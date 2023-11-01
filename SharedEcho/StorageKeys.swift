@@ -25,6 +25,7 @@ public struct StorageKeys {
     public static var wordPredictionLimit = "wordPredictionLimit"
     public static var predictionLanguage = "predictionLanguage"
     public static var characterOrder = "characterOrder"
+    public static var wordAndLetterPrompt = "wordAndLetterPrompt"
     
     public static var switchesList = "switchesList"
     public static var speakingVoiceOptions = "speakingVoiceOptions"

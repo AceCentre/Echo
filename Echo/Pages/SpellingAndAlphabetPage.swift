@@ -88,6 +88,27 @@ struct SpellingAndAlphabetPage: View {
                     comment: "Footer for the language settings"
                 )
             })
+            
+            Section(content: {
+                Toggle(
+                    String(
+                        localized: "Use Prompts",
+                        comment: "Label for toggle prompts"
+                    ),
+                    isOn: spellingOptions.$wordAndLetterPrompt
+                )
+            }, header: {
+                Text(
+                    "Word and Letter Prompt",
+                    comment: "Label for the section in settings about prompts"
+                )
+            }, footer: {
+                Text(
+                    "Echo prefixes some items with 'current sentence' and 'current word'. However, this might slow you down so you may choose to disable the prompt.",
+                    comment: "Footer for the section in settings about prompts"
+                )
+            })
+            
         }
         .navigationTitle(
             String(

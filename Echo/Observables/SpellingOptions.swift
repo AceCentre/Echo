@@ -187,6 +187,7 @@ class SpellingOptions: ObservableObject, Analytic {
     @AppStorage(StorageKeys.wordPredictionLimit) var wordPredictionLimit: Int = 3
     @AppStorage(StorageKeys.predictionLanguage) var predictionLanguage: String = "DEFAULT"
     @AppStorage(StorageKeys.characterOrder) var characterOrderId: String = CharacterOrder.defaultOrder.id
+    @AppStorage(StorageKeys.wordAndLetterPrompt) var wordAndLetterPrompt: Bool = true
     
     var analytics: Analytics?
     

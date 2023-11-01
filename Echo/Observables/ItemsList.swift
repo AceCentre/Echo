@@ -240,10 +240,11 @@ class ItemsList: ObservableObject {
             let predictions = predictor.predict(enteredText: self.enteredText)
             var prefixItems: [Item] = []
             
-            let currentSentencePrefix = String(
+            let wordAndLetterPrompt = self.spelling?.wordAndLetterPrompt ?? true
+            let currentSentencePrefix = wordAndLetterPrompt ? String(
                 localized: "Current Sentence: ",
                 comment: "This label prefixes the current full sentance in the scrollable area. Make sure to leave the colon and space"
-            )
+            ) : ""
             let finishedText = currentSentencePrefix + self.enteredText
             
             guard let unwrappedEngine = self.voiceEngine else {
@@ -257,10 +258,10 @@ class ItemsList: ObservableObject {
                 prefixItems.append(fullSentenceItem)
             }
             
-            let currentWordPrefix = String(
+            let currentWordPrefix = wordAndLetterPrompt ? String(
                 localized: "Current Word: ",
                 comment: "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
-            )
+            ) : ""
             let splitBySpace = self.enteredText.components(separatedBy: "·")
             let prefix = splitBySpace.last ?? ""
             let prefixWithHyphens = currentWordPrefix + String(Array(prefix.split(separator: "")).joined(separator: "·"))
