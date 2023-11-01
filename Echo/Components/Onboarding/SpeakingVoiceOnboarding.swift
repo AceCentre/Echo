@@ -83,7 +83,6 @@ struct SpeakingVoiceOnboarding: View {
             }
             .scrollContentBackground(.hidden)
         }
-        .padding(.bottom, 64)
         .onAppear {
             loadSettings()
             

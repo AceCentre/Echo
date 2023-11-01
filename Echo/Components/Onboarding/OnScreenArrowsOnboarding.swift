@@ -39,6 +39,5 @@ struct OnScreenArrowsOnboarding: View {
             .pickerStyle(.segmented)
         }
         .padding(.horizontal)
-        .padding(.bottom, 64)
     }
 }

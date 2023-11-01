@@ -22,6 +22,6 @@ struct IntroStep: View {
                     comment: "Explain what Echo is"
                 )
             )
-        }.padding(.bottom, 64)
+        }
     }
 }

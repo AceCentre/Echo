@@ -91,6 +91,7 @@ struct ContentView: SwiftUI.View {
                                     }
                                 }
                             )
+                            
                             VStack {
                                 Text(items.enteredText == "" ? " " : items.enteredText)
                                     .padding(10)
@@ -101,6 +102,12 @@ struct ContentView: SwiftUI.View {
                             
                         }
                     }
+                    .accessibilityRepresentation(representation: {
+                        Text(
+                            "Echo does not currently support system accessibility controls. To use Echo please disable your system accessibility controls. We hope to improve this in the future.",
+                            comment: "An explaination to users using Voice over about how to use Echo"
+                        )
+                    })
                 }
                 .navigationTitle(
                     String(

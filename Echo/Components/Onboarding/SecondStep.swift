@@ -32,6 +32,5 @@ struct SecondStep: View {
             )
         }
         .padding(.horizontal)
-        .padding(.bottom, 64)
     }
 }

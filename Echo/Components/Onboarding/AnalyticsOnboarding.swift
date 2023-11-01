@@ -51,6 +51,5 @@ struct AnalyticsOnboarding: View {
             .pickerStyle(.segmented)
         }
         .padding(.horizontal)
-        .padding(.bottom, 64)
     }
 }

@@ -63,6 +63,7 @@ struct OnboardingSettingsPage: View {
 
 struct Onboarding: View {
     @State var currentPage: Int = 0
+    @AccessibilityFocusState var isFocused: Bool
     var endOnboarding: () -> Void
     
     var body: some View {
@@ -77,31 +78,40 @@ struct Onboarding: View {
                 VStack {
                     TabView(selection: $currentPage) {
                         ForEach(OnboardingSteps.allCases) { step in
-                            step.page.tag(step.rawValue)
+                            VStack {
+                                step.page
+                                   
+                                HStack {
+                                    if currentPage + 1 < OnboardingSteps.allCases.count {
+                                        Button(action: {
+                                            endOnboarding()
+                                        }, label: {
+                                            Text("Skip", comment: "The label for the button to exit onboarding")
+                                        })
+                                        .buttonStyle(SkipButton())
+                                        Button(action: {
+                                            currentPage += 1
+                                            isFocused = true
+                                        }, label: {
+                                            Text("Next", comment: "The label for the to go to the next onboarding step")
+                                        }).buttonStyle(NextButton())
+                                    } else {
+                                        Button(action: {
+                                            endOnboarding()
+                                        }, label: {
+                                            Text("Done", comment: "The label for the button to exit onboarding")
+                                        }).buttonStyle(NextButton())
+                                    }
+                                }.padding(.vertical)
+                                
+                            }
+                            .accessibilityFocused($isFocused)
+                            .padding(.bottom, 32)
+                            .tag(step.rawValue)
+                            
                         }
                     }
                     .tabViewStyle(PageTabViewStyle())
-                    HStack {
-                        if currentPage + 1 < OnboardingSteps.allCases.count {
-                            Button(action: {
-                                endOnboarding()
-                            }, label: {
-                                Text("Skip", comment: "The label for the button to exit onboarding")
-                            })
-                            .buttonStyle(SkipButton())
-                            Button(action: {
-                                currentPage += 1
-                            }, label: {
-                                Text("Next", comment: "The label for the to go to the next onboarding step")
-                            }).buttonStyle(NextButton())
-                        } else {
-                            Button(action: {
-                                endOnboarding()
-                            }, label: {
-                                Text("Done", comment: "The label for the button to exit onboarding")
-                            }).buttonStyle(NextButton())
-                        }
-                    }.padding(.bottom)
                 }.frame(maxWidth: 800)
             }
         }
