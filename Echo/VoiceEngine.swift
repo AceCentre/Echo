@@ -80,7 +80,8 @@ class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Anal
     }
     
     func play(_ text: String, voiceOptions: VoiceOptions, cb: (() -> Void)? = {}) {
-        let utterance = AVSpeechUtterance(string: text)
+        let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
+        let utterance = AVSpeechUtterance(string: textWithSpaces)
         
         utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
         utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
