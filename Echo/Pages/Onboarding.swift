@@ -55,7 +55,7 @@ struct OnboardingSettingsPage: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        Onboarding(endOnboarding: { pageNumber,finishType in
+        Onboarding(endOnboarding: { _, _ in
             self.presentationMode.wrappedValue.dismiss()
         })
     }
