@@ -142,5 +142,8 @@ struct OnboardingWrapper: View {
 struct Onboarding_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         OnboardingWrapper()
+            .preferredColorScheme(.light)
+        OnboardingWrapper()
+            .preferredColorScheme(.dark)
     }
 }

@@ -51,7 +51,6 @@
 		D5DB64762ACDBA0C00E41867 /* AccessOptionsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DB64752ACDBA0C00E41867 /* AccessOptionsPage.swift */; };
 		D5DB64782ACDC39500E41867 /* AccessOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DB64772ACDC39500E41867 /* AccessOptions.swift */; };
 		D5E26B432AC2E77A003545BE /* ScrollLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E26B422AC2E77A003545BE /* ScrollLock.swift */; };
-		D5EDA49C2AEBB1DF00727B90 /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EDA49B2AEBB1DF00727B90 /* VideoPlayer.swift */; };
 		D5EDA49F2AEBF1C800727B90 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EDA49E2AEBF1C800727B90 /* ButtonStyles.swift */; };
 		D5EDA4A12AEBF1EA00727B90 /* BottomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EDA4A02AEBF1EA00727B90 /* BottomText.swift */; };
 		D5EDA4A32AEBF2AE00727B90 /* OnScreenArrowsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EDA4A22AEBF2AD00727B90 /* OnScreenArrowsOnboarding.swift */; };
@@ -167,7 +166,6 @@
 		D5DB64752ACDBA0C00E41867 /* AccessOptionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessOptionsPage.swift; sourceTree = "<group>"; };
 		D5DB64772ACDC39500E41867 /* AccessOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessOptions.swift; sourceTree = "<group>"; };
 		D5E26B422AC2E77A003545BE /* ScrollLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLock.swift; sourceTree = "<group>"; };
-		D5EDA49B2AEBB1DF00727B90 /* VideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		D5EDA49E2AEBF1C800727B90 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		D5EDA4A02AEBF1EA00727B90 /* BottomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomText.swift; sourceTree = "<group>"; };
 		D5EDA4A22AEBF2AD00727B90 /* OnScreenArrowsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScreenArrowsOnboarding.swift; sourceTree = "<group>"; };
@@ -339,7 +337,6 @@
 				D58005182AC6D92D008BDC33 /* VoicePicker.swift */,
 				D5E26B422AC2E77A003545BE /* ScrollLock.swift */,
 				D5A488992AD945D500E9A635 /* KeyPressController.swift */,
-				D5EDA49B2AEBB1DF00727B90 /* VideoPlayer.swift */,
 				D536A5B22AD5865B00F8DB9F /* AddSwitch.swift */,
 				D5DB64732ACD82FD00E41867 /* VoiceOptions.swift */,
 				D5DB64712ACC5E6500E41867 /* OnScreenArrows.swift */,
@@ -640,7 +637,6 @@
 				D57A51812ACF0E3700FC7716 /* ScanningOptions.swift in Sources */,
 				D5A488A02ADFDAD400E9A635 /* SpellingOptions.swift in Sources */,
 				D5E26B432AC2E77A003545BE /* ScrollLock.swift in Sources */,
-				D5EDA49C2AEBB1DF00727B90 /* VideoPlayer.swift in Sources */,
 				D5EDA4A52AEBF2CF00727B90 /* Intro.swift in Sources */,
 				D5DAB05C2AEA815200888390 /* Onboarding.swift in Sources */,
 				D5EDA4A12AEBF1EA00727B90 /* BottomText.swift in Sources */,

@@ -326,10 +326,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -491,7 +491,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
     }
   },
   "version" : "1.0"

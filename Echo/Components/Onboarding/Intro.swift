@@ -11,7 +11,9 @@ import SwiftUI
 struct IntroStep: View {
     var body: some View {
         VStack {
-            VideoPlayerOnboarding()
+            Spacer()
+            Text("Video Goes Here", comment: "Placeholder")
+            Spacer()
             BottomText(
                 topText: AttributedString(
                     localized: "Welcome to **Echo**",

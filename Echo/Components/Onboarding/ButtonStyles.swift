@@ -9,16 +9,17 @@ import Foundation
 import SwiftUI
 
 struct NextButton: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(.horizontal, 52)
             .padding(.vertical)
             .background(Color("aceBlue"))
-            .foregroundStyle(.white)
+            .foregroundStyle(colorScheme == .light ? .white : Color("gradientBackground"))
             .clipShape(Capsule())
             .fontWeight(.bold)
             .font(.system(size: 24))
-
     }
 }
 
