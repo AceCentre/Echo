@@ -296,7 +296,7 @@
       "comment" : "Explaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -326,7 +326,7 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for the scanning during onboarding\nLabel for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
       "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
