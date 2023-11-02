@@ -15,7 +15,9 @@ struct ContentView: SwiftUI.View {
     
     var body: some SwiftUI.View {
         if showOnboarding {
-            Onboarding(endOnboarding: {
+            Onboarding(endOnboarding: { pageNumber, finishType in
+                analytics.finishedOnboarding(pageNumber: pageNumber, finishType: finishType)
+            
                 showOnboarding = false
             })
         } else {

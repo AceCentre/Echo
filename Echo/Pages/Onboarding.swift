@@ -55,7 +55,7 @@ struct OnboardingSettingsPage: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        Onboarding(endOnboarding: {
+        Onboarding(endOnboarding: { pageNumber,finishType in
             self.presentationMode.wrappedValue.dismiss()
         })
     }
@@ -64,7 +64,7 @@ struct OnboardingSettingsPage: View {
 struct Onboarding: View {
     @State var currentPage: Int = 0
     @AccessibilityFocusState var isFocused: Bool
-    var endOnboarding: () -> Void
+    var endOnboarding: (_ pageNumber: Int, _ finishType: String) -> Void
     
     var body: some View {
         NavigationStack {
@@ -84,7 +84,7 @@ struct Onboarding: View {
                                 HStack {
                                     if currentPage + 1 < OnboardingSteps.allCases.count {
                                         Button(action: {
-                                            endOnboarding()
+                                            endOnboarding(currentPage, "skip")
                                         }, label: {
                                             Text("Skip", comment: "The label for the button to exit onboarding")
                                         })
@@ -97,7 +97,7 @@ struct Onboarding: View {
                                         }).buttonStyle(NextButton())
                                     } else {
                                         Button(action: {
-                                            endOnboarding()
+                                            endOnboarding(currentPage, "completed")
                                         }, label: {
                                             Text("Done", comment: "The label for the button to exit onboarding")
                                         }).buttonStyle(NextButton())
@@ -127,7 +127,7 @@ struct OnboardingWrapper: View {
     
     var body: some View {
         ZStack {
-            Onboarding(endOnboarding: {
+            Onboarding(endOnboarding: { _, _ in
                 print("Done")
             })
         }

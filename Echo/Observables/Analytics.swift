@@ -17,6 +17,7 @@ enum AnalyticKey: String, CaseIterable {
     case userInteraction
     case wordAdded
     case letterAdded
+    case onboarding
     
     var explanation: String {
         switch self {
@@ -42,6 +43,10 @@ enum AnalyticKey: String, CaseIterable {
         )
         case .letterAdded: return String(
             localized: "When you enter a letter we log if it was predicted or not. We do not log the word",
+            comment: "A label for an analytics event"
+        )
+        case .onboarding: return String(
+            localized: "When you complete the initial onboarding steps.",
             comment: "A label for an analytics event"
         )
         }
@@ -105,6 +110,10 @@ class Analytics: ObservableObject {
     
     func letterAdded(isPredicted: Bool) {
         event(.letterAdded, extraProperties: ["isPredicted": isPredicted])
+    }
+    
+    func finishedOnboarding(pageNumber: Int, finishType: String) {
+        event(.onboarding, extraProperties: ["pageNumber": pageNumber, "finishType": finishType])
     }
     
     func utteranceSpoken(numberOfWords: Int, averageWordLength: Int, totalUtteranceLength: Int) {
