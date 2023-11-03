@@ -8,11 +8,28 @@
 import Foundation
 import SwiftUI
 
+struct ExternalLinks: View {
+    var body: some View {
+        VStack {
+            Form {
+                if let docsUrl = URL(string: "https://docs.acecentre.org.uk/products/v/echo") {
+                    Section {
+                        Link(String(
+                            localized: "Read Documentation",
+                            comment: "A link to the external documentation"
+                        ), destination: docsUrl)
+                    }
+                }
+            }
+        }
+    }
+}
+
 enum SettingsPath: CaseIterable, Identifiable {
-    case voice, access, scanning, spelling, analytics, onboarding
+    case voice, access, scanning, spelling, analytics, onboarding, externalLinks
     
     static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics]
-    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .onboarding]
+    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .onboarding, .externalLinks]
     
     var id: String {
         switch self {
@@ -22,6 +39,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .spelling: return "spelling"
         case .analytics: return "analytics"
         case .onboarding: return "onboarding"
+        case .externalLinks: return "external"
         }
     }
     
@@ -33,6 +51,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .spelling: SpellingAndAlphabetPage()
         case .analytics: AnalyticsOptions()
         case .onboarding: OnboardingSettingsPage()
+        case .externalLinks: ExternalLinks()
         }
     }
     
@@ -62,6 +81,10 @@ enum SettingsPath: CaseIterable, Identifiable {
             localized: "Initial Setup",
             comment: "Label for the navigation link to the initial options page"
         )
+        case .externalLinks: return String(
+            localized: "External Links",
+            comment: "Label for the navigation link to the initial options page"
+        )
         }
     }
 }
@@ -86,6 +109,15 @@ struct SettingsPagePhone: View {
                 }, label: {
                     Text("Initial Setup", comment: "Label for the navigation link to the onboarding page")
                 })
+            }
+            
+            if let docsUrl = URL(string: "https://docs.acecentre.org.uk/products/v/echo") {
+                Section {
+                    Link(String(
+                        localized: "Read Documentation",
+                        comment: "A link to the external documentation"
+                    ), destination: docsUrl)
+                }
             }
         }
         .navigationBarBackButtonHidden(true)

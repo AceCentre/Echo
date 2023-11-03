@@ -98,7 +98,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for analytics picker"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -211,6 +211,9 @@
     "Enter Switch" : {
 
     },
+    "External Links" : {
+      "comment" : "Label for the navigation link to the initial options page"
+    },
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
     },
@@ -310,6 +313,9 @@
     "Rate" : {
       "comment" : "Label for a slider that controls the rate of a voice"
     },
+    "Read Documentation" : {
+      "comment" : "A link to the external documentation"
+    },
     "Required" : {
       "comment" : "Prompt for required text input"
     },
@@ -326,10 +332,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
+      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
