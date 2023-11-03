@@ -16,7 +16,8 @@ struct EchoApp: App {
     @StateObject var scanningOptions: ScanningOptions = ScanningOptions()
     @StateObject var spellingOptions: SpellingOptions = SpellingOptions()
     @StateObject var analytics: Analytics = Analytics()
-    
+    @StateObject var rating: Rating = Rating()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -26,6 +27,7 @@ struct EchoApp: App {
                 .environmentObject(scanningOptions)
                 .environmentObject(spellingOptions)
                 .environmentObject(analytics)
+                .environmentObject(rating)
                 .onAppear {
                     #if DEBUG
                     for current in StorageKeys.allowedViaTest {
@@ -34,6 +36,8 @@ struct EchoApp: App {
                         }
                     }
                     #endif
+                    
+                    rating.countOpen()
  
                     itemsList.loadAnalytics(analytics)
                     spellingOptions.loadAnalytics(analytics: analytics)

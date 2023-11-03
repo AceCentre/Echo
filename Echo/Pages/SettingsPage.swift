@@ -150,11 +150,19 @@ struct SettingsPagePad: View {
 
 // Not a huge fan of this if im honest
 struct SettingsPage: View {
+    @EnvironmentObject var rating: Rating
+    
     var body: some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            SettingsPagePad()
-        } else {
-            SettingsPagePhone()
+        ZStack {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                SettingsPagePad()
+            } else {
+                SettingsPagePhone()
+            }
+        }.onAppear {
+            if rating.shouldShowRating() {
+                rating.openPrompt()
+            }
         }
     }
 }
