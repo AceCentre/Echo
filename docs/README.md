@@ -1,4 +1,14 @@
+---
+description: 'Echo: Every Character Speaks Volumes'
+---
+
 # Introduction
+
+Echo is an AAC app designed for those with a visual difficulty and physical difficulty to access communication.
+
+Echo is based around the concept of auditory scanning. Auditory scanning is a communication method using sound cues or auditory feedback rather than visual cues. This method is especially valuable for those with a visual impairment who cant access visual based AAC.
+
+Echo provides you with two different voices, one for your auditory cues and the another to represent your voice.
 
 {% embed url="https://youtu.be/GzZOlZMKyCY" %}
 A demo of Echo in use
