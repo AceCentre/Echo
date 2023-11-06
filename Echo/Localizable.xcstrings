@@ -67,6 +67,9 @@
     "A switch name and switch key must be entered before you can save the new switch." : {
       "comment" : "The footer to to the save button that explains what the required fields are."
     },
+    "About Us" : {
+      "comment" : "A link to the about page"
+    },
     "Access Methods" : {
       "comment" : "Label for the navigation link to the access methods options page"
     },
@@ -147,6 +150,9 @@
     },
     "Communication for the visual impaired" : {
       "comment" : "Explain what Echo is"
+    },
+    "Contact Us" : {
+      "comment" : "A link to the contact page"
     },
     "Control **Echo** using an arrow keypad on screen." : {
       "comment" : "Explain of Echo onboarding process"
