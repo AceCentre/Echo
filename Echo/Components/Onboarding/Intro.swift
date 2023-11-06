@@ -47,7 +47,7 @@ struct IntroStep: View {
                     comment: "Welcome message in onboarding"
                 ),
                 bottomText: AttributedString(
-                    localized: "Communication for the visual impaired",
+                    localized: "Every Character Speaks Volumes",
                     comment: "Explain what Echo is"
                 )
             )
