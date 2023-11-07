@@ -30,8 +30,15 @@ You can enable and disable the arrows in the settings
 
 ## External Switches
 
-Echo allows you to use external switches
+Echo allows you to use external switches to control the app. To add a new switch go to your access settings and then click add a new switch. You can then click 'detect switch' which will then listen for you to press your switch. This registers the switch and then you can assign it an action.
 
 Possible actions are:
 
-*
+* None - This can be used if you want to register a switch but not have the switch trigger an action
+* Go to the next item
+* Go to the previous item
+* Select the currently selected item
+* Delete the last inputted letter
+* Clear all the inputted text
+* Start scanning from the current item, scanning must be enabled
+* Quickly scan through the items - This is only available when holding the switch
