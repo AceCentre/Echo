@@ -1,12 +1,16 @@
-# Echo - Auditory Scanning
+<p align="center">
+  <a href="https://apps.apple.com/gb/app/echo-auditory-scanning/id6451412975">
+    <img src="https://raw.githubusercontent.com/AceCentre/Echo/main/readme-header.png" alt="Echo Logo and Download App Icon" width="300" />
+  </a>
+</p>
+<p align="center"><i>Every Character Speaks Volumes</i></p>
 
-## Default Behaviour
+- [Releasing a new version](#releasing-a-new-version)
+- [Prediction](#prediction)
 
-After each letter you type out: read back the current word one charcter at a time. Prefix it with 'Current word'
+## Releasing a new version
 
-After each word read out the current sentence. Prefix it with 'current sentence'
-
-The prefixes should be toggleable in the settings but lets keep them on by default
+To release a new version make sure you commit message includes `[PATCH]`, `[MINOR]` or `[MAJOR]` depending on what changes you have made. This will automatically trigger an xcode cloud build which will then release that version to TestFlight for testing. To then make the new version publicly available you have to release it via AppStoreConnect.
 
 ## Prediction
 
