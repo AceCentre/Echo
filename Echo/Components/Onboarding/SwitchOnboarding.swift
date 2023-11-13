@@ -12,6 +12,8 @@ struct SwitchOnboarding: View {
     @EnvironmentObject var accessOptions: AccessOptions
     @State var showNewSwitchSheet = false
     
+    @State var currentSwitch: Switch?
+
     var body: some View {
         VStack {
             VStack {
@@ -54,20 +56,16 @@ struct SwitchOnboarding: View {
                         isOn: $accessOptions.enableSwitchControl
                     )
                     
-                    ForEach(accessOptions.listOfSwitches) { currentSwitch in
-                        NavigationLink(destination: {
-                            AddSwitch(
-                                switchName: currentSwitch.name,
-                                selectedKey: currentSwitch.key,
-                                tapAction: currentSwitch.tapAction,
-                                holdAction: currentSwitch.holdAction,
-                                id: currentSwitch.id
-                            )
+                    ForEach(accessOptions.listOfSwitches) { switchForButton in
+                        Button(action: {
+                            currentSwitch = switchForButton
                         }, label: {
                             HStack {
-                                Text(currentSwitch.name)
+                                Text(switchForButton.name)
                                 Spacer()
-                                Text(keyToDisplay(currentSwitch.key))
+                                Text(keyToDisplay(switchForButton.key))
+                                    .foregroundStyle(.gray)
+                                Image(systemName: "chevron.right")
                                     .foregroundStyle(.gray)
                             }
                         })
@@ -88,11 +86,21 @@ struct SwitchOnboarding: View {
                 .onDisappear {
                     accessOptions.save()
                 }
-                .sheet(isPresented: $showNewSwitchSheet) {
-                    AddSwitch()
-                }
+                
             }
             .scrollContentBackground(.hidden)
+            .sheet(isPresented: $showNewSwitchSheet) {
+                AddSwitch()
+            }
+            .sheet(item: $currentSwitch) { currentSwitchObject in
+                AddSwitch(
+                    switchName: currentSwitchObject.name,
+                    selectedKey: currentSwitchObject.key,
+                    tapAction: currentSwitchObject.tapAction,
+                    holdAction: currentSwitchObject.holdAction,
+                    id: currentSwitchObject.id
+                )
+            }
         }
         
     }

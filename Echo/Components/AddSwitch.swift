@@ -49,7 +49,6 @@ struct AddSwitch: View {
     @State var tapAction: Action = .next
     @State var doubleAction: Action = .none
     @State var holdAction: Action = .none
-    
     @State var id: UUID?
     
     var isButtonEnabled: Bool {
@@ -70,7 +69,7 @@ struct AddSwitch: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(content: {
                     TextField(
@@ -101,7 +100,7 @@ struct AddSwitch: View {
                             systemImage: "button.programmable.square"
                         )
                     })
-
+                    
                 }, header: {
                     Text("Switch Key", comment: "Header text for the switch keyboard area")
                 }, footer: {
@@ -160,7 +159,7 @@ struct AddSwitch: View {
                         }, label: {
                             Text("Save Changes", comment: "The label for the save changes button")
                         })
-  
+                        
                         .disabled(isButtonEnabled)
                         Button(action: {
                             if let unwrappedId = id {
@@ -176,7 +175,7 @@ struct AddSwitch: View {
                                 ),
                                 systemImage: "trash"
                             )
-                                .foregroundColor(.red)
+                            .foregroundColor(.red)
                         })
                         
                     }, footer: {
@@ -210,34 +209,31 @@ struct AddSwitch: View {
                         )
                     })
                 }
-
+                
             }
             
             .toolbar {
-                if id == nil {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text(
-                                "Cancel",
-                                comment: "The cancel toolbar button to stop adding a new switch"
-                            )
-                        })
-                    }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text(
+                            "Cancel",
+                            comment: "The cancel toolbar button to stop adding a new switch"
+                        )
+                    })
                 }
             }
-        }
-        .onAppear {
-            initSwitchName()
-        }
-        .if(id != nil) { view in
-            view.navigationTitle(
+            .navigationTitle(
                 String(
                     localized: "Switch: \(switchName)",
                     comment: "The navigation title when editing a given switch. It contains the user entered name after the colon"
                 )
             )
+        }
+        
+        .onAppear {
+            initSwitchName()
         }
     }
 }

@@ -13,6 +13,8 @@ struct AccessOptionsPage: View {
     
     @State var showNewSwitchSheet = false
     
+    @State var currentSwitch: Switch?
+    
     var body: some View {
         Form {
             Section(content: {
@@ -35,7 +37,7 @@ struct AccessOptionsPage: View {
                     ),
                     isOn: $accessOptions.allowSwipeGestures
                 )
-
+                
             }, footer: {
                 Text(
             """
@@ -45,7 +47,7 @@ struct AccessOptionsPage: View {
                • **Left:** Remove the last entered character
                • **Up:** Go to the previous item in the list
             """,
-                     comment: "A description of all the swiping gestures. Please use the same format including bold text"
+            comment: "A description of all the swiping gestures. Please use the same format including bold text"
                 )
             })
             
@@ -58,25 +60,20 @@ struct AccessOptionsPage: View {
                     isOn: $accessOptions.enableSwitchControl
                 )
                 
-                ForEach(accessOptions.listOfSwitches) { currentSwitch in
-                    NavigationLink(destination: {
-                        AddSwitch(
-                            switchName: currentSwitch.name,
-                            selectedKey: currentSwitch.key,
-                            tapAction: currentSwitch.tapAction,
-                            holdAction: currentSwitch.holdAction,
-                            id: currentSwitch.id
-                        )
+                ForEach(accessOptions.listOfSwitches) { switchForButton in
+                    Button(action: {
+                        currentSwitch = switchForButton
                     }, label: {
                         HStack {
-                            Text(currentSwitch.name)
+                            Text(switchForButton.name)
                             Spacer()
-                            Text(keyToDisplay(currentSwitch.key))
+                            Text(keyToDisplay(switchForButton.key))
+                                .foregroundStyle(.gray)
+                            Image(systemName: "chevron.right")
                                 .foregroundStyle(.gray)
                         }
                     })
                 }
-                  
                 Button(action: {
                     showNewSwitchSheet.toggle()
                 }, label: {
@@ -103,6 +100,16 @@ struct AccessOptionsPage: View {
         .sheet(isPresented: $showNewSwitchSheet) {
             AddSwitch()
         }
+        .sheet(item: $currentSwitch) { currentSwitchObject in
+            AddSwitch(
+                switchName: currentSwitchObject.name,
+                selectedKey: currentSwitchObject.key,
+                tapAction: currentSwitchObject.tapAction,
+                holdAction: currentSwitchObject.holdAction,
+                id: currentSwitchObject.id
+            )
+        }
+        
         .navigationTitle(
             String(
                 localized: "Access Options",
@@ -114,35 +121,35 @@ struct AccessOptionsPage: View {
 
 private struct PreviewWrapper: View {
     @StateObject var accessOptions: AccessOptions = AccessOptions()
-
+    
     var body: some View {
         NavigationStack {
             Text("Main Page")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    navigationDestination(isPresented: .constant(true), destination: {
-                        AccessOptionsPage()
-                            .environmentObject(accessOptions)
-                            .onAppear {
-                                self.accessOptions.addSwitch(
-                                    name: "Demo Switch",
-                                    key: .downArrow,
-                                    tapAction: .back,
-                                    holdAction: .none
-                                )
-                                self.accessOptions.addSwitch(
-                                    name: "Another One",
-                                    key: .upArrow,
-                                    tapAction: .next,
-                                    holdAction: .none
-                                )
-                            }
-                    })
-                    
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        navigationDestination(isPresented: .constant(true), destination: {
+                            AccessOptionsPage()
+                                .environmentObject(accessOptions)
+                                .onAppear {
+                                    self.accessOptions.addSwitch(
+                                        name: "Demo Switch",
+                                        key: .downArrow,
+                                        tapAction: .back,
+                                        holdAction: .none
+                                    )
+                                    self.accessOptions.addSwitch(
+                                        name: "Another One",
+                                        key: .upArrow,
+                                        tapAction: .next,
+                                        holdAction: .none
+                                    )
+                                }
+                        })
+                        
+                    }
                 }
-            }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.inline)
         }
         
     }
@@ -152,6 +159,6 @@ struct AccessOptionsPage_Previews: PreviewProvider {
     
     static var previews: some SwiftUI.View {
         PreviewWrapper().preferredColorScheme(.light)
-            
+        
     }
 }
