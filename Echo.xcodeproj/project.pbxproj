@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D507A94B2AE7C2C4003EC583 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = D507A94A2AE7C2C4003EC583 /* PostHog */; };
 		D507A94D2AE7C32C003EC583 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A94C2AE7C32C003EC583 /* Analytics.swift */; };
 		D507A94F2AE7D587003EC583 /* AnalyticsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */; };
 		D507A9512AE90B65003EC583 /* MeasuringUtterancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A9502AE90B65003EC583 /* MeasuringUtterancesTests.swift */; };
 		D512DA952ACEBDCA00660524 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D512DA942ACEBDCA00660524 /* Comparable.swift */; };
 		D51743072A6FF72300E14EE0 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D51743062A6FF72300E14EE0 /* dictionary.sqlite */; };
-		D517430A2A6FFBBA00E14EE0 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D51743092A6FFBBA00E14EE0 /* SQLite */; };
 		D51743132A7AA94100E14EE0 /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51743122A7AA94100E14EE0 /* Items.swift */; };
 		D52232AC2AF167E700EA3F37 /* SharedEcho.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; };
 		D52232AD2AF167E700EA3F37 /* SharedEcho.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -42,7 +40,9 @@
 		D5BA42082B04E5B4006AE544 /* UIKeyboardHIDUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA42072B04E5B4006AE544 /* UIKeyboardHIDUsage.swift */; };
 		D5C005712AC58C7A007C21B2 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C005702AC58C7A007C21B2 /* SettingsPage.swift */; };
 		D5C005732AC5CEF9007C21B2 /* VoiceSelectionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C005722AC5CEF9007C21B2 /* VoiceSelectionPage.swift */; };
-		D5D848E32AE2C5C800D89C88 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = D5D848E22AE2C5C800D89C88 /* SwiftUIIntrospect */; };
+		D5C6B92A2B04F3C900755F62 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = D5C6B9292B04F3C900755F62 /* SwiftUIIntrospect */; };
+		D5C6B92D2B04F3E100755F62 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D5C6B92C2B04F3E100755F62 /* SQLite */; };
+		D5C6B9302B04F3F400755F62 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = D5C6B92F2B04F3F400755F62 /* PostHog */; };
 		D5DAB05C2AEA815200888390 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DAB05B2AEA815200888390 /* Onboarding.swift */; };
 		D5DB645F2ACC514800E41867 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DB645E2ACC514800E41867 /* View.swift */; };
 		D5DB64612ACC518900E41867 /* VoiceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DB64602ACC518900E41867 /* VoiceEngine.swift */; };
@@ -213,10 +213,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D507A94B2AE7C2C4003EC583 /* PostHog in Frameworks */,
-				D517430A2A6FFBBA00E14EE0 /* SQLite in Frameworks */,
+				D5C6B92D2B04F3E100755F62 /* SQLite in Frameworks */,
 				D53986AB2AF1679200CF9419 /* SharedEcho.framework in Frameworks */,
-				D5D848E32AE2C5C800D89C88 /* SwiftUIIntrospect in Frameworks */,
+				D5C6B92A2B04F3C900755F62 /* SwiftUIIntrospect in Frameworks */,
+				D5C6B9302B04F3F400755F62 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,9 +487,9 @@
 			);
 			name = Echo;
 			packageProductDependencies = (
-				D51743092A6FFBBA00E14EE0 /* SQLite */,
-				D5D848E22AE2C5C800D89C88 /* SwiftUIIntrospect */,
-				D507A94A2AE7C2C4003EC583 /* PostHog */,
+				D5C6B9292B04F3C900755F62 /* SwiftUIIntrospect */,
+				D5C6B92C2B04F3E100755F62 /* SQLite */,
+				D5C6B92F2B04F3F400755F62 /* PostHog */,
 			);
 			productName = Echo;
 			productReference = D5965DF92A61995A003C9208 /* Echo.app */;
@@ -532,9 +532,9 @@
 			);
 			mainGroup = D5965DF02A61995A003C9208;
 			packageReferences = (
-				D51743082A6FFBBA00E14EE0 /* XCRemoteSwiftPackageReference "SQLite" */,
-				D5D848E12AE2C5C800D89C88 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				D507A9492AE7C2C4003EC583 /* XCRemoteSwiftPackageReference "posthog-ios" */,
+				D5C6B9282B04F3C900755F62 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				D5C6B92B2B04F3E100755F62 /* XCRemoteSwiftPackageReference "SQLite" */,
+				D5C6B92E2B04F3F400755F62 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			productRefGroup = D5965DFA2A61995A003C9208 /* Products */;
 			projectDirPath = "";
@@ -1113,15 +1113,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D507A9492AE7C2C4003EC583 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+		D5C6B9282B04F3C900755F62 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.0;
+				minimumVersion = 1.1.1;
 			};
 		};
-		D51743082A6FFBBA00E14EE0 /* XCRemoteSwiftPackageReference "SQLite" */ = {
+		D5C6B92B2B04F3E100755F62 /* XCRemoteSwiftPackageReference "SQLite" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
 			requirement = {
@@ -1129,31 +1129,31 @@
 				minimumVersion = 0.14.1;
 			};
 		};
-		D5D848E12AE2C5C800D89C88 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+		D5C6B92E2B04F3F400755F62 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				minimumVersion = 2.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D507A94A2AE7C2C4003EC583 /* PostHog */ = {
+		D5C6B9292B04F3C900755F62 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D507A9492AE7C2C4003EC583 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
+			package = D5C6B9282B04F3C900755F62 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = SwiftUIIntrospect;
 		};
-		D51743092A6FFBBA00E14EE0 /* SQLite */ = {
+		D5C6B92C2B04F3E100755F62 /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D51743082A6FFBBA00E14EE0 /* XCRemoteSwiftPackageReference "SQLite" */;
+			package = D5C6B92B2B04F3E100755F62 /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
 		};
-		D5D848E22AE2C5C800D89C88 /* SwiftUIIntrospect */ = {
+		D5C6B92F2B04F3F400755F62 /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D5D848E12AE2C5C800D89C88 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = SwiftUIIntrospect;
+			package = D5C6B92E2B04F3F400755F62 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

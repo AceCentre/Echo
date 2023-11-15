@@ -110,7 +110,7 @@
       "comment" : "Explaination of swipe controls"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
+      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -290,10 +290,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
+      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -356,7 +356,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
+      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"
@@ -455,7 +455,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"
