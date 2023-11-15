@@ -29,8 +29,8 @@ struct KeyPressController: View {
     // this will cause undefined behavior.'
     // Im not sure why because im changing it in an onKeyPress function not a view update
     // However, because we dont display keyMap we shouldn't get any 'undefined behaviour'
-    @State var keyMap: [KeyEquivalent: KeyStage] = [:]
-    @State var workItemsMap: [KeyEquivalent: DispatchWorkItem] = [:]
+    @State var keyMap: [UIKeyboardHIDUsage: KeyStage] = [:]
+    @State var workItemsMap: [UIKeyboardHIDUsage: DispatchWorkItem] = [:]
     
     func doAction(action: Action) {
         switch action {
@@ -54,95 +54,64 @@ struct KeyPressController: View {
     }
     
     var body: some View {
-        Text("Capturing Keys", comment: "This text is never actually shown to the user.")
-            .opacity(0)
-            .focusable()
-            .focused($focused)
-            .onAppear {
-                focused = true
+        KeyboardPressDetectorView { press in
+            guard let currentKeyCode = press.key?.keyCode else {
+                return
             }
-            .onKeyPress(phases: [.all]) { press in
-                // We only want to capture buttons that the user has specifed
-                guard let currentSwitch = accessOptions.listOfSwitches.first(where: { $0.key == press.key }) else {
-                    return .ignored
-                }
-                
-                if press.phase == .down {
-                    analytics.userInteraction(type: "SwitchPress", extraInfo: keyToDisplay(press.key))
-                }
-                
-                let currentKeyStage = keyMap[press.key] ?? .unpressed
-                
-                // Deal with keydown event
-                if press.phase == .down {
-                    self.keyMap.updateValue(.pressed, forKey: press.key)
-                    
-                    // Cancel any previous work items now we have a new keypress
-                    let lastWorkItem = self.workItemsMap[press.key]
-                    lastWorkItem?.cancel()
-                    
-                    // Shedule hold callback
-                    let newWorkItem = DispatchWorkItem(block: {
-                        let keyStage = keyMap[press.key] ?? .unpressed
-                                                
-                        if keyStage == .pressed {
-                            self.keyMap.updateValue(.held, forKey: press.key)
-                            
-                            doAction(action: currentSwitch.holdAction)
-                        }
-                    })
-                    
-                    let timeInterval = 1.0
-                    self.workItemsMap.updateValue(newWorkItem, forKey: press.key)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval, execute: newWorkItem)
-                }
-                
-                // When the key is up we need to do our action
-                if press.phase == .up {
-                    // Normal length press
-                    if currentKeyStage == .pressed {
-                        doAction(action: currentSwitch.tapAction)
-                    }
-                    
-                    // The key was held for longer than the threshold
-                    if currentKeyStage == .held {
-                        if currentSwitch.holdAction == .fast {
-                            items.stopFastScan()
-                        }
-                    }
-                    
-                    self.keyMap.updateValue(.unpressed, forKey: press.key)
-                }
-                
-                return .handled
+            
+            // We only want to capture buttons that the user has specifed
+            guard let currentSwitch = accessOptions.listOfSwitches.first(where: { $0.key == currentKeyCode }) else {
+                return
             }
-
+            
+            if press.phase == .began {
+                analytics.userInteraction(type: "SwitchPress", extraInfo: keyToDisplay(currentKeyCode))
+            }
+            
+            let currentKeyStage = keyMap[currentKeyCode] ?? .unpressed
+            
+            // Deal with keydown event
+            if press.phase == .began {
+                self.keyMap.updateValue(.pressed, forKey: currentKeyCode)
+                
+                // Cancel any previous work items now we have a new keypress
+                let lastWorkItem = self.workItemsMap[currentKeyCode]
+                lastWorkItem?.cancel()
+                
+                // Shedule hold callback
+                let newWorkItem = DispatchWorkItem(block: {
+                    let keyStage = keyMap[currentKeyCode] ?? .unpressed
+                                            
+                    if keyStage == .pressed {
+                        self.keyMap.updateValue(.held, forKey: currentKeyCode)
+                        
+                        doAction(action: currentSwitch.holdAction)
+                    }
+                })
+                
+                let timeInterval = 1.0
+                self.workItemsMap.updateValue(newWorkItem, forKey: currentKeyCode)
+                DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval, execute: newWorkItem)
+            }
+            
+            // When the key is up we need to do our action
+            if press.phase == .ended {
+                // Normal length press
+                if currentKeyStage == .pressed {
+                    doAction(action: currentSwitch.tapAction)
+                }
+                
+                // The key was held for longer than the threshold
+                if currentKeyStage == .held {
+                    if currentSwitch.holdAction == .fast {
+                        items.stopFastScan()
+                    }
+                }
+                
+                self.keyMap.updateValue(.unpressed, forKey: currentKeyCode)
+            }
+            
+            return
+        }
     }
 }
-
-/**
- .onKeyPress is only on iOS 17. We can use the following hack if we
- want to back support older versions but it doesnt support 'hold' press
- 
-         Group {
-             ForEach($accessOptions.listOfSwitches) { $currentSwitch in
-                 Button(action: {
-                     switch currentSwitch.tapAction {
-                     case .none:
-                         return
-                     case .next:
-                         items.next(userInteraction: true)
-                         return
-                     case .back:
-                         items.back(userInteraction: true)
-                         return
-                     }
-                 }, label: {
-                     Text("Hidden button for switch: \(currentSwitch.name)")
-                 })
-                 .keyboardShortcut(currentSwitch.key, modifiers: [])
-             }
-         }
-         .opacity(0)
- 
- */

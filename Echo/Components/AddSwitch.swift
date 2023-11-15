@@ -10,32 +10,27 @@ import SwiftUI
 
 struct DetectSwitch: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @FocusState private var focused: Bool
-    @Binding var selectedKey: KeyEquivalent?
+    @Binding var selectedKey: UIKeyboardHIDUsage?
     
     var body: some View {
-        Form {
-            VStack {
-                ProgressView()
-                Text("Activate your external switch", comment: "Shown when detecting the switch press when adding a new switch")
-                    .font(.title2)
-                Text("""
+        ZStack {
+            KeyboardPressDetectorView { press in
+                self.selectedKey = press.key?.keyCode
+                presentationMode.wrappedValue.dismiss()
+            }
+            Form {
+                VStack {
+                    ProgressView()
+                    Text("Activate your external switch", comment: "Shown when detecting the switch press when adding a new switch")
+                        .font(.title2)
+                    Text("""
                  External switches can be a bluetooth or wired device such as a keyboard, controller or switch
                  """, comment: "Explains what an external switch is")
-                .font(.caption)
+                    .font(.caption)
+                }
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
             }
-            .frame(maxWidth: .infinity)
-            .multilineTextAlignment(.center)
-        }
-        .focusable()
-        .focused($focused)
-        .onKeyPress { press in
-            selectedKey = press.key
-            self.presentationMode.wrappedValue.dismiss()
-            return .handled
-        }
-        .onAppear {
-            focused = true
         }
     }
 }
@@ -45,7 +40,7 @@ struct AddSwitch: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var switchName = ""
-    @State var selectedKey: KeyEquivalent?
+    @State var selectedKey: UIKeyboardHIDUsage?
     @State var tapAction: Action = .next
     @State var doubleAction: Action = .none
     @State var holdAction: Action = .none
@@ -270,7 +265,7 @@ private struct PreviewWrapperEdit: View {
                     navigationDestination(isPresented: .constant(true), destination: {
                         AddSwitch(
                             switchName: "My Switch",
-                            selectedKey: .upArrow,
+                            selectedKey: .keyboardUpArrow,
                             tapAction: .next,
                             id: UUID()
                         )

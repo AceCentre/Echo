@@ -10,51 +10,6 @@
     "**Word and Letter Prediction**" : {
       "comment" : "Label for the prediction during onboarding"
     },
-    "<BACKSPACE>" : {
-      "comment" : "A description of the backspace key on a keyboard, please use all caps and <>"
-    },
-    "<CLEAR>" : {
-      "comment" : "A description of the clear key on a keyboard, please use all caps and <>"
-    },
-    "<DELETE FORWARD>" : {
-      "comment" : "A description of the delete forward key on a keyboard, please use all caps and <>"
-    },
-    "<DELETE>" : {
-      "comment" : "A description of the delete key on a keyboard, please use all caps and <>"
-    },
-    "<DOWN ARROW>" : {
-      "comment" : "A description of the down arrow on a keyboard, please use all caps and <>"
-    },
-    "<END>" : {
-      "comment" : "A description of the end key on a keyboard, please use all caps and <>"
-    },
-    "<ENTER>" : {
-      "comment" : "A description of the enter key on a keyboard, please use all caps and <>"
-    },
-    "<ESC>" : {
-      "comment" : "A description of the escape key on a keyboard, please use all caps and <>"
-    },
-    "<HOME>" : {
-      "comment" : "A description of the home key on a keyboard, please use all caps and <>"
-    },
-    "<LEFT ARROW>" : {
-      "comment" : "A description of the left arrow on a keyboard, please use all caps and <>"
-    },
-    "<PAGE UP>" : {
-      "comment" : "A description of the page up key on a keyboard, please use all caps and <>"
-    },
-    "<RIGHT ARROW>" : {
-      "comment" : "A description of the right arrow on a keyboard, please use all caps and <>"
-    },
-    "<SPACE>" : {
-      "comment" : "A description of the space bar key on a keyboard, please use all caps and <>"
-    },
-    "<TAB>" : {
-      "comment" : "A description of the tab key on a keyboard, please use all caps and <>"
-    },
-    "<UP ARROW>" : {
-      "comment" : "A description of the up arrow key on a keyboard, please use all caps and <>"
-    },
     "A four way arrow keypad" : {
       "comment" : "Accessibility label for arrows"
     },
@@ -132,9 +87,6 @@
     },
     "Cancel" : {
       "comment" : "The cancel toolbar button to stop adding a new switch"
-    },
-    "Capturing Keys" : {
-      "comment" : "This text is never actually shown to the user."
     },
     "Clear" : {
       "comment" : "The label for the button that will clear all the text that has been inputted"
@@ -305,7 +257,7 @@
       "comment" : "Explaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -338,10 +290,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for the scanning during onboarding\nLabel for toggle to turn scanning off and on"
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"

@@ -12,14 +12,14 @@ import SharedEcho
 struct Switch: Identifiable, Decodable, Encodable {
     var id: UUID
     var name: String
-    var key: KeyEquivalent
+    var key: UIKeyboardHIDUsage
     var tapAction: Action
     var holdAction: Action
     
     init(
         id: UUID,
         name: String,
-        key: KeyEquivalent,
+        key: UIKeyboardHIDUsage,
         tapAction: Action,
         holdAction: Action
     ) {
@@ -46,14 +46,15 @@ struct Switch: Identifiable, Decodable, Encodable {
         self.tapAction = try container.decode(Action.self, forKey: .tapAction)
         self.holdAction = try container.decode(Action.self, forKey: .holdAction)
 
-        let key = try container.decode(String.self, forKey: .key)
-        self.key = KeyEquivalent(Character(key))
+        let key = try container.decode(Int.self, forKey: .key)
+        
+        self.key = UIKeyboardHIDUsage(rawValue: key) ?? .keyboardReturn
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        let encodableKey = String(key.character)
+        let encodableKey = self.key.rawValue
         
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
@@ -121,7 +122,7 @@ class AccessOptions: ObservableObject, Analytic {
                 localized: "Enter Switch",
                 comment: ""
             ),
-            key: .return,
+            key: .keyboardReturnOrEnter,
             tapAction: .next,
             holdAction: .none
         ),
@@ -131,7 +132,7 @@ class AccessOptions: ObservableObject, Analytic {
                 localized: "Space Switch",
                 comment: ""
             ),
-            key: .space,
+            key: .keyboardSpacebar,
             tapAction: .select,
             holdAction: .none
         )
@@ -146,7 +147,7 @@ class AccessOptions: ObservableObject, Analytic {
         ]
     }
     
-    func addSwitch(name: String, key: KeyEquivalent, tapAction: Action, holdAction: Action) {
+    func addSwitch(name: String, key: UIKeyboardHIDUsage, tapAction: Action, holdAction: Action) {
         listOfSwitches.append(
             Switch(
                 id: UUID(),
@@ -160,7 +161,7 @@ class AccessOptions: ObservableObject, Analytic {
         save()
     }
     
-    func updateSwitch(id: UUID, name: String, key: KeyEquivalent, tapAction: Action, holdAction: Action) {
+    func updateSwitch(id: UUID, name: String, key: UIKeyboardHIDUsage, tapAction: Action, holdAction: Action) {
         
         listOfSwitches = listOfSwitches.map { current in
             if current.id == id {

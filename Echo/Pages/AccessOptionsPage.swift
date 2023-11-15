@@ -133,13 +133,13 @@ private struct PreviewWrapper: View {
                                 .onAppear {
                                     self.accessOptions.addSwitch(
                                         name: "Demo Switch",
-                                        key: .downArrow,
+                                        key: .keyboardDownArrow,
                                         tapAction: .back,
                                         holdAction: .none
                                     )
                                     self.accessOptions.addSwitch(
                                         name: "Another One",
-                                        key: .upArrow,
+                                        key: .keyboardUpArrow,
                                         tapAction: .next,
                                         holdAction: .none
                                     )
