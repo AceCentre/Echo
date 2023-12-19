@@ -32,27 +32,6 @@ struct KeyPressController: View {
     @State var keyMap: [UIKeyboardHIDUsage: KeyStage] = [:]
     @State var workItemsMap: [UIKeyboardHIDUsage: DispatchWorkItem] = [:]
     
-    func doAction(action: Action) {
-        switch action {
-        case .none:
-            print("No action")
-        case .next:
-            items.next(userInteraction: true)
-        case .back:
-            items.back(userInteraction: true)
-        case .fast:
-            items.startFastScan()
-        case .clear:
-            items.clear(userInteraction: true)
-        case .delete:
-            items.backspace(userInteraction: true)
-        case .select:
-            items.select(userInteraction: true)
-        case .startScanning:
-            items.startScanningOnKeyPress()
-        }
-    }
-    
     var body: some View {
         KeyboardPressDetectorView { press in
             guard let currentKeyCode = press.key?.keyCode else {
@@ -85,7 +64,7 @@ struct KeyPressController: View {
                     if keyStage == .pressed {
                         self.keyMap.updateValue(.held, forKey: currentKeyCode)
                         
-                        doAction(action: currentSwitch.holdAction)
+                        items.doAction(action: currentSwitch.holdAction)
                     }
                 })
                 
@@ -98,7 +77,7 @@ struct KeyPressController: View {
             if press.phase == .ended {
                 // Normal length press
                 if currentKeyStage == .pressed {
-                    doAction(action: currentSwitch.tapAction)
+                    self.items.doAction(action: currentSwitch.tapAction)
                 }
                 
                 // The key was held for longer than the threshold

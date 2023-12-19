@@ -35,6 +35,27 @@ class ItemsList: ObservableObject {
         clearItem = nil
     }
     
+    func doAction(action: Action) {
+        switch action {
+        case .none:
+            print("No action")
+        case .next:
+            next(userInteraction: true)
+        case .back:
+            back(userInteraction: true)
+        case .fast:
+            startFastScan()
+        case .clear:
+            clear(userInteraction: true)
+        case .delete:
+            backspace(userInteraction: true)
+        case .select:
+            select(userInteraction: true)
+        case .startScanning:
+            startScanningOnKeyPress()
+        }
+    }
+    
     func cancelScanning() {
         disableScanningAsHidden = true
         if let unwrappedWorkItem = workItem {
