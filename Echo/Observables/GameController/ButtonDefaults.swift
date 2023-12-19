@@ -12,6 +12,7 @@ import Foundation
  Its worth noting that this will only work in english, in the future it should be extended to work in all languages
 **/
 enum ButtonDefaults: String {
+    // Switch Buttons + General
     case a = "A Button"
     case b = "B Button"
     case up = "Up Button"
@@ -30,6 +31,19 @@ enum ButtonDefaults: String {
     case zr = "ZR Button"
     case leftStick = "Left Stick"
     case rightStick = "Right Stick"
+    
+    // Playstation Buttons
+    case circle = "Circle Button"
+    case l1Button = "L1 Button"
+    case l2Button = "L2 Button"
+    case psButton = "PS Button"
+    case options = "OPTIONS Button"
+    case r1 = "R1 Button"
+    case r2 = "R2 Button"
+    case sharePs = "SHARE Button"
+    case square = "Square Button"
+    case triangle = "Triangle Button"
+    case cross = "Cross Button"
     
     var tapAction: Action {
         switch self {
@@ -69,6 +83,28 @@ enum ButtonDefaults: String {
             return .select
         case .rightStick:
             return .select
+        case .circle:
+            return .select
+        case .l1Button:
+            return .none
+        case .l2Button:
+            return .none
+        case .psButton:
+            return .none
+        case .options:
+            return .none
+        case .r1:
+            return .none
+        case .r2:
+            return .none
+        case .sharePs:
+            return .none
+        case .square:
+            return .delete
+        case .triangle:
+            return .back
+        case .cross:
+            return .next
         }
     }
     
@@ -110,6 +146,28 @@ enum ButtonDefaults: String {
             return .none
         case .rightStick:
             return .none
+        case .circle:
+            return .none
+        case .l1Button:
+            return .none
+        case .l2Button:
+            return .none
+        case .psButton:
+            return .none
+        case .options:
+            return .none
+        case .r1:
+            return .none
+        case .r2:
+            return .none
+        case .sharePs:
+            return .none
+        case .square:
+            return .none
+        case .triangle:
+            return .none
+        case .cross:
+            return .fast
         }
     }
 }
