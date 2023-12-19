@@ -178,6 +178,9 @@
     "Frequency Order" : {
       "comment" : "The value for the order of the alphabet"
     },
+    "Game Controllers" : {
+      "comment" : "Header for game controller settings area"
+    },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
     },
@@ -223,8 +226,14 @@
     "Māori (Experimental)" : {
       "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
     },
+    "Map Buttons" : {
+      "comment" : "The help text on the controller button"
+    },
     "Next" : {
       "comment" : "The label for the to go to the next onboarding step"
+    },
+    "No game controller connect to device. Please connect a controller to access these settings" : {
+      "comment" : "Notification of no game controllers connected"
     },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
@@ -277,6 +286,9 @@
     "Required" : {
       "comment" : "Prompt for required text input"
     },
+    "Save" : {
+      "comment" : "The save toolbar button when saving controller mapping"
+    },
     "Save Changes" : {
       "comment" : "The label for the save changes button"
     },
@@ -290,10 +302,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -391,8 +403,17 @@
     "Undo" : {
       "comment" : "The label for the button that will remove the last character. Also known as backspace"
     },
+    "Unknown Button" : {
+      "comment" : "Name of a button when none is given"
+    },
+    "Unknown Controller" : {
+      "comment" : "Name of the controller if none is givens"
+    },
     "Urdu (Experimental)" : {
       "comment" : "The label for the urdu language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Use a game controller to control Echo" : {
+      "comment" : "Footer for game controller settings area"
     },
     "Use Prompts" : {
       "comment" : "Label for toggle prompts"
@@ -455,7 +476,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
     }
   },
   "version" : "1.0"
