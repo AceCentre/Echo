@@ -17,6 +17,7 @@ struct EchoApp: App {
     @StateObject var spellingOptions: SpellingOptions = SpellingOptions()
     @StateObject var analytics: Analytics = Analytics()
     @StateObject var rating: Rating = Rating()
+    @StateObject var controllerManager = ControllerManager()
 
     var body: some Scene {
         WindowGroup {
@@ -28,6 +29,7 @@ struct EchoApp: App {
                 .environmentObject(spellingOptions)
                 .environmentObject(analytics)
                 .environmentObject(rating)
+                .environmentObject(controllerManager)
                 .onAppear {
                     #if DEBUG
                     for current in StorageKeys.allowedViaTest {
@@ -46,6 +48,9 @@ struct EchoApp: App {
                     itemsList.loadSpelling(spellingOptions)
                     itemsList.loadEngine(voiceEngine)
                     itemsList.loadScanning(scanningOptions)
+                    
+                    controllerManager.loadItems(itemsList)
+                    controllerManager.loadAnalytics(analytics)
                     
                     analytics.load(
                         voiceEngine: voiceEngine, accessOptions: accessOptions, scanningOptions: scanningOptions, spellingOptions: spellingOptions
