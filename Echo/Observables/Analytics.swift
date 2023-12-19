@@ -104,6 +104,14 @@ class Analytics: ObservableObject {
         ])
     }
     
+    func gamePadButtonPress(controllerName: String, buttonName: String) {
+        event(.userInteraction, extraProperties: [
+            "interactionType": "GamepadButtonPress",
+            "controllerName": controllerName,
+            "buttonName": buttonName
+        ])
+    }
+    
     func wordAdded(isPredicted: Bool) {
         event(.wordAdded, extraProperties: ["isPredicted": isPredicted])
     }
