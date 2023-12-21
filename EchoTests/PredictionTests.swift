@@ -126,7 +126,7 @@ final class PredictionTests: XCTestCase {
             currentMessage += predictionList[positionInList].details.letter.replacingOccurrences(of: "·", with: " ")
         }
         
-        print(testName, targetSentence, totalCount)
+        print("*", targetSentence, "=" ,totalCount)
         
         return totalCount
     }
@@ -168,6 +168,8 @@ final class PredictionTests: XCTestCase {
     func testAllSentences(spelling: SpellingOptions, testName: String) throws -> Int {
         var totalScore = 0
         
+        print("###", testName)
+        
         for sentence in testSentences {
             do {
                 totalScore += try calculateScore(spelling: spelling, targetSentence: sentence, testName: testName)
@@ -176,7 +178,8 @@ final class PredictionTests: XCTestCase {
             }
         }
         
-        print(testName, "Total Score = ", totalScore)
+        print("")
+        print("Total Score = ", totalScore)
         print("")
         
         return totalScore
@@ -226,6 +229,8 @@ final class PredictionTests: XCTestCase {
         spelling.characterOrderId = CharacterOrder.alphabetical.id
         scoreMap["Word Prediction"] = try testAllSentences(spelling: spelling, testName: "Word Prediction")
         
+        print("## Totals")
+        print("")
         for (key, value) in scoreMap.sorted(by: { $0.value > $1.value }) {
             print("\(key): \(value)")
         }
