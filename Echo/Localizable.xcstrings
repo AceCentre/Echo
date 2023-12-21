@@ -302,7 +302,7 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
       "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"

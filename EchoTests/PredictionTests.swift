@@ -230,9 +230,8 @@ final class PredictionTests: XCTestCase {
         scoreMap["Word Prediction"] = try testAllSentences(spelling: spelling, testName: "Word Prediction")
         
         print("## Totals")
-        print("")
         for (key, value) in scoreMap.sorted(by: { $0.value > $1.value }) {
-            print("\(key): \(value)")
+            print("* \(key): \(value)")
         }
     }
 }

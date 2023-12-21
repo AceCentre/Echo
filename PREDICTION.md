@@ -115,9 +115,9 @@ Total Score = 5685
 
 ## Totals
 
-No Prediction: 6718
-Word Prediction: 5685
-Frequency: 4553
-Word and Letter Prediction: 3793
-Letter Prediction: 3233
-Word, Letter, Frequency: 3143
+- No Prediction: 6718
+- Word Prediction: 5685
+- Frequency: 4553
+- Word and Letter Prediction: 3793
+- Letter Prediction: 3233
+- Word, Letter, Frequency: 3143
