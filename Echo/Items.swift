@@ -13,6 +13,7 @@ class FinishItem: ItemProtocol, Identifiable {
     var displayText: String
     var speakText: String
     var voiceEngine: VoiceEngine
+    var letter: String = ""
     
     init(_ display: String, voiceEngine: VoiceEngine) {
         self.displayText = display
@@ -31,7 +32,8 @@ class BackspaceItem: ItemProtocol, Identifiable {
     var id = UUID()
     var displayText: String
     var speakText = "Undo"
-    
+    var letter: String = ""
+
     init(_ display: String) {
         self.displayText = display
     }
@@ -54,6 +56,7 @@ class ClearItem: ItemProtocol, Identifiable {
     var id = UUID()
     var displayText: String = "Clear"
     var speakText = "Clear"
+    var letter: String = ""
 
     func select(enteredText: String, cb: @escaping (_ enteredText: String) -> Void) {
         cb("")
@@ -125,6 +128,7 @@ protocol ItemProtocol: Identifiable {
     var id: UUID { get }
     var displayText: String { get }
     var speakText: String { get }
+    var letter: String { get }
     func select(enteredText: String, cb: @escaping (_ enteredText: String) -> Void)
 }
 

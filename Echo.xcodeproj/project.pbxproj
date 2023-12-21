@@ -145,6 +145,7 @@
 		D539868A2AF1515C00CF9419 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		D53986982AF1679100CF9419 /* SharedEcho.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedEcho.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D539869A2AF1679100CF9419 /* SharedEcho.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedEcho.h; sourceTree = "<group>"; };
+		D553118D2B34886F005B01AB /* PREDICTION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PREDICTION.md; sourceTree = "<group>"; };
 		D574BCA42AE170A000C50EDC /* EchoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D574BCAD2AE170B800C50EDC /* PredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionTests.swift; sourceTree = "<group>"; };
 		D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsPage.swift; sourceTree = "<group>"; };
@@ -278,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DB64702ACC5D7900E41867 /* README.md */,
+				D553118D2B34886F005B01AB /* PREDICTION.md */,
 				D5C0056D2AC46235007C21B2 /* ci_scripts */,
 				D5965DFB2A61995A003C9208 /* Echo */,
 				D574BCA52AE170A000C50EDC /* EchoTests */,
