@@ -113,11 +113,62 @@ Total Score = 3143
 
 Total Score = 5685
 
+### Apple Word Prediction Only
+
+- an apple = 45
+- The quick brown fox jumps over the lazy dog. = 400
+- The weather forecast predicts rain with a chance of thunderstorms = 212
+- Please send me the latest sales report by the end of the day = 273
+- I'm interested in learning more about machine learning and artificial intelligence = 387
+- The sun sets in the west, casting a warm, golden glow over the horizon = 471
+- She played a beautiful melody on her violin, filling the room with enchanting music. = 365
+- The scientist conducted experiments to prove his groundbreaking theory. = 343
+- He embarked on a journey to explore the uncharted wilderness. = 229
+- The ancient castle stood atop the hill, shrouded in legends and mysteries. = 445
+- The chef prepared a delicious gourmet meal that delighted the guests. = 334
+
+Total Score = 3504
+
+### Apple, Word, Letter
+
+- an apple = 25
+- The quick brown fox jumps over the lazy dog. = 245
+- The weather forecast predicts rain with a chance of thunderstorms = 191
+- Please send me the latest sales report by the end of the day = 244
+- I'm interested in learning more about machine learning and artificial intelligence = 223
+- The sun sets in the west, casting a warm, golden glow over the horizon = 337
+- She played a beautiful melody on her violin, filling the room with enchanting music. = 313
+- The scientist conducted experiments to prove his groundbreaking theory. = 210
+- He embarked on a journey to explore the uncharted wilderness. = 196
+- The ancient castle stood atop the hill, shrouded in legends and mysteries. = 287
+- The chef prepared a delicious gourmet meal that delighted the guests. = 242
+
+Total Score = 2513
+
+### Apple, Word, Letter, Frequency
+
+- an apple = 25
+- The quick brown fox jumps over the lazy dog. = 245
+- The weather forecast predicts rain with a chance of thunderstorms = 191
+- Please send me the latest sales report by the end of the day = 244
+- I'm interested in learning more about machine learning and artificial intelligence = 223
+- The sun sets in the west, casting a warm, golden glow over the horizon = 337
+- She played a beautiful melody on her violin, filling the room with enchanting music. = 313
+- The scientist conducted experiments to prove his groundbreaking theory. = 210
+- He embarked on a journey to explore the uncharted wilderness. = 196
+- The ancient castle stood atop the hill, shrouded in legends and mysteries. = 287
+- The chef prepared a delicious gourmet meal that delighted the guests. = 242
+
+Total Score = 2513
+
 ## Totals
 
 - No Prediction: 6718
 - Word Prediction: 5685
 - Frequency: 4553
 - Word and Letter Prediction: 3793
+- Apple Word Prediction: 3504
 - Letter Prediction: 3233
 - Word, Letter, Frequency: 3143
+- Apple, Word, Letter: 2513
+- Apple, Word, Letter, Frequency: 2513
