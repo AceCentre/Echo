@@ -31,7 +31,7 @@ struct PredictionOnboarding: View {
                         .resizable()
                         .frame(width: 200, height: 144)
                         .foregroundStyle(Color("aceBlue"))
-                    if !prediction || (!spellingOptions.wordPrediction && !spellingOptions.letterPrediction) {
+                    if !prediction || (!spellingOptions.allWordPrediction && !spellingOptions.letterPrediction) {
                         Image("Slash")
                             .resizable()
                             .frame(width: 200, height: 200)
@@ -70,7 +70,7 @@ struct PredictionOnboarding: View {
                                 localized: "Word prediction",
                                 comment: "Label for toggle to turn word prediction off and on"
                             ),
-                            isOn: spellingOptions.$wordPrediction
+                            isOn: $spellingOptions.allWordPrediction
                         )
                     } else {
                         Toggle(
@@ -91,7 +91,7 @@ struct PredictionOnboarding: View {
                         ForEach(PredictionLanguage.allLanguages) { language in
                             Text(language.display).tag(language.id)
                         }
-                    }.pickerStyle(.navigationLink)
+                    }
                 })
             }
             .scrollContentBackground(.hidden)
@@ -99,7 +99,7 @@ struct PredictionOnboarding: View {
                 initState()
             }
             .onChange(of: prediction) {
-                spellingOptions.wordPrediction = prediction
+                spellingOptions.allWordPrediction = prediction
                 spellingOptions.letterPrediction = prediction
             }
         }

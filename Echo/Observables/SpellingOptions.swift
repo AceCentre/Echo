@@ -46,6 +46,13 @@ class SpellingOptions: ObservableObject, Analytic {
     @AppStorage(StorageKeys.wordAndLetterPrompt) var wordAndLetterPrompt: Bool = true
     @AppStorage(StorageKeys.appleWordPrediction) var appleWordPrediction: Bool = true
     
+    @Published var allWordPrediction: Bool {
+        willSet {
+            appleWordPrediction = newValue
+            wordPrediction = newValue
+        }
+    }
+    
     var analytics: Analytics?
     
     var dbConn: Connection?
@@ -88,6 +95,8 @@ class SpellingOptions: ObservableObject, Analytic {
     }
     
     init() {
+        allWordPrediction = true
+        
         if predictionLanguage == "DEFAULT" {
             let usersLanguage: String = Locale.preferredLanguages.first ?? "en"
             
@@ -108,6 +117,12 @@ class SpellingOptions: ObservableObject, Analytic {
             
         } catch {
             print(error)
+        }
+        
+        if wordPrediction || appleWordPrediction {
+            allWordPrediction = true
+        } else {
+            allWordPrediction = false
         }
     }
 

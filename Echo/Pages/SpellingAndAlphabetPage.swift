@@ -26,9 +26,9 @@ struct SpellingAndAlphabetPage: View {
                         localized: "Word prediction",
                         comment: "Label for toggle to turn word prediction off and on"
                     ),
-                    isOn: spellingOptions.$wordPrediction
+                    isOn: $spellingOptions.allWordPrediction
                 )
-                if spellingOptions.wordPrediction {
+                if spellingOptions.allWordPrediction {
                     Stepper(
                         value: spellingOptions.$wordPredictionLimit,
                         in: 1...10,
@@ -68,7 +68,7 @@ struct SpellingAndAlphabetPage: View {
                     ForEach(PredictionLanguage.allLanguages) { language in
                         Text(language.display).tag(language.id)
                     }
-                }.pickerStyle(.navigationLink)
+                }
                 Picker(
                     String(
                         localized: "Alphabet Order",
