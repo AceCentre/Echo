@@ -56,7 +56,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for analytics picker"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -266,7 +266,7 @@
       "comment" : "Explaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -302,7 +302,7 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page\nLabel for the scanning during onboarding"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
       "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
@@ -476,7 +476,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"

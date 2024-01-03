@@ -28,6 +28,7 @@ public struct StorageKeys {
     public static var wordAndLetterPrompt = "wordAndLetterPrompt"
     public static var numberOfOpens = "numberOfOpens"
     public static var numberOfRatingPromptsShown = "numberOfRatingPromptsShown"
+    public static var appleWordPrediction = "appleWordPrediction"
     
     public static var switchesList = "switchesListV2"
     public static var speakingVoiceOptions = "speakingVoiceOptions"

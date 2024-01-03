@@ -24,6 +24,7 @@
 		D53986A82AF1679200CF9419 /* SharedEcho.h in Headers */ = {isa = PBXBuildFile; fileRef = D539869A2AF1679100CF9419 /* SharedEcho.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D53986AB2AF1679200CF9419 /* SharedEcho.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; };
 		D53986AC2AF1679200CF9419 /* SharedEcho.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D553118F2B445D6A005B01AB /* PredictionLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D553118E2B445D6A005B01AB /* PredictionLanguages.swift */; };
 		D574BCAE2AE170B800C50EDC /* PredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D574BCAD2AE170B800C50EDC /* PredictionTests.swift */; };
 		D57A517F2ACF084300FC7716 /* ScanningOptionsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */; };
 		D57A51812ACF0E3700FC7716 /* ScanningOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57A51802ACF0E3700FC7716 /* ScanningOptions.swift */; };
@@ -146,6 +147,7 @@
 		D53986982AF1679100CF9419 /* SharedEcho.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedEcho.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D539869A2AF1679100CF9419 /* SharedEcho.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedEcho.h; sourceTree = "<group>"; };
 		D553118D2B34886F005B01AB /* PREDICTION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PREDICTION.md; sourceTree = "<group>"; };
+		D553118E2B445D6A005B01AB /* PredictionLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionLanguages.swift; sourceTree = "<group>"; };
 		D574BCA42AE170A000C50EDC /* EchoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D574BCAD2AE170B800C50EDC /* PredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionTests.swift; sourceTree = "<group>"; };
 		D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsPage.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				D57A51802ACF0E3700FC7716 /* ScanningOptions.swift */,
 				D5DB64772ACDC39500E41867 /* AccessOptions.swift */,
 				D5A4889F2ADFDAD400E9A635 /* SpellingOptions.swift */,
+				D553118E2B445D6A005B01AB /* PredictionLanguages.swift */,
 				D5DB646C2ACC5CE100E41867 /* AvailableVoices.swift */,
 			);
 			path = Observables;
@@ -689,6 +692,7 @@
 				D5A4889A2AD945D500E9A635 /* KeyPressController.swift in Sources */,
 				D51743132A7AA94100E14EE0 /* Items.swift in Sources */,
 				D5BA42082B04E5B4006AE544 /* UIKeyboardHIDUsage.swift in Sources */,
+				D553118F2B445D6A005B01AB /* PredictionLanguages.swift in Sources */,
 				D5A4889E2ADFCD8D00E9A635 /* SpellingAndAlphabetPage.swift in Sources */,
 				D5DB64722ACC5E6500E41867 /* OnScreenArrows.swift in Sources */,
 				D512DA952ACEBDCA00660524 /* Comparable.swift in Sources */,
