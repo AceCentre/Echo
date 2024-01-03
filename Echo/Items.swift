@@ -120,6 +120,43 @@ class LetterItem: ItemProtocol, Identifiable {
     }
 }
 
+/***
+ ApplePredictionItem is the item type that supports the Apple prediction. The reason it differs
+ from LetterItem is because it might suggest words with a different prefix
+ */
+class ApplePredictionItem: ItemProtocol, Identifiable {
+    var displayText: String
+    var id = UUID()
+    var speakText: String
+    var letter: String
+    var analytics: Analytics?
+
+    init(_ word: String, analytics: Analytics? = nil) {
+        displayText = word
+        letter = word
+        speakText = word
+        self.analytics = analytics
+    }
+    
+    func select(enteredText: String, cb: @escaping (String) -> Void) {
+        analytics?.wordAdded(isPredicted: true)
+        
+        if let lastChar = enteredText.last, String(lastChar) == "·" {
+            cb(enteredText + letter + "·")
+        } else {
+            var words = enteredText.components(separatedBy: "·")
+            
+            if !words.isEmpty {
+                words.removeLast()
+            }
+            
+            let allWords = words + [letter]
+            
+            cb(allWords.joined(separator: "·") + "·")
+        }
+    }
+}
+
 /// This is protocol of an item.
 ///
 /// The reason this is a protocol is because we will define different types of item for example
@@ -150,6 +187,10 @@ struct Item: Identifiable {
         self.details = LetterItem(letter, display: display, speakText: speakText, letterType: letterType, analytics: analytics)
     }
 
+    init(predictedWord: String, analytics: Analytics? = nil) {
+        self.details = ApplePredictionItem(predictedWord, analytics: analytics)
+    }
+    
     init(actionType: ItemActionType, display: String, voiceEngine: VoiceEngine) {
         switch actionType {
         case .backspace:
