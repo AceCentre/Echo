@@ -115,6 +115,7 @@ struct AddSwitch: View {
                     ) {
                         ForEach(Action.tapCases) { action in
                             Text(action.display)
+                                .tag(action)
                         }
                     }.pickerStyle(.navigationLink)
                     Picker(
@@ -126,6 +127,7 @@ struct AddSwitch: View {
                     ) {
                         ForEach(Action.holdCases) { action in
                             Text(action.display)
+                                .tag(action)
                         }
                     }.pickerStyle(.navigationLink)
                 }, header: {
