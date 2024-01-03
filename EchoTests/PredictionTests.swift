@@ -14,7 +14,7 @@ extension String {
     }
     
     func targetWord(_ index: Int) -> String {
-        let words = self.split(separator: " ")
+        let words = self.split(separator: "·")
         
         for word in words {
             if let range = self.range(of: word) {
@@ -83,15 +83,16 @@ final class PredictionTests: XCTestCase {
         
         return filtered
             .joined(separator: "")
+            .replacingOccurrences(of: " ", with: "·")
             
     }
     
-    func calculateScore(spelling: SpellingOptions, targetSentence: String, testName: String) throws -> Int {
+    func calculateScore(spelling: SpellingOptions, targetSentence: String, testName: String) async throws -> Int {
         var currentMessage = ""
         var totalCount = 0
         
         // Loop while the current message does not equal the complete message
-        while normaliseString(targetSentence) != normaliseString(currentMessage).trimmingCharacters(in: .whitespacesAndNewlines) {
+        while normaliseString(targetSentence) != normaliseString(currentMessage).trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: ["·"]) {
             // Only pass the last word to prediction
             let predictionList = spelling.predict(enteredText: currentMessage.replacingOccurrences(of: " ", with: "·"))
             
@@ -101,7 +102,7 @@ final class PredictionTests: XCTestCase {
             let targetWord = normalisedTargetSentence.targetWord(normalisedCurrentMessage.count)
             let targetLetter = normalisedTargetSentence.getCharAtIndex(normalisedCurrentMessage.count)
             
-            if targetLetter == " " {
+            if targetLetter == " " || targetLetter == "·" {
                 totalCount += 1
                 currentMessage += " "
                 continue
@@ -123,10 +124,14 @@ final class PredictionTests: XCTestCase {
             
             totalCount += positionInList + 1
             
-            currentMessage += predictionList[positionInList].details.letter.replacingOccurrences(of: "·", with: " ")
+            currentMessage = await withCheckedContinuation { continuation in
+                predictionList[positionInList].details.select(enteredText: normalisedCurrentMessage, cb: { newMessage in
+                    continuation.resume(returning: newMessage)
+                })
+            }
         }
         
-        print("*", targetSentence, "=" ,totalCount)
+        print("*", targetSentence, "=", totalCount)
         
         return totalCount
     }
@@ -165,14 +170,14 @@ final class PredictionTests: XCTestCase {
         XCTAssertEqual(spelling.language, .english)
     }
     
-    func testAllSentences(spelling: SpellingOptions, testName: String) throws -> Int {
+    func testAllSentences(spelling: SpellingOptions, testName: String) async throws -> Int {
         var totalScore = 0
         
         print("###", testName)
         
         for sentence in testSentences {
             do {
-                totalScore += try calculateScore(spelling: spelling, targetSentence: sentence, testName: testName)
+                totalScore += try await calculateScore(spelling: spelling, targetSentence: sentence, testName: testName)
             } catch {
                 throw error
             }
@@ -185,7 +190,8 @@ final class PredictionTests: XCTestCase {
         return totalScore
     }
     
-    func testPredictionMeasure() throws {
+    // swiftlint:disable function_body_length
+    func testPredictionMeasure() async throws {
         var scoreMap: [String: Int] = [:]
         
         var spelling = SpellingOptions()
@@ -193,45 +199,74 @@ final class PredictionTests: XCTestCase {
         spelling.wordPrediction = false
         spelling.wordPredictionLimit = 3
         spelling.characterOrderId = CharacterOrder.alphabetical.id
-        scoreMap["No Prediction"] = try testAllSentences(spelling: spelling, testName: "No Prediction")
+        spelling.appleWordPrediction = false
+        scoreMap["No Prediction"] = try await testAllSentences(spelling: spelling, testName: "No Prediction")
         
         spelling = SpellingOptions()
         spelling.letterPrediction = true
         spelling.wordPrediction = false
         spelling.wordPredictionLimit = 3
         spelling.characterOrderId = CharacterOrder.alphabetical.id
-        scoreMap["Letter Prediction"] = try testAllSentences(spelling: spelling, testName: "Letter Prediction")
+        spelling.appleWordPrediction = false
+        scoreMap["Letter Prediction"] = try await testAllSentences(spelling: spelling, testName: "Letter Prediction")
         
         spelling = SpellingOptions()
         spelling.letterPrediction = false
         spelling.wordPrediction = false
         spelling.characterOrderId = CharacterOrder.frequency.id
-        scoreMap["Frequency"] = try testAllSentences(spelling: spelling, testName: "Frequency")
+        spelling.appleWordPrediction = false
+        scoreMap["Frequency"] = try await testAllSentences(spelling: spelling, testName: "Frequency")
 
         spelling = SpellingOptions()
         spelling.letterPrediction = true
         spelling.wordPrediction = true
         spelling.wordPredictionLimit = 3
         spelling.characterOrderId = CharacterOrder.alphabetical.id
-        scoreMap["Word and Letter Prediction"] = try testAllSentences(spelling: spelling, testName: "Word and Letter Prediction")
+        spelling.appleWordPrediction = false
+        scoreMap["Word and Letter Prediction"] = try await testAllSentences(spelling: spelling, testName: "Word and Letter Prediction")
         
         spelling = SpellingOptions()
         spelling.letterPrediction = true
         spelling.wordPrediction = true
         spelling.wordPredictionLimit = 3
         spelling.characterOrderId = CharacterOrder.frequency.id
-        scoreMap["Word, Letter, Frequency"] = try testAllSentences(spelling: spelling, testName: "Word, Letter, Frequency")
+        spelling.appleWordPrediction = false
+        scoreMap["Word, Letter, Frequency"] = try await testAllSentences(spelling: spelling, testName: "Word, Letter, Frequency")
 
         spelling = SpellingOptions()
         spelling.letterPrediction = false
         spelling.wordPrediction = true
         spelling.wordPredictionLimit = 3
         spelling.characterOrderId = CharacterOrder.alphabetical.id
-        scoreMap["Word Prediction"] = try testAllSentences(spelling: spelling, testName: "Word Prediction")
+        spelling.appleWordPrediction = false
+        scoreMap["Word Prediction"] = try await testAllSentences(spelling: spelling, testName: "Word Prediction")
+        
+        spelling = SpellingOptions()
+        spelling.letterPrediction = false
+        spelling.wordPrediction = false
+        spelling.wordPredictionLimit = 4
+        spelling.characterOrderId = CharacterOrder.alphabetical.id
+        spelling.appleWordPrediction = true
+        scoreMap["Apple Word Prediction"] = try await testAllSentences(spelling: spelling, testName: "Apple Word Prediction Only")
+        
+        spelling.letterPrediction = true
+        spelling.wordPrediction = true
+        spelling.wordPredictionLimit = 4
+        spelling.characterOrderId = CharacterOrder.alphabetical.id
+        spelling.appleWordPrediction = true
+        scoreMap["Apple, Word, Letter"] = try await testAllSentences(spelling: spelling, testName: "Apple, Word, Letter")
+        
+        spelling.letterPrediction = true
+        spelling.wordPrediction = true
+        spelling.wordPredictionLimit = 4
+        spelling.characterOrderId = CharacterOrder.alphabetical.id
+        spelling.appleWordPrediction = true
+        scoreMap["Apple, Word, Letter, Frequency"] = try await testAllSentences(spelling: spelling, testName: "Apple, Word, Letter, Frequency")
         
         print("## Totals")
         for (key, value) in scoreMap.sorted(by: { $0.value > $1.value }) {
             print("* \(key): \(value)")
         }
     }
+    // swiftlint:enable function_body_length
 }
