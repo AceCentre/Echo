@@ -141,7 +141,7 @@ struct AccessOptionsPage: View {
             )
         }
         .sheet(item: $currentController) { currentControllerObject in
-            NavigationView {
+            NavigationStack {
                 Form {
                     ForEach(currentControllerObject.buttons, id: \.id) { button in
                         Section {
