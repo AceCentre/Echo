@@ -106,30 +106,25 @@ struct AddSwitch: View {
                 })
                 
                 Section(content: {
-                    Picker(
-                        String(
+                    
+                    ActionPicker(
+                        label: String(
                             localized: "Single Tap",
                             comment: "The label that is shown next to the single tap action"
                         ),
-                        selection: $tapAction
-                    ) {
-                        ForEach(Action.tapCases) { action in
-                            Text(action.display)
-                                .tag(action.id)
-                        }
-                    }.pickerStyle(.navigationLink)
-                    Picker(
-                        String(
+                        selected: $tapAction,
+                        actions: Action.tapCases
+                    )
+                    
+                    ActionPicker(
+                        label: String(
                             localized: "Hold",
                             comment: "The label that is shown next to the single hold action"
                         ),
-                        selection: $holdAction
-                    ) {
-                        ForEach(Action.holdCases) { action in
-                            Text(action.display)
-                                .tag(action.id)
-                        }
-                    }.pickerStyle(.navigationLink)
+                        selected: $holdAction,
+                        actions: Action.holdCases
+                    )
+
                 }, header: {
                     Text("Actions", comment: "The header of the actions area when adding a new switch")
                 }, footer: {

@@ -25,6 +25,7 @@
 		D53986AB2AF1679200CF9419 /* SharedEcho.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; };
 		D53986AC2AF1679200CF9419 /* SharedEcho.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D553118F2B445D6A005B01AB /* PredictionLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D553118E2B445D6A005B01AB /* PredictionLanguages.swift */; };
+		D55311912B46F5E5005B01AB /* ActionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55311902B46F5E5005B01AB /* ActionPicker.swift */; };
 		D574BCAE2AE170B800C50EDC /* PredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D574BCAD2AE170B800C50EDC /* PredictionTests.swift */; };
 		D57A517F2ACF084300FC7716 /* ScanningOptionsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */; };
 		D57A51812ACF0E3700FC7716 /* ScanningOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57A51802ACF0E3700FC7716 /* ScanningOptions.swift */; };
@@ -148,6 +149,7 @@
 		D539869A2AF1679100CF9419 /* SharedEcho.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedEcho.h; sourceTree = "<group>"; };
 		D553118D2B34886F005B01AB /* PREDICTION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PREDICTION.md; sourceTree = "<group>"; };
 		D553118E2B445D6A005B01AB /* PredictionLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionLanguages.swift; sourceTree = "<group>"; };
+		D55311902B46F5E5005B01AB /* ActionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionPicker.swift; sourceTree = "<group>"; };
 		D574BCA42AE170A000C50EDC /* EchoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D574BCAD2AE170B800C50EDC /* PredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionTests.swift; sourceTree = "<group>"; };
 		D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsPage.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				D5E26B422AC2E77A003545BE /* ScrollLock.swift */,
 				D5BA42052B04C312006AE544 /* KeyboardDetector.swift */,
 				D5A488992AD945D500E9A635 /* KeyPressController.swift */,
+				D55311902B46F5E5005B01AB /* ActionPicker.swift */,
 				D536A5B22AD5865B00F8DB9F /* AddSwitch.swift */,
 				D5A03D9D2B30985000CC4670 /* ControllerButtonSection.swift */,
 				D5DB64732ACD82FD00E41867 /* VoiceOptions.swift */,
@@ -705,6 +708,7 @@
 				D58005192AC6D92D008BDC33 /* VoicePicker.swift in Sources */,
 				D5965DFD2A61995A003C9208 /* EchoApp.swift in Sources */,
 				D5EDA4B52AF0160600727B90 /* ScanningOnboarding.swift in Sources */,
+				D55311912B46F5E5005B01AB /* ActionPicker.swift in Sources */,
 				D5EDA49F2AEBF1C800727B90 /* ButtonStyles.swift in Sources */,
 				D5DB64742ACD82FD00E41867 /* VoiceOptions.swift in Sources */,
 				D5A03D9E2B30985100CC4670 /* ControllerButtonSection.swift in Sources */,
