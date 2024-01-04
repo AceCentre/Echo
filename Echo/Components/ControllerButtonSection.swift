@@ -13,28 +13,23 @@ struct ControllerButtonSection: View {
     var button: ControllerButton
     
     var body: some View {
-        Picker(
-            String(
+        ActionPicker(
+            label: String(
                 localized: "Single Tap",
                 comment: "The label that is shown next to the single tap action"
             ),
-            selection: $tapAction
-        ) {
-            ForEach(Action.tapCases) { action in
-                Text(action.display)
-            }
-        }.pickerStyle(.menu)
-        Picker(
-            String(
+            selected: $tapAction,
+            actions: Action.tapCases
+        )
+        
+        ActionPicker(
+            label: String(
                 localized: "Hold",
                 comment: "The label that is shown next to the single hold action"
             ),
-            selection: $holdAction
-        ) {
-            ForEach(Action.holdCases) { action in
-                Text(action.display)
-            }
-        }.pickerStyle(.menu)
+            selected: $holdAction,
+            actions: Action.holdCases
+        )
         .onChange(of: holdAction) {
             button.holdAction = holdAction
         }
