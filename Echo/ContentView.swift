@@ -12,6 +12,8 @@ struct ContentView: SwiftUI.View {
     
     @State var lastLangId: String?
     @AppStorage(StorageKeys.showOnboarding) var showOnboarding = true
+        
+    @State var loading = true
     
     var body: some SwiftUI.View {
         if showOnboarding {
@@ -23,93 +25,99 @@ struct ContentView: SwiftUI.View {
         } else {
             NavigationStack {
                 ScrollLock(selectedUUID: $items.selectedUUID) {
-                    
-                    ZStack {
-                        if accessOptions.showOnScreenArrows {
-                            OnScreenArrows(
-                                up: { items.back(userInteraction: true) },
-                                down: { items.next(userInteraction: true) },
-                                left: { items.backspace(userInteraction: true) },
-                                right: { items.select(userInteraction: true) }
-                            )
-                        }
-                        if accessOptions.enableSwitchControl {
-                            KeyPressController()
-                        }
+                    if loading {
                         VStack {
-                            
-                            HStack {
-                                Image(systemName: "chevron.right")
+                            ProgressView()
+                            Text("Echo is loading, thank you for waiting", comment: "Text shown on loading screen.")
+                        }
+                    } else {
+                        ZStack {
+                            if accessOptions.showOnScreenArrows {
+                                OnScreenArrows(
+                                    up: { items.back(userInteraction: true) },
+                                    down: { items.next(userInteraction: true) },
+                                    left: { items.backspace(userInteraction: true) },
+                                    right: { items.select(userInteraction: true) }
+                                )
+                            }
+                            if accessOptions.enableSwitchControl {
+                                KeyPressController()
+                            }
+                            VStack {
                                 
-                                GeometryReader { geoReader in
-                                    ScrollView {
-                                        VStack(alignment: .leading) {
-                                            ForEach(items.items) { item in
-                                                HStack {
-                                                    if item.id == items.selectedUUID {
-                                                        Text(item.details.displayText)
-                                                            .padding()
-                                                            .bold()
-                                                        
-                                                    } else {
-                                                        Text(item.details.displayText)
-                                                            .padding()
-                                                        
-                                                    }
-                                                }.id(item.id)
-                                                
-                                            }
-                                        }.padding(.vertical, geoReader.size.height/2)
+                                HStack {
+                                    Image(systemName: "chevron.right")
+                                    
+                                    GeometryReader { geoReader in
+                                        ScrollView {
+                                            VStack(alignment: .leading) {
+                                                ForEach(items.items) { item in
+                                                    HStack {
+                                                        if item.id == items.selectedUUID {
+                                                            Text(item.details.displayText)
+                                                                .padding()
+                                                                .bold()
+                                                            
+                                                        } else {
+                                                            Text(item.details.displayText)
+                                                                .padding()
+                                                            
+                                                        }
+                                                    }.id(item.id)
+                                                    
+                                                }
+                                            }.padding(.vertical, geoReader.size.height/2)
+                                            
+                                        }
                                         
                                     }
-                                    
                                 }
-                            }
-                            .contentShape(Rectangle())
-                            .padding()
-                            .swipe(
-                                up: {
-                                    if accessOptions.allowSwipeGestures {
-                                        items.back(userInteraction: true)
-                                        analytics.userInteraction(type: "Swipe", extraInfo: "UP")
+                                .contentShape(Rectangle())
+                                .padding()
+                                .swipe(
+                                    up: {
+                                        if accessOptions.allowSwipeGestures {
+                                            items.back(userInteraction: true)
+                                            analytics.userInteraction(type: "Swipe", extraInfo: "UP")
+                                        }
+                                    },
+                                    down: {
+                                        if accessOptions.allowSwipeGestures {
+                                            items.next(userInteraction: true)
+                                            analytics.userInteraction(type: "Swipe", extraInfo: "DOWN")
+                                        }
+                                    },
+                                    left: {
+                                        if accessOptions.allowSwipeGestures {
+                                            items.backspace(userInteraction: true)
+                                            analytics.userInteraction(type: "Swipe", extraInfo: "LEFT")
+                                        }
+                                    },
+                                    right: {
+                                        if accessOptions.allowSwipeGestures {
+                                            items.select(userInteraction: true)
+                                            analytics.userInteraction(type: "Swipe", extraInfo: "RIGHT")
+                                        }
                                     }
-                                },
-                                down: {
-                                    if accessOptions.allowSwipeGestures {
-                                        items.next(userInteraction: true)
-                                        analytics.userInteraction(type: "Swipe", extraInfo: "DOWN")
-                                    }
-                                },
-                                left: {
-                                    if accessOptions.allowSwipeGestures {
-                                        items.backspace(userInteraction: true)
-                                        analytics.userInteraction(type: "Swipe", extraInfo: "LEFT")
-                                    }
-                                },
-                                right: {
-                                    if accessOptions.allowSwipeGestures {
-                                        items.select(userInteraction: true)
-                                        analytics.userInteraction(type: "Swipe", extraInfo: "RIGHT")
-                                    }
+                                )
+                                
+                                VStack {
+                                    Text(items.enteredText == "" ? " " : items.enteredText)
+                                        .padding(10)
                                 }
-                            )
-                            
-                            VStack {
-                                Text(items.enteredText == "" ? " " : items.enteredText)
-                                    .padding(10)
+                                .frame(maxWidth: .infinity)
+                                .background(Color("lightGray"))
+                                .shadow(radius: 1)
+                                
                             }
-                            .frame(maxWidth: .infinity)
-                            .background(Color("lightGray"))
-                            .shadow(radius: 1)
-                            
                         }
+                        .accessibilityRepresentation(representation: {
+                            Text(
+                                "Echo does not currently support system accessibility controls. To use Echo please disable your system accessibility controls. We hope to improve this in the future.",
+                                comment: "An explaination to users using Voice over about how to use Echo"
+                            )
+                        })
                     }
-                    .accessibilityRepresentation(representation: {
-                        Text(
-                            "Echo does not currently support system accessibility controls. To use Echo please disable your system accessibility controls. We hope to improve this in the future.",
-                            comment: "An explaination to users using Voice over about how to use Echo"
-                        )
-                    })
                 }
                 .navigationTitle(
                     String(
@@ -133,6 +141,7 @@ struct ContentView: SwiftUI.View {
                     items.cancelScanning()
                 }
                 .onAppear {
+                    loading = true
                     if let unwrappedLangId = lastLangId {
                         if unwrappedLangId != spelling.language.id {
                             items.clear(userInteraction: false)
@@ -146,6 +155,7 @@ struct ContentView: SwiftUI.View {
                     if scanOptions.scanOnAppLaunch {
                         items.startScanningOnAppLaunch()
                     }
+                    loading = false
                 }
             }
         }

@@ -19,9 +19,20 @@ struct EchoApp: App {
     @StateObject var rating: Rating = Rating()
     @StateObject var controllerManager = ControllerManager()
 
+    @State var loading = true
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                if loading {
+                    VStack {
+                        ProgressView()
+                        Text("Echo is loading, thank you for waiting", comment: "Text shown on loading screen.")
+                    }
+                } else {
+                    ContentView()
+                }
+            }
                 .environmentObject(voiceEngine)
                 .environmentObject(itemsList)
                 .environmentObject(accessOptions)
@@ -31,6 +42,7 @@ struct EchoApp: App {
                 .environmentObject(rating)
                 .environmentObject(controllerManager)
                 .onAppear {
+                    loading = true
                     #if DEBUG
                     for current in StorageKeys.allowedViaTest {
                         if let unwrappedValue = ProcessInfo.processInfo.environment[current] {
@@ -56,6 +68,8 @@ struct EchoApp: App {
                         voiceEngine: voiceEngine, accessOptions: accessOptions, scanningOptions: scanningOptions, spellingOptions: spellingOptions
                     )
                     analytics.event(.appLaunch)
+                    
+                    loading = false
                 }
                 .onDisappear {
                     voiceEngine.save()
