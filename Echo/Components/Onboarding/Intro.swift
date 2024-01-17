@@ -7,37 +7,43 @@
 
 import Foundation
 import SwiftUI
-import AVKit
+import WebKit
 
-struct PlayerWrapper: UIViewControllerRepresentable {
-    var videoURL: URL?
-
-    private var player: AVPlayer {
-        return AVPlayer(url: videoURL!)
+struct DemoGif: UIViewRepresentable {
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        
+        if let url = Bundle.main.url(forResource: "EchoDemo", withExtension: "gif") {
+            do {
+                let data = try Data(contentsOf: url)
+                
+                webView.load(
+                    data,
+                    mimeType: "image/gif",
+                    characterEncodingName: "UTF-8",
+                    baseURL: url.deletingLastPathComponent()
+                )
+            } catch {
+                print("An error occurred whilst loading image")
+            }
+            webView.scrollView.isScrollEnabled = false
+        }
+        
+        return webView
     }
 
-    func makeUIViewController(context: Context) -> AVPlayerViewController {
-        let controller = AVPlayerViewController()
-        
-        controller.player = player
-        controller.player?.play()
-        controller.videoGravity = .resizeAspectFill
-        
-        return controller
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.reload()
     }
 
-    func updateUIViewController(_ playerController: AVPlayerViewController, context: Context) {}
 }
 
 struct IntroStep: View {
-    @State var player: AVPlayer?
-    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
-                PlayerWrapper(videoURL: Bundle.main.url(forResource: "EchoIntro", withExtension: "mp4"))
-                    .aspectRatio(970 / 1920, contentMode: .fit)
+                DemoGif().aspectRatio(970 / 1920, contentMode: .fit)
                 Spacer()
             }
 
