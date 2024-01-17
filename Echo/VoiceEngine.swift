@@ -42,17 +42,62 @@ class VoiceOptions: Codable {
     }
 }
 
-class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Analytic {
-    @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
-    @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
-    
-    var analytics: Analytics?
-    
+class CustomAV: NSObject, AVSpeechSynthesizerDelegate {
     var synthesizer = AVSpeechSynthesizer()
     
     var callback: (() -> Void)?
     
     var lastIssuedUtterance: AVSpeechUtterance?
+    
+    override init() {        
+        super.init()
+        self.synthesizer.delegate = self
+    }
+    
+    func stop() {
+        self.synthesizer.stopSpeaking(at: .immediate)
+    }
+    
+    func speak(text: String, voiceOptions: VoiceOptions, cb: (() -> Void)?) {
+        let utterance = AVSpeechUtterance(string: text)
+        
+        utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
+        utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
+        utterance.volume = voiceOptions.volume / 100 // Volume is between 0 - 1
+        utterance.rate = voiceOptions.rate / 100 // Rate is between 0 - 1
+
+        self.lastIssuedUtterance = utterance
+        
+        if cb != nil {
+            self.callback = cb
+        }
+
+        self.synthesizer.speak(utterance)
+    }
+    
+    func triggerCallback(utterance: AVSpeechUtterance) {
+        if utterance == lastIssuedUtterance {
+            if let unwappedCallback = self.callback {
+                unwappedCallback()
+            }
+        }
+    }
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        triggerCallback(utterance: utterance)
+    }
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        triggerCallback(utterance: utterance)
+    }
+}
+
+class VoiceEngine: ObservableObject, Analytic {
+    @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
+    @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
+    
+    var analytics: Analytics?
+    var customAV: CustomAV?
     
     func getAnalyticData() -> [String: Any] {
         return [
@@ -67,10 +112,7 @@ class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Anal
         ]
     }
     
-    override init() {
-        super.init()
-        self.synthesizer.delegate = self
-        
+   init() {
         // This makes it work in silent mode by setting the audio to playback
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
@@ -79,23 +121,13 @@ class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Anal
         }
     }
     
-    func play(_ text: String, voiceOptions: VoiceOptions, cb: (() -> Void)? = {}) {
-        let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
-        let utterance = AVSpeechUtterance(string: textWithSpaces)
-        
-        utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
-        utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
-        utterance.volume = voiceOptions.volume / 100 // Volume is between 0 - 1
-        utterance.rate = voiceOptions.rate / 100 // Rate is between 0 - 1
-
-        self.synthesizer.stopSpeaking(at: .immediate)
-        
-        if cb != nil {
-            self.callback = cb
-        }
-        
-        lastIssuedUtterance = utterance
-        self.synthesizer.speak(utterance)
+    func play(_ text: String, voiceOptions: VoiceOptions, cb: (() -> Void)? = {}) {      
+            let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
+            let unwrappedAv = self.customAV ?? CustomAV()
+            self.customAV = unwrappedAv
+            
+            unwrappedAv.stop()
+            unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, cb: cb)        
     }
     
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
@@ -126,7 +158,9 @@ class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Anal
     }
     
     func load(analytics: Analytics? = nil) {
-        self.analytics = analytics
+        if analytics != nil {
+            self.analytics = analytics
+        }
         
         if let speakingVoiceData = UserDefaults.standard.data(forKey: StorageKeys.speakingVoiceOptions) {
             do {
@@ -224,19 +258,5 @@ class VoiceEngine: NSObject, ObservableObject, AVSpeechSynthesizerDelegate, Anal
         self.saveSpeakingOptions()
     }
     
-    func triggerCallback(utterance: AVSpeechUtterance) {   
-        if utterance == lastIssuedUtterance {
-            if let unwappedCallback = self.callback {
-                unwappedCallback()
-            }
-        }
-    }
-    
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        triggerCallback(utterance: utterance)
-    }
-    
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        triggerCallback(utterance: utterance)
-    }
+
 }
