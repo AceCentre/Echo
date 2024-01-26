@@ -77,7 +77,7 @@ struct SpeakingVoiceOnboarding: View {
                         voiceEngine.play(String(
                             localized: "Thank you for using Echo, this is your cue voice",
                             comment: "This is text is read aloud by the Text-To-Speech system as a preview"
-                        ), voiceOptions: cueVoice)
+                        ), voiceOptions: cueVoice, pan: AudioDirection.center.pan)
                     }
                 )
             }

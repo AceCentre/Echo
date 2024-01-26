@@ -8,10 +8,15 @@
 import Foundation
 import AVKit
 import SharedEcho
+import SwiftUI
 
 class VoiceController: ObservableObject, Analytic {
     @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
     @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
+    
+    @AppStorage("splitAudio") var splitAudio = false
+    @AppStorage("cueDirection") var cueDirection: AudioDirection = .left
+    @AppStorage("speakDirection") var speakDirection: AudioDirection = .right
     
     var analytics: Analytics?
     var customAV: AudioEngine?
@@ -38,13 +43,13 @@ class VoiceController: ObservableObject, Analytic {
         }
     }
     
-    func play(_ text: String, voiceOptions: VoiceOptions, cb: (() -> Void)? = {}) {      
-            let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
-            let unwrappedAv = self.customAV ?? AudioEngine()
-            self.customAV = unwrappedAv
-            
-            unwrappedAv.stop()
-            unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, cb: cb)        
+    func play(_ text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)? = {}) {
+        let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
+        let unwrappedAv = self.customAV ?? AudioEngine()
+        self.customAV = unwrappedAv
+        
+        unwrappedAv.stop()
+        unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, pan: pan, cb: cb)
     }
     
     func stop() {
@@ -52,30 +57,35 @@ class VoiceController: ObservableObject, Analytic {
     }
     
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
+        let direction: AudioDirection = splitAudio ? cueDirection : .center
+        
         play(text, voiceOptions: VoiceOptions(
             voiceId: cueVoiceOptions.voiceId,
             rate: 75,
             pitch: cueVoiceOptions.pitch,
             volume: cueVoiceOptions.volume
-        ), cb: cb)
+        ), pan: direction.pan, cb: cb)
     }
     
     func playCue(_ text: String, cb: (() -> Void)? = {}) {
         analytics?.event(.readCue)
-        play(text, voiceOptions: cueVoiceOptions, cb: cb)
+        let direction: AudioDirection = splitAudio ? cueDirection : .center
+
+        play(text, voiceOptions: cueVoiceOptions, pan: direction.pan, cb: cb)
     }
     
     func playSpeaking(_ text: String, cb: (() -> Void)? = {}) {
         let numberOfWords = getNumberOfWords(text)
         let averageWordLength = getAverageWordLength(text)
         let totalUtteranceLength = getTotalUtteranceLength(text)
-        
+        let direction: AudioDirection = splitAudio ? speakDirection : .center
+
         analytics?.utteranceSpoken(
             numberOfWords: numberOfWords,
             averageWordLength: averageWordLength,
             totalUtteranceLength: totalUtteranceLength
         )
-        play(text, voiceOptions: speakingVoiceOptions, cb: cb)
+        play(text, voiceOptions: speakingVoiceOptions, pan: direction.pan, cb: cb)
     }
     
     func load(analytics: Analytics? = nil) {

@@ -37,13 +37,11 @@ class AudioEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDelegate, A
         outputSemaphore.signal()
     }
     
-    func speak(text: String, voiceOptions: VoiceOptions, cb: (() -> Void)?) {
+    func speak(text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)?) {
         callback = cb
         
         let utterance = AVSpeechUtterance(string: text)
-        
-        print(utterance.speechString)
-        
+                
         utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
         utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
         utterance.volume = voiceOptions.volume / 100 // Volume is between 0 - 1
@@ -83,17 +81,23 @@ class AudioEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDelegate, A
             }
             
             if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
-                self.finished(audioUrl: audioFilePath)
+                self.finished(audioUrl: audioFilePath, pan: pan)
             }
         })
     }
     
-    func finished(audioUrl: URL) {
+    func finished(audioUrl: URL, pan: Float) {
         do {
             self.player = try AVAudioPlayer(contentsOf: audioUrl)
-            self.player?.delegate = self
-            self.player?.prepareToPlay()
-            self.player?.play()
+            
+            guard let unwrappedPlayer = self.player else {
+                fatalError("Failed to create AVAudioPlayer")
+            }
+            
+            unwrappedPlayer.pan = pan
+            unwrappedPlayer.delegate = self
+            unwrappedPlayer.prepareToPlay()
+            unwrappedPlayer.play()
         } catch {
             fatalError("Failed to create AVAudioPlayer")
         }

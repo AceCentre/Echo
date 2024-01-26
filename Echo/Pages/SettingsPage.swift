@@ -44,10 +44,10 @@ struct ExternalLinksForm: View {
 }
 
 enum SettingsPath: CaseIterable, Identifiable {
-    case voice, access, scanning, spelling, analytics, onboarding, externalLinks
+    case voice, access, scanning, spelling, analytics, onboarding, externalLinks, audio
     
-    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics]
-    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .onboarding, .externalLinks]
+    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio]
+    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .onboarding, .externalLinks]
     
     var id: String {
         switch self {
@@ -58,6 +58,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .analytics: return "analytics"
         case .onboarding: return "onboarding"
         case .externalLinks: return "external"
+        case .audio: return "audio"
         }
     }
     
@@ -70,6 +71,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .analytics: AnalyticsOptions()
         case .onboarding: OnboardingSettingsPage()
         case .externalLinks: ExternalLinksForm()
+        case .audio: AudioPage()
         }
     }
     
@@ -101,7 +103,11 @@ enum SettingsPath: CaseIterable, Identifiable {
         )
         case .externalLinks: return String(
             localized: "External Links",
-            comment: "Label for the navigation link to the initial options page"
+            comment: "Label for the navigation link to the externalLinks options page"
+        )
+        case .audio: return String(
+            localized: "Audio",
+            comment: "Label for the navigation link to the audio options page"
         )
         }
     }

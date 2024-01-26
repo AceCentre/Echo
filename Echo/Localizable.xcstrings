@@ -56,7 +56,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "The label for the section about analytics\nLabel for analytics picker"
+      "comment" : "Label for analytics picker\nThe label for the section about analytics"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -82,8 +82,17 @@
     "Arrow pointing up" : {
       "comment" : "An accessibility label for the up arrow image"
     },
+    "Audio" : {
+      "comment" : "The label for the section about analytics\nLabel for the navigation link to the audio options page"
+    },
+    "Audio Settings" : {
+      "comment" : "The navigation title for the Audio options page"
+    },
     "Back" : {
       "comment" : "The button text for the navigation back button"
+    },
+    "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
+      "comment" : "A description of why audio splitting exists"
     },
     "Cancel" : {
       "comment" : "The cancel toolbar button to stop adding a new switch"
@@ -110,7 +119,7 @@
       "comment" : "Explaination of swipe controls"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
+      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -123,6 +132,9 @@
     },
     "Cue Voice" : {
       "comment" : "The heading for the options that control the cue voice"
+    },
+    "Cue Voice Direction" : {
+      "comment" : "Label for cue voice audio direction"
     },
     "Current Sentence: " : {
       "comment" : "This label prefixes the current full sentance in the scrollable area. Make sure to leave the colon and space"
@@ -138,6 +150,9 @@
     },
     "Detect Switch" : {
       "comment" : "Label for a NavigationLink that will get a user to press their external switch"
+    },
+    "Directional Audio" : {
+      "comment" : "Label for directional audio toggle"
     },
     "Disable" : {
       "comment" : "Label to disable swipe"
@@ -173,7 +188,7 @@
       "comment" : "Explain what Echo is"
     },
     "External Links" : {
-      "comment" : "Label for the navigation link to the initial options page"
+      "comment" : "Label for the navigation link to the externalLinks options page"
     },
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
@@ -213,6 +228,9 @@
     },
     "Language and Alphabet" : {
       "comment" : "Header for the language settings"
+    },
+    "Left Channel" : {
+
     },
     "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
       "comment" : "A description of how detecting switches works and how to reset it"
@@ -289,6 +307,9 @@
     "Required" : {
       "comment" : "Prompt for required text input"
     },
+    "Right Channel" : {
+
+    },
     "Save" : {
       "comment" : "The save toolbar button when saving controller mapping"
     },
@@ -305,10 +326,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -346,6 +367,9 @@
     "Speaking Voice" : {
       "comment" : "The heading for the options that control the speaking voice"
     },
+    "Speaking Voice Direction" : {
+      "comment" : "Label for speaking voice audio direction"
+    },
     "Spelling & Alphabet" : {
       "comment" : "Label for the navigation link to the spelling, alphabet and predictions options page"
     },
@@ -371,7 +395,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
+      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"

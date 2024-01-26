@@ -47,6 +47,7 @@
 		D5A4889C2ADE8F3500E9A635 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D5A4889B2ADE8F3500E9A635 /* Localizable.xcstrings */; };
 		D5A4889E2ADFCD8D00E9A635 /* SpellingAndAlphabetPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A4889D2ADFCD8D00E9A635 /* SpellingAndAlphabetPage.swift */; };
 		D5A488A02ADFDAD400E9A635 /* SpellingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A4889F2ADFDAD400E9A635 /* SpellingOptions.swift */; };
+		D5A623202B63F93000C7A1F8 /* AudioPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A6231F2B63F93000C7A1F8 /* AudioPage.swift */; };
 		D5BA42062B04C312006AE544 /* KeyboardDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA42052B04C312006AE544 /* KeyboardDetector.swift */; };
 		D5BA42082B04E5B4006AE544 /* UIKeyboardHIDUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA42072B04E5B4006AE544 /* UIKeyboardHIDUsage.swift */; };
 		D5C005712AC58C7A007C21B2 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C005702AC58C7A007C21B2 /* SettingsPage.swift */; };
@@ -178,6 +179,7 @@
 		D5A4889B2ADE8F3500E9A635 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		D5A4889D2ADFCD8D00E9A635 /* SpellingAndAlphabetPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingAndAlphabetPage.swift; sourceTree = "<group>"; };
 		D5A4889F2ADFDAD400E9A635 /* SpellingOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingOptions.swift; sourceTree = "<group>"; };
+		D5A6231F2B63F93000C7A1F8 /* AudioPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPage.swift; sourceTree = "<group>"; };
 		D5BA42052B04C312006AE544 /* KeyboardDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDetector.swift; sourceTree = "<group>"; };
 		D5BA42072B04E5B4006AE544 /* UIKeyboardHIDUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKeyboardHIDUsage.swift; sourceTree = "<group>"; };
 		D5C0056E2AC4625D007C21B2 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 				D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */,
 				D5C005702AC58C7A007C21B2 /* SettingsPage.swift */,
 				D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */,
+				D5A6231F2B63F93000C7A1F8 /* AudioPage.swift */,
 				D5DB64752ACDBA0C00E41867 /* AccessOptionsPage.swift */,
 			);
 			path = Pages;
@@ -686,6 +689,7 @@
 				D5EDA4A72AEBF3BF00727B90 /* SecondStep.swift in Sources */,
 				D5A03D982B3097FC00CC4670 /* ButtonDefaults.swift in Sources */,
 				D53570512B598B390093AF22 /* AudioEngine.swift in Sources */,
+				D5A623202B63F93000C7A1F8 /* AudioPage.swift in Sources */,
 				D5DB64662ACC5A6A00E41867 /* ItemsList.swift in Sources */,
 				D5965DFF2A61995A003C9208 /* ContentView.swift in Sources */,
 				D535704F2B598AFD0093AF22 /* AudioEngineProtocol.swift in Sources */,

@@ -28,7 +28,7 @@ class SynthesiserEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDeleg
         self.synthesizer.stopSpeaking(at: .immediate)
     }
     
-    func speak(text: String, voiceOptions: VoiceOptions, cb: (() -> Void)?) {
+    func speak(text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)?) {
         let utterance = AVSpeechUtterance(string: text)
         
         utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)

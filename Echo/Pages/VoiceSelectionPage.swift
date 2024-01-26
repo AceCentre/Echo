@@ -92,7 +92,8 @@ struct VoiceSelectionPage: View {
                                 localized: "Thank you for using Echo, this is your speaking voice.",
                                 comment: "This is text is read aloud by the Text-To-Speech system as a preview"
                             ),
-                            voiceOptions: speakingVoice
+                            voiceOptions: speakingVoice,
+                            pan: AudioDirection.center.pan
                         )
                     }
                 )
@@ -122,7 +123,8 @@ struct VoiceSelectionPage: View {
                                 localized: "Thank you for using Echo, this is your cue voice",
                                 comment: "This is text is read aloud by the Text-To-Speech system as a preview"
                             ),
-                            voiceOptions: cueVoice
+                            voiceOptions: cueVoice,
+                            pan: AudioDirection.center.pan
                         )
                     }
                 )

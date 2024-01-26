@@ -9,5 +9,5 @@ import Foundation
 
 protocol AudioEngineProtocol {
     func stop()
-    func speak(text: String, voiceOptions: VoiceOptions, cb: (() -> Void)?)
+    func speak(text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)?)
 }
