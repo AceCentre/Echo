@@ -10,7 +10,7 @@ import SwiftUI
 import AVKit
 
 struct SpeakingVoiceOnboarding: View {
-    @EnvironmentObject var voiceEngine: VoiceEngine
+    @EnvironmentObject var voiceEngine: VoiceController
     
     @State var speakingPitch: Double = 0
     @State var speakingVolume: Double = 0

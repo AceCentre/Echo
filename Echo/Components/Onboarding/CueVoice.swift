@@ -10,7 +10,7 @@ import SwiftUI
 import AVFAudio
 
 struct CueVoiceOnboarding: View {
-    @EnvironmentObject var voiceEngine: VoiceEngine
+    @EnvironmentObject var voiceEngine: VoiceController
     
     @State var cuePitch: Double = 0
     @State var cueVolume: Double = 0

@@ -9,95 +9,12 @@ import Foundation
 import AVKit
 import SharedEcho
 
-class VoiceOptions: Codable {
-    var voiceId: String
-    var rate: Float
-    var pitch: Float
-    var volume: Float
-        
-    init() {
-        self.voiceId = ""
-        self.rate = 50
-        self.pitch = 25
-        self.volume = 100
-    }
-    
-    init(
-        voiceId: String,
-        rate: Float,
-        pitch: Float,
-        volume: Float
-    ) {
-        self.voiceId = voiceId
-        self.rate = rate
-        self.pitch = pitch
-        self.volume = volume
-    }
-    
-    init(_ voiceId: String) {
-        self.voiceId = voiceId
-        self.rate = 50
-        self.pitch = 25
-        self.volume = 100
-    }
-}
-
-class CustomAV: NSObject, AVSpeechSynthesizerDelegate {
-    var synthesizer = AVSpeechSynthesizer()
-    
-    var callback: (() -> Void)?
-    
-    var lastIssuedUtterance: AVSpeechUtterance?
-    
-    override init() {        
-        super.init()
-        self.synthesizer.delegate = self
-    }
-    
-    func stop() {
-        self.synthesizer.stopSpeaking(at: .immediate)
-    }
-    
-    func speak(text: String, voiceOptions: VoiceOptions, cb: (() -> Void)?) {
-        let utterance = AVSpeechUtterance(string: text)
-        
-        utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
-        utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
-        utterance.volume = voiceOptions.volume / 100 // Volume is between 0 - 1
-        utterance.rate = voiceOptions.rate / 100 // Rate is between 0 - 1
-
-        self.lastIssuedUtterance = utterance
-        
-        if cb != nil {
-            self.callback = cb
-        }
-
-        self.synthesizer.speak(utterance)
-    }
-    
-    func triggerCallback(utterance: AVSpeechUtterance) {
-        if utterance == lastIssuedUtterance {
-            if let unwappedCallback = self.callback {
-                unwappedCallback()
-            }
-        }
-    }
-    
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        triggerCallback(utterance: utterance)
-    }
-    
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        triggerCallback(utterance: utterance)
-    }
-}
-
-class VoiceEngine: ObservableObject, Analytic {
+class VoiceController: ObservableObject, Analytic {
     @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
     @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
     
     var analytics: Analytics?
-    var customAV: CustomAV?
+    var customAV: AudioEngine?
     
     func getAnalyticData() -> [String: Any] {
         return [
@@ -123,11 +40,15 @@ class VoiceEngine: ObservableObject, Analytic {
     
     func play(_ text: String, voiceOptions: VoiceOptions, cb: (() -> Void)? = {}) {      
             let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
-            let unwrappedAv = self.customAV ?? CustomAV()
+            let unwrappedAv = self.customAV ?? AudioEngine()
             self.customAV = unwrappedAv
             
             unwrappedAv.stop()
             unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, cb: cb)        
+    }
+    
+    func stop() {
+        customAV?.stop()
     }
     
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
@@ -257,6 +178,4 @@ class VoiceEngine: ObservableObject, Analytic {
         self.saveCueOptions()
         self.saveSpeakingOptions()
     }
-    
-
 }

@@ -12,10 +12,10 @@ class FinishItem: ItemProtocol, Identifiable {
     var id = UUID()
     var displayText: String
     var speakText: String
-    var voiceEngine: VoiceEngine
+    var voiceEngine: VoiceController
     var letter: String = ""
     
-    init(_ display: String, voiceEngine: VoiceEngine) {
+    init(_ display: String, voiceEngine: VoiceController) {
         self.displayText = display
         self.speakText = displayText
         self.voiceEngine = voiceEngine
@@ -191,7 +191,7 @@ struct Item: Identifiable {
         self.details = ApplePredictionItem(predictedWord, analytics: analytics)
     }
     
-    init(actionType: ItemActionType, display: String, voiceEngine: VoiceEngine) {
+    init(actionType: ItemActionType, display: String, voiceEngine: VoiceController) {
         switch actionType {
         case .backspace:
             self.details = BackspaceItem(display)

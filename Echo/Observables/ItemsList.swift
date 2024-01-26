@@ -19,7 +19,7 @@ class ItemsList: ObservableObject {
     var undoItem: Item?
     var clearItem: Item?
     
-    var voiceEngine: VoiceEngine?
+    var voiceEngine: VoiceController?
     var spelling: SpellingOptions?
     var scanningOptions: ScanningOptions?
     var analytics: Analytics?
@@ -81,7 +81,7 @@ class ItemsList: ObservableObject {
         self.moveToUUID(target: selectedUUID, isAppLaunch: false, isAfterSelection: false, isKeyPress: true)
     }
     
-    func loadEngine(_ voiceEngine: VoiceEngine) {
+    func loadEngine(_ voiceEngine: VoiceController) {
         self.voiceEngine = voiceEngine
         self.undoItem = Item(
             actionType: .backspace,

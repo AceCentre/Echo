@@ -120,7 +120,7 @@ struct Onboarding: View {
 
 struct OnboardingWrapper: View {
     @StateObject var access: AccessOptions = AccessOptions()
-    @StateObject var voiceEngine: VoiceEngine = VoiceEngine()
+    @StateObject var voiceEngine: VoiceController = VoiceController()
     @StateObject var analytics: Analytics = Analytics()
     @StateObject var spelling: SpellingOptions = SpellingOptions()
     @StateObject var scanning: ScanningOptions = ScanningOptions()

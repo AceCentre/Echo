@@ -3,7 +3,7 @@ import Combine
 import SharedEcho
 
 struct ContentView: SwiftUI.View {
-    @EnvironmentObject var voiceEngine: VoiceEngine
+    @EnvironmentObject var voiceEngine: VoiceController
     @EnvironmentObject var items: ItemsList
     @EnvironmentObject var accessOptions: AccessOptions
     @EnvironmentObject var scanOptions: ScanningOptions

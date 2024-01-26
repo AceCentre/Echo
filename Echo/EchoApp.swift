@@ -10,7 +10,7 @@ import SharedEcho
 
 @main
 struct EchoApp: App {
-    @StateObject var voiceEngine: VoiceEngine = VoiceEngine()
+    @StateObject var voiceEngine: VoiceController = VoiceController()
     @StateObject var itemsList: ItemsList = ItemsList()
     @StateObject var accessOptions: AccessOptions = AccessOptions()
     @StateObject var scanningOptions: ScanningOptions = ScanningOptions()

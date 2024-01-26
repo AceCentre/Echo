@@ -60,7 +60,7 @@ protocol Analytic {
 class Analytics: ObservableObject {
     @AppStorage(StorageKeys.allowAnalytics) var allowAnalytics = true
     
-    var voiceEngine: VoiceEngine?
+    var voiceEngine: VoiceController?
     var accessOptions: AccessOptions?
     var scanningOptions: ScanningOptions?
     var spellingOptions: SpellingOptions?
@@ -86,7 +86,7 @@ class Analytics: ObservableObject {
         return PHGPostHog.shared()
     }
     
-    func load(voiceEngine: VoiceEngine, accessOptions: AccessOptions, scanningOptions: ScanningOptions, spellingOptions: SpellingOptions) {
+    func load(voiceEngine: VoiceController, accessOptions: AccessOptions, scanningOptions: ScanningOptions, spellingOptions: SpellingOptions) {
         self.voiceEngine = voiceEngine
         self.accessOptions = accessOptions
         self.scanningOptions = scanningOptions

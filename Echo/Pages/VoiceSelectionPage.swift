@@ -10,7 +10,7 @@ import SwiftUI
 import AVFAudio
 
 struct VoiceSelectionPage: View {
-    @EnvironmentObject var voiceEngine: VoiceEngine
+    @EnvironmentObject var voiceEngine: VoiceController
     
     @State var cuePitch: Double = 0
     @State var cueVolume: Double = 0
@@ -147,7 +147,7 @@ struct VoiceSelectionPage: View {
 }
 
 private struct PreviewWrapper: View {
-    @StateObject var voiceEngine: VoiceEngine = VoiceEngine()
+    @StateObject var voiceEngine: VoiceController = VoiceController()
     
     var body: some View {
         NavigationStack {
