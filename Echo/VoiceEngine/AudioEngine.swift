@@ -7,8 +7,9 @@
 
 import Foundation
 import AVKit
+import SwiftUI
 
-class AudioEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate {
+class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate, ObservableObject {
     var synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     var player: AVAudioPlayer?
             
@@ -37,7 +38,7 @@ class AudioEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDelegate, A
         outputSemaphore.signal()
     }
     
-    func speak(text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)?) {
+    func speak(text: String, voiceOptions: VoiceOptions, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
         callback = cb
         
         let utterance = AVSpeechUtterance(string: text)
@@ -51,39 +52,43 @@ class AudioEngine: NSObject, AudioEngineProtocol, AVSpeechSynthesizerDelegate, A
         
         let audioFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
         var output: AVAudioFile?
-        
-        synthesizer.write(utterance, toBufferCallback: { buffer in
-            guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
-                fatalError("unknown buffer type: \(buffer)")
-            }
             
-            if let unwrappedOutput = output {
-                do {
-                    try unwrappedOutput.write(from: pcmBuffer)
-                } catch {
-                    fatalError("Failed to write pcmBuffer to output")
+        if scenePhase == .active {
+            synthesizer.write(utterance, toBufferCallback: { buffer in
+                guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
+                    fatalError("unknown buffer type: \(buffer)")
                 }
                 
-            } else {
-                output = try? AVAudioFile(
-                    forWriting: audioFilePath,
-                    settings: pcmBuffer.format.settings,
-                    commonFormat: pcmBuffer.format.commonFormat,
-                    interleaved: pcmBuffer.format.isInterleaved
-                )
                 if let unwrappedOutput = output {
                     do {
                         try unwrappedOutput.write(from: pcmBuffer)
                     } catch {
                         fatalError("Failed to write pcmBuffer to output")
                     }
+                    
+                } else {
+                    output = try? AVAudioFile(
+                        forWriting: audioFilePath,
+                        settings: pcmBuffer.format.settings,
+                        commonFormat: pcmBuffer.format.commonFormat,
+                        interleaved: pcmBuffer.format.isInterleaved
+                    )
+                    if let unwrappedOutput = output {
+                        do {
+                            try unwrappedOutput.write(from: pcmBuffer)
+                        } catch {
+                            fatalError("Failed to write pcmBuffer to output")
+                        }
+                    }
                 }
-            }
-            
-            if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
-                self.finished(audioUrl: audioFilePath, pan: pan)
-            }
-        })
+                
+                if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
+                    self.finished(audioUrl: audioFilePath, pan: pan)
+                }
+            })
+        } else {
+            print("Not calling write as app is in the background or inactive")
+        }
     }
     
     func finished(audioUrl: URL, pan: Float) {

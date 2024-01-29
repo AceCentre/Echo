@@ -144,7 +144,6 @@ class Analytics: ObservableObject {
         ].merging(extraProperties, uniquingKeysWith: { (current, _) in current })
 
         if let unwrappedPosthog = posthog, allowAnalytics == true {
-            print("ANALYTICS EVENT: ", key.rawValue, extraProperties)
             unwrappedPosthog.capture(
                 key.rawValue,
                 properties: properties
@@ -157,10 +156,7 @@ class Analytics: ObservableObject {
                     key.rawValue,
                     properties: properties
                 )
-                print("ANALYTICS EVENT (NEW): ", key.rawValue, extraProperties)
             }
-        } else {
-            print("ANALYTICS EVENT (SUPRESSED): ", key.rawValue, extraProperties)
         }
     }
 }

@@ -73,8 +73,10 @@ class ItemsList: ObservableObject {
         }
     }
     
-    func startScanningOnAppLaunch() {
-        self.moveToUUID(target: selectedUUID, isAppLaunch: true, isAfterSelection: false)
+    func startup() {
+        if let first = items.first {
+            self.moveToUUID(target: first.id, isAppLaunch: true, isAfterSelection: false)
+        }
     }
     
     func startScanningOnKeyPress() {
@@ -106,10 +108,6 @@ class ItemsList: ObservableObject {
         let predictions = spellingOptions.predict(enteredText: enteredText)
 
         items = predictions + items
-
-        if let firstItem = items.first {
-            selectedUUID = firstItem.id
-        }
     }
     
     func loadAnalytics(_ analytics: Analytics) {

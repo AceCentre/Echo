@@ -21,6 +21,10 @@ struct EchoApp: App {
 
     @State var loading = true
     
+    @Environment(\.scenePhase) var scenePhase
+    
+    @AppStorage(StorageKeys.showOnboarding) var showOnboarding = true
+    
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -30,7 +34,7 @@ struct EchoApp: App {
                         Text("Echo is loading, thank you for waiting", comment: "Text shown on loading screen.")
                     }
                 } else {
-                    ContentView()
+                    ContentView(showOnboarding: $showOnboarding)
                 }
             }
                 .environmentObject(voiceEngine)
@@ -43,6 +47,7 @@ struct EchoApp: App {
                 .environmentObject(controllerManager)
                 .onAppear {
                     loading = true
+                    voiceEngine.setPhase(scenePhase)
                     #if DEBUG
                     for current in StorageKeys.allowedViaTest {
                         if let unwrappedValue = ProcessInfo.processInfo.environment[current] {
@@ -68,12 +73,19 @@ struct EchoApp: App {
                         voiceEngine: voiceEngine, accessOptions: accessOptions, scanningOptions: scanningOptions, spellingOptions: spellingOptions
                     )
                     analytics.event(.appLaunch)
-                    
+                                        
                     loading = false
                 }
                 .onDisappear {
                     voiceEngine.save()
                     accessOptions.save()
+                }
+                .onChange(of: scenePhase) { newPhase in
+                    voiceEngine.setPhase(newPhase)
+                    if newPhase == .active && showOnboarding == false {
+                        itemsList.allowScanning()
+                        itemsList.startup()
+                    }
                 }
         }
         

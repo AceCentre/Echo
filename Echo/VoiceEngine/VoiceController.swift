@@ -13,6 +13,7 @@ import SwiftUI
 class VoiceController: ObservableObject, Analytic {
     @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
     @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
+    @Published var phase: ScenePhase = .active
     
     @AppStorage("splitAudio") var splitAudio = false
     @AppStorage("cueDirection") var cueDirection: AudioDirection = .left
@@ -35,6 +36,7 @@ class VoiceController: ObservableObject, Analytic {
     }
     
    init() {
+        phase = .active
         // This makes it work in silent mode by setting the audio to playback
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
@@ -43,13 +45,17 @@ class VoiceController: ObservableObject, Analytic {
         }
     }
     
+    func setPhase(_ newPhase: ScenePhase) {
+        phase = newPhase
+    }
+    
     func play(_ text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)? = {}) {
         let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
         let unwrappedAv = self.customAV ?? AudioEngine()
         self.customAV = unwrappedAv
         
         unwrappedAv.stop()
-        unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, pan: pan, cb: cb)
+        unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, pan: pan, scenePhase: phase, cb: cb)
     }
     
     func stop() {
