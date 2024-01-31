@@ -283,7 +283,7 @@ class ItemsList: ObservableObject {
             ) : ""
             let splitBySpace = self.enteredText.components(separatedBy: "·")
             let prefix = splitBySpace.last ?? ""
-            let prefixWithHyphens = currentWordPrefix + String(Array(prefix.split(separator: "")).joined(separator: "·"))
+            let prefixWithHyphens = currentWordPrefix + "<say-as interpret-as=\"characters\">\(prefix)</say-as>"
             let prefixItem = Item(
                 letter: "·",
                 display: currentWordPrefix + prefix,

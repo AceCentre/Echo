@@ -40,9 +40,13 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     
     func speak(text: String, voiceOptions: VoiceOptions, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
         callback = cb
-        
-        let utterance = AVSpeechUtterance(string: text)
                 
+        // let ssmlRepresentation = "<speak><say-as interpret-as=\"characters\">dylan</say-as></speak>"
+        let ssmlRepresentation = "<speak>\(text)</speak>"
+        guard let utterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) else {
+            fatalError("SSML was not valid")
+        }
+        
         utterance.voice = AVSpeechSynthesisVoice(identifier: voiceOptions.voiceId)
         utterance.pitchMultiplier = ((voiceOptions.pitch * 1.5) / 100) + 0.5 // Pitch is between 0.5 - 2
         utterance.volume = voiceOptions.volume / 100 // Volume is between 0 - 1
