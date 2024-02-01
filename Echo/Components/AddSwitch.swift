@@ -35,6 +35,27 @@ struct DetectSwitch: View {
     }
 }
 
+struct AddSwitchSheet: View {
+    @Binding var showNewSwitchSheet: Bool
+    @Binding var currentSwitch: Switch?
+    
+    var body: some View {
+        ZStack {}
+            .sheet(isPresented: $showNewSwitchSheet) {
+                AddSwitch().interactiveDismissDisabled()
+            }.interactiveDismissDisabled()
+            .sheet(item: $currentSwitch) { currentSwitchObject in
+                AddSwitch(
+                    switchName: currentSwitchObject.name,
+                    selectedKey: currentSwitchObject.key,
+                    tapAction: currentSwitchObject.tapAction,
+                    holdAction: currentSwitchObject.holdAction,
+                    id: currentSwitchObject.id
+                ).interactiveDismissDisabled()
+            }
+    }
+}
+
 struct AddSwitch: View {
     @EnvironmentObject var accessOptions: AccessOptions
     @Environment(\.presentationMode) var presentationMode
@@ -45,6 +66,8 @@ struct AddSwitch: View {
     @State var doubleAction: Action = .none
     @State var holdAction: Action = .none
     @State var id: UUID?
+    
+    @State var deleteAlert: Bool = false
     
     var isButtonEnabled: Bool {
         if switchName == "" { return true }
@@ -137,28 +160,7 @@ struct AddSwitch: View {
                 if id != nil {
                     Section(content: {
                         Button(action: {
-                            if let unwrappedKey = selectedKey, let unwrappedId = id {
-                                accessOptions.updateSwitch(
-                                    id: unwrappedId,
-                                    name: switchName,
-                                    key: unwrappedKey,
-                                    tapAction: tapAction,
-                                    holdAction: holdAction
-                                )
-                            }
-                            
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text("Save Changes", comment: "The label for the save changes button")
-                        })
-                        
-                        .disabled(isButtonEnabled)
-                        Button(action: {
-                            if let unwrappedId = id {
-                                accessOptions.deleteSwitch(id: unwrappedId)
-                            }
-                            
-                            presentationMode.wrappedValue.dismiss()
+                            deleteAlert = true
                         }, label: {
                             Label(
                                 String(
@@ -169,39 +171,22 @@ struct AddSwitch: View {
                             )
                             .foregroundColor(.red)
                         })
-                        
-                    }, footer: {
-                        Text(
-                            "A switch name and switch key must be entered before you can save changes switch.",
-                            comment: "The footer for the save button area of adding a new switch"
-                        )
-                    })
-                } else {
-                    Section(content: {
-                        Button(action: {
-                            if let unwrappedKey = selectedKey {
-                                accessOptions.addSwitch(
-                                    name: switchName,
-                                    key: unwrappedKey,
-                                    tapAction: tapAction,
-                                    holdAction: holdAction
-                                )
+                        .alert(String(localized: "Delete Switch", comment: "Title for alert about deleting a switch"), isPresented: $deleteAlert) {
+                            Button(String(localized: "Delete", comment: "Button label to confirm deletion"), role: .destructive) {
+                                if let unwrappedId = id {
+                                    accessOptions.deleteSwitch(id: unwrappedId)
+                                }
+                                
+                                presentationMode.wrappedValue.dismiss()
                             }
-                            
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text("Add New Switch", comment: "Label on button that adds switch and saves it")
-                        })
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .disabled(isButtonEnabled)
-                    }, footer: {
-                        Text(
-                            "A switch name and switch key must be entered before you can save the new switch.",
-                            comment: "The footer to to the save button that explains what the required fields are."
-                        )
+                            Button(String(localized: "Cancel", comment: "Cancel button label"), role: .cancel) { deleteAlert.toggle() }
+                    
+                        } message: {
+                            Text("Are you sure you want to delete '\(switchName)'?", comment: "Message in alert for deleting switch")
+                        }
+
                     })
                 }
-                
             }
             
             .toolbar {
@@ -215,6 +200,17 @@ struct AddSwitch: View {
                         )
                     })
                 }
+                
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(action: {
+                            createUpdateSwitch()
+                            
+                            presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            Text("Save", comment: "The label for the save changes button")
+                        })
+                    }
+                
             }
             .navigationTitle(
                 String(
@@ -227,6 +223,28 @@ struct AddSwitch: View {
         .onAppear {
             initSwitchName()
         }
+    }
+    
+    func createUpdateSwitch() {
+        if let unwrappedId = id {
+            // Update existing switch
+            accessOptions.updateSwitch(
+                id: unwrappedId,
+                name: switchName,
+                key: selectedKey ?? .keyboardEscape,
+                tapAction: tapAction,
+                holdAction: holdAction
+            )
+        } else {
+            // Create new switch
+            accessOptions.addSwitch(
+                name: switchName,
+                key: selectedKey ?? .keyboardEscape,
+                tapAction: tapAction,
+                holdAction: holdAction
+            )
+        }
+        
     }
 }
 

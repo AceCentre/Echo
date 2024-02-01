@@ -89,18 +89,9 @@ struct SwitchOnboarding: View {
                 
             }
             .scrollContentBackground(.hidden)
-            .sheet(isPresented: $showNewSwitchSheet) {
-                AddSwitch()
-            }
-            .sheet(item: $currentSwitch) { currentSwitchObject in
-                AddSwitch(
-                    switchName: currentSwitchObject.name,
-                    selectedKey: currentSwitchObject.key,
-                    tapAction: currentSwitchObject.tapAction,
-                    holdAction: currentSwitchObject.holdAction,
-                    id: currentSwitchObject.id
-                )
-            }
+            AddSwitchSheet(
+                showNewSwitchSheet: $showNewSwitchSheet, currentSwitch: $currentSwitch
+            )
         }
         
     }

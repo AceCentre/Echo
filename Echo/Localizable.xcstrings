@@ -16,12 +16,6 @@
     "A slash to indicate disabled" : {
       "comment" : "Accessibility label for slash"
     },
-    "A switch name and switch key must be entered before you can save changes switch." : {
-      "comment" : "The footer for the save button area of adding a new switch"
-    },
-    "A switch name and switch key must be entered before you can save the new switch." : {
-      "comment" : "The footer to to the save button that explains what the required fields are."
-    },
     "About Us" : {
       "comment" : "A link to the about page"
     },
@@ -36,9 +30,6 @@
     },
     "Activate your external switch" : {
       "comment" : "Shown when detecting the switch press when adding a new switch"
-    },
-    "Add New Switch" : {
-      "comment" : "Label on button that adds switch and saves it"
     },
     "Add Switch" : {
       "comment" : "Button label to add a new switch to the list"
@@ -56,7 +47,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "The label for the section about analytics\nLabel for analytics picker"
+      "comment" : "Label for analytics picker\nThe label for the section about analytics"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -69,6 +60,9 @@
     },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Are you sure you want to delete '%@'?" : {
+      "comment" : "Message in alert for deleting switch"
     },
     "Arrow pointing down" : {
       "comment" : "An accessibility label for the down arrow image"
@@ -95,7 +89,7 @@
       "comment" : "A description of why audio splitting exists"
     },
     "Cancel" : {
-      "comment" : "The cancel toolbar button to stop adding a new switch"
+      "comment" : "Cancel button label"
     },
     "Clear" : {
       "comment" : "The label for the button that will clear all the text that has been inputted"
@@ -142,8 +136,11 @@
     "Current Word: " : {
       "comment" : "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
     },
+    "Delete" : {
+      "comment" : "Button label to confirm deletion"
+    },
     "Delete Switch" : {
-      "comment" : "The label for the button to delete a switch"
+      "comment" : "Title for alert about deleting a switch"
     },
     "Delete the last inputted letter" : {
       "comment" : "Label for action that happens on a keypress"
@@ -311,10 +308,7 @@
 
     },
     "Save" : {
-      "comment" : "The save toolbar button when saving controller mapping"
-    },
-    "Save Changes" : {
-      "comment" : "The label for the save changes button"
+      "comment" : "The save toolbar button when saving controller mapping\nThe label for the save changes button"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -326,7 +320,7 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on"
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for the scanning during onboarding\nLabel for toggle to turn scanning off and on"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
       "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
