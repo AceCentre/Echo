@@ -34,6 +34,8 @@ public struct StorageKeys {
     public static var speakingVoiceOptions = "speakingVoiceOptions"
     public static var cueVoiceOptions = "cueVoiceOptions"
     
+    public static var controlCommandPosition = "controlCommandPosition"
+    
     public static var allowedViaTest = [
         showOnboarding,
         scanning,

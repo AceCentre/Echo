@@ -107,7 +107,7 @@ class ItemsList: ObservableObject {
         self.spelling = spellingOptions
         let predictions = spellingOptions.predict(enteredText: enteredText)
 
-        items = predictions + items
+        self.setItems(prefixItems: [], predictions: predictions)
     }
     
     func loadAnalytics(_ analytics: Analytics) {
@@ -295,9 +295,27 @@ class ItemsList: ObservableObject {
                 prefixItems.append(prefixItem)
                 newTargetItem = prefixItem
             }
-            
-            self.items = prefixItems + predictions
+                       
+            self.setItems(prefixItems: prefixItems, predictions: predictions)
             self.moveToUUID(target: newTargetItem.id, isAppLaunch: false, isAfterSelection: true)
+        }
+    }
+    
+    func setItems(prefixItems: [Item], predictions: [Item]) {
+        if
+            let spellingOptions = self.spelling,
+            let backspace = self.undoItem,
+            let clear = self.clearItem
+        {
+            if spellingOptions.controlCommandPosition == .hide {
+                self.items = prefixItems + predictions
+            } else if spellingOptions.controlCommandPosition == .top {
+                self.items =  prefixItems + [backspace, clear] + predictions
+            } else if spellingOptions.controlCommandPosition == .bottom {
+                self.items = prefixItems + predictions + [backspace, clear]
+            }
+        } else {
+            self.items = prefixItems + predictions
         }
     }
     

@@ -37,6 +37,12 @@ enum CharacterOrder: String, CaseIterable, Identifiable {
     public static var defaultOrder: CharacterOrder = .alphabetical
 }
 
+enum ControlCommandDisplayOptions: Int {
+    case hide
+    case top
+    case bottom
+}
+
 class SpellingOptions: ObservableObject, Analytic {
     @AppStorage(StorageKeys.letterPrediction) var letterPrediction: Bool = true
     @AppStorage(StorageKeys.wordPrediction) var wordPrediction: Bool = true
@@ -45,6 +51,7 @@ class SpellingOptions: ObservableObject, Analytic {
     @AppStorage(StorageKeys.characterOrder) var characterOrderId: String = CharacterOrder.defaultOrder.id
     @AppStorage(StorageKeys.wordAndLetterPrompt) var wordAndLetterPrompt: Bool = true
     @AppStorage(StorageKeys.appleWordPrediction) var appleWordPrediction: Bool = true
+    @AppStorage(StorageKeys.controlCommandPosition) var controlCommandPosition: ControlCommandDisplayOptions = .top
     
     @Published var allWordPrediction: Bool {
         willSet {

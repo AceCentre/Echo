@@ -62,8 +62,8 @@ struct EchoApp: App {
                     spellingOptions.loadAnalytics(analytics: analytics)
                     voiceEngine.load(analytics: analytics)
                     accessOptions.load()
-                    itemsList.loadSpelling(spellingOptions)
                     itemsList.loadEngine(voiceEngine)
+                    itemsList.loadSpelling(spellingOptions)
                     itemsList.loadScanning(scanningOptions)
                     
                     controllerManager.loadItems(itemsList)

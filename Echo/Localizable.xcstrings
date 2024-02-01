@@ -47,7 +47,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for analytics picker"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -77,7 +77,7 @@
       "comment" : "An accessibility label for the up arrow image"
     },
     "Audio" : {
-      "comment" : "The label for the section about analytics\nLabel for the navigation link to the audio options page"
+      "comment" : "Label for the navigation link to the audio options page\nThe label for the section about analytics"
     },
     "Audio Settings" : {
       "comment" : "The navigation title for the Audio options page"
@@ -111,6 +111,9 @@
     },
     "Control **Echo** using Swipes" : {
       "comment" : "Explaination of swipe controls"
+    },
+    "Control Commands" : {
+      "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
       "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
@@ -154,6 +157,9 @@
     "Disable" : {
       "comment" : "Label to disable swipe"
     },
+    "Display control commands" : {
+      "comment" : "Picker label for control commands"
+    },
     "Do not track" : {
       "comment" : "Label to disable swipe"
     },
@@ -174,6 +180,9 @@
     },
     "Enable" : {
       "comment" : "Label to enable swipe"
+    },
+    "End of list" : {
+      "comment" : "Picker option for control command"
     },
     "English" : {
       "comment" : "The label for the English language when setting prediction language"
@@ -209,7 +218,7 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Label to hide arrows"
+      "comment" : "Label to hide arrows\nPicker option for control command"
     },
     "Hold" : {
       "comment" : "The label that is shown next to the single hold action"
@@ -284,7 +293,7 @@
       "comment" : "Explaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -370,6 +379,9 @@
     "Spelling & Alphabet Options" : {
       "comment" : "The navigation title for the Spelling & Alphabet options page"
     },
+    "Start of list" : {
+      "comment" : "Picker option for control command"
+    },
     "Start scanning from the current item, scanning must be enabled" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -405,6 +417,9 @@
     },
     "Thank you for using Echo, this is your speaking voice." : {
       "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
+    },
+    "The control commands are commands like backspace and clear. They can be shown the list of items and selected." : {
+      "comment" : "Footer for commands area"
     },
     "The language chosen here will change the alphabet that is shown and will change which words are used for prediction" : {
       "comment" : "Footer for the language settings"
@@ -497,7 +512,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SpellingAndAlphabetPage: View {
     @EnvironmentObject var spellingOptions: SpellingOptions
-    
+        
     var body: some View {
         Form {
             Section(content: {
@@ -86,6 +86,24 @@ struct SpellingAndAlphabetPage: View {
                 Text(
                     "The language chosen here will change the alphabet that is shown and will change which words are used for prediction",
                     comment: "Footer for the language settings"
+                )
+            })
+            
+            Section(content: {
+                Picker(String(localized: "Display control commands", comment: "Picker label for control commands"), selection: spellingOptions.$controlCommandPosition) {
+                    Text("Hide", comment: "Picker option for control command").tag(ControlCommandDisplayOptions.hide)
+                    Text("End of list", comment: "Picker option for control command").tag(ControlCommandDisplayOptions.bottom)
+                    Text("Start of list", comment: "Picker option for control command").tag(ControlCommandDisplayOptions.top)
+                }
+            }, header: {
+                Text(
+                    "Control Commands",
+                    comment: "Header for commands area"
+                )
+            }, footer: {
+                Text(
+                    "The control commands are commands like backspace and clear. They can be shown the list of items and selected.",
+                    comment: "Footer for commands area"
                 )
             })
             
