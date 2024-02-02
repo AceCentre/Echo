@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 extension SwiftUI.View {
+    /***
+        Note the directions given here refer to the direction of inertia. So 'left' is swiping your finger from right to the left
+     */
     func swipe(
         up: @escaping (() -> Void) = {},
         down: @escaping (() -> Void) = {},

@@ -74,18 +74,26 @@ struct ContentView: SwiftUI.View {
                                             
                                         }
                                     }
+                                    .background(Color("transparent"))
                                     .contentShape(Rectangle())
                                     .padding()
+                                    .onTapGesture(count: 1, perform: {
+                                        if accessOptions.allowSwipeGestures {
+                                            items.select(userInteraction: true)
+                                            analytics.userInteraction(type: "Tap", extraInfo: "Single")
+                                        }
+                                    })
+                                    // Note the directions given here refer to the direction of inertia. So 'left' is swiping your finger from right to the left
                                     .swipe(
                                         up: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.back(userInteraction: true)
+                                                items.next(userInteraction: true)
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "UP")
                                             }
                                         },
                                         down: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.next(userInteraction: true)
+                                                items.back(userInteraction: true)
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "DOWN")
                                             }
                                         },
@@ -113,6 +121,7 @@ struct ContentView: SwiftUI.View {
                                     
                                 }
                             }
+                            
                             .accessibilityRepresentation(representation: {
                                 Text(
                                     "Echo does not currently support system accessibility controls. To use Echo please disable your system accessibility controls. We hope to improve this in the future.",

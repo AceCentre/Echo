@@ -36,7 +36,7 @@ struct AccessOptionsPage: View {
             Section(content: {
                 Toggle(
                     String(
-                        localized: "Swiping gestures",
+                        localized: "Tap and Gesture control",
                         comment: "Toggle for swiping gestures"
                     ),
                     isOn: $accessOptions.allowSwipeGestures
@@ -46,10 +46,11 @@ struct AccessOptionsPage: View {
                 Text(
             """
             Swipe up, down, left or right to control Echo
-               • **Right:** Select the current item
-               • **Down:** Go to the next item in the list
-               • **Left:** Remove the last entered character
-               • **Up:** Go to the previous item in the list
+               • **Tap:** Select the current item
+               • **Left to Right:** Select the current item
+               • **Right to Left:** Remove the last entered character
+               • **Top to Bottom:** Go to the previous item in the list
+               • **Bottom to Top:** Go to the next item in the list
             """,
             comment: "A description of all the swiping gestures. Please use the same format including bold text"
                 )
