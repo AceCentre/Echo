@@ -132,8 +132,8 @@ class SpellingOptions: ObservableObject, Analytic {
             allWordPrediction = false
         }
     }
-
-    func getApplePredictionItems(_ enteredText: String) -> [Item] {
+    
+    func getApplePredictionNodes(_ enteredText: String) -> [Node] {
         let predictionText = enteredText.replacingOccurrences(of: "·", with: " ")
         
         if predictionText.last == " " {
@@ -152,11 +152,11 @@ class SpellingOptions: ObservableObject, Analytic {
         )
                 
         return (completions ?? []).map { word in
-            return Item(predictedWord: word, analytics: self.analytics)
+            return Node(type: .predictedWord, text: word)
         }
     }
     
-    func getDictPredictionItems(_ enteredText: String) -> [Item] {
+    func getDictPredictionNodes(_ enteredText: String) -> [Node] {
         guard let db = dbConn else { return [] }
         guard let words = wordsTable else { return [] }
         
@@ -191,7 +191,7 @@ class SpellingOptions: ObservableObject, Analytic {
             
             return wordPredictions.map { word in
                 let wordWithoutPrefix = String(word.dropFirst(prefix.count))
-                return Item(letter: wordWithoutPrefix + "·", display: word, speakText: word, letterType: .predictedWord, analytics: self.analytics)
+                return Node(type: .letter, text: wordWithoutPrefix)
             }
             
         } catch {
@@ -200,11 +200,11 @@ class SpellingOptions: ObservableObject, Analytic {
         }
     }
     
-    func getDictLetterItems(_ enteredText: String) -> [Item] {
+    func getDictLetterNodes(_ enteredText: String) -> [Node] {
         var alphabetScores: [String: Int] = [:]
         
         let alphabetItems = currentAlphabet.map { currentPrediction in
-            return Item(letter: currentPrediction, letterType: .letter, analytics: self.analytics)
+            return Node(type: .letter, text: currentPrediction)
         }
         
         guard let db = dbConn else { return alphabetItems }
@@ -254,38 +254,34 @@ class SpellingOptions: ObservableObject, Analytic {
             let secondScore = alphabetScores[$1, default: 0]
                             
             return firstScore > secondScore
-        }.map { currentPrediction in
-            let isPredictedLetter = alphabetScores[currentPrediction, default: 0] > 0
-            
-            return Item(
-                letter: currentPrediction,
-                letterType: isPredictedLetter ? .predictedLetter : .letter, analytics: self.analytics)
+        }.map { currentPrediction in            
+            return Node(type: .letter, text: currentPrediction)
         }
         
     }
     
-    func predict(enteredText: String) -> [Item] {
+    func predictNodes(_ enteredText: String) -> [Node] {
         var alphabetItems = currentAlphabet.map { currentPrediction in
-            return Item(letter: currentPrediction, letterType: .letter, analytics: self.analytics)
+            // return Item(letter: currentPrediction, letterType: .letter, analytics: self.analytics)
+            return Node(type: .letter, text: currentPrediction)
         }
                 
-        var words: [Item] = []
+        var words: [Node] = []
         
         if appleWordPrediction {
-            words += getApplePredictionItems(enteredText)
+            words += getApplePredictionNodes(enteredText)
         }
         
         if wordPrediction {
-            words += getDictPredictionItems(enteredText)
+            words += getDictPredictionNodes(enteredText)
         }
         
         words = Array(words.prefix(wordPredictionLimit))
         
         if letterPrediction {
-            alphabetItems = getDictLetterItems(enteredText)
+            alphabetItems = getDictLetterNodes(enteredText)
         }
         
         return words + alphabetItems
     }
-
 }

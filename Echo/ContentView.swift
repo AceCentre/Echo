@@ -26,7 +26,6 @@ struct ContentView: SwiftUI.View {
         } else {
             NavigationStack {
                 ZStack {
-                    ScrollLock(selectedUUID: $items.selectedUUID) {
                         if loading {
                             VStack {
                                 ProgressView()
@@ -36,10 +35,10 @@ struct ContentView: SwiftUI.View {
                             ZStack {
                                 if accessOptions.showOnScreenArrows {
                                     OnScreenArrows(
-                                        up: { items.back(userInteraction: true) },
-                                        down: { items.next(userInteraction: true) },
-                                        left: { items.backspace(userInteraction: true) },
-                                        right: { items.select(userInteraction: true) }
+                                        up: { items.userPrevNode() },
+                                        down: { items.userNextNode() },
+                                        left: { items.userBack() },
+                                        right: { items.userClickHovered() }
                                     )
                                 }
                                 if accessOptions.enableSwitchControl {
@@ -48,30 +47,45 @@ struct ContentView: SwiftUI.View {
                                 VStack {
                                     
                                     HStack {
-                                        Image(systemName: "chevron.right")
                                         
                                         GeometryReader { geoReader in
-                                            ScrollView {
-                                                VStack(alignment: .leading) {
-                                                    ForEach(items.items) { item in
+                                            HStack {
+                                                ForEach(items.getLevels(), id: \.self) { currentLevel in
+                                                    HStack {
                                                         HStack {
-                                                            if item.id == items.selectedUUID {
-                                                                Text(item.details.displayText)
-                                                                    .padding()
-                                                                    .bold()
-                                                                
-                                                            } else {
-                                                                Text(item.details.displayText)
-                                                                    .padding()
+                                                            if currentLevel.last {
+                                                                Image(systemName: "chevron.right")
+                                                            }
+                                                        }.frame(minWidth: 25)
+                                                        ScrollLock(selectedUUID: currentLevel.hoveredNode.id) {
+                                                            ScrollView {
+                                                                VStack(alignment: .leading) {
+                                                                    ForEach(currentLevel.nodes) { node in
+                                                                        HStack {
+                                                                            if node.id == currentLevel.hoveredNode.id {
+                                                                                Text(node.displayText)
+                                                                                    .padding()
+                                                                                    .bold()
+                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                
+                                                                            } else {
+                                                                                Text(node.displayText)
+                                                                                    .padding()
+                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                
+                                                                            }
+                                                                        }.id(node.id)
+                                                                        
+                                                                    }
+                                                                }.padding(.vertical, geoReader.size.height/2)
                                                                 
                                                             }
-                                                        }.id(item.id)
-                                                        
+                                                            
+                                                        }
                                                     }
-                                                }.padding(.vertical, geoReader.size.height/2)
-                                                
+                                                    
+                                                }
                                             }
-                                            
                                         }
                                     }
                                     .background(Color("transparent"))
@@ -79,7 +93,7 @@ struct ContentView: SwiftUI.View {
                                     .padding()
                                     .onTapGesture(count: 1, perform: {
                                         if accessOptions.allowSwipeGestures {
-                                            items.select(userInteraction: true)
+                                            items.userClickHovered()
                                             analytics.userInteraction(type: "Tap", extraInfo: "Single")
                                         }
                                     })
@@ -87,25 +101,25 @@ struct ContentView: SwiftUI.View {
                                     .swipe(
                                         up: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.next(userInteraction: true)
+                                                items.userNextNode()
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "UP")
                                             }
                                         },
                                         down: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.back(userInteraction: true)
+                                                items.userPrevNode()
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "DOWN")
                                             }
                                         },
                                         left: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.backspace(userInteraction: true)
+                                                items.userBack()
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "LEFT")
                                             }
                                         },
                                         right: {
                                             if accessOptions.allowSwipeGestures {
-                                                items.select(userInteraction: true)
+                                                items.userClickHovered()
                                                 analytics.userInteraction(type: "Swipe", extraInfo: "RIGHT")
                                             }
                                         }
@@ -129,7 +143,7 @@ struct ContentView: SwiftUI.View {
                                 )
                             })
                         }
-                    }
+                    
                 }
                 .navigationTitle(
                     String(
@@ -150,21 +164,20 @@ struct ContentView: SwiftUI.View {
                 }
                 .toolbarBackground(.visible, for: .navigationBar, .tabBar)
                 .onDisappear {
-                    items.cancelScanning()
+                    items.onDisappear()
                 }
                 .onAppear {
                     loading = true
                     if let unwrappedLangId = lastLangId {
                         if unwrappedLangId != spelling.language.id {
-                            items.clear(userInteraction: false)
+                            items.userClear()
                             lastLangId = spelling.language.id
                         }
                     } else {
                         lastLangId = spelling.language.id
                     }
                     
-                    items.allowScanning()
-                    items.startup()
+                    items.onAppear()
                     loading = false
                 }
             }

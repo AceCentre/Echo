@@ -64,7 +64,7 @@ struct EchoApp: App {
                     accessOptions.load()
                     itemsList.loadEngine(voiceEngine)
                     itemsList.loadSpelling(spellingOptions)
-                    itemsList.loadScanning(scanningOptions)
+                    itemsList.loadScanning(scanningOptions)              
                     
                     controllerManager.loadItems(itemsList)
                     controllerManager.loadAnalytics(analytics)
@@ -80,11 +80,10 @@ struct EchoApp: App {
                     voiceEngine.save()
                     accessOptions.save()
                 }
-                .onChange(of: scenePhase) { newPhase in
-                    voiceEngine.setPhase(newPhase)
-                    if newPhase == .active && showOnboarding == false {
-                        itemsList.allowScanning()
-                        itemsList.startup()
+                .onChange(of: scenePhase) {
+                    voiceEngine.setPhase(scenePhase)
+                    if scenePhase == .active && showOnboarding == false {
+                        itemsList.onAppear()
                     }
                 }
         }
