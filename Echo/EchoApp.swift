@@ -18,6 +18,7 @@ struct EchoApp: App {
     @StateObject var analytics: Analytics = Analytics()
     @StateObject var rating: Rating = Rating()
     @StateObject var controllerManager = ControllerManager()
+    @StateObject var errorHandling = ErrorHandling()
 
     @State var loading = true
     
@@ -36,7 +37,9 @@ struct EchoApp: App {
                 } else {
                     ContentView(showOnboarding: $showOnboarding)
                 }
+                ErrorView(errorHandling: errorHandling)
             }
+                .environmentObject(errorHandling)
                 .environmentObject(voiceEngine)
                 .environmentObject(itemsList)
                 .environmentObject(accessOptions)
@@ -60,9 +63,11 @@ struct EchoApp: App {
  
                     voiceEngine.load(analytics: analytics)
                     accessOptions.load()
+                    
                     itemsList.loadEngine(voiceEngine)
                     itemsList.loadSpelling(spellingOptions)
-                    itemsList.loadScanning(scanningOptions)              
+                    itemsList.loadScanning(scanningOptions)
+                    itemsList.loadErrorHandling(errorHandling)
                     
                     controllerManager.loadItems(itemsList)
                     controllerManager.loadAnalytics(analytics)

@@ -30,6 +30,7 @@ class ItemsList: ObservableObject {
     var voiceEngine: VoiceController?
     var spelling: SpellingOptions?
     var scanningOptions: ScanningOptions?
+    var errorHandling: ErrorHandling?
     
     var workItem: DispatchWorkItem?
     
@@ -117,12 +118,16 @@ class ItemsList: ObservableObject {
     func onAppear() {
         scanLoops = 0
         disableScanningAsHidden = false
-        clickNode(vocabulary.tree.rootNode, isStartup: true)
+        do {
+            try clickNode(vocabulary.tree.rootNode, isStartup: true)
+        } catch {
+            self.errorHandling?.handle(error: error)
+        }
     }
     
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_body_length
-    private func clickNode(_ node: Node, isStartup: Bool) {
+    private func clickNode(_ node: Node, isStartup: Bool) throws {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
@@ -137,17 +142,22 @@ class ItemsList: ObservableObject {
             if let firstNode = node.children.first {
                 hoverNode(firstNode, shouldScan: shouldScan)
             } else {
-                fatalError("Code path not implemented")
+                errorHandling?.handle(error: EchoError.noChildren)
             }
         } else if node.type == .phrase {
             voiceEngine?.playSpeaking(node.speakText, cb: {
-                self.clickNode(self.vocabulary.tree.rootNode, isStartup: false)
+                do {
+                    try self.clickNode(self.vocabulary.tree.rootNode, isStartup: false)
+                } catch {
+                    self.errorHandling?.handle(error: error)
+                }
+                
             })
             
         } else if node.type == .branch {
             hoverNode(node.children.first ?? hoveredNode, shouldScan: shouldScan)
         } else if node.type == .rootAndSpelling {
-            let nodeToHover = resetSpellingNodes(parentNode: node)
+            let nodeToHover = try resetSpellingNodes(parentNode: node)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .back {
             if let parentNode = node.parent {
@@ -164,21 +174,25 @@ class ItemsList: ObservableObject {
             
             enteredText = allWords.joined(separator: "·") + "·"
             
-            let nodeToHover = resetSpellingNodes(parentNode: node.parent)
+            let nodeToHover = try resetSpellingNodes(parentNode: node.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .spelling {
-            let nodeToHover = resetSpellingNodes(parentNode: node)
+            let nodeToHover = try resetSpellingNodes(parentNode: node)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .letter {
             enteredText += node.displayText
             
-            let nodeToHover = resetSpellingNodes(parentNode: node.parent)
+            let nodeToHover = try resetSpellingNodes(parentNode: node.parent)
             
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .currentSentence {
             voiceEngine?.playSpeaking(node.speakText, cb: {
                 self.enteredText = ""
-                self.clickNode(self.vocabulary.tree.rootNode, isStartup: false)
+                do {
+                    try self.clickNode(self.vocabulary.tree.rootNode, isStartup: false)
+                } catch {
+                    self.errorHandling?.handle(error: error)
+                }
             })
         } else if node.type == .currentWord {
             var words = enteredText.components(separatedBy: "·")
@@ -191,28 +205,28 @@ class ItemsList: ObservableObject {
             
             enteredText = allWords.joined(separator: "·") + "·"
             
-            let nodeToHover = resetSpellingNodes(parentNode: node.parent)
+            let nodeToHover = try resetSpellingNodes(parentNode: node.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .backspace {
             if !enteredText.isEmpty {
                 enteredText.removeLast()
             }
             
-            let nodeToHover = resetSpellingNodes(parentNode: node.parent)
+            let nodeToHover = try resetSpellingNodes(parentNode: node.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else if node.type == .clear {
             enteredText = ""
             
-            let nodeToHover = resetSpellingNodes(parentNode: node.parent)
+            let nodeToHover = try resetSpellingNodes(parentNode: node.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
         } else {
-            fatalError("Code path not implemented")
+            errorHandling?.handle(error: EchoError.unhandledNodeType)
         }
     }
     // swiftlint:enable cyclomatic_complexity
     // swiftlint:enable function_body_length
     
-    private func resetSpellingNodes(parentNode: Node?) -> Node {
+    private func resetSpellingNodes(parentNode: Node?) throws -> Node {
         var spellingNodes = getAllSpellingNodes()
         
         let currentSentenceNode = getCurrentSentenceNode()
@@ -239,7 +253,8 @@ class ItemsList: ObservableObject {
         }
         
         guard let parent = parentNode else {
-            fatalError("Code path not implemented")
+            // errorHandling?.handle(error: EchoError.noParent)
+            throw EchoError.noParent
         }
         
         for spellingNode in spellingNodes {
@@ -263,7 +278,7 @@ class ItemsList: ObservableObject {
         if let finalNodeToHover = nodeToHover {
             return finalNodeToHover
         } else {
-            fatalError("Code path not implemented")
+            throw EchoError.noHoverNode
         }
         
     }
@@ -315,13 +330,21 @@ class ItemsList: ObservableObject {
     func userClickHovered() {
         scanLoops = 0
         
-        clickNode(hoveredNode, isStartup: false)
+        do {
+            try clickNode(hoveredNode, isStartup: false)
+        } catch {
+            errorHandling?.handle(error: error)
+        }
     }
     
     func userStartFastScan() {
         scanLoops = 0
                 
-        self.startFastScan()
+        do {
+            try self.startFastScan()
+        } catch {
+            self.errorHandling?.handle(error: error)
+        }
     }
     
     func userClear() {
@@ -331,8 +354,12 @@ class ItemsList: ObservableObject {
         if let parentNode = hoveredNode.parent, parentNode.type == .spelling || parentNode.type == .rootAndSpelling {
             enteredText = ""
             
-            let nodeToHover = resetSpellingNodes(parentNode: parentNode)
-            hoverNode(nodeToHover, shouldScan: scanAfterSelection)
+            do {
+                let nodeToHover = try resetSpellingNodes(parentNode: parentNode)
+                hoverNode(nodeToHover, shouldScan: scanAfterSelection)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
         }
     }
     
@@ -352,8 +379,12 @@ class ItemsList: ObservableObject {
             }
         } else {
             enteredText.removeLast()
-            let nodeToHover = resetSpellingNodes(parentNode: hoveredNode.parent)
-            hoverNode(nodeToHover, shouldScan: scanAfterSelection)
+            do {
+                let nodeToHover = try resetSpellingNodes(parentNode: hoveredNode.parent)
+                hoverNode(nodeToHover, shouldScan: scanAfterSelection)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
         }
     }
     
@@ -366,18 +397,26 @@ class ItemsList: ObservableObject {
     func userPrevNode() {
         scanLoops = 0
         
-        self.prevNode()
+        do {
+            try self.prevNode()
+        } catch {
+            errorHandling?.handle(error: error)
+        }
     }
     
     func userNextNode() {
         scanLoops = 0
         
-        self.nextNode()
+        do {
+            try self.nextNode()
+        } catch {
+            errorHandling?.handle(error: error)
+        }
     }
     
-    private func nextNodeIndex() -> Int {
+    private func nextNodeIndex() throws -> Int {
         guard let siblings = hoveredNode.parent?.children else {
-            fatalError("Code path not implemented")
+            throw EchoError.noSiblings
         }
         
         let currentIndex = siblings.firstIndex(where: { $0.id == hoveredNode.id }) ?? -1
@@ -386,31 +425,31 @@ class ItemsList: ObservableObject {
         return nextIndex
     }
     
-    private func nextNode() {
+    private func nextNode() throws {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
         
         guard let siblings = hoveredNode.parent?.children else {
-            fatalError("Code path not implemented")
+            throw EchoError.noSiblings
         }
         
-        let nextIndex = nextNodeIndex()
+        let nextIndex = try nextNodeIndex()
         
         guard let nextNode = siblings[safe: nextIndex] else {
-            fatalError("Code path not implemented")
+            throw EchoError.invalidNodeIndex
         }
         
         hoverNode(nextNode, shouldScan: true)
     }
     
-    private func prevNode() {
+    private func prevNode() throws {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
         
         guard let siblings = hoveredNode.parent?.children else {
-            fatalError("Code path not implemented")
+            throw EchoError.noSiblings
         }
         
         let currentIndex = siblings.firstIndex(where: { $0.id == hoveredNode.id }) ?? -1
@@ -421,7 +460,7 @@ class ItemsList: ObservableObject {
         }
         
         guard let prevNode = siblings[safe: nextIndex] else {
-            fatalError("Code path not implemented")
+            throw EchoError.invalidNodeIndex
         }
         
         hoverNode(prevNode, shouldScan: true)
@@ -436,7 +475,7 @@ class ItemsList: ObservableObject {
         
         if node.type == .root {
             // Do nothing
-            fatalError("Code path not implemented")
+            errorHandling?.handle(error: EchoError.hoveredRootNode)
         } else if
             node.type == .phrase ||
             node.type == .branch ||
@@ -452,17 +491,25 @@ class ItemsList: ObservableObject {
         {
             if isFastScan {
                 unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
-                    self.nextNode()
+                    do {
+                        try self.nextNode()
+                    } catch {
+                        self.errorHandling?.handle(error: error)
+                    }
                 })
             } else {
                 unwrappedVoice.playCue(hoveredNode.cueText, cb: {
                     if self.scanningOptions?.scanning == true && shouldScan {
-                        self.setNextMoveTimer()
+                        do {
+                            try self.setNextMoveTimer()
+                        } catch {
+                            self.errorHandling?.handle(error: error)
+                        }
                     }
                 })
             }
         } else {
-            fatalError("Code path not implemented")
+            errorHandling?.handle(error: EchoError.hoveredInvalidNodeType)
         }
     }
     
@@ -478,19 +525,27 @@ class ItemsList: ObservableObject {
         self.scanningOptions = scanning
     }
     
-    private func setNextMoveTimer() {
+    func loadErrorHandling(_ errorHandling: ErrorHandling) {
+        self.errorHandling = errorHandling
+    }
+    
+    private func setNextMoveTimer() throws {
         if disableScanningAsHidden { return }
         
         let maxScanLoops = scanningOptions?.scanLoops ?? 0
         
         let newWorkItem = DispatchWorkItem(block: {
-            self.nextNode()
+            do {
+                try self.nextNode()
+            } catch {
+                self.errorHandling?.handle(error: error)
+            }
         })
         
         workItem = newWorkItem
         let timeInterval = scanningOptions?.scanWaitTime ?? 3
         
-        let nextIndex = nextNodeIndex()
+        let nextIndex = try nextNodeIndex()
         
         if nextIndex == 0 {
             scanLoops += 1
@@ -501,14 +556,14 @@ class ItemsList: ObservableObject {
         }
     }
     
-    private func startFastScan() {
+    private func startFastScan() throws {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
         
         isFastScan = true
         
-        nextNode()
+        try nextNode()
     }
     
     func stopFastScan() {

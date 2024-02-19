@@ -28,6 +28,7 @@
 		D53986AC2AF1679200CF9419 /* SharedEcho.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D54D28162B83974D009A1B2E /* VocabularyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54D28152B83974D009A1B2E /* VocabularyPage.swift */; };
 		D54D28182B839B66009A1B2E /* VocabularyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54D28172B839B66009A1B2E /* VocabularyOnboarding.swift */; };
+		D54D281A2B83B179009A1B2E /* ErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54D28192B83B179009A1B2E /* ErrorHandling.swift */; };
 		D553118F2B445D6A005B01AB /* PredictionLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = D553118E2B445D6A005B01AB /* PredictionLanguages.swift */; };
 		D55311912B46F5E5005B01AB /* ActionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55311902B46F5E5005B01AB /* ActionPicker.swift */; };
 		D574BCAE2AE170B800C50EDC /* PredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D574BCAD2AE170B800C50EDC /* PredictionTests.swift */; };
@@ -157,6 +158,7 @@
 		D539869A2AF1679100CF9419 /* SharedEcho.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedEcho.h; sourceTree = "<group>"; };
 		D54D28152B83974D009A1B2E /* VocabularyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyPage.swift; sourceTree = "<group>"; };
 		D54D28172B839B66009A1B2E /* VocabularyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOnboarding.swift; sourceTree = "<group>"; };
+		D54D28192B83B179009A1B2E /* ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandling.swift; sourceTree = "<group>"; };
 		D553118D2B34886F005B01AB /* PREDICTION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PREDICTION.md; sourceTree = "<group>"; };
 		D553118E2B445D6A005B01AB /* PredictionLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionLanguages.swift; sourceTree = "<group>"; };
 		D55311902B46F5E5005B01AB /* ActionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionPicker.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				D5DB64642ACC5A3900E41867 /* Observables */,
 				D535704B2B59884D0093AF22 /* VoiceEngine */,
 				D5965DFC2A61995A003C9208 /* EchoApp.swift */,
+				D54D28192B83B179009A1B2E /* ErrorHandling.swift */,
 				D5DB646E2ACC5D0600E41867 /* Helpers.swift */,
 				D5965DFE2A61995A003C9208 /* ContentView.swift */,
 				D52506892B768E1F00F4E8F6 /* Tree.swift */,
@@ -702,6 +705,7 @@
 				D5A488A02ADFDAD400E9A635 /* SpellingOptions.swift in Sources */,
 				D5E26B432AC2E77A003545BE /* ScrollLock.swift in Sources */,
 				D5EDA4A52AEBF2CF00727B90 /* Intro.swift in Sources */,
+				D54D281A2B83B179009A1B2E /* ErrorHandling.swift in Sources */,
 				D5DAB05C2AEA815200888390 /* Onboarding.swift in Sources */,
 				D52CFFF72AF54B940083FFD0 /* Rating.swift in Sources */,
 				D5EDA4A12AEBF1EA00727B90 /* BottomText.swift in Sources */,
