@@ -13,7 +13,7 @@ import SwiftUIIntrospect
     Renders a ScrollView and keeps the given UUID always in the center of the scroll area
  */
 struct ScrollLock<Content: View>: SwiftUI.View {
-    @Binding var selectedUUID: UUID
+    var selectedUUID: UUID
     @ViewBuilder var content: Content
 
     var body: some View {
