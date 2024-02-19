@@ -99,6 +99,8 @@ class CustomGameController: Identifiable {
         }
     }
     
+    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable function_body_length
     init(_ controller: GCController) {
         internalController = controller
         id = controller.vendorName ?? "no-name"
@@ -197,4 +199,6 @@ class CustomGameController: Identifiable {
         
         self.load()
     }
+    // swiftlint:enable cyclomatic_complexity
+    // swiftlint:enable function_body_length
 }
