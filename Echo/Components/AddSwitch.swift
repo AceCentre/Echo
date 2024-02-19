@@ -62,7 +62,7 @@ struct AddSwitch: View {
     
     @State var switchName = ""
     @State var selectedKey: UIKeyboardHIDUsage?
-    @State var tapAction: Action = .next
+    @State var tapAction: Action = .nextNode
     @State var doubleAction: Action = .none
     @State var holdAction: Action = .none
     @State var id: UUID?
@@ -281,7 +281,7 @@ private struct PreviewWrapperEdit: View {
                         AddSwitch(
                             switchName: "My Switch",
                             selectedKey: .keyboardUpArrow,
-                            tapAction: .next,
+                            tapAction: .nextNode,
                             id: UUID()
                         )
                             .environmentObject(accessOptions)

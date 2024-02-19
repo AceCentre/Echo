@@ -65,11 +65,11 @@ struct Switch: Identifiable, Decodable, Encodable {
 }
 
 enum Action: String, CaseIterable, Identifiable, Codable {
-    case next, back, none, fast, select, delete, clear, startScanning
+    case nextNode, prevNode, none, fast, select, back, clear, startScanning
     var id: Self { self }
     
-    static public var tapCases: [Action] = [.next, .back, .none, .select, .delete, .clear, .startScanning]
-    static public var holdCases: [Action] = [.next, .back, .none, .fast, .select, .delete, .clear, .startScanning]
+    static public var tapCases: [Action] = [.nextNode, .prevNode, .none, .select, .back, .clear, .startScanning]
+    static public var holdCases: [Action] = [.nextNode, .prevNode, .none, .fast, .select, .back, .clear, .startScanning]
 
     var display: String {
         switch self {
@@ -77,11 +77,11 @@ enum Action: String, CaseIterable, Identifiable, Codable {
             localized: "None",
             comment: "Label for action that happens on a keypress"
         )
-        case .next: return String(
+        case .nextNode: return String(
             localized: "Go to the next item",
             comment: "Label for action that happens on a keypress"
         )
-        case .back: return String(
+        case .prevNode: return String(
             localized: "Go to the previous item",
             comment: "Label for action that happens on a keypress"
         )
@@ -93,8 +93,8 @@ enum Action: String, CaseIterable, Identifiable, Codable {
             localized: "Select the currently selected item",
             comment: "Label for action that happens on a keypress"
         )
-        case .delete: return String(
-            localized: "Delete the last inputted letter",
+        case .back: return String(
+            localized: "Go back to the last level of the vocabulary (or delete the last inputted letter)",
             comment: "Label for action that happens on a keypress"
         )
         case .clear: return String(
@@ -123,7 +123,7 @@ class AccessOptions: ObservableObject, Analytic {
                 comment: ""
             ),
             key: .keyboardReturnOrEnter,
-            tapAction: .next,
+            tapAction: .nextNode,
             holdAction: .none
         ),
         Switch(
