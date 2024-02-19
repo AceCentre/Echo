@@ -1,0 +1,5 @@
+project: Echo.xcodeproj
+schemes:
+- Echo
+targets:
+- Echo
