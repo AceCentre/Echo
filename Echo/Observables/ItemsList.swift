@@ -320,7 +320,7 @@ class ItemsList: ObservableObject {
     
     func userStartFastScan() {
         scanLoops = 0
-        
+                
         self.startFastScan()
     }
     
@@ -452,9 +452,7 @@ class ItemsList: ObservableObject {
         {
             if isFastScan {
                 unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
-                    if self.scanningOptions?.scanning == true && shouldScan {
-                        self.nextNode()
-                    }
+                    self.nextNode()
                 })
             } else {
                 unwrappedVoice.playCue(hoveredNode.cueText, cb: {
