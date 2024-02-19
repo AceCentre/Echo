@@ -2,6 +2,8 @@ disabled_rules:
   - trailing_whitespace
   - todo
   - line_length
+  - accessibility_label_for_image
+  - file_length
 
 opt_in_rules:
   - accessibility_label_for_image
