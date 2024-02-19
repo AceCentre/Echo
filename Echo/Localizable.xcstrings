@@ -7,6 +7,9 @@
     "**Speaking Voice**" : {
       "comment" : "Label for the speaking voice during onboarding"
     },
+    "**Vocabulary**" : {
+      "comment" : "Label for the Vocabulary during onboarding"
+    },
     "**Word and Letter Prediction**" : {
       "comment" : "Label for the prediction during onboarding"
     },
@@ -116,7 +119,7 @@
       "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
+      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -144,9 +147,6 @@
     },
     "Delete Switch" : {
       "comment" : "Title for alert about deleting a switch"
-    },
-    "Delete the last inputted letter" : {
-      "comment" : "Label for action that happens on a keypress"
     },
     "Detect Switch" : {
       "comment" : "Label for a NavigationLink that will get a user to press their external switch"
@@ -207,6 +207,9 @@
     },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
+    },
+    "Go back to the last level of the vocabulary (or delete the last inputted letter)" : {
+      "comment" : "Label for action that happens on a keypress"
     },
     "Go to the next item" : {
       "comment" : "Label for action that happens on a keypress"
@@ -290,10 +293,10 @@
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
     },
     "Predict which words and letters come next and you enter each letter." : {
-      "comment" : "Explaination of prediction during onboarding"
+      "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -342,6 +345,9 @@
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Select the vocabulary of phrases, words and letters to be used" : {
+
     },
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
@@ -398,7 +404,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
+      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"
@@ -453,6 +459,9 @@
     },
     "Use Prompts" : {
       "comment" : "Label for toggle prompts"
+    },
+    "Vocabulary" : {
+      "comment" : "The label that is shown next to the vocab picker\nLabel for navigation link to the vocab page\nThe navigation title for the Vocabulary options page"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"
@@ -512,7 +521,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"
