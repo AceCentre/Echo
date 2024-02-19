@@ -50,13 +50,13 @@ enum ButtonDefaults: String {
         case .a:
             return .select
         case .b:
-            return .next
+            return .nextNode
         case .up:
-            return .back
+            return .prevNode
         case .down:
-            return .next
+            return .nextNode
         case .left:
-            return .delete
+            return .back
         case .right:
             return .select
         case .share:
@@ -64,19 +64,19 @@ enum ButtonDefaults: String {
         case .home:
             return .none
         case .lBumper:
-            return .back
+            return .prevNode
         case .minus:
-            return .back
+            return .prevNode
         case .plus:
             return .select
         case .rBumper:
             return .select
         case .x:
-            return .back
+            return .prevNode
         case .y:
-            return .delete
+            return .back
         case .zl:
-            return .delete
+            return .back
         case .zr:
             return .select
         case .leftStick:
@@ -100,11 +100,11 @@ enum ButtonDefaults: String {
         case .sharePs:
             return .none
         case .square:
-            return .delete
-        case .triangle:
             return .back
+        case .triangle:
+            return .prevNode
         case .cross:
-            return .next
+            return .nextNode
         }
     }
     
