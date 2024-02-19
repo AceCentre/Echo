@@ -31,4 +31,3 @@ class ControllerButton: Identifiable {
         self.holdAction = holdAction
     }
 }
-
