@@ -53,10 +53,6 @@ enum AnalyticKey: String, CaseIterable {
     }
 }
 
-protocol Analytic {
-    func getAnalyticData() -> [String: Any]
-}
-
 class Analytics: ObservableObject {
     @AppStorage(StorageKeys.allowAnalytics) var allowAnalytics = true
     
@@ -111,15 +107,7 @@ class Analytics: ObservableObject {
             "buttonName": buttonName
         ])
     }
-    
-    func wordAdded(isPredicted: Bool) {
-        event(.wordAdded, extraProperties: ["isPredicted": isPredicted])
-    }
-    
-    func letterAdded(isPredicted: Bool) {
-        event(.letterAdded, extraProperties: ["isPredicted": isPredicted])
-    }
-    
+
     func finishedOnboarding(pageNumber: Int, finishType: String) {
         event(.onboarding, extraProperties: ["pageNumber": pageNumber, "finishType": finishType])
     }

@@ -46,7 +46,9 @@ struct ExternalLinksForm: View {
 enum SettingsPath: CaseIterable, Identifiable {
     case voice, access, scanning, spelling, analytics, onboarding, externalLinks, audio, vocabulary
     
+    // periphery:ignore
     static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary]
+    // periphery:ignore
     static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary, .onboarding, .externalLinks]
     
     var id: String {
@@ -241,6 +243,7 @@ private struct PreviewWrapper: View {
     }
 }
 
+// periphery:ignore
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         PreviewWrapper()

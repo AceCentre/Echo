@@ -68,7 +68,9 @@ enum Action: String, CaseIterable, Identifiable, Codable {
     case nextNode, prevNode, none, fast, select, back, clear, startScanning
     var id: Self { self }
     
+    // periphery:ignore
     static public var tapCases: [Action] = [.nextNode, .prevNode, .none, .select, .back, .clear, .startScanning]
+    // periphery:ignore
     static public var holdCases: [Action] = [.nextNode, .prevNode, .none, .fast, .select, .back, .clear, .startScanning]
 
     var display: String {
@@ -110,7 +112,7 @@ enum Action: String, CaseIterable, Identifiable, Codable {
     
 }
 
-class AccessOptions: ObservableObject, Analytic {
+class AccessOptions: ObservableObject {
     @AppStorage(StorageKeys.showOnScreenArrows) var showOnScreenArrows = true
     @AppStorage(StorageKeys.allowSwipeGestures) var allowSwipeGestures = true
     @AppStorage(StorageKeys.enableSwitchControl) var enableSwitchControl = true

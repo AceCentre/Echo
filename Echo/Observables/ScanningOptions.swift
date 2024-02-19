@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SharedEcho
 
-class ScanningOptions: ObservableObject, Analytic {    
+class ScanningOptions: ObservableObject {    
     @AppStorage(StorageKeys.scanning) var scanning = true
     @AppStorage(StorageKeys.scanWaitTime) var scanWaitTime: Double = 2
     @AppStorage(StorageKeys.scanLoops) var scanLoops: Int = 3

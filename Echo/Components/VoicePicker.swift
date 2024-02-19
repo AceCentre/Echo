@@ -16,6 +16,7 @@ struct VoicePicker: View {
     @StateObject var voiceList = AvailableVoices()
     
     @Binding var voiceId: String
+    // periphery:ignore
     @Binding var voiceName: String
     
     var body: some View {
@@ -75,6 +76,7 @@ private struct PreviewWrapper: View {
     }
 }
 
+// periphery:ignore
 struct VoicePickerPage_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         PreviewWrapper().preferredColorScheme(.light)

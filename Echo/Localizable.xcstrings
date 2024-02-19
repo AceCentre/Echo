@@ -50,7 +50,7 @@
       "comment" : "Accesibility label for logo"
     },
     "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for analytics picker"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -94,9 +94,6 @@
     "Cancel" : {
       "comment" : "Cancel button label"
     },
-    "Clear" : {
-      "comment" : "The label for the button that will clear all the text that has been inputted"
-    },
     "Clear all the inputted text" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -119,7 +116,7 @@
       "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
+      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -296,7 +293,7 @@
       "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -332,10 +329,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -404,7 +401,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
+      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"
@@ -441,9 +438,6 @@
     },
     "This ID is used to identify you in the analytics collected. Do not share it unless you are willing to be identified." : {
       "comment" : "Explanation of what an ID is"
-    },
-    "Undo" : {
-      "comment" : "The label for the button that will remove the last character. Also known as backspace"
     },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"
@@ -521,7 +515,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
     }
   },
   "version" : "1.0"

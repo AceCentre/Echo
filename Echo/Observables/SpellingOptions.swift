@@ -34,6 +34,7 @@ enum CharacterOrder: String, CaseIterable, Identifiable {
         }
     }
     
+    // periphery:ignore
     public static var defaultOrder: CharacterOrder = .alphabetical
 }
 
@@ -43,7 +44,7 @@ enum ControlCommandDisplayOptions: Int {
     case bottom
 }
 
-class SpellingOptions: ObservableObject, Analytic {
+class SpellingOptions: ObservableObject {
     @AppStorage(StorageKeys.letterPrediction) var letterPrediction: Bool = true
     @AppStorage(StorageKeys.wordPrediction) var wordPrediction: Bool = true
     @AppStorage(StorageKeys.wordPredictionLimit) var wordPredictionLimit: Int = 3
@@ -59,8 +60,6 @@ class SpellingOptions: ObservableObject, Analytic {
             wordPrediction = newValue
         }
     }
-    
-    var analytics: Analytics?
     
     var dbConn: Connection?
     var wordsTable: SQLite.Table?
@@ -95,10 +94,6 @@ class SpellingOptions: ObservableObject, Analytic {
             "predictionLanguage": predictionLanguage,
             "characterOrderId": characterOrderId
         ]
-    }
-    
-    func loadAnalytics(analytics: Analytics) {
-        self.analytics = analytics
     }
     
     init() {

@@ -27,22 +27,15 @@ class ItemsList: ObservableObject {
         
     var disableScanningAsHidden = false
     
-    var undoItem: Item?
-    var clearItem: Item?
-    
     var voiceEngine: VoiceController?
     var spelling: SpellingOptions?
     var scanningOptions: ScanningOptions?
-    var analytics: Analytics?
     
     var workItem: DispatchWorkItem?
     
     var isFastScan: Bool = false
     
     init() {
-        undoItem = nil
-        clearItem = nil
-        
         hoveredNode = Node(type: .root)
     }
     
@@ -115,6 +108,7 @@ class ItemsList: ObservableObject {
     func onDisappear() {
         scanLoops = 0
         disableScanningAsHidden = true
+        voiceEngine?.stop()
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
@@ -433,10 +427,6 @@ class ItemsList: ObservableObject {
         hoverNode(prevNode, shouldScan: true)
     }
     
-    private func back() {
-
-    }
-    
     private func hoverNode(_ node: Node, shouldScan: Bool) {
         hoveredNode = node
         
@@ -460,15 +450,19 @@ class ItemsList: ObservableObject {
             node.type == .backspace ||
             node.type == .clear
         {
-            unwrappedVoice.playCue(hoveredNode.cueText, cb: {
-                if self.scanningOptions?.scanning == true && shouldScan {
-                    if self.isFastScan {
+            if isFastScan {
+                unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
+                    if self.scanningOptions?.scanning == true && shouldScan {
                         self.nextNode()
-                    } else {
+                    }
+                })
+            } else {
+                unwrappedVoice.playCue(hoveredNode.cueText, cb: {
+                    if self.scanningOptions?.scanning == true && shouldScan {
                         self.setNextMoveTimer()
                     }
-                }
-            })
+                })
+            }
         } else {
             fatalError("Code path not implemented")
         }
@@ -476,30 +470,10 @@ class ItemsList: ObservableObject {
     
     func loadEngine(_ voiceEngine: VoiceController) {
         self.voiceEngine = voiceEngine
-        self.undoItem = Item(
-            actionType: .backspace,
-            display: String(
-                localized: "Undo",
-                comment: "The label for the button that will remove the last character. Also known as backspace"
-            ),
-            voiceEngine: voiceEngine
-        )
-        self.clearItem = Item(
-            actionType: .clear,
-            display: String(
-                localized: "Clear",
-                comment: "The label for the button that will clear all the text that has been inputted"
-            ),
-            voiceEngine: voiceEngine
-        )
     }
     
     func loadSpelling(_ spellingOptions: SpellingOptions) {
         self.spelling = spellingOptions
-    }
-    
-    func loadAnalytics(_ analytics: Analytics) {
-        self.analytics = analytics
     }
     
     func loadScanning(_ scanning: ScanningOptions) {

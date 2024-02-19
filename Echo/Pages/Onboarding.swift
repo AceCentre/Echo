@@ -142,6 +142,7 @@ struct OnboardingWrapper: View {
     }
 }
 
+// periphery:ignore
 struct Onboarding_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         OnboardingWrapper()

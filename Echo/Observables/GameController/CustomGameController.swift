@@ -20,10 +20,6 @@ class CustomGameController: Identifiable {
     
     var responder: ((ControllerButton, Bool) -> Void)?
     
-    var saveKey: String {
-        return "\(id)-controller"
-    }
-    
     var displayName: String {
         return internalController.vendorName ?? String(localized: "Unknown Controller", comment: "Name of the controller if none is givens")
     }

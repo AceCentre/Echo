@@ -10,7 +10,7 @@ import AVKit
 import SharedEcho
 import SwiftUI
 
-class VoiceController: ObservableObject, Analytic {
+class VoiceController: ObservableObject {
     @Published var speakingVoiceOptions: VoiceOptions = VoiceOptions()
     @Published var cueVoiceOptions: VoiceOptions = VoiceOptions()
     @Published var phase: ScenePhase = .active

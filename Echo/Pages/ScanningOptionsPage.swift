@@ -104,10 +104,9 @@ private struct PreviewWrapper: View {
     }
 }
 
+// periphery:ignore
 struct ScanningOptionsPage_Previews: PreviewProvider {
-    
     static var previews: some SwiftUI.View {
         PreviewWrapper().preferredColorScheme(.light)
-            
     }
 }

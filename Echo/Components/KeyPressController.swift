@@ -22,9 +22,7 @@ struct KeyPressController: View {
     @EnvironmentObject var items: ItemsList
     @EnvironmentObject var accessOptions: AccessOptions
     @EnvironmentObject var analytics: Analytics
-    
-    @FocusState var focused
-        
+            
     // This method does complain that 'Publishing changes from within view updates is not allowed,
     // this will cause undefined behavior.'
     // Im not sure why because im changing it in an onKeyPress function not a view update

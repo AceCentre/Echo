@@ -146,6 +146,7 @@ private struct PreviewWrapper: View {
     }
 }
 
+// periphery:ignore
 private struct SpellingAndAlphabetPage_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         PreviewWrapper()

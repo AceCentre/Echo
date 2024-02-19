@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DetectSwitch: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    // periphery:ignore
     @Binding var selectedKey: UIKeyboardHIDUsage?
     
     var body: some View {
@@ -63,18 +64,10 @@ struct AddSwitch: View {
     @State var switchName = ""
     @State var selectedKey: UIKeyboardHIDUsage?
     @State var tapAction: Action = .nextNode
-    @State var doubleAction: Action = .none
     @State var holdAction: Action = .none
     @State var id: UUID?
     
     @State var deleteAlert: Bool = false
-    
-    var isButtonEnabled: Bool {
-        if switchName == "" { return true }
-        if selectedKey == nil { return true }
-        
-        return false
-    }
     
     func initSwitchName() {
         if switchName != "" { return }
@@ -268,7 +261,6 @@ private struct PreviewWrapperAdd: View {
 }
 
 private struct PreviewWrapperEdit: View {
-    @State var sheetState: Bool = true
     @StateObject var accessOptions = AccessOptions()
     
     var body: some View {
@@ -297,6 +289,7 @@ private struct PreviewWrapperEdit: View {
     }
 }
 
+// periphery:ignore
 struct AddSwitch_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         PreviewWrapperAdd()

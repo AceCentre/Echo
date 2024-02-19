@@ -210,10 +210,9 @@ private struct PreviewWrapper: View {
     }
 }
 
+// periphery:ignore
 struct AccessOptionsPage_Previews: PreviewProvider {
-    
     static var previews: some SwiftUI.View {
         PreviewWrapper().preferredColorScheme(.light)
-        
     }
 }

@@ -58,8 +58,6 @@ struct EchoApp: App {
                     
                     rating.countOpen()
  
-                    itemsList.loadAnalytics(analytics)
-                    spellingOptions.loadAnalytics(analytics: analytics)
                     voiceEngine.load(analytics: analytics)
                     accessOptions.load()
                     itemsList.loadEngine(voiceEngine)

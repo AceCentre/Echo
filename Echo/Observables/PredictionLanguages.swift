@@ -15,6 +15,7 @@ struct PredictionLanguage: Hashable, Identifiable {
     var databaseLanguageCode: String
     var acceptedPreferredLangs: [String]
     
+    // periphery:ignore
     static public var english = PredictionLanguage(
         id: "en",
         display: String(
@@ -27,6 +28,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["en"]
     )
     
+    // periphery:ignore
     static public var arabic = PredictionLanguage(
         id: "ar",
         display: String(
@@ -39,6 +41,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["ar"]
     )
     
+    // periphery:ignore
     static public var welsh = PredictionLanguage(
         id: "cy",
         display: String(
@@ -51,6 +54,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["cy"]
     )
     
+    // periphery:ignore
     static public var spanish = PredictionLanguage(
         id: "es",
         display: String(
@@ -63,6 +67,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["es"]
     )
     
+    // periphery:ignore
     static public var hebrew = PredictionLanguage(
         id: "he",
         display: String(
@@ -75,6 +80,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["he"]
     )
     
+    // periphery:ignore
     static public var croatian = PredictionLanguage(
         id: "hr",
         display: String(
@@ -87,6 +93,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["hr"]
     )
 
+    // periphery:ignore
     static public var maori = PredictionLanguage(
         id: "mi",
         display: String(
@@ -99,6 +106,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["mi"]
     )
     
+    // periphery:ignore
     static public var polish = PredictionLanguage(
         id: "pl",
         display: String(
@@ -111,6 +119,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["pl"]
     )
     
+    // periphery:ignore
     static public var portuguese = PredictionLanguage(
         id: "pt",
         display: String(
@@ -123,6 +132,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["pt", "pt-PT", "pt-BR"]
     )
     
+    // periphery:ignore
     static public var urdu = PredictionLanguage(
         id: "ur",
         display: String(
@@ -135,6 +145,7 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["ur"]
     )
     
+    // periphery:ignore
     static public var yidish = PredictionLanguage(
         id: "yi",
         display: String(
@@ -147,6 +158,8 @@ struct PredictionLanguage: Hashable, Identifiable {
         acceptedPreferredLangs: ["yi"]
     )
     
+    // periphery:ignore
     static public var allLanguages: [PredictionLanguage] = [.english, .welsh, .arabic, .spanish, .hebrew, .croatian, .maori, .polish, .urdu, .yidish, .portuguese]
+    // periphery:ignore
     static public var defaultLanguage: PredictionLanguage = .english
 }

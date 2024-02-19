@@ -106,6 +106,7 @@ class Tree {
         self.rootNode = rootNode
     }
     
+    // periphery:ignore
     public static var Basic = Tree(
         name: "Demo Vocabulary",
         rootNode: Node(type: .root, children: [
@@ -120,6 +121,7 @@ class Tree {
         ])
     )
     
+    // periphery:ignore
     public static var SpellingTree = Tree(
         name: "Spelling",
         rootNode: Node(type: .rootAndSpelling)

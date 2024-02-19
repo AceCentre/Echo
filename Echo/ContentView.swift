@@ -3,10 +3,8 @@ import Combine
 import SharedEcho
 
 struct ContentView: SwiftUI.View {
-    @EnvironmentObject var voiceEngine: VoiceController
     @EnvironmentObject var items: ItemsList
     @EnvironmentObject var accessOptions: AccessOptions
-    @EnvironmentObject var scanOptions: ScanningOptions
     @EnvironmentObject var spelling: SpellingOptions
     @EnvironmentObject var analytics: Analytics
     
@@ -185,6 +183,7 @@ struct ContentView: SwiftUI.View {
     }
 }
 
+// periphery:ignore
 struct ContentView_Previews: PreviewProvider {
     static var previews: some SwiftUI.View {
         ContentView(showOnboarding: .constant(false)).preferredColorScheme(.light)

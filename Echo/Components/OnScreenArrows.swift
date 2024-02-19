@@ -15,7 +15,6 @@ struct OnScreenArrows: View {
     // Thanks to https://sarunw.com/posts/move-view-around-with-drag-gesture-in-swiftui/
     @AppStorage(StorageKeys.arrowLocationX) var locationX: Double = 300
     @AppStorage(StorageKeys.arrowLocationY) var locationY: Double = 200
-    @GestureState private var fingerLocation: CGPoint?
     @GestureState private var startLocation: CGPoint?
     
     var up: (() -> Void) = {}
