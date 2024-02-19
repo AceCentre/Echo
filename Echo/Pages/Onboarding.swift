@@ -11,14 +11,15 @@ import SwiftUI
 enum OnboardingSteps: Int, CaseIterable, Identifiable {
     case introVideo = 0
     case secondStep = 1
-    case cueVoice =  2
-    case speakingVoice = 3
-    case scanning = 4
-    case prediction = 5
-    case onScreenArrows = 6
-    case swipeOnboarding = 7
-    case switchOnboarding = 8
-    case analytics = 9
+    case vocabulary = 2
+    case cueVoice =  3
+    case speakingVoice = 4
+    case scanning = 5
+    case prediction = 6
+    case onScreenArrows = 7
+    case swipeOnboarding = 8
+    case switchOnboarding = 9
+    case analytics = 10
 
     var id: String {
         switch self {
@@ -32,6 +33,7 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .prediction: "prediction"
         case .switchOnboarding: "switch"
         case .scanning: "Scanning"
+        case .vocabulary: "Vocabulary"
         }
     }
     
@@ -47,6 +49,7 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .prediction: PredictionOnboarding()
         case .switchOnboarding: SwitchOnboarding()
         case .scanning: ScanningOnboarding()
+        case .vocabulary: VocabularyOnboarding()
         }
     }
 }
