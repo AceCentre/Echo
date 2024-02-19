@@ -29,12 +29,11 @@ public struct StorageKeys {
     public static var numberOfOpens = "numberOfOpens"
     public static var numberOfRatingPromptsShown = "numberOfRatingPromptsShown"
     public static var appleWordPrediction = "appleWordPrediction"
-    
     public static var switchesList = "switchesListV2"
     public static var speakingVoiceOptions = "speakingVoiceOptions"
     public static var cueVoiceOptions = "cueVoiceOptions"
-    
     public static var controlCommandPosition = "controlCommandPosition"
+    public static var vocabulary = "vocabulary"
     
     public static var allowedViaTest = [
         showOnboarding,
