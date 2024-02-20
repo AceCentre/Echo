@@ -70,13 +70,8 @@ struct ContentView: SwiftUI.View {
                                                                                 } else {
                                                                                     Text(node.displayText)
                                                                                         .padding()
-                                                                                        .bold()
-                                                                                        .opacity(0)
-                                                                                            .overlay {
-                                                                                                Text(node.displayText)
-                                                                                                    .padding()
-                                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
-                                                                                            }
+                                                                                        .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                            
                                                                                 }
                                                                             }.id(node.id)
                                                                             
@@ -89,7 +84,6 @@ struct ContentView: SwiftUI.View {
                                                         }
                                                         .frame(maxWidth: geoReader.size.width / 2)
                                                     }
-                                                    Spacer()
                                                 }
                                             }
                                             .scrollDisabled(true)

@@ -53,7 +53,7 @@
 
     },
     "Analytics" : {
-      "comment" : "The label for the section about analytics\nLabel for analytics picker"
+      "comment" : "Label for analytics picker\nThe label for the section about analytics"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -221,7 +221,7 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Label to hide arrows\nPicker option for control command"
+      "comment" : "Picker option for control command\nLabel to hide arrows"
     },
     "History" : {
 
@@ -299,10 +299,10 @@
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
     },
     "Predict which words and letters come next and you enter each letter." : {
-      "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
+      "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -326,7 +326,7 @@
 
     },
     "Save" : {
-      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
+      "comment" : "The save toolbar button when saving controller mapping\nThe label for the save changes button"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -338,10 +338,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for the scanning during onboarding\nLabel for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -470,7 +470,7 @@
       "comment" : "Label for toggle prompts"
     },
     "Vocabulary" : {
-      "comment" : "The label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page\nLabel for navigation link to the vocab page"
+      "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"
@@ -530,7 +530,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
     }
   },
   "version" : "1.0"
