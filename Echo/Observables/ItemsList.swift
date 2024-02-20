@@ -24,6 +24,7 @@ class ItemsList: ObservableObject {
     @Published var scanLoops = 0
         
     @AppStorage(StorageKeys.vocabulary) var vocabulary: Vocabulary = .basic
+    @AppStorage(StorageKeys.history) var history: Int = 2
         
     var disableScanningAsHidden = false
     
@@ -82,7 +83,7 @@ class ItemsList: ObservableObject {
         
         levels.reverse()
         
-        return levels
+        return levels.suffix(history)
     }
     
     func doAction(action: Action) {

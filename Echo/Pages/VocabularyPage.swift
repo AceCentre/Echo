@@ -29,6 +29,21 @@ struct VocabularyPage: View {
             }, footer: {
                 Text("Select the vocabulary of phrases, words and letters to be used")
             })
+            Section(content: {
+                Stepper(
+                    value: $itemsList.history,
+                    in: 1...10,
+                    step: 1
+                ) {
+                    Text(
+                        "Show **\(itemsList.history)** level of your vocabulary"
+                    )
+                }
+            }, header: {
+                Text("History")
+            }, footer: {
+                Text("This is the number of levels of your phrases to show at once.")
+            })
         }
         .navigationTitle(
             String(

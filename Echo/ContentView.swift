@@ -47,43 +47,53 @@ struct ContentView: SwiftUI.View {
                                     HStack {
                                         
                                         GeometryReader { geoReader in
-                                            HStack {
-                                                ForEach(items.getLevels(), id: \.self) { currentLevel in
-                                                    HStack {
+                                            ScrollView([.horizontal]) {
+                                                HStack {
+                                                    ForEach(items.getLevels(), id: \.self) { currentLevel in
                                                         HStack {
-                                                            if currentLevel.last {
-                                                                Image(systemName: "chevron.right")
-                                                            }
-                                                        }.frame(minWidth: 25)
-                                                        ScrollLock(selectedUUID: currentLevel.hoveredNode.id) {
-                                                            ScrollView {
-                                                                VStack(alignment: .leading) {
-                                                                    ForEach(currentLevel.nodes) { node in
-                                                                        HStack {
-                                                                            if node.id == currentLevel.hoveredNode.id {
-                                                                                Text(node.displayText)
-                                                                                    .padding()
-                                                                                    .bold()
-                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
-                                                                                
-                                                                            } else {
-                                                                                Text(node.displayText)
-                                                                                    .padding()
-                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
-                                                                                
-                                                                            }
-                                                                        }.id(node.id)
-                                                                        
-                                                                    }
-                                                                }.padding(.vertical, geoReader.size.height/2)
+                                                            HStack {
+                                                                if currentLevel.last {
+                                                                    Image(systemName: "chevron.right")
+                                                                }
+                                                            }.frame(minWidth: 25)
+                                                            ScrollLock(selectedUUID: currentLevel.hoveredNode.id) {
+                                                                ScrollView {
+                                                                    VStack(alignment: .leading) {
+                                                                        ForEach(currentLevel.nodes) { node in
+                                                                            HStack {
+                                                                                if node.id == currentLevel.hoveredNode.id {
+                                                                                    Text(node.displayText)
+                                                                                        .padding()
+                                                                                        .bold()
+                                                                                        .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                    
+                                                                                } else {
+                                                                                    Text(node.displayText)
+                                                                                        .padding()
+                                                                                        .bold()
+                                                                                        .opacity(0)
+                                                                                            .overlay {
+                                                                                                Text(node.displayText)
+                                                                                                    .padding()
+                                                                                                    .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                            }
+                                                                                }
+                                                                            }.id(node.id)
+                                                                            
+                                                                        }
+                                                                    }.padding(.vertical, geoReader.size.height/2)
+                                                                    
+                                                                }
                                                                 
                                                             }
-                                                            
                                                         }
+                                                        .frame(maxWidth: geoReader.size.width / 2)
                                                     }
-                                                    
+                                                    Spacer()
                                                 }
                                             }
+                                            .scrollDisabled(true)
+                                            .defaultScrollAnchor(.trailing)
                                         }
                                     }
                                     .background(Color("transparent"))

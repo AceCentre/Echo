@@ -221,7 +221,10 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Label to hide arrows\nPicker option for control command"
+      "comment" : "Picker option for control command\nLabel to hide arrows"
+    },
+    "History" : {
+
     },
     "Hold" : {
       "comment" : "The label that is shown next to the single hold action"
@@ -296,10 +299,10 @@
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
     },
     "Predict which words and letters come next and you enter each letter." : {
-      "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
+      "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
     },
     "Prediction" : {
-      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -323,7 +326,7 @@
 
     },
     "Save" : {
-      "comment" : "The save toolbar button when saving controller mapping\nThe label for the save changes button"
+      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -335,10 +338,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
+      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -360,6 +363,9 @@
     },
     "Show" : {
       "comment" : "Label to show arrows"
+    },
+    "Show **%lld** level of your vocabulary" : {
+
     },
     "Show on-screen arrows" : {
       "comment" : "Label for toggle for on screen arrows"
@@ -445,6 +451,9 @@
     "This ID is used to identify you in the analytics collected. Do not share it unless you are willing to be identified." : {
       "comment" : "Explanation of what an ID is"
     },
+    "This is the number of levels of your phrases to show at once." : {
+
+    },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"
     },
@@ -461,7 +470,7 @@
       "comment" : "Label for toggle prompts"
     },
     "Vocabulary" : {
-      "comment" : "The label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page\nLabel for navigation link to the vocab page"
+      "comment" : "Label for navigation link to the vocab page\nThe navigation title for the Vocabulary options page\nThe label that is shown next to the vocab picker"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"

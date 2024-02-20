@@ -115,6 +115,27 @@ class Tree {
                 Node(type: .phrase, text: "Hey"),
                 Node(type: .phrase, text: "How are you"),
                 Node(type: .phrase, text: "Tell me more"),
+                Node(type: .branch, text: "Another level", children: [
+                    Node(type: .branch, text: "Another level", children: [
+                        Node(type: .phrase, text: "Final level"),
+                        Node(type: .branch, text: "Another level", children: [
+                            Node(type: .branch, text: "Another level", children: [
+                                Node(type: .phrase, text: "Final level"),
+                                Node(type: .branch, text: "Another level", children: [
+                                    Node(type: .branch, text: "Another level", children: [
+                                        Node(type: .phrase, text: "Final level"),
+                                        Node(type: .back, text: "Back")
+                                    ]),
+                                    Node(type: .back, text: "Back")
+                                ]),
+                                Node(type: .back, text: "Back")
+                            ]),
+                            Node(type: .back, text: "Back")
+                        ]),
+                        Node(type: .back, text: "Back")
+                    ]),
+                    Node(type: .back, text: "Back")
+                ]),
                 Node(type: .back, text: "Back")
             ]),
             Node(type: .spelling, text: "I will spell it")
