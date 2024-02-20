@@ -47,6 +47,10 @@ class VoiceController: ObservableObject {
     
     func setPhase(_ newPhase: ScenePhase) {
         phase = newPhase
+                
+        if phase == .inactive || phase == .background {
+            self.stop()
+        }
     }
     
     func play(_ text: String, voiceOptions: VoiceOptions, pan: Float, cb: (() -> Void)? = {}) {

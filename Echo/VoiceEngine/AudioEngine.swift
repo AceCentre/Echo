@@ -27,13 +27,12 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func stop() {
+        self.callback = nil
+        self.synthesizer.stopSpeaking(at: .immediate)
         if let unwrappedPlayer = self.player {
             unwrappedPlayer.pause()
             unwrappedPlayer.stop()
         }
-        
-        self.synthesizer.stopSpeaking(at: .immediate)
-        self.callback = nil
         
         outputSemaphore.signal()
     }
