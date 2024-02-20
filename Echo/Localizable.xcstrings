@@ -119,7 +119,7 @@
       "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
+      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -221,7 +221,7 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Label to hide arrows\nPicker option for control command"
+      "comment" : "Picker option for control command\nLabel to hide arrows"
     },
     "History" : {
 
@@ -326,7 +326,7 @@
 
     },
     "Save" : {
-      "comment" : "The save toolbar button when saving controller mapping\nThe label for the save changes button"
+      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -338,7 +338,7 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
       "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
@@ -413,7 +413,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
+      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"

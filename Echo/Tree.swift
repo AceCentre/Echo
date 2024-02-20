@@ -11,12 +11,14 @@ enum Vocabulary: Int, CaseIterable, Identifiable {
     case basic
     case spelling
     case adultAce
+    case adultStarter
     
     var id: String {
         switch self {
         case .basic: return "Basic"
         case .spelling:  return "Spelling"
         case .adultAce: return "Adult Ace"
+        case .adultStarter: return "Adult Starter"
         }
     }
     
@@ -28,6 +30,8 @@ enum Vocabulary: Int, CaseIterable, Identifiable {
             return Tree.SpellingTree
         case .adultAce:
             return Tree.AdultAce
+        case .adultStarter:
+            return Tree.AdultStarter
         }
     }
 }
@@ -110,6 +114,58 @@ class Tree {
         self.rootNode = rootNode
     }
     
+    public static var AdultStarter = Tree(
+        name: "Adult Starter",
+        rootNode: Node(type: .root, children: [
+            Node(type: .branch, text: "Quick Words", children: [
+                Node(type: .phrase, text: "Help"),
+                Node(type: .phrase, text: "Stop"),
+                Node(type: .phrase, text: "Choking. Need suction."),
+                Node(type: .phrase, text: "More"),
+                Node(type: .phrase, text: "Less")
+            ]),
+            Node(type: .branch, text: "Chat", children: [
+                Node(type: .phrase, text: "How are you?"),
+                Node(type: .phrase, text: "What have you been doing?"),
+                Node(type: .phrase, text: "Thank You"),
+                Node(type: .phrase, text: "Let me sleep now"),
+                Node(type: .phrase, text: "When are you coming next?")
+            ]),
+            Node(type: .branch, text: "Care", children: [
+                Node(type: .phrase, text: "I need the toilet"),
+                Node(type: .phrase, text: "I'm hot"),
+                Node(type: .phrase, text: "I'm cold"),
+                Node(type: .phrase, text: "I'm in pain")
+            ]),
+            Node(type: .branch, text: "Position", children: [
+                Node(type: .phrase, text: "Move me up"),
+                Node(type: .phrase, text: "Move me down")
+            ]),
+            Node(type: .branch, text: "People", children: [
+                Node(type: .phrase, text: "Ring"),
+                Node(type: .phrase, text: "My child"),
+                Node(type: .phrase, text: "The care manager"),
+                Node(type: .phrase, text: "Someone else")
+            ]),
+            Node(type: .branch, text: "Equipment", children: [
+                Node(type: .phrase, text: "Heating"),
+                Node(type: .phrase, text: "Window"),
+                Node(type: .phrase, text: "Fan"),
+                Node(type: .phrase, text: "Radio"),
+                Node(type: .phrase, text: "Lock Door")
+            ]),
+            Node(type: .branch, text: "Feelings", children: [
+                Node(type: .phrase, text: "I'm tired"),
+                Node(type: .phrase, text: "I'm in pain"),
+                Node(type: .phrase, text: "I'm ok thanks"),
+                Node(type: .phrase, text: "I'm Bored"),
+                Node(type: .phrase, text: "I'm sad"),
+                Node(type: .phrase, text: "I'm Angry")
+            ]),
+            Node(type: .spelling, text: "I will spell it")
+        ])
+    )
+    
     public static var AdultAce = Tree(
         name: "Adult Ace",
         rootNode: Node(type: .root, children: [
@@ -149,7 +205,7 @@ class Tree {
                 Node(type: .phrase, text: "Speech Valve"),
                 Node(type: .phrase, text: "Positioning"),
                 Node(type: .phrase, text: "Move me up"),
-                Node(type: .phrase, text: "Move me down"),
+                Node(type: .phrase, text: "Move me down")
             ]),
             Node(type: .branch, text: "People", children: [
                 Node(type: .branch, text: "Family", children: [

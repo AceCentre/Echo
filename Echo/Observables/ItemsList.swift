@@ -23,7 +23,7 @@ class ItemsList: ObservableObject {
     @Published var enteredText = ""
     @Published var scanLoops = 0
         
-    @AppStorage(StorageKeys.vocabulary) var vocabulary: Vocabulary = .basic
+    @AppStorage(StorageKeys.vocabulary) var vocabulary: Vocabulary = .adultStarter
     @AppStorage(StorageKeys.history) var history: Int = 2
         
     var disableScanningAsHidden = false
