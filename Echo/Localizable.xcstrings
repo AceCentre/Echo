@@ -53,7 +53,7 @@
 
     },
     "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for analytics picker"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -83,7 +83,7 @@
       "comment" : "An accessibility label for the up arrow image"
     },
     "Audio" : {
-      "comment" : "Label for the navigation link to the audio options page\nThe label for the section about analytics"
+      "comment" : "The label for the section about analytics\nLabel for the navigation link to the audio options page"
     },
     "Audio Settings" : {
       "comment" : "The navigation title for the Audio options page"
@@ -221,7 +221,7 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Picker option for control command\nLabel to hide arrows"
+      "comment" : "Label to hide arrows\nPicker option for control command"
     },
     "History" : {
 
@@ -302,7 +302,7 @@
       "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
     },
     "Prediction" : {
-      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -338,10 +338,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the scanning during onboarding\nLabel for toggle to turn scanning off and on\nLabel for the navigation link to the scanning options page"
+      "comment" : "Label for toggle to turn scanning off and on\nLabel for the scanning during onboarding\nLabel for the navigation link to the scanning options page"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -470,7 +470,7 @@
       "comment" : "Label for toggle prompts"
     },
     "Vocabulary" : {
-      "comment" : "Label for navigation link to the vocab page\nThe navigation title for the Vocabulary options page\nThe label that is shown next to the vocab picker"
+      "comment" : "The label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page\nLabel for navigation link to the vocab page"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"
@@ -530,7 +530,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"

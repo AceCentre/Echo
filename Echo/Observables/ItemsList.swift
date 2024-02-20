@@ -372,7 +372,7 @@ class ItemsList: ObservableObject {
         // If there is text, delete a character
         if enteredText == "" {
             if let parentNode = hoveredNode.parent {
-                if let firstNode = parentNode.children.first, parentNode.type == .rootAndSpelling {
+                if let firstNode = parentNode.children.first, parentNode.type == .rootAndSpelling || parentNode.type == .root {
                     hoverNode(firstNode, shouldScan: scanAfterSelection)
                 } else {
                     hoverNode(parentNode, shouldScan: scanAfterSelection)
