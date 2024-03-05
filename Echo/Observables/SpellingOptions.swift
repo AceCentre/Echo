@@ -53,6 +53,7 @@ class SpellingOptions: ObservableObject {
     @AppStorage(StorageKeys.wordAndLetterPrompt) var wordAndLetterPrompt: Bool = true
     @AppStorage(StorageKeys.appleWordPrediction) var appleWordPrediction: Bool = true
     @AppStorage(StorageKeys.controlCommandPosition) var controlCommandPosition: ControlCommandDisplayOptions = .top
+    @AppStorage(StorageKeys.messageBarFontSize) var messageBarFontSize: Int = 25
     
     @Published var allWordPrediction: Bool {
         willSet {

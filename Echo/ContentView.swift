@@ -130,6 +130,7 @@ struct ContentView: SwiftUI.View {
                                     VStack {
                                         Text(items.enteredText == "" ? " " : items.enteredText)
                                             .padding(10)
+                                            .font(.system(size: CGFloat(spelling.messageBarFontSize)))
                                     }
                                     .frame(maxWidth: .infinity)
                                     .background(Color("lightGray"))

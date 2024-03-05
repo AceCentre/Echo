@@ -35,6 +35,7 @@ public struct StorageKeys {
     public static var controlCommandPosition = "controlCommandPosition"
     public static var vocabulary = "vocabulary"
     public static var history = "history"
+    public static var messageBarFontSize = "messageBarFontSize"
 
     public static var allowedViaTest = [
         showOnboarding,

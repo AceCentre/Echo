@@ -14,6 +14,23 @@ struct SpellingAndAlphabetPage: View {
     var body: some View {
         Form {
             Section(content: {
+                Stepper(
+                    value: spellingOptions.$messageBarFontSize,
+                    in: 10...100,
+                    step: 1
+                ) {
+                    HStack {
+                        Text("Message Bar Font Size")
+                        Spacer()
+                        Text("\(spellingOptions.messageBarFontSize)")
+                    }
+                    
+                }
+            }, header: {
+                Text("Display", comment: "Label for display header in settings")
+            })
+            
+            Section(content: {
                 Toggle(
                     String(
                         localized: "Letter prediction",

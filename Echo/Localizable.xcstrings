@@ -13,6 +13,9 @@
     "**Word and Letter Prediction**" : {
       "comment" : "Label for the prediction during onboarding"
     },
+    "%lld" : {
+
+    },
     "A four way arrow keypad" : {
       "comment" : "Accessibility label for arrows"
     },
@@ -119,7 +122,7 @@
       "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Footer description describing what switch access is\nDescription describing what switch access is"
+      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
     },
     "Copied!" : {
       "comment" : "Label thats shown when text is copied"
@@ -156,6 +159,9 @@
     },
     "Disable" : {
       "comment" : "Label to disable swipe"
+    },
+    "Display" : {
+      "comment" : "Label for display header in settings"
     },
     "Display control commands" : {
       "comment" : "Picker label for control commands"
@@ -221,7 +227,7 @@
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
     "Hide" : {
-      "comment" : "Picker option for control command\nLabel to hide arrows"
+      "comment" : "Label to hide arrows\nPicker option for control command"
     },
     "History" : {
 
@@ -261,6 +267,9 @@
     },
     "Map Buttons" : {
       "comment" : "The help text on the controller button"
+    },
+    "Message Bar Font Size" : {
+
     },
     "Next" : {
       "comment" : "The label for the to go to the next onboarding step"
@@ -302,7 +311,7 @@
       "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
     },
     "Prediction" : {
-      "comment" : "Label for toggle to turn prediction off and on\nLabel for the section in settings about prediction"
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
     },
     "Prediction helps you to get to the words you want to speak faster" : {
       "comment" : "Footer for the section in settings about prediction"
@@ -326,7 +335,7 @@
 
     },
     "Save" : {
-      "comment" : "The save toolbar button when saving controller mapping\nThe label for the save changes button"
+      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -338,10 +347,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for the scanning during onboarding\nLabel for toggle to turn scanning off and on"
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -413,7 +422,7 @@
       "comment" : "The default switch name"
     },
     "Switch Control" : {
-      "comment" : "Label for toggle to turn switch control off and on\nHeader for switch control in onboarding page"
+      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
     },
     "Switch Key" : {
       "comment" : "Header text for the switch keyboard area"
@@ -470,7 +479,7 @@
       "comment" : "Label for toggle prompts"
     },
     "Vocabulary" : {
-      "comment" : "The navigation title for the Vocabulary options page\nLabel for navigation link to the vocab page\nThe label that is shown next to the vocab picker"
+      "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"
@@ -530,7 +539,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
     }
   },
   "version" : "1.0"
