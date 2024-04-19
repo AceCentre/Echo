@@ -10,6 +10,7 @@
 		D507A94D2AE7C32C003EC583 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A94C2AE7C32C003EC583 /* Analytics.swift */; };
 		D507A94F2AE7D587003EC583 /* AnalyticsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */; };
 		D507A9512AE90B65003EC583 /* MeasuringUtterancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A9502AE90B65003EC583 /* MeasuringUtterancesTests.swift */; };
+		D510A2862BD2811100ED3934 /* EditVocabPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D510A2852BD2811100ED3934 /* EditVocabPage.swift */; };
 		D512DA952ACEBDCA00660524 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D512DA942ACEBDCA00660524 /* Comparable.swift */; };
 		D51743072A6FF72300E14EE0 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D51743062A6FF72300E14EE0 /* dictionary.sqlite */; };
 		D52232AC2AF167E700EA3F37 /* SharedEcho.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; };
@@ -142,6 +143,7 @@
 		D507A94C2AE7C32C003EC583 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsOptions.swift; sourceTree = "<group>"; };
 		D507A9502AE90B65003EC583 /* MeasuringUtterancesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuringUtterancesTests.swift; sourceTree = "<group>"; };
+		D510A2852BD2811100ED3934 /* EditVocabPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVocabPage.swift; sourceTree = "<group>"; };
 		D512DA942ACEBDCA00660524 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		D51743062A6FF72300E14EE0 /* dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dictionary.sqlite; sourceTree = "<group>"; };
 		D52232B12AF167FF00EA3F37 /* StorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKeys.swift; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 			isa = PBXGroup;
 			children = (
 				D5C005722AC5CEF9007C21B2 /* VoiceSelectionPage.swift */,
+				D510A2852BD2811100ED3934 /* EditVocabPage.swift */,
 				D5DAB05B2AEA815200888390 /* Onboarding.swift */,
 				D5A4889D2ADFCD8D00E9A635 /* SpellingAndAlphabetPage.swift */,
 				D57A517E2ACF084300FC7716 /* ScanningOptionsPage.swift */,
@@ -555,7 +558,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					D53986852AF1515C00CF9419 = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -708,6 +711,7 @@
 				D54D281A2B83B179009A1B2E /* ErrorHandling.swift in Sources */,
 				D5DAB05C2AEA815200888390 /* Onboarding.swift in Sources */,
 				D52CFFF72AF54B940083FFD0 /* Rating.swift in Sources */,
+				D510A2862BD2811100ED3934 /* EditVocabPage.swift in Sources */,
 				D5EDA4A12AEBF1EA00727B90 /* BottomText.swift in Sources */,
 				D5DB645F2ACC514800E41867 /* View.swift in Sources */,
 				D5DB64782ACDC39500E41867 /* AccessOptions.swift in Sources */,
@@ -952,6 +956,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1012,6 +1017,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

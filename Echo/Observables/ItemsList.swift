@@ -126,6 +126,10 @@ class ItemsList: ObservableObject {
         }
     }
     
+    public func expandNode(_ node: Node) throws {
+        try clickNode(node, isStartup: false)
+    }
+    
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_body_length
     private func clickNode(_ node: Node, isStartup: Bool) throws {

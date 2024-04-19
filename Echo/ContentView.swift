@@ -155,7 +155,14 @@ struct ContentView: SwiftUI.View {
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
+                .toolbar { /// TODO Not really a fan of this button placement
+                    ToolbarItem(placement: .topBarLeading) {
+                        NavigationLink(destination: {
+                            EditVocabPage()
+                        }, label: {
+                            Image(systemName: "square.and.pencil").foregroundColor(.blue)
+                        })
+                    }
                     ToolbarItem(placement: .primaryAction) {
                         NavigationLink(destination: {
                             SettingsPage()

@@ -56,7 +56,7 @@
 
     },
     "Analytics" : {
-      "comment" : "The label for the section about analytics\nLabel for analytics picker"
+      "comment" : "Label for analytics picker\nThe label for the section about analytics"
     },
     "Analytics & Telemetry" : {
       "comment" : "The navigation title for the Analytics & Telemetry options page"
@@ -277,6 +277,9 @@
     "No game controller connect to device. Please connect a controller to access these settings" : {
       "comment" : "Notification of no game controllers connected"
     },
+    "Node text" : {
+
+    },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -308,7 +311,7 @@
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
     },
     "Predict which words and letters come next and you enter each letter." : {
-      "comment" : "Select the vocabulary of phrases, words and letters to be used\nExplaination of prediction during onboarding"
+      "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
     },
     "Prediction" : {
       "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
@@ -347,10 +350,10 @@
       "comment" : "Label for toggle that controls when scanning starts"
     },
     "Scanning" : {
-      "comment" : "Label for the navigation link to the scanning options page\nLabel for toggle to turn scanning off and on\nLabel for the scanning during onboarding"
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for the scanning during onboarding\nLabel for toggle to turn scanning off and on"
     },
     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
-      "comment" : "The footer explaining what scanning loops is\nExplaination of scanning during onboarding"
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
     },
     "Scanning Options" : {
       "comment" : "The navigation title for the scanning options page"
@@ -539,7 +542,7 @@
       "comment" : "The footer for the options that control the cue voice"
     },
     "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
-      "comment" : "The footer for the options that control the speaking voice\nExplanation of speaking voice during onboarding"
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
     }
   },
   "version" : "1.0"

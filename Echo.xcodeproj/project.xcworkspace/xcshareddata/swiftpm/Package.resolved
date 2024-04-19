@@ -1,4 +1,5 @@
 {
+  "originHash" : "4446a53ceaa80fa6c2ddfb40a84bd050d3fec01022684966dd744ec579351e87",
   "pins" : [
     {
       "identity" : "posthog-ios",
@@ -28,5 +29,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
