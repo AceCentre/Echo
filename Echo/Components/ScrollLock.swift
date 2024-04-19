@@ -14,6 +14,7 @@ import SwiftUIIntrospect
  */
 struct ScrollLock<Content: View>: SwiftUI.View {
     var selectedUUID: UUID
+    var locked: Bool = true
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -25,7 +26,7 @@ struct ScrollLock<Content: View>: SwiftUI.View {
                     }
                 }.onAppear {
                     scrollControl.scrollTo(selectedUUID, anchor: .center)
-                }.scrollDisabled(true)
+                }.scrollDisabled(locked)
         }
         .introspect(.scrollView, on: .iOS(.v17)) { scrollView in
             // We need a shorter animation than default on scrollTo so that it
