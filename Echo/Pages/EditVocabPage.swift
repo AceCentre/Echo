@@ -44,25 +44,65 @@ struct EditVocabPage: View {
                                                                             HStack {
                                                                                 if node.id == currentLevel.hoveredNode.id {
                                                                                     VStack {
-                                                                                        TextField(
-                                                                                            "temp",
-                                                                                            text: .constant(node.displayText)
-                                                                                        )
-                                                                                        Color.gray.frame(height: 1)
-
+                                                                                        Button(action: {
+                                                                                            print("Add above")
+                                                                                        }, label: {
+                                                                                            Image(systemName: "plus.circle")
+                                                                                                .foregroundStyle(.green)
+                                                                                        })
+                                                                                        
+                                                                                        HStack {
+                                                                                            VStack {
+                                                                                                TextField(
+                                                                                                    "temp",
+                                                                                                    text: .constant(node.displayText)
+                                                                                                )
+                                                                                                Color.gray.frame(height: 1)
+                                                                                                
+                                                                                            }
+                                                                                            .padding()
+                                                                                            .background(.red)
+                                                                                            .cornerRadius(6)
+                                                                                            .padding()
+                                                                                            
+                                                                                            if node.children.count == 0 {
+                                                                                                Button(action: {
+                                                                                                    print("Add next")
+                                                                                                }, label: {
+                                                                                                    Image(systemName: "plus.circle")
+                                                                                                        .foregroundStyle(.green)
+                                                                                                })
+                                                                                            } else {
+                                                                                                Button(action: {
+                                                                                                    print("Add next")
+                                                                                                }, label: {
+                                                                                                    Image(systemName: "chevron.right")
+                                                                                                })
+                                                                                            }
+                                                                                        }
+                                                                                        
+                                                                                        Button(action: {
+                                                                                            print("Add below")
+                                                                                        }, label: {
+                                                                                            Image(systemName: "plus.circle")
+                                                                                                .foregroundStyle(.green)
+                                                                                        })
                                                                                     }
-                                                                                    .padding()
-                                                                                    .background(.red)
-                                                                                    .cornerRadius(15)
-                                                                                    .padding()
 
                                                                                     
                                                                                     
                                                                                     
                                                                                 } else {
-                                                                                    Text(node.displayText)
-                                                                                        .padding()
-                                                                                        .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                    Button(action: {
+                                                                                        print("Pressed")
+                                                                                        items.hoverNode(node, shouldScan: false)
+                                                                                    }, label: {
+                                                                                        Text(node.displayText)
+                                                                                            .padding()
+                                                                                            .opacity(currentLevel.last ? 1 : 0.5)
+                                                                                    })
+                                                                                   
+//
                                                                                             
                                                                                 }
                                                                             }.id(node.id)

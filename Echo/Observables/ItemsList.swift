@@ -471,7 +471,7 @@ class ItemsList: ObservableObject {
         hoverNode(prevNode, shouldScan: true)
     }
     
-    private func hoverNode(_ node: Node, shouldScan: Bool) {
+    public func hoverNode(_ node: Node, shouldScan: Bool) {
         hoveredNode = node
         
         guard let unwrappedVoice = voiceEngine else {
