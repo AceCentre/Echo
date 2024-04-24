@@ -11,6 +11,7 @@
 		D507A94F2AE7D587003EC583 /* AnalyticsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */; };
 		D507A9512AE90B65003EC583 /* MeasuringUtterancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D507A9502AE90B65003EC583 /* MeasuringUtterancesTests.swift */; };
 		D510A2862BD2811100ED3934 /* EditVocabPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D510A2852BD2811100ED3934 /* EditVocabPage.swift */; };
+		D510A2A32BD93B1600ED3934 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D510A2A22BD93B1600ED3934 /* PrivacyInfo.xcprivacy */; };
 		D512DA952ACEBDCA00660524 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D512DA942ACEBDCA00660524 /* Comparable.swift */; };
 		D51743072A6FF72300E14EE0 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D51743062A6FF72300E14EE0 /* dictionary.sqlite */; };
 		D52232AC2AF167E700EA3F37 /* SharedEcho.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53986982AF1679100CF9419 /* SharedEcho.framework */; };
@@ -144,6 +145,7 @@
 		D507A94E2AE7D587003EC583 /* AnalyticsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsOptions.swift; sourceTree = "<group>"; };
 		D507A9502AE90B65003EC583 /* MeasuringUtterancesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuringUtterancesTests.swift; sourceTree = "<group>"; };
 		D510A2852BD2811100ED3934 /* EditVocabPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVocabPage.swift; sourceTree = "<group>"; };
+		D510A2A22BD93B1600ED3934 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D512DA942ACEBDCA00660524 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		D51743062A6FF72300E14EE0 /* dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dictionary.sqlite; sourceTree = "<group>"; };
 		D52232B12AF167FF00EA3F37 /* StorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKeys.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			children = (
 				D586D0A52B57DB660060BE2E /* EchoDemo.gif */,
 				D5965E0B2A6875AB003C9208 /* Info.plist */,
+				D510A2A22BD93B1600ED3934 /* PrivacyInfo.xcprivacy */,
 				D5DB645D2ACC513A00E41867 /* Extensions */,
 				D5DB64622ACC57B000E41867 /* Components */,
 				D5DB64632ACC58F500E41867 /* Pages */,
@@ -629,6 +632,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D510A2A32BD93B1600ED3934 /* PrivacyInfo.xcprivacy in Resources */,
 				D5965E042A61995F003C9208 /* Preview Assets.xcassets in Resources */,
 				D5965E012A61995E003C9208 /* Assets.xcassets in Resources */,
 				D5A4889C2ADE8F3500E9A635 /* Localizable.xcstrings in Resources */,
