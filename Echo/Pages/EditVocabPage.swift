@@ -24,6 +24,93 @@ struct SheetButton<SheetLabel: View, SheetContent: View>: View {
     }
 }
 
+struct NodeSheet: View {
+    var node: Node
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section(content: {
+                    TextField("", text: .constant(node.displayText))
+                }, header: {
+                    Text("Label")
+                }, footer: {
+                    Text("The text that is displayed and read aloud for the given node.")
+                })
+                Section(content: {
+                    Text("Temp, picker here")
+                }, header: {
+                    Text("Node Type")
+                }, footer: {
+                    Text("The node type indicates what will happen when you select the specific node")
+                })
+            }.navigationTitle("Editing: " + node.displayText)
+        }
+    }
+}
+
+struct EditingNode: View {
+    @EnvironmentObject var items: ItemsList
+
+    var node: Node
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                print("Add above")
+            }, label: {
+                Image(systemName: "plus.circle")
+                    .foregroundStyle(.green)
+            })
+            
+            HStack {
+                
+                SheetButton(sheetLabel: {
+                    Image(systemName: "gear")
+                }, sheetContent: {
+                    NodeSheet(node: node)
+                })
+                
+                TextField(
+                    "temp",
+                    text: .constant(node.displayText)
+                )
+                .frame(minWidth: 200)
+                .textFieldStyle(.roundedBorder)
+                .cornerRadius(6)
+                
+                if node.children.count == 0 {
+                    Button(action: {
+                        print("Add next")
+                    }, label: {
+                        Image(systemName: "plus.circle")
+                            .foregroundStyle(.green)
+                    })
+                } else {
+                    Button(action: {
+                        items.userClickHovered()
+                    }, label: {
+                        Image(systemName: "chevron.right")
+                    })
+                }
+            }
+            
+            Button(action: {
+                print("Add below")
+            }, label: {
+                Image(systemName: "plus.circle")
+                    .foregroundStyle(.green)
+            })
+        }
+        .padding(8)
+        .background(.lightGray)
+        .cornerRadius(6)
+        .shadow(radius: 5)
+        .padding(8)
+        
+    }
+}
+
 struct EditVocabPage: View {
     @EnvironmentObject var items: ItemsList
     @EnvironmentObject var accessOptions: AccessOptions
@@ -56,61 +143,7 @@ struct EditVocabPage: View {
                                                 ForEach(currentLevel.nodes) { node in
                                                     HStack {
                                                         if node.id == items.hoveredNode.id {
-                                                            VStack {
-                                                                Button(action: {
-                                                                    print("Add above")
-                                                                }, label: {
-                                                                    Image(systemName: "plus.circle")
-                                                                        .foregroundStyle(.green)
-                                                                })
-                                                                
-                                                                    
-                                                                HStack {
-                                                                    
-                                                                    SheetButton(sheetLabel: {
-                                                                        Image(systemName: "gear")
-                                                                    }, sheetContent: {
-                                                                        Text(node.displayText)
-                                                                    })
-                                                                    
-                                                                    TextField(
-                                                                        "temp",
-                                                                        text: .constant(node.displayText)
-                                                                    )
-                                                                    .frame(minWidth: 200)
-                                                                    .textFieldStyle(.roundedBorder)
-                                                                    .cornerRadius(6)
-                                                                    
-                                                                    if node.children.count == 0 {
-                                                                        Button(action: {
-                                                                            print("Add next")
-                                                                        }, label: {
-                                                                            Image(systemName: "plus.circle")
-                                                                                .foregroundStyle(.green)
-                                                                        })
-                                                                    } else {
-                                                                        Button(action: {
-                                                                            items.userClickHovered()
-                                                                        }, label: {
-                                                                            Image(systemName: "chevron.right")
-                                                                        })
-                                                                    }
-                                                                }
-                                                                
-                                                                
-                                                                Button(action: {
-                                                                    print("Add below")
-                                                                }, label: {
-                                                                    Image(systemName: "plus.circle")
-                                                                        .foregroundStyle(.green)
-                                                                })
-                                                            }
-                                                            .padding(8)
-                                                            .background(.lightGray)
-                                                            .cornerRadius(6)
-                                                            .shadow(radius: 5)
-                                                            .padding(8)
-                                                            
+                                                            EditingNode(node: node)
                                                             
                                                             
                                                         } else {
@@ -141,7 +174,6 @@ struct EditVocabPage: View {
                     }
                 }
                 
-                
             }
             
         }
@@ -152,8 +184,6 @@ struct EditVocabPage: View {
                 comment: "An explaination to users using Voice over about how to use Echo"
             )
         })
-        
-        
         
         .navigationTitle(
             String(

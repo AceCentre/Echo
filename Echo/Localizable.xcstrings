@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "**Cue Voice**" : {
       "comment" : "Label for the cue voice during onboarding"
     },
@@ -241,6 +244,9 @@
     "Initial Setup" : {
       "comment" : "Label for the navigation link to the initial options page"
     },
+    "Label" : {
+
+    },
     "Language" : {
       "comment" : "The label that is shown next to the language picker"
     },
@@ -276,6 +282,9 @@
     },
     "No game controller connect to device. Please connect a controller to access these settings" : {
       "comment" : "Notification of no game controllers connected"
+    },
+    "Node Type" : {
+
     },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
@@ -439,6 +448,9 @@
     "temp" : {
 
     },
+    "Temp, picker here" : {
+
+    },
     "Thank you for using Echo, this is your cue voice" : {
       "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
     },
@@ -453,6 +465,12 @@
     },
     "The length of time that Echo will wait before moving onto the next item" : {
       "comment" : "A description of what scanning speed does"
+    },
+    "The node type indicates what will happen when you select the specific node" : {
+
+    },
+    "The text that is displayed and read aloud for the given node." : {
+
     },
     "The voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
       "comment" : "Explanation of cuevoice during onboarding"
