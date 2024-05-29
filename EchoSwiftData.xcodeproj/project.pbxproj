@@ -11,6 +11,18 @@
 		D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3902BFF9A2800F064F2 /* ContentView.swift */; };
 		D577B3932BFF9A2B00F064F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D577B3922BFF9A2B00F064F2 /* Assets.xcassets */; };
 		D577B3972BFF9A2B00F064F2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D577B3962BFF9A2B00F064F2 /* Preview Assets.xcassets */; };
+		D577B39E2C008AD500F064F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B39D2C008AD500F064F2 /* Settings.swift */; };
+		D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A12C0099B500F064F2 /* Onboarding.swift */; };
+		D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */; };
+		D577B3A92C00A05100F064F2 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A82C00A05100F064F2 /* View.swift */; };
+		D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3AA2C00A23A00F064F2 /* Intro.swift */; };
+		D577B3AD2C00A98800F064F2 /* BottomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3AC2C00A98800F064F2 /* BottomText.swift */; };
+		D577B3AF2C00AF4400F064F2 /* EchoDemo.gif in Resources */ = {isa = PBXBuildFile; fileRef = D577B3AE2C00AF4400F064F2 /* EchoDemo.gif */; };
+		D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B02C00C2AF00F064F2 /* SecondStep.swift */; };
+		D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */; };
+		D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B42C00C78600F064F2 /* Vocabulary.swift */; };
+		D5A775992C0627D8004DA914 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775982C0627D8004DA914 /* String.swift */; };
+		D5A7759B2C062C1A004DA914 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A7759A2C062C1A004DA914 /* Errors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +32,18 @@
 		D577B3922BFF9A2B00F064F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D577B3942BFF9A2B00F064F2 /* EchoSwiftData.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EchoSwiftData.entitlements; sourceTree = "<group>"; };
 		D577B3962BFF9A2B00F064F2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D577B39D2C008AD500F064F2 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D577B3A12C0099B500F064F2 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		D577B3A82C00A05100F064F2 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		D577B3AA2C00A23A00F064F2 /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
+		D577B3AC2C00A98800F064F2 /* BottomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomText.swift; sourceTree = "<group>"; };
+		D577B3AE2C00AF4400F064F2 /* EchoDemo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = EchoDemo.gif; sourceTree = "<group>"; };
+		D577B3B02C00C2AF00F064F2 /* SecondStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondStep.swift; sourceTree = "<group>"; };
+		D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOnboarding.swift; sourceTree = "<group>"; };
+		D577B3B42C00C78600F064F2 /* Vocabulary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vocabulary.swift; sourceTree = "<group>"; };
+		D5A775982C0627D8004DA914 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D5A7759A2C062C1A004DA914 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +76,13 @@
 		D577B38D2BFF9A2800F064F2 /* EchoSwiftData */ = {
 			isa = PBXGroup;
 			children = (
+				D577B3AE2C00AF4400F064F2 /* EchoDemo.gif */,
+				D577B3A02C0099AA00F064F2 /* Pages */,
+				D577B39F2C008BDA00F064F2 /* Models */,
+				D577B3A52C009AC800F064F2 /* Components */,
+				D577B3A72C00A03700F064F2 /* Extensions */,
 				D577B38E2BFF9A2800F064F2 /* EchoSwiftDataApp.swift */,
+				D5A7759A2C062C1A004DA914 /* Errors.swift */,
 				D577B3902BFF9A2800F064F2 /* ContentView.swift */,
 				D577B3922BFF9A2B00F064F2 /* Assets.xcassets */,
 				D577B3942BFF9A2B00F064F2 /* EchoSwiftData.entitlements */,
@@ -67,6 +97,52 @@
 				D577B3962BFF9A2B00F064F2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D577B39F2C008BDA00F064F2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D577B39D2C008AD500F064F2 /* Settings.swift */,
+				D577B3B42C00C78600F064F2 /* Vocabulary.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D577B3A02C0099AA00F064F2 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				D577B3A12C0099B500F064F2 /* Onboarding.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		D577B3A52C009AC800F064F2 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D577B3A62C009AED00F064F2 /* Onboarding */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D577B3A62C009AED00F064F2 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */,
+				D577B3B02C00C2AF00F064F2 /* SecondStep.swift */,
+				D577B3AA2C00A23A00F064F2 /* Intro.swift */,
+				D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */,
+				D577B3AC2C00A98800F064F2 /* BottomText.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D577B3A72C00A03700F064F2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D577B3A82C00A05100F064F2 /* View.swift */,
+				D5A775982C0627D8004DA914 /* String.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D577B3972BFF9A2B00F064F2 /* Preview Assets.xcassets in Resources */,
+				D577B3AF2C00AF4400F064F2 /* EchoDemo.gif in Resources */,
 				D577B3932BFF9A2B00F064F2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,7 +216,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D577B39E2C008AD500F064F2 /* Settings.swift in Sources */,
+				D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */,
 				D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */,
+				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
+				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
+				D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */,
+				D5A775992C0627D8004DA914 /* String.swift in Sources */,
+				D5A7759B2C062C1A004DA914 /* Errors.swift in Sources */,
+				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
+				D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */,
+				D577B3AD2C00A98800F064F2 /* BottomText.swift in Sources */,
+				D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */,
 				D577B38F2BFF9A2800F064F2 /* EchoSwiftDataApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(Settings.self) var settings
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if settings.showOnboarding {
+            Onboarding(endOnboarding: {
+                settings.showOnboarding = false
+            })
+        } else {
+            VStack {
+                Image(systemName: "globe")
+                    .imageScale(.large)
+                    .foregroundStyle(.tint)
+                Text("Hello, world!")
+                Button(action: {
+                    settings.showOnboarding = true
+                }, label: {
+                    Text("reset")
+                })
+            }
+            .padding()
         }
-        .padding()
+        
     }
 }
 
