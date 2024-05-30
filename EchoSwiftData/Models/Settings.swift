@@ -14,7 +14,18 @@ class Settings {
     
     var currentVocab: Vocabulary?
     
+    var cueVoice: Voice?
+    var speakingVoice: Voice?
+    
+    var splitAudio: Bool
+    var cueDirection: AudioDirection
+    var speakDirection: AudioDirection
+    
     init(showOnboarding: Bool = true) {
         self.showOnboarding = showOnboarding
+        
+        self.splitAudio = false
+        self.cueDirection = .left
+        self.speakDirection = .right
     }
 }

@@ -53,6 +53,43 @@ struct EchoSwiftDataApp: App {
                     }
                 }
                 
+                /*
+                 Create and store a cueVoice
+                 */
+                if currentSettings.cueVoice == nil {
+                    let cueVoice = Voice(
+                        rate: 35,
+                        volume: 100,
+                        voiceId: "unknown",
+                        voiceName: "unkown"
+                    )
+                    cueVoice.setToDefaultCueVoice()
+                    
+                    container.mainContext.insert(cueVoice)
+                    try container.mainContext.save()
+                    
+                    currentSettings.cueVoice = cueVoice
+                    try container.mainContext.save()
+                }
+                
+                /*
+                 Create and store a speakingVoice
+                 */
+                if currentSettings.speakingVoice == nil {
+                    let speakingVoice = Voice(
+                        rate: 35,
+                        volume: 100,
+                        voiceId: "unknown",
+                        voiceName: "unkown"
+                    )
+                    speakingVoice.setToDefaultSpeakingVoice()
+                    
+                    container.mainContext.insert(speakingVoice)
+                    try container.mainContext.save()
+                    
+                    currentSettings.speakingVoice = speakingVoice
+                    try container.mainContext.save()
+                }
             } catch {
                 /// TODO: Properly address error
                 print(error)

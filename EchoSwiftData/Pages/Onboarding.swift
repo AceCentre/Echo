@@ -12,7 +12,7 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
     case introVideo = 0
     case secondStep = 1
     case vocabulary = 2
-//    case cueVoice =  3
+    case cueVoice =  3
 //    case speakingVoice = 4
 //    case scanning = 5
 //    case prediction = 6
@@ -27,7 +27,7 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .secondStep: "second"
 //        case .onScreenArrows: "arrows"
 //        case .swipeOnboarding: "swipe"
-//        case .cueVoice: "cueVoice"
+        case .cueVoice: "cueVoice"
 //        case .speakingVoice: "speakingVoice"
 //        case .analytics: "analytics"
 //        case .prediction: "prediction"
@@ -43,7 +43,7 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .secondStep: SecondStep()
 //        case .onScreenArrows: OnScreenArrowsOnboarding()
 //        case .swipeOnboarding: SwipeOnboarding()
-//        case .cueVoice: CueVoiceOnboarding()
+        case .cueVoice: CueVoiceOnboarding()
 //        case .speakingVoice: SpeakingVoiceOnboarding()
 //        case .analytics: AnalyticsOnboarding()
 //        case .prediction: PredictionOnboarding()

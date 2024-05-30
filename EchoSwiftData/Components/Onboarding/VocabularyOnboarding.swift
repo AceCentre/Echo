@@ -18,9 +18,7 @@ struct VocabularyOnboarding: View {
     @State var selectedVocab = Vocabulary(name: "temp")
     
     var body: some View {
-        VStack {
-            
-            
+        VStack { 
             VStack {
                 Spacer()
                 ZStack {
