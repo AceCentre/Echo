@@ -32,6 +32,7 @@
 		D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A92C0780C4004DA914 /* VoiceController.swift */; };
 		D5A775AC2C078127004DA914 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775AB2C078127004DA914 /* AudioEngine.swift */; };
 		D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775AD2C0784D0004DA914 /* AudioDirection.swift */; };
+		D5A775B12C08B445004DA914 /* SpeakingVoiceOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775B02C08B445004DA914 /* SpeakingVoiceOnboarding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		D5A775A92C0780C4004DA914 /* VoiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceController.swift; sourceTree = "<group>"; };
 		D5A775AB2C078127004DA914 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		D5A775AD2C0784D0004DA914 /* AudioDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDirection.swift; sourceTree = "<group>"; };
+		D5A775B02C08B445004DA914 /* SpeakingVoiceOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakingVoiceOnboarding.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */,
+				D5A775B02C08B445004DA914 /* SpeakingVoiceOnboarding.swift */,
 				D5A7759C2C075F4E004DA914 /* CueVoice.swift */,
 				D577B3B02C00C2AF00F064F2 /* SecondStep.swift */,
 				D577B3AA2C00A23A00F064F2 /* Intro.swift */,
@@ -270,6 +273,7 @@
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
 				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
 				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
+				D5A775B12C08B445004DA914 /* SpeakingVoiceOnboarding.swift in Sources */,
 				D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */,
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
 				D5A7759B2C062C1A004DA914 /* Errors.swift in Sources */,
