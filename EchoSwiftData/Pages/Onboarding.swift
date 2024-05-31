@@ -14,25 +14,23 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
     case vocabulary = 2
     case cueVoice =  3
     case speakingVoice = 4
-//    case scanning = 5
-//    case prediction = 6
-//    case onScreenArrows = 7
-//    case swipeOnboarding = 8
-//    case switchOnboarding = 9
-//    case analytics = 10
+    case scanning = 5
+    case prediction = 6
+    case onScreenArrows = 7
+    case swipeOnboarding = 8
+    case switchOnboarding = 9
 
     var id: String {
         switch self {
         case .introVideo: "intro"
         case .secondStep: "second"
-//        case .onScreenArrows: "arrows"
-//        case .swipeOnboarding: "swipe"
+        case .onScreenArrows: "arrows"
+        case .swipeOnboarding: "swipe"
         case .cueVoice: "cueVoice"
         case .speakingVoice: "speakingVoice"
-//        case .analytics: "analytics"
-//        case .prediction: "prediction"
-//        case .switchOnboarding: "switch"
-//        case .scanning: "Scanning"
+        case .prediction: "prediction"
+        case .switchOnboarding: "switch"
+        case .scanning: "Scanning"
         case .vocabulary: "Vocabulary"
         }
     }
@@ -41,14 +39,13 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         switch self {
         case .introVideo: IntroStep()
         case .secondStep: SecondStep()
-//        case .onScreenArrows: OnScreenArrowsOnboarding()
-//        case .swipeOnboarding: SwipeOnboarding()
+        case .onScreenArrows: OnScreenArrowsOnboarding()
+        case .swipeOnboarding: SwipeOnboarding()
         case .cueVoice: CueVoiceOnboarding()
         case .speakingVoice: SpeakingVoiceOnboarding()
-//        case .analytics: AnalyticsOnboarding()
-//        case .prediction: PredictionOnboarding()
-//        case .switchOnboarding: SwitchOnboarding()
-//        case .scanning: ScanningOnboarding()
+        case .prediction: PredictionOnboarding()
+        case .switchOnboarding: SwitchOnboarding()
+        case .scanning: ScanningOnboarding()
         case .vocabulary: VocabularyOnboarding()
         }
     }
