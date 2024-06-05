@@ -10,10 +10,13 @@ import SwiftData
 
 @main
 struct EchoSwiftDataApp: App {
+    @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
+    
     var body: some Scene {
         WindowGroup {
             SwiftDataInitialiser()
-        }.modelContainer(for: Settings.self) { result in
+        }
+        .modelContainer(for: [Settings.self, Switch.self]) { result in
             do {
                 /*
                  Create the initial settings object if it does not exist
@@ -27,6 +30,31 @@ struct EchoSwiftDataApp: App {
                     container.mainContext.insert(currentSettings)
                 }
                 try container.mainContext.save()
+                
+                /*
+                 Initialise the default switches once
+                 */
+                if !hasLoadedSwitches {
+                    container.mainContext.insert(
+                        Switch(
+                            name: "Enter Switch",
+                            key: .keyboardReturnOrEnter,
+                            tapAction: .nextNode,
+                            holdAction: .none
+                        )
+                    )
+                    container.mainContext.insert(
+                        Switch(
+                            name: "Space Switch",
+                            key: .keyboardSpacebar,
+                            tapAction: .select,
+                            holdAction: .none
+                        )
+                    )
+                    try container.mainContext.save()
+                    hasLoadedSwitches = true
+                }
+
                 
                 /*
                  Insert the system vocabularies, this performs an upsert so won't create any duplicates

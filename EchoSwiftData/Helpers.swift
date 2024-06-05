@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 func getLanguageAndRegion(_ givenLocale: String) -> String {
     let currentLocale: Locale = .current
@@ -15,4 +16,8 @@ func getLanguageAndRegion(_ givenLocale: String) -> String {
 func getLanguage(_ givenLocale: String) -> String {
     let currentLocale: Locale = .current
     return currentLocale.localizedString(forLanguageCode: givenLocale) ?? "Unknown"
+}
+
+func keyToDisplay(_ key: UIKeyboardHIDUsage?) -> String {
+    return "Key: \(key?.description ?? "UNKNOWN")"
 }

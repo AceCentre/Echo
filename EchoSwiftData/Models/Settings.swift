@@ -41,6 +41,8 @@ class Settings {
     
     var allowSwipeGestures: Bool
     
+    var enableSwitchControl: Bool
+    
     init(showOnboarding: Bool = true) {
         self.showOnboarding = showOnboarding
         
@@ -67,5 +69,7 @@ class Settings {
         self.showOnScreenArrows = true
         
         self.allowSwipeGestures = true
+        
+        self.enableSwitchControl = true
     }
 }
