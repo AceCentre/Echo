@@ -116,6 +116,7 @@ struct AddSwitch: View {
                             actionState: bindableSwitch.tapAction
                         )
                        
+                        
                         ActionPicker(
                             label: String(
                                 localized: "Hold",

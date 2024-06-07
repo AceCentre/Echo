@@ -1,11 +1,12 @@
 //
-//  Errors.swift
+//  ErrorHandling.swift
 //  EchoSwiftData
 //
-//  Created by Gavin Henderson on 28/05/2024.
+//  Created by Gavin Henderson on 07/06/2024.
 //
 
 import Foundation
+import SwiftUI
 
 enum EchoError: LocalizedError {
     case unknown
@@ -42,5 +43,37 @@ enum EchoError: LocalizedError {
         case .tooManySettings:
             return "Error 10: Too many settings initialised"
         }
+    }
+}
+
+struct ErrorAlert: Identifiable {
+    var id = UUID()
+    var message: String
+    var dismissAction: (() -> Void)?
+}
+
+class ErrorHandling: ObservableObject {
+    @Published var currentAlert: ErrorAlert?
+    
+    func handle(error: Error) {
+        currentAlert = ErrorAlert(message: error.localizedDescription)
+    }
+}
+
+struct ErrorView: View {
+    @ObservedObject var errorHandling: ErrorHandling
+    
+    var body: some View {
+        ZStack {}
+            .alert(item: $errorHandling.currentAlert) { currentAlert in
+                Alert(
+                    title: Text("An Error Occurred"),
+                    message: Text(currentAlert.message),
+                    dismissButton: .default(Text("Ok")) {
+                        currentAlert.dismissAction?()
+                    }
+                )
+            }
+        
     }
 }

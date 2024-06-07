@@ -11,10 +11,12 @@ import SwiftData
 @main
 struct EchoSwiftDataApp: App {
     @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
+    @StateObject var errorHandling = ErrorHandling()
     
     var body: some Scene {
         WindowGroup {
             SwiftDataInitialiser()
+            ErrorView(errorHandling: errorHandling)
         }
         .modelContainer(for: [Settings.self, Switch.self]) { result in
             do {
@@ -119,8 +121,7 @@ struct EchoSwiftDataApp: App {
                     try container.mainContext.save()
                 }
             } catch {
-                /// TODO: Properly address error
-                print(error)
+                errorHandling.handle(error: error)
             }
         }
     }
