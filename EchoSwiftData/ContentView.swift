@@ -16,18 +16,7 @@ struct ContentView: View {
                 settings.showOnboarding = false
             })
         } else {
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                Text("Hello, world!")
-                Button(action: {
-                    settings.showOnboarding = true
-                }, label: {
-                    Text("reset")
-                })
-            }
-            .padding()
+            MainCommunicationPage()
         }
         
     }
