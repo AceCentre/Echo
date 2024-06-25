@@ -8,48 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct ExternalLinksSection: View {
-    var body: some View {
-        if
-            let docsUrl = URL(string: "https://docs.acecentre.org.uk/products/v/echo"),
-            let contactUrl = URL(string: "https://acecentre.org.uk/contact"),
-            let aboutUrl = URL(string: "https://acecentre.org.uk/about")
-        {
-            Section {
-                Link(String(
-                    localized: "Read Documentation",
-                    comment: "A link to the external documentation"
-                ), destination: docsUrl)
-                Link(String(
-                    localized: "Contact Us",
-                    comment: "A link to the contact page"
-                ), destination: contactUrl)
-                Link(String(
-                    localized: "About Us",
-                    comment: "A link to the about page"
-                ), destination: aboutUrl)
-            }
-        }
-    }
-}
-
-struct ExternalLinksForm: View {
-    var body: some View {
-        VStack {
-            Form {
-                ExternalLinksSection()
-            }
-        }
-    }
-}
 
 enum SettingsPath: CaseIterable, Identifiable {
-    case voice, access, scanning, spelling, analytics, onboarding, externalLinks, audio, vocabulary
+    case voice, access, scanning, spelling, onboarding, externalLinks, audio, vocabulary
     
     // periphery:ignore
-    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary]
+    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary]
     // periphery:ignore
-    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary, .onboarding, .externalLinks]
+    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary, .onboarding, .externalLinks]
     
     var id: String {
         switch self {
@@ -57,7 +23,6 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .access: return "access"
         case .scanning: return "scanning"
         case .spelling: return "spelling"
-        case .analytics: return "analytics"
         case .onboarding: return "onboarding"
         case .externalLinks: return "external"
         case .audio: return "audio"
@@ -71,9 +36,8 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .access: Text("Test")
         case .scanning: Text("Test")
         case .spelling: Text("Test")
-        case .analytics: Text("Test")
-        case .onboarding: Text("Test")
-        case .externalLinks: Text("Test")
+        case .onboarding: OnboardingSettingsPage()
+        case .externalLinks: ExternalLinksForm()
         case .audio: Text("Test")
         case .vocabulary: Text("Test")
         }
@@ -96,10 +60,6 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .spelling: return String(
             localized: "Spelling & Alphabet",
             comment: "Label for the navigation link to the spelling, alphabet and predictions options page"
-        )
-        case .analytics: return String(
-            localized: "Analytics & Tracking",
-            comment: "Label for the navigation link to the tracking options page"
         )
         case .onboarding: return String(
             localized: "Initial Setup",

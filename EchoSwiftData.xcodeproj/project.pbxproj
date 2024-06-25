@@ -51,6 +51,7 @@
 		D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D22C136264004DA914 /* SettingsPage.swift */; };
 		D5A775D52C29A527004DA914 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D42C29A527004DA914 /* Rating.swift */; };
 		D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */; };
+		D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		D5A775D22C136264004DA914 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		D5A775D42C29A527004DA914 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectionArea.swift; sourceTree = "<group>"; };
+		D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinksSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */,
+				D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
 				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
 				D5A775BF2C09E6F2004DA914 /* Swipe.swift in Sources */,
+				D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */,
 				D5A775B72C08C661004DA914 /* CharacterOrder.swift in Sources */,
 				D5A775C12C09FF16004DA914 /* SwitchOnboarding.swift in Sources */,
 				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
