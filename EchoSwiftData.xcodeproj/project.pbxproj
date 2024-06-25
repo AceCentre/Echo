@@ -47,6 +47,10 @@
 		D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775CA2C0F5FA9004DA914 /* ActionPicker.swift */; };
 		D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775CC2C0F66AC004DA914 /* KeyboardDetector.swift */; };
 		D5A775CF2C131F63004DA914 /* ErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775CE2C131F63004DA914 /* ErrorHandling.swift */; };
+		D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D02C1324AB004DA914 /* MainCommunicationPage.swift */; };
+		D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D22C136264004DA914 /* SettingsPage.swift */; };
+		D5A775D52C29A527004DA914 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D42C29A527004DA914 /* Rating.swift */; };
+		D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +96,10 @@
 		D5A775CA2C0F5FA9004DA914 /* ActionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionPicker.swift; sourceTree = "<group>"; };
 		D5A775CC2C0F66AC004DA914 /* KeyboardDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDetector.swift; sourceTree = "<group>"; };
 		D5A775CE2C131F63004DA914 /* ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandling.swift; sourceTree = "<group>"; };
+		D5A775D02C1324AB004DA914 /* MainCommunicationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCommunicationPage.swift; sourceTree = "<group>"; };
+		D5A775D22C136264004DA914 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		D5A775D42C29A527004DA914 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
+		D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectionArea.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				D577B3A12C0099B500F064F2 /* Onboarding.swift */,
+				D5A775D02C1324AB004DA914 /* MainCommunicationPage.swift */,
+				D5A775D22C136264004DA914 /* SettingsPage.swift */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -174,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				D577B3A62C009AED00F064F2 /* Onboarding */,
+				D5A775D82C2B18CD004DA914 /* Settings */,
 				D5A7759E2C075FBF004DA914 /* VoiceOptionsDisplay.swift */,
 				D5A775C82C0F5F6E004DA914 /* AddSwitch.swift */,
 				D5A775CA2C0F5FA9004DA914 /* ActionPicker.swift */,
@@ -217,6 +228,7 @@
 			children = (
 				D5A775A32C076122004DA914 /* AvailableVoices.swift */,
 				D5A775A92C0780C4004DA914 /* VoiceController.swift */,
+				D5A775D42C29A527004DA914 /* Rating.swift */,
 			);
 			path = Observables;
 			sourceTree = "<group>";
@@ -231,6 +243,14 @@
 				D5A775B62C08C661004DA914 /* CharacterOrder.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		D5A775D82C2B18CD004DA914 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,6 +336,7 @@
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
+				D5A775D52C29A527004DA914 /* Rating.swift in Sources */,
 				D5A775AC2C078127004DA914 /* AudioEngine.swift in Sources */,
 				D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */,
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
@@ -328,8 +349,11 @@
 				D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */,
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
 				D5A775B32C08C10F004DA914 /* ScanningOnboarding.swift in Sources */,
+				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
 				D5A775A82C0766F0004DA914 /* Voice.swift in Sources */,
 				D5A775B92C08C692004DA914 /* ControlCommandDisplayOptions.swift in Sources */,
+				D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */,
+				D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */,
 				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
 				D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */,
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
