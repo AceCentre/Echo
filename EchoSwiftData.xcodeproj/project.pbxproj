@@ -60,6 +60,7 @@
 		D5A775E72C2DA494004DA914 /* GameControllerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E62C2DA494004DA914 /* GameControllerButton.swift */; };
 		D5A775E92C2DA5C1004DA914 /* ScanningOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */; };
 		D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */; };
+		D5A775ED2C2DB026004DA914 /* AudioOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +119,7 @@
 		D5A775E62C2DA494004DA914 /* GameControllerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControllerButton.swift; sourceTree = "<group>"; };
 		D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingOptionsArea.swift; sourceTree = "<group>"; };
+		D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOptionsArea.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +276,7 @@
 				D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */,
 				D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */,
 				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
+				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */,
 				D5A775B72C08C661004DA914 /* CharacterOrder.swift in Sources */,
 				D5A775C12C09FF16004DA914 /* SwitchOnboarding.swift in Sources */,
+				D5A775ED2C2DB026004DA914 /* AudioOptionsArea.swift in Sources */,
 				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
 				D5A775E52C2DA482004DA914 /* GameController.swift in Sources */,
 				D5A775B12C08B445004DA914 /* SpeakingVoiceOnboarding.swift in Sources */,
