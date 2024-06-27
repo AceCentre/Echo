@@ -52,6 +52,12 @@
 		D5A775D52C29A527004DA914 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D42C29A527004DA914 /* Rating.swift */; };
 		D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */; };
 		D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */; };
+		D5A775DC2C2C0BE5004DA914 /* AccessOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */; };
+		D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DD2C2C0FBD004DA914 /* SwitchControlSection.swift */; };
+		D5A775E02C2C10DF004DA914 /* GameControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */; };
+		D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */; };
+		D5A775E52C2DA482004DA914 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E42C2DA482004DA914 /* GameController.swift */; };
+		D5A775E72C2DA494004DA914 /* GameControllerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E62C2DA494004DA914 /* GameControllerButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +108,12 @@
 		D5A775D42C29A527004DA914 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectionArea.swift; sourceTree = "<group>"; };
 		D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinksSection.swift; sourceTree = "<group>"; };
+		D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessOptionsArea.swift; sourceTree = "<group>"; };
+		D5A775DD2C2C0FBD004DA914 /* SwitchControlSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchControlSection.swift; sourceTree = "<group>"; };
+		D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControllerManager.swift; sourceTree = "<group>"; };
+		D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameControllerSection.swift; path = Settings/GameControllerSection.swift; sourceTree = "<group>"; };
+		D5A775E42C2DA482004DA914 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
+		D5A775E62C2DA494004DA914 /* GameControllerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControllerButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +176,7 @@
 		D577B39F2C008BDA00F064F2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D5A775E32C2DA44D004DA914 /* GameController */,
 				D577B39D2C008AD500F064F2 /* Settings.swift */,
 				D5A775C22C0A27EA004DA914 /* Switch.swift */,
 				D5A775A72C0766F0004DA914 /* Voice.swift */,
@@ -188,9 +201,11 @@
 				D577B3A62C009AED00F064F2 /* Onboarding */,
 				D5A775D82C2B18CD004DA914 /* Settings */,
 				D5A7759E2C075FBF004DA914 /* VoiceOptionsDisplay.swift */,
+				D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */,
 				D5A775C82C0F5F6E004DA914 /* AddSwitch.swift */,
 				D5A775CA2C0F5FA9004DA914 /* ActionPicker.swift */,
 				D5A775CC2C0F66AC004DA914 /* KeyboardDetector.swift */,
+				D5A775DD2C2C0FBD004DA914 /* SwitchControlSection.swift */,
 				D5A775A02C075FFE004DA914 /* VoicePicker.swift */,
 			);
 			path = Components;
@@ -252,8 +267,19 @@
 			children = (
 				D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */,
 				D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */,
+				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		D5A775E32C2DA44D004DA914 /* GameController */ = {
+			isa = PBXGroup;
+			children = (
+				D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */,
+				D5A775E62C2DA494004DA914 /* GameControllerButton.swift */,
+				D5A775E42C2DA482004DA914 /* GameController.swift */,
+			);
+			path = GameController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,11 +370,13 @@
 				D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */,
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
 				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
+				D5A775DC2C2C0BE5004DA914 /* AccessOptionsArea.swift in Sources */,
 				D5A775BF2C09E6F2004DA914 /* Swipe.swift in Sources */,
 				D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */,
 				D5A775B72C08C661004DA914 /* CharacterOrder.swift in Sources */,
 				D5A775C12C09FF16004DA914 /* SwitchOnboarding.swift in Sources */,
 				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
+				D5A775E52C2DA482004DA914 /* GameController.swift in Sources */,
 				D5A775B12C08B445004DA914 /* SpeakingVoiceOnboarding.swift in Sources */,
 				D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */,
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
@@ -356,17 +384,21 @@
 				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
 				D5A775A82C0766F0004DA914 /* Voice.swift in Sources */,
 				D5A775B92C08C692004DA914 /* ControlCommandDisplayOptions.swift in Sources */,
+				D5A775E72C2DA494004DA914 /* GameControllerButton.swift in Sources */,
 				D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */,
+				D5A775E02C2C10DF004DA914 /* GameControllerManager.swift in Sources */,
 				D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */,
 				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
 				D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */,
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
 				D5A775C32C0A27EA004DA914 /* Switch.swift in Sources */,
+				D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */,
 				D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */,
 				D5A775A62C076151004DA914 /* Helpers.swift in Sources */,
 				D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */,
 				D577B3AD2C00A98800F064F2 /* BottomText.swift in Sources */,
 				D5A775B52C08C5C2004DA914 /* PredictionOnboarding.swift in Sources */,
+				D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */,
 				D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */,
 				D577B38F2BFF9A2800F064F2 /* EchoSwiftDataApp.swift in Sources */,
 			);
