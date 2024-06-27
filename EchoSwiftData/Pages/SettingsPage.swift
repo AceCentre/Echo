@@ -33,7 +33,7 @@ enum SettingsPath: CaseIterable, Identifiable {
     @ViewBuilder var page: some View {
         switch self {
         case .voice: VoiceSelectionArea()
-        case .access: Text("Test")
+        case .access: AccessOptionsArea()
         case .scanning: Text("Test")
         case .spelling: Text("Test")
         case .onboarding: OnboardingSettingsPage()
