@@ -18,7 +18,7 @@ struct EchoSwiftDataApp: App {
             SwiftDataInitialiser()
             ErrorView(errorHandling: errorHandling)
         }
-        .modelContainer(for: [Settings.self, Switch.self]) { result in
+        .modelContainer(for: [Settings.self, Switch.self, GameControllerManager.self]) { result in
             do {
                 /*
                  Create the initial settings object if it does not exist
@@ -30,6 +30,18 @@ struct EchoSwiftDataApp: App {
                     currentSettings = firstSettings
                 } else {
                     container.mainContext.insert(currentSettings)
+                }
+                try container.mainContext.save()
+                
+                /*
+                 Create the initial GameControllerManager object if it does not exist
+                 */
+                let allGameControllerManagers = try container.mainContext.fetch(FetchDescriptor<GameControllerManager>())
+                var currentGameControllerManager = GameControllerManager(controllers: [])
+                if let firstGameControllerManager = allGameControllerManagers.first {
+                    currentGameControllerManager = firstGameControllerManager
+                } else {
+                    container.mainContext.insert(currentGameControllerManager)
                 }
                 try container.mainContext.save()
                 
@@ -130,9 +142,14 @@ struct EchoSwiftDataApp: App {
 struct SwiftDataInitialiser: View {
     @Environment(\.modelContext) var context
     @Query var settings: [Settings]
+    @Query var gameControllerManager: [GameControllerManager]
     
     var body: some View {
         ContentView()
             .environment(settings.first ?? Settings())
+            .environment(gameControllerManager.first ?? GameControllerManager(controllers: []))
+            .onAppear {
+                gameControllerManager.first?.startControllerListeners()
+            }
     }
 }
