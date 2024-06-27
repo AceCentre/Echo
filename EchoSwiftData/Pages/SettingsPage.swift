@@ -34,7 +34,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         switch self {
         case .voice: VoiceSelectionArea()
         case .access: AccessOptionsArea()
-        case .scanning: Text("Test")
+        case .scanning: ScanningOptionsArea()
         case .spelling: Text("Test")
         case .onboarding: OnboardingSettingsPage()
         case .externalLinks: ExternalLinksForm()
