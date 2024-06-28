@@ -71,10 +71,13 @@ struct EchoSwiftDataApp: App {
 
                 
                 /*
-                 Insert the system vocabularies, this performs an upsert so won't create any duplicates
+                 Insert the system vocabularies
                  */
+                let existingVocabs = try container.mainContext.fetch(FetchDescriptor<Vocabulary>())
                 for newSystemVocab in Vocabulary.getSystemVocabs() {
-                    container.mainContext.insert(newSystemVocab)
+                    if !existingVocabs.contains(where: { $0.slug == newSystemVocab.slug }) {
+                        container.mainContext.insert(newSystemVocab)
+                    }
                 }
                 try container.mainContext.save()
                 

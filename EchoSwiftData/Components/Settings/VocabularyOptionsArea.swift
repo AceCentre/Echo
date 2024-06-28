@@ -10,9 +10,9 @@ import SwiftData
 struct VocabularyOptionsArea: View {
     @Environment(Settings.self) var settings: Settings
 
-    @Query var allVocabs: [Vocabulary]
+    @Query(sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
     
-    @State var selectedVocab = Vocabulary(name: "temp")
+    @State var selectedVocab = Vocabulary(name: "temp", rootNode: Node(type: .root))
     
     var body: some View {
         @Bindable var bindableSettings = settings

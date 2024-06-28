@@ -13,9 +13,9 @@ struct VocabularyOnboarding: View {
     
     @Query(filter: #Predicate<Vocabulary> { vocab in
         vocab.systemVocab == true
-    }) var allVocabs: [Vocabulary]
+    }, sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
     
-    @State var selectedVocab = Vocabulary(name: "temp")
+    @State var selectedVocab = Vocabulary(name: "temp", rootNode: Node(type: .root))
     
     var body: some View {
         VStack { 
