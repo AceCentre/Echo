@@ -39,7 +39,7 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .onboarding: OnboardingSettingsPage()
         case .externalLinks: ExternalLinksForm()
         case .audio: AudioOptionsArea()
-        case .vocabulary: Text("Test")
+        case .vocabulary: VocabularyOptionsArea()
         }
     }
     

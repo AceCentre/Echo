@@ -13,6 +13,7 @@ class Settings {
     var showOnboarding: Bool
     
     var currentVocab: Vocabulary?
+    var vocabHistory: Int
     
     var cueVoice: Voice?
     var speakingVoice: Voice?
@@ -44,6 +45,8 @@ class Settings {
     var enableSwitchControl: Bool
     
     init(showOnboarding: Bool = true) {
+        self.vocabHistory = 2
+        
         self.showOnboarding = showOnboarding
         
         self.splitAudio = false

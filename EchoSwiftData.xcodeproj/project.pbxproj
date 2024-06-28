@@ -61,6 +61,7 @@
 		D5A775E92C2DA5C1004DA914 /* ScanningOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */; };
 		D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */; };
 		D5A775ED2C2DB026004DA914 /* AudioOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */; };
+		D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +121,7 @@
 		D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOptionsArea.swift; sourceTree = "<group>"; };
+		D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOptionsArea.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +277,7 @@
 				D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */,
 				D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */,
 				D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */,
+				D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */,
 				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
 				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
 			);
@@ -373,6 +376,7 @@
 				D5A775CF2C131F63004DA914 /* ErrorHandling.swift in Sources */,
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
+				D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */,
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
 				D5A775D52C29A527004DA914 /* Rating.swift in Sources */,
