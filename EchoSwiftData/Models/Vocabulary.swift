@@ -8,27 +8,6 @@
 import Foundation
 import SwiftData
 
-enum NodeType: Int, Codable {
-    case root, branch, phrase, spelling, back, rootAndSpelling
-}
-
-@Model
-class Node {
-    @Relationship(inverse: \Node.parent) var children: [Node]
-    var parent: Node?
-    var displayText: String
-    var speakText: String
-    var type: NodeType
-    
-    init(type: NodeType, parent: Node? = nil, text: String = "root", children: [Node] = []) {
-        self.children = children
-        self.parent = parent
-        self.displayText = text
-        self.speakText = text
-        self.type = type
-    }
-}
-
 @Model
 class Vocabulary {
     /**
