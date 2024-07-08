@@ -15,7 +15,7 @@ struct EchoSwiftDataApp: App {
     
     var body: some Scene {
         WindowGroup {
-            SwiftDataInitialiser()
+            SwiftDataInitialiser(errorHandling: errorHandling)
             ErrorView(errorHandling: errorHandling)
         }
         .modelContainer(for: [Settings.self, Switch.self, GameControllerManager.self]) { result in
@@ -32,6 +32,10 @@ struct EchoSwiftDataApp: App {
                     container.mainContext.insert(currentSettings)
                 }
                 try container.mainContext.save()
+                
+                if let url = container.configurations.first?.url.path(percentEncoded: false) {
+                    print("Database Location: \"\(url)\"")
+                }
                 
                 /*
                  Create the initial GameControllerManager object if it does not exist
@@ -68,7 +72,7 @@ struct EchoSwiftDataApp: App {
                     try container.mainContext.save()
                     hasLoadedSwitches = true
                 }
-
+                
                 
                 /*
                  Insert the system vocabularies
@@ -79,6 +83,8 @@ struct EchoSwiftDataApp: App {
                         container.mainContext.insert(newSystemVocab)
                     }
                 }
+                
+                
                 try container.mainContext.save()
                 
                 
@@ -143,12 +149,13 @@ struct EchoSwiftDataApp: App {
 }
 
 struct SwiftDataInitialiser: View {
+    @ObservedObject var errorHandling: ErrorHandling
     @Environment(\.modelContext) var context
     @Query var settings: [Settings]
     @Query var gameControllerManager: [GameControllerManager]
     
     var body: some View {
-        ContentView()
+        ContentView(errorHandling: errorHandling)
             .environment(settings.first ?? Settings())
             .environment(gameControllerManager.first ?? GameControllerManager(controllers: []))
             .onAppear {

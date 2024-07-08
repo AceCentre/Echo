@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var errorHandling: ErrorHandling
     @Environment(Settings.self) var settings
     
     var body: some View {
@@ -16,12 +17,8 @@ struct ContentView: View {
                 settings.showOnboarding = false
             })
         } else {
-            MainCommunicationPage()
+            MainCommunicationPage(errorHandling: errorHandling)
         }
         
     }
-}
-
-#Preview {
-    ContentView()
 }
