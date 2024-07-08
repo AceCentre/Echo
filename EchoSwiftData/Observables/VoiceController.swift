@@ -34,17 +34,16 @@ class VoiceController: ObservableObject {
         }
     }
     
-    func setSettings(_ settings: Settings) {
+    func loadSettings(_ settings: Settings) {
         self.settings = settings
     }
     
-    func play(_ text: String, voiceOptions: Voice, pan: Float, cb: (() -> Void)? = {}) {
-        let textWithSpaces = text.replacingOccurrences(of: "·", with: " ")
+    func play(_ text: String?, voiceOptions: Voice, pan: Float, cb: (() -> Void)? = {}) {
         let unwrappedAv = self.customAV ?? AudioEngine()
         self.customAV = unwrappedAv
         
         unwrappedAv.stop()
-        unwrappedAv.speak(text: textWithSpaces, voiceOptions: voiceOptions, pan: pan, scenePhase: phase, cb: cb)
+        unwrappedAv.speak(text: text ?? "", voiceOptions: voiceOptions, pan: pan, scenePhase: phase, cb: cb)
     }
     
     func stop() {
@@ -64,7 +63,7 @@ class VoiceController: ObservableObject {
         }
     }
     
-    func playCue(_ text: String, cb: (() -> Void)? = {}) {
+    func playCue(_ text: String?, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
             
