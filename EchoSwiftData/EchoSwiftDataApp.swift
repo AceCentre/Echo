@@ -150,7 +150,10 @@ struct EchoSwiftDataApp: App {
 
 struct SwiftDataInitialiser: View {
     @ObservedObject var errorHandling: ErrorHandling
+    
     @Environment(\.modelContext) var context
+    @Environment(\.scenePhase) var scenePhase
+
     @Query var settings: [Settings]
     @Query var gameControllerManager: [GameControllerManager]
     
@@ -160,6 +163,32 @@ struct SwiftDataInitialiser: View {
             .environment(gameControllerManager.first ?? GameControllerManager(controllers: []))
             .onAppear {
                 gameControllerManager.first?.startControllerListeners()
+            }
+            .onChange(of: scenePhase) {
+                /*
+                 When the app goes into the background we want to clean up our data
+                 We find nodes that have no parent and are left out of a tree (not root nodes though)
+                 */
+                if scenePhase == .background  {
+                    do {
+                        let nodes = try context.fetch(FetchDescriptor<Node>())
+                        
+                        let nodesToDelete = nodes.filter { currentNode in
+                            if currentNode.type == .root || currentNode.type == .rootAndSpelling {
+                                return false
+                            }
+                            
+                            return currentNode.parent == nil
+                        }
+                                                
+                        for currentNode in nodesToDelete {
+                            print(currentNode.displayText, currentNode)
+                            context.delete(currentNode)
+                        }
+                    } catch {
+                        errorHandling.handle(error: EchoError.cleanupFailed)
+                    }
+                }
             }
     }
 }

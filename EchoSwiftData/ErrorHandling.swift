@@ -19,6 +19,7 @@ enum EchoError: LocalizedError {
     case hoveredInvalidNodeType
     case noHoverNode
     case tooManySettings
+    case cleanupFailed
 
     var errorDescription: String? {
         switch self {
@@ -42,7 +43,10 @@ enum EchoError: LocalizedError {
             return "Error 09: No node to hover"
         case .tooManySettings:
             return "Error 10: Too many settings initialised"
+        case .cleanupFailed:
+            return "Error 11: Failed to cleanup nodes"
         }
+        
     }
 }
 
