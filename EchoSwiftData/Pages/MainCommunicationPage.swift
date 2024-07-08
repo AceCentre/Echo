@@ -9,10 +9,33 @@ import Foundation
 import SwiftUI
 
 struct MainCommunicationPage: View {
+    @ObservedObject var errorHandling: ErrorHandling
+    
+    @Environment(Settings.self) var settings: Settings
+    @Environment(\.scenePhase) var scenePhase
+    
+    @StateObject var voiceController = VoiceController()
+    @StateObject var mainCommunicationPageState = MainCommunicationPageState()
+    @StateObject var spelling = Spelling()
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                Text("wow")
+                if settings.showOnScreenArrows {
+                    OnScreenArrows(
+                        up: { mainCommunicationPageState.userPrevNode() },
+                        down: { mainCommunicationPageState.userNextNode() },
+                        left: { mainCommunicationPageState.userBack() },
+                        right: { mainCommunicationPageState.userClickHovered() }
+                    )
+                }
+                VStack {
+                    NodeTreeView(mainCommunicationPageState: mainCommunicationPageState)
+                    MessageBar(mainCommunicationPageState: mainCommunicationPageState)
+                }
+                .onDisappear {
+                    mainCommunicationPageState.onDisappear()
+                }
             }
             .navigationTitle(
                 String(
@@ -33,5 +56,18 @@ struct MainCommunicationPage: View {
             }
             .toolbarBackground(.visible, for: .navigationBar, .tabBar)
         }
+        .onAppear {
+            spelling.loadSettings(settings)
+            mainCommunicationPageState.loadSettings(settings)
+            voiceController.loadSettings(settings)
+            
+            mainCommunicationPageState.loadSpelling(spelling)
+            mainCommunicationPageState.loadErrorHandling(errorHandling)
+            mainCommunicationPageState.loadEngine(voiceController)
+        }
+        .onChange(of: scenePhase) {
+            voiceController.setPhase(scenePhase)
+        }
     }
+    
 }
