@@ -64,7 +64,7 @@ struct CueVoiceOnboarding: View {
                 cueVoiceName = unwrapped.voiceName
             }
             
-            voiceController.setSettings(settings)
+            voiceController.loadSettings(settings)
             voiceController.setPhase(scenePhase)
         }
         .onChange(of: cueRate) {

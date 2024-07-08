@@ -63,7 +63,7 @@ struct SpeakingVoiceOnboarding: View {
                 speakingVoiceName = unwrapped.voiceName
             }
             
-            voiceController.setSettings(settings)
+            voiceController.loadSettings(settings)
             voiceController.setPhase(scenePhase)
         }
         .onChange(of: speakingRate) {
