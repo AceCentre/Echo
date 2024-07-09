@@ -29,6 +29,9 @@ struct MainCommunicationPage: View {
                         right: { mainCommunicationPageState.userClickHovered() }
                     )
                 }
+                if settings.enableSwitchControl {
+                    KeyPressController(mainCommunicationPageState: mainCommunicationPageState)
+                }
                 VStack {
                     NodeTreeView(mainCommunicationPageState: mainCommunicationPageState)
                     MessageBar(mainCommunicationPageState: mainCommunicationPageState)
