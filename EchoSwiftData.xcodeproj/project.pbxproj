@@ -21,9 +21,9 @@
 		D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B02C00C2AF00F064F2 /* SecondStep.swift */; };
 		D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */; };
 		D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B42C00C78600F064F2 /* Vocabulary.swift */; };
+		D581A72C2C3D3A3A00E5C626 /* SQLiteSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D581A72B2C3D3A3A00E5C626 /* SQLiteSwift */; };
 		D581E9082C382C5200F9EDE8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9072C382C5200F9EDE8 /* Array.swift */; };
 		D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9092C38302700F9EDE8 /* Spelling.swift */; };
-		D581E90D2C3836ED00F9EDE8 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D581E90C2C3836ED00F9EDE8 /* SQLite */; };
 		D581E90F2C38444200F9EDE8 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D581E90E2C38444200F9EDE8 /* dictionary.sqlite */; };
 		D581E9112C384B8B00F9EDE8 /* OnScreenArrows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9102C384B8B00F9EDE8 /* OnScreenArrows.swift */; };
 		D581E9132C384BD800F9EDE8 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9122C384BD800F9EDE8 /* Comparable.swift */; };
@@ -151,7 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D581E90D2C3836ED00F9EDE8 /* SQLite in Frameworks */,
+				D581A72C2C3D3A3A00E5C626 /* SQLiteSwift in Frameworks */,
 				D5A775F42C32EA11004DA914 /* SwiftUIIntrospect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,7 +346,7 @@
 			name = EchoSwiftData;
 			packageProductDependencies = (
 				D5A775F32C32EA11004DA914 /* SwiftUIIntrospect */,
-				D581E90C2C3836ED00F9EDE8 /* SQLite */,
+				D581A72B2C3D3A3A00E5C626 /* SQLiteSwift */,
 			);
 			productName = EchoSwiftData;
 			productReference = D577B38B2BFF9A2800F064F2 /* EchoSwiftData.app */;
@@ -378,7 +378,7 @@
 			mainGroup = D577B3822BFF9A2800F064F2;
 			packageReferences = (
 				D5A775F22C32EA11004DA914 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				D581E90B2C3836ED00F9EDE8 /* XCRemoteSwiftPackageReference "SQLite" */,
+				D581A72A2C3D3A3A00E5C626 /* XCRemoteSwiftPackageReference "SQLite" */,
 			);
 			productRefGroup = D577B38C2BFF9A2800F064F2 /* Products */;
 			projectDirPath = "";
@@ -691,12 +691,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D581E90B2C3836ED00F9EDE8 /* XCRemoteSwiftPackageReference "SQLite" */ = {
+		D581A72A2C3D3A3A00E5C626 /* XCRemoteSwiftPackageReference "SQLite" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			repositoryURL = "https://github.com/AceCentre/SQLite.swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.15.3;
+				branch = master;
+				kind = branch;
 			};
 		};
 		D5A775F22C32EA11004DA914 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
@@ -710,10 +710,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D581E90C2C3836ED00F9EDE8 /* SQLite */ = {
+		D581A72B2C3D3A3A00E5C626 /* SQLiteSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D581E90B2C3836ED00F9EDE8 /* XCRemoteSwiftPackageReference "SQLite" */;
-			productName = SQLite;
+			package = D581A72A2C3D3A3A00E5C626 /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLiteSwift;
 		};
 		D5A775F32C32EA11004DA914 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;

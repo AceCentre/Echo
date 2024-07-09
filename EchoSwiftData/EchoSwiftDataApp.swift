@@ -20,7 +20,7 @@ struct EchoSwiftDataApp: App {
         }
         .modelContainer(for: [Settings.self, Switch.self, GameControllerManager.self]) { result in
             do {
-                /*
+                /*+
                  Create the initial settings object if it does not exist
                  */
                 let container = try result.get()

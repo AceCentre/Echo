@@ -63,7 +63,9 @@ struct NodeTreeView: View {
         .padding()
         .onAppear {
             mainCommunicationPageState.loadSettings(settings)
+            
             mainCommunicationPageState.onAppear()
+            
         }
     }
 }

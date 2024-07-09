@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import SQLite
+import SQLiteSwift
 import SwiftUI
 
 class Spelling: ObservableObject {
     var dbConn: Connection?
-    var wordsTable: SQLite.Table?
+    var wordsTable: SQLiteSwift.Table?
     
     var settings: Settings?
     
