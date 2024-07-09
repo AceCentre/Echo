@@ -39,16 +39,14 @@ class MainCommunicationPageState: ObservableObject {
     
     struct Level: Hashable, Equatable {
         static func == (lhs: MainCommunicationPageState.Level, rhs: MainCommunicationPageState.Level) -> Bool {
-            return lhs.hoveredNode.id == rhs.hoveredNode.id
+            return lhs.levelId == rhs.levelId
         }
         
         func hash(into hasher: inout Hasher) {
-            hasher.combine(hoveredNode.id)
-            for node in nodes {
-                hasher.combine(node.id)
-            }
+            hasher.combine(levelId)
         }
         
+        var levelId: UUID = UUID()
         var hoveredNode: Node
         var nodes: [Node]
         var last: Bool
@@ -428,7 +426,7 @@ class MainCommunicationPageState: ObservableObject {
             throw EchoError.noSiblings
         }
         
-        let currentIndex = siblings.firstIndex(where: { $0.id == hoveredNode.id }) ?? -1
+        let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
         let nextIndex = (Int(currentIndex) + 1) % siblings.count
         
         return nextIndex
@@ -461,7 +459,7 @@ class MainCommunicationPageState: ObservableObject {
             throw EchoError.noSiblings
         }
         
-        let currentIndex = siblings.firstIndex(where: { $0.id == hoveredNode.id }) ?? -1
+        let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
         var nextIndex = (Int(currentIndex) - 1)
         
         if nextIndex < 0 {
