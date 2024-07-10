@@ -38,12 +38,12 @@ class VoiceController: ObservableObject {
         self.settings = settings
     }
     
-    func play(_ text: String?, voiceOptions: Voice, pan: Float, cb: (() -> Void)? = {}) {
+    func play(_ text: String?, voiceOptions: Voice, pan: Float, isFast: Bool = false, cb: (() -> Void)? = {}) {
         let unwrappedAv = self.customAV ?? AudioEngine()
         self.customAV = unwrappedAv
         
         unwrappedAv.stop()
-        unwrappedAv.speak(text: text ?? "", voiceOptions: voiceOptions, pan: pan, scenePhase: phase, cb: cb)
+        unwrappedAv.speak(text: text ?? "", voiceOptions: voiceOptions, pan: pan, scenePhase: phase, isFast: isFast, cb: cb)
     }
     
     func stop() {
@@ -59,9 +59,11 @@ class VoiceController: ObservableObject {
             
             let cueVoice = unwrappedSettings.cueVoice ?? defaultCueVoice
             
-            play(text, voiceOptions: cueVoice, pan: direction.pan, cb: cb)
+            play(text, voiceOptions: cueVoice, pan: direction.pan, isFast: true, cb: cb)
         }
     }
+    
+    
     
     func playCue(_ text: String?, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {

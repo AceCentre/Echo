@@ -37,7 +37,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         outputSemaphore.signal()
     }
     
-    func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
+    func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
         callback = cb
                 
         // let ssmlRepresentation = "<speak><say-as interpret-as=\"characters\">dylan</say-as></speak>"
@@ -83,7 +83,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
                 }
                 
                 if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
-                    self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: voiceOptions.rate)
+                    self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: isFast ? 75 : voiceOptions.rate)
                 }
             })
         } else {

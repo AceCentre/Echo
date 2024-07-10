@@ -12,13 +12,15 @@ import SwiftData
 struct EchoSwiftDataApp: App {
     @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
     @StateObject var errorHandling = ErrorHandling()
+    @StateObject var controllerManager = ControllerManager()
     
     var body: some Scene {
         WindowGroup {
             SwiftDataInitialiser(errorHandling: errorHandling)
             ErrorView(errorHandling: errorHandling)
         }
-        .modelContainer(for: [Settings.self, Switch.self, GameControllerManager.self]) { result in
+        .environmentObject(controllerManager)
+        .modelContainer(for: [Settings.self, Switch.self]) { result in
             do {
                 /*+
                  Create the initial settings object if it does not exist
@@ -36,18 +38,6 @@ struct EchoSwiftDataApp: App {
                 if let url = container.configurations.first?.url.path(percentEncoded: false) {
                     print("Database Location: \"\(url)\"")
                 }
-                
-                /*
-                 Create the initial GameControllerManager object if it does not exist
-                 */
-                let allGameControllerManagers = try container.mainContext.fetch(FetchDescriptor<GameControllerManager>())
-                var currentGameControllerManager = GameControllerManager(controllers: [])
-                if let firstGameControllerManager = allGameControllerManagers.first {
-                    currentGameControllerManager = firstGameControllerManager
-                } else {
-                    container.mainContext.insert(currentGameControllerManager)
-                }
-                try container.mainContext.save()
                 
                 /*
                  Initialise the default switches once
@@ -151,19 +141,16 @@ struct EchoSwiftDataApp: App {
 struct SwiftDataInitialiser: View {
     @ObservedObject var errorHandling: ErrorHandling
     
+    
     @Environment(\.modelContext) var context
     @Environment(\.scenePhase) var scenePhase
 
     @Query var settings: [Settings]
-    @Query var gameControllerManager: [GameControllerManager]
     
     var body: some View {
         ContentView(errorHandling: errorHandling)
             .environment(settings.first ?? Settings())
-            .environment(gameControllerManager.first ?? GameControllerManager(controllers: []))
-            .onAppear {
-                gameControllerManager.first?.startControllerListeners()
-            }
+           
             .onChange(of: scenePhase) {
                 /*
                  When the app goes into the background we want to clean up our data

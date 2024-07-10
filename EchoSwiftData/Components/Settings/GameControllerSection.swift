@@ -10,87 +10,56 @@ import SwiftData
 import SwiftUI
 import GameController
 
-struct ControllerEditor: View {
-    @Binding var currentGameController: GameController?
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+struct ControllerButtonSection: View {
+    @State var holdAction: SwitchAction
+    @State var tapAction: SwitchAction
+    var button: ControllerButton
     
     var body: some View {
-        NavigationStack {
-            if let unwrappedGameController = currentGameController {
-                @Bindable var bindableGameController = unwrappedGameController
-                Form {
-                    ForEach(bindableGameController.buttons.sorted { $0.name < $1.name }) { controllerButton in
-                        Section {
-                            Label(controllerButton.name, systemImage: controllerButton.symbolName)
-                            
-                            @Bindable var bindableButton = controllerButton
-                            
-                            ActionPicker(
-                                label: String(
-                                    localized: "Single Tap",
-                                    comment: "The label that is shown next to the single tap action"
-                                ),
-                                actions: SwitchAction.tapCases,
-                                actionChange: { newAction in
-                                    bindableButton.tapAction = newAction
-                                },
-                                actionState: controllerButton.tapAction
-                            )
-                            
-                            ActionPicker(
-                                label: String(
-                                    localized: "Hold",
-                                    comment: "The label that is shown next to the single hold action"
-                                ),
-                                actions: SwitchAction.holdCases,
-                                actionChange: { newAction in
-                                    bindableButton.holdAction = newAction
-                                },
-                                actionState: controllerButton.holdAction
-                            )
-                            
-                        }
-                    }
-                    
-                }
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text(
-                                "Save",
-                                comment: "The save toolbar button when saving controller mapping"
-                            )
-                        })
-                    }
-                }
-                .navigationTitle(bindableGameController.displayName)
-            }
+        ActionPicker(
+            label: String(
+                localized: "Single Tap",
+                comment: "The label that is shown next to the single tap action"
+            ),
+            actions: SwitchAction.tapCases,
+            actionChange: { newAction in
+                tapAction = newAction
+            },
+            actionState: tapAction
+        )
+        
+        ActionPicker(
+            label: String(
+                localized: "Hold",
+                comment: "The label that is shown next to the single hold action"
+            ),
+            actions: SwitchAction.holdCases,
+            actionChange: { newAction in
+                holdAction = newAction
+            },
+            actionState: holdAction
+        )
+        .onChange(of: holdAction) {
+            button.holdAction = holdAction
         }
-        
-        
+        .onChange(of: tapAction) {
+            button.tapAction = tapAction
+        }
     }
 }
 
 
 struct GameControllerSection: View {
-    @Environment(GameControllerManager.self) var gameControllerManager: GameControllerManager
-    
-    @State var showGameControllerSheet = false
-    @State var currentGameController: GameController?
-    
+    @EnvironmentObject var controllerManager: ControllerManager
+    @State var currentController: CustomGameController?
+        
     var body: some View {
         Section(content: {
-            ForEach(gameControllerManager.controllers) { controller in
+            ForEach(controllerManager.controllers, id: \.id) { controller in
                 Button(action: {
-                    currentGameController = controller
-                    showGameControllerSheet.toggle()
+                    currentController = controller
                 }, label: {
                     HStack {
-                        Circle()
-                            .fill(controller.isConnected ? .green : .red)
-                            .frame(width: 15, height: 15)
                         Label(controller.displayName, systemImage: "gamecontroller.fill")
                         Spacer()
                         Text("Map Buttons", comment: "The help text on the controller button")
@@ -100,12 +69,42 @@ struct GameControllerSection: View {
                     }
                 })
             }
-            .sheet(isPresented: $showGameControllerSheet) {
-                ControllerEditor(
-                    currentGameController: $currentGameController
-                )
+            .sheet(item: $currentController) { currentControllerObject in
+                NavigationStack {
+                    Form {
+                        ForEach(currentControllerObject.buttons, id: \.id) { button in
+                            Section {
+                                Label(button.displayName, systemImage: button.symbolName)
+                                ControllerButtonSection(
+                                    holdAction: button.holdAction,
+                                    tapAction: button.tapAction,
+                                    button: button
+                                )
+                            }
+            
+                        }
+                        
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button(action: {
+                                currentController = nil
+                            }, label: {
+                                Text(
+                                    "Save",
+                                    comment: "The save toolbar button when saving controller mapping"
+                                )
+                            })
+                        }
+                    }
+                    .navigationTitle(currentControllerObject.displayName)
+                }
+                .onDisappear {
+                    currentControllerObject.save()
+                }
             }
-            if gameControllerManager.controllers.isEmpty {
+
+            if controllerManager.controllers.isEmpty {
                 Text(
                     "No game controller connect to device. Please connect a controller to access these settings",
                     comment: "Notification of no game controllers connected"
@@ -116,7 +115,6 @@ struct GameControllerSection: View {
         }, footer: {
             Text("Use a game controller to control Echo", comment: "Footer for game controller settings area")
         })
-        
         
     }
     

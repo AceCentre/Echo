@@ -14,6 +14,8 @@ struct MainCommunicationPage: View {
     @Environment(Settings.self) var settings: Settings
     @Environment(\.scenePhase) var scenePhase
     
+    @EnvironmentObject var controllerManager: ControllerManager
+    
     @StateObject var voiceController = VoiceController()
     @StateObject var mainCommunicationPageState = MainCommunicationPageState()
     @StateObject var spelling = Spelling()
@@ -34,6 +36,34 @@ struct MainCommunicationPage: View {
                 }
                 VStack {
                     NodeTreeView(mainCommunicationPageState: mainCommunicationPageState)
+                        .onTapGesture(count: 1, perform: {
+                            if settings.allowSwipeGestures {
+                                mainCommunicationPageState.userClickHovered()
+                            }
+                        })
+                        // Note the directions given here refer to the direction of inertia. So 'left' is swiping your finger from right to the left
+                        .swipe(
+                            up: {
+                                if settings.allowSwipeGestures {
+                                    mainCommunicationPageState.userNextNode()
+                                }
+                            },
+                            down: {
+                                if settings.allowSwipeGestures {
+                                    mainCommunicationPageState.userPrevNode()
+                                }
+                            },
+                            left: {
+                                if settings.allowSwipeGestures {
+                                    mainCommunicationPageState.userBack()
+                                }
+                            },
+                            right: {
+                                if settings.allowSwipeGestures {
+                                    mainCommunicationPageState.userClickHovered()
+                                }
+                            }
+                        )
                     MessageBar(mainCommunicationPageState: mainCommunicationPageState)
                 }
                 .onDisappear {
@@ -67,6 +97,8 @@ struct MainCommunicationPage: View {
             mainCommunicationPageState.loadSpelling(spelling)
             mainCommunicationPageState.loadErrorHandling(errorHandling)
             mainCommunicationPageState.loadEngine(voiceController)
+            
+            controllerManager.loadMainCommunicationPageState(mainCommunicationPageState)
         }
         .onChange(of: scenePhase) {
             voiceController.setPhase(scenePhase)

@@ -11,7 +11,6 @@
 		D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3902BFF9A2800F064F2 /* ContentView.swift */; };
 		D577B3932BFF9A2B00F064F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D577B3922BFF9A2B00F064F2 /* Assets.xcassets */; };
 		D577B3972BFF9A2B00F064F2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D577B3962BFF9A2B00F064F2 /* Preview Assets.xcassets */; };
-		D577B39E2C008AD500F064F2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B39D2C008AD500F064F2 /* Settings.swift */; };
 		D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A12C0099B500F064F2 /* Onboarding.swift */; };
 		D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */; };
 		D577B3A92C00A05100F064F2 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3A82C00A05100F064F2 /* View.swift */; };
@@ -20,15 +19,22 @@
 		D577B3AF2C00AF4400F064F2 /* EchoDemo.gif in Resources */ = {isa = PBXBuildFile; fileRef = D577B3AE2C00AF4400F064F2 /* EchoDemo.gif */; };
 		D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B02C00C2AF00F064F2 /* SecondStep.swift */; };
 		D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */; };
-		D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B42C00C78600F064F2 /* Vocabulary.swift */; };
 		D581A72C2C3D3A3A00E5C626 /* SQLiteSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D581A72B2C3D3A3A00E5C626 /* SQLiteSwift */; };
 		D581A72E2C3D556B00E5C626 /* KeyPressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A72D2C3D556B00E5C626 /* KeyPressController.swift */; };
+		D581A7302C3ED08700E5C626 /* CustomGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A72F2C3ED08700E5C626 /* CustomGameController.swift */; };
+		D581A7322C3ED0AA00E5C626 /* ControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7312C3ED0AA00E5C626 /* ControllerManager.swift */; };
+		D581A7352C3ED0D000E5C626 /* ControllerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7342C3ED0D000E5C626 /* ControllerButton.swift */; };
+		D581A7372C3ED0E300E5C626 /* ButtonDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7362C3ED0E300E5C626 /* ButtonDefaults.swift */; };
+		D581A73D2C3ED20A00E5C626 /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7382C3ED20900E5C626 /* Switch.swift */; };
+		D581A73E2C3ED20A00E5C626 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7392C3ED20A00E5C626 /* Settings.swift */; };
+		D581A73F2C3ED20A00E5C626 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A73A2C3ED20A00E5C626 /* Voice.swift */; };
+		D581A7402C3ED20A00E5C626 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */; };
+		D581A7412C3ED20A00E5C626 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A73C2C3ED20A00E5C626 /* Node.swift */; };
 		D581E9082C382C5200F9EDE8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9072C382C5200F9EDE8 /* Array.swift */; };
 		D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9092C38302700F9EDE8 /* Spelling.swift */; };
 		D581E90F2C38444200F9EDE8 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D581E90E2C38444200F9EDE8 /* dictionary.sqlite */; };
 		D581E9112C384B8B00F9EDE8 /* OnScreenArrows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9102C384B8B00F9EDE8 /* OnScreenArrows.swift */; };
 		D581E9132C384BD800F9EDE8 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9122C384BD800F9EDE8 /* Comparable.swift */; };
-		D581E9152C3BFC0100F9EDE8 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9142C3BFC0100F9EDE8 /* Node.swift */; };
 		D581E9172C3BFC2800F9EDE8 /* MessageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9162C3BFC2800F9EDE8 /* MessageBar.swift */; };
 		D581E9192C3BFC4200F9EDE8 /* NodeTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9182C3BFC4200F9EDE8 /* NodeTreeView.swift */; };
 		D5A775992C0627D8004DA914 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775982C0627D8004DA914 /* String.swift */; };
@@ -37,7 +43,6 @@
 		D5A775A12C075FFE004DA914 /* VoicePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A02C075FFE004DA914 /* VoicePicker.swift */; };
 		D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A32C076122004DA914 /* AvailableVoices.swift */; };
 		D5A775A62C076151004DA914 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A52C076151004DA914 /* Helpers.swift */; };
-		D5A775A82C0766F0004DA914 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A72C0766F0004DA914 /* Voice.swift */; };
 		D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775A92C0780C4004DA914 /* VoiceController.swift */; };
 		D5A775AC2C078127004DA914 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775AB2C078127004DA914 /* AudioEngine.swift */; };
 		D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775AD2C0784D0004DA914 /* AudioDirection.swift */; };
@@ -50,7 +55,6 @@
 		D5A775BD2C09E5F4004DA914 /* OnScreenArrowsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775BC2C09E5F4004DA914 /* OnScreenArrowsOnboarding.swift */; };
 		D5A775BF2C09E6F2004DA914 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775BE2C09E6F2004DA914 /* Swipe.swift */; };
 		D5A775C12C09FF16004DA914 /* SwitchOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775C02C09FF16004DA914 /* SwitchOnboarding.swift */; };
-		D5A775C32C0A27EA004DA914 /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775C22C0A27EA004DA914 /* Switch.swift */; };
 		D5A775C52C0E0700004DA914 /* SwitchAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775C42C0E0700004DA914 /* SwitchAction.swift */; };
 		D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775C62C0E0782004DA914 /* UIKeyboardHIDUsage.swift */; };
 		D5A775C92C0F5F6E004DA914 /* AddSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775C82C0F5F6E004DA914 /* AddSwitch.swift */; };
@@ -64,10 +68,7 @@
 		D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */; };
 		D5A775DC2C2C0BE5004DA914 /* AccessOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */; };
 		D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DD2C2C0FBD004DA914 /* SwitchControlSection.swift */; };
-		D5A775E02C2C10DF004DA914 /* GameControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */; };
 		D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */; };
-		D5A775E52C2DA482004DA914 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E42C2DA482004DA914 /* GameController.swift */; };
-		D5A775E72C2DA494004DA914 /* GameControllerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E62C2DA494004DA914 /* GameControllerButton.swift */; };
 		D5A775E92C2DA5C1004DA914 /* ScanningOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */; };
 		D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */; };
 		D5A775ED2C2DB026004DA914 /* AudioOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */; };
@@ -84,7 +85,6 @@
 		D577B3922BFF9A2B00F064F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D577B3942BFF9A2B00F064F2 /* EchoSwiftData.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EchoSwiftData.entitlements; sourceTree = "<group>"; };
 		D577B3962BFF9A2B00F064F2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D577B39D2C008AD500F064F2 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D577B3A12C0099B500F064F2 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		D577B3A32C009AAA00F064F2 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		D577B3A82C00A05100F064F2 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -93,14 +93,21 @@
 		D577B3AE2C00AF4400F064F2 /* EchoDemo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = EchoDemo.gif; sourceTree = "<group>"; };
 		D577B3B02C00C2AF00F064F2 /* SecondStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondStep.swift; sourceTree = "<group>"; };
 		D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOnboarding.swift; sourceTree = "<group>"; };
-		D577B3B42C00C78600F064F2 /* Vocabulary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vocabulary.swift; sourceTree = "<group>"; };
 		D581A72D2C3D556B00E5C626 /* KeyPressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressController.swift; sourceTree = "<group>"; };
+		D581A72F2C3ED08700E5C626 /* CustomGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGameController.swift; sourceTree = "<group>"; };
+		D581A7312C3ED0AA00E5C626 /* ControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerManager.swift; sourceTree = "<group>"; };
+		D581A7342C3ED0D000E5C626 /* ControllerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerButton.swift; sourceTree = "<group>"; };
+		D581A7362C3ED0E300E5C626 /* ButtonDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonDefaults.swift; sourceTree = "<group>"; };
+		D581A7382C3ED20900E5C626 /* Switch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Switch.swift; path = EchoSwiftData/Models/Switch.swift; sourceTree = SOURCE_ROOT; };
+		D581A7392C3ED20A00E5C626 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = EchoSwiftData/Models/Settings.swift; sourceTree = SOURCE_ROOT; };
+		D581A73A2C3ED20A00E5C626 /* Voice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Voice.swift; path = EchoSwiftData/Models/Voice.swift; sourceTree = SOURCE_ROOT; };
+		D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Vocabulary.swift; path = EchoSwiftData/Models/Vocabulary.swift; sourceTree = SOURCE_ROOT; };
+		D581A73C2C3ED20A00E5C626 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Node.swift; path = EchoSwiftData/Models/Node.swift; sourceTree = SOURCE_ROOT; };
 		D581E9072C382C5200F9EDE8 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		D581E9092C38302700F9EDE8 /* Spelling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spelling.swift; sourceTree = "<group>"; };
 		D581E90E2C38444200F9EDE8 /* dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dictionary.sqlite; sourceTree = "<group>"; };
 		D581E9102C384B8B00F9EDE8 /* OnScreenArrows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScreenArrows.swift; sourceTree = "<group>"; };
 		D581E9122C384BD800F9EDE8 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
-		D581E9142C3BFC0100F9EDE8 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		D581E9162C3BFC2800F9EDE8 /* MessageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBar.swift; sourceTree = "<group>"; };
 		D581E9182C3BFC4200F9EDE8 /* NodeTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeTreeView.swift; sourceTree = "<group>"; };
 		D5A775982C0627D8004DA914 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -109,7 +116,6 @@
 		D5A775A02C075FFE004DA914 /* VoicePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePicker.swift; sourceTree = "<group>"; };
 		D5A775A32C076122004DA914 /* AvailableVoices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableVoices.swift; sourceTree = "<group>"; };
 		D5A775A52C076151004DA914 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		D5A775A72C0766F0004DA914 /* Voice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice.swift; sourceTree = "<group>"; };
 		D5A775A92C0780C4004DA914 /* VoiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceController.swift; sourceTree = "<group>"; };
 		D5A775AB2C078127004DA914 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		D5A775AD2C0784D0004DA914 /* AudioDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDirection.swift; sourceTree = "<group>"; };
@@ -122,7 +128,6 @@
 		D5A775BC2C09E5F4004DA914 /* OnScreenArrowsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScreenArrowsOnboarding.swift; sourceTree = "<group>"; };
 		D5A775BE2C09E6F2004DA914 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
 		D5A775C02C09FF16004DA914 /* SwitchOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchOnboarding.swift; sourceTree = "<group>"; };
-		D5A775C22C0A27EA004DA914 /* Switch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switch.swift; sourceTree = "<group>"; };
 		D5A775C42C0E0700004DA914 /* SwitchAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAction.swift; sourceTree = "<group>"; };
 		D5A775C62C0E0782004DA914 /* UIKeyboardHIDUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKeyboardHIDUsage.swift; sourceTree = "<group>"; };
 		D5A775C82C0F5F6E004DA914 /* AddSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSwitch.swift; sourceTree = "<group>"; };
@@ -136,10 +141,7 @@
 		D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinksSection.swift; sourceTree = "<group>"; };
 		D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775DD2C2C0FBD004DA914 /* SwitchControlSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchControlSection.swift; sourceTree = "<group>"; };
-		D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControllerManager.swift; sourceTree = "<group>"; };
 		D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameControllerSection.swift; path = Settings/GameControllerSection.swift; sourceTree = "<group>"; };
-		D5A775E42C2DA482004DA914 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
-		D5A775E62C2DA494004DA914 /* GameControllerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControllerButton.swift; sourceTree = "<group>"; };
 		D5A775E82C2DA5C1004DA914 /* ScanningOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775EA2C2DAAF4004DA914 /* SpellingOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOptionsArea.swift; sourceTree = "<group>"; };
@@ -211,12 +213,11 @@
 		D577B39F2C008BDA00F064F2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D5A775E32C2DA44D004DA914 /* GameController */,
-				D577B39D2C008AD500F064F2 /* Settings.swift */,
-				D5A775C22C0A27EA004DA914 /* Switch.swift */,
-				D5A775A72C0766F0004DA914 /* Voice.swift */,
-				D577B3B42C00C78600F064F2 /* Vocabulary.swift */,
-				D581E9142C3BFC0100F9EDE8 /* Node.swift */,
+				D581A7392C3ED20A00E5C626 /* Settings.swift */,
+				D581A73A2C3ED20A00E5C626 /* Voice.swift */,
+				D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */,
+				D581A7382C3ED20900E5C626 /* Switch.swift */,
+				D581A73C2C3ED20A00E5C626 /* Node.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -283,9 +284,21 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D581A7332C3ED0B500E5C626 /* GameController */ = {
+			isa = PBXGroup;
+			children = (
+				D581A7312C3ED0AA00E5C626 /* ControllerManager.swift */,
+				D581A7342C3ED0D000E5C626 /* ControllerButton.swift */,
+				D581A7362C3ED0E300E5C626 /* ButtonDefaults.swift */,
+				D581A72F2C3ED08700E5C626 /* CustomGameController.swift */,
+			);
+			path = GameController;
+			sourceTree = "<group>";
+		};
 		D5A775A22C076111004DA914 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
+				D581A7332C3ED0B500E5C626 /* GameController */,
 				D5A775A32C076122004DA914 /* AvailableVoices.swift */,
 				D5A775F52C35A269004DA914 /* MainCommunicationPageState.swift */,
 				D5A775A92C0780C4004DA914 /* VoiceController.swift */,
@@ -319,16 +332,6 @@
 				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		D5A775E32C2DA44D004DA914 /* GameController */ = {
-			isa = PBXGroup;
-			children = (
-				D5A775DF2C2C10DF004DA914 /* GameControllerManager.swift */,
-				D5A775E62C2DA494004DA914 /* GameControllerButton.swift */,
-				D5A775E42C2DA482004DA914 /* GameController.swift */,
-			);
-			path = GameController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,15 +417,16 @@
 				D5A775C52C0E0700004DA914 /* SwitchAction.swift in Sources */,
 				D5A775BB2C08CC07004DA914 /* PredictionLanguage.swift in Sources */,
 				D5A775C92C0F5F6E004DA914 /* AddSwitch.swift in Sources */,
+				D581A73F2C3ED20A00E5C626 /* Voice.swift in Sources */,
 				D5A775BD2C09E5F4004DA914 /* OnScreenArrowsOnboarding.swift in Sources */,
 				D5A775A12C075FFE004DA914 /* VoicePicker.swift in Sources */,
-				D577B39E2C008AD500F064F2 /* Settings.swift in Sources */,
 				D581E9192C3BFC4200F9EDE8 /* NodeTreeView.swift in Sources */,
 				D581E9082C382C5200F9EDE8 /* Array.swift in Sources */,
 				D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */,
 				D581A72E2C3D556B00E5C626 /* KeyPressController.swift in Sources */,
 				D5A775E92C2DA5C1004DA914 /* ScanningOptionsArea.swift in Sources */,
 				D5A775CF2C131F63004DA914 /* ErrorHandling.swift in Sources */,
+				D581A7372C3ED0E300E5C626 /* ButtonDefaults.swift in Sources */,
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
 				D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */,
@@ -430,6 +434,7 @@
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
 				D5A775F62C35A269004DA914 /* MainCommunicationPageState.swift in Sources */,
+				D581A73D2C3ED20A00E5C626 /* Switch.swift in Sources */,
 				D5A775D52C29A527004DA914 /* Rating.swift in Sources */,
 				D5A775AC2C078127004DA914 /* AudioEngine.swift in Sources */,
 				D581E9132C384BD800F9EDE8 /* Comparable.swift in Sources */,
@@ -439,40 +444,39 @@
 				D5A775DC2C2C0BE5004DA914 /* AccessOptionsArea.swift in Sources */,
 				D5A775BF2C09E6F2004DA914 /* Swipe.swift in Sources */,
 				D581E9112C384B8B00F9EDE8 /* OnScreenArrows.swift in Sources */,
-				D581E9152C3BFC0100F9EDE8 /* Node.swift in Sources */,
 				D5A775DA2C2B2030004DA914 /* ExternalLinksSection.swift in Sources */,
 				D5A775B72C08C661004DA914 /* CharacterOrder.swift in Sources */,
 				D5A775C12C09FF16004DA914 /* SwitchOnboarding.swift in Sources */,
 				D5A775ED2C2DB026004DA914 /* AudioOptionsArea.swift in Sources */,
 				D577B3A22C0099B500F064F2 /* Onboarding.swift in Sources */,
-				D5A775E52C2DA482004DA914 /* GameController.swift in Sources */,
 				D5A775B12C08B445004DA914 /* SpeakingVoiceOnboarding.swift in Sources */,
-				D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */,
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
+				D581A7352C3ED0D000E5C626 /* ControllerButton.swift in Sources */,
 				D5A775B32C08C10F004DA914 /* ScanningOnboarding.swift in Sources */,
 				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
-				D5A775A82C0766F0004DA914 /* Voice.swift in Sources */,
 				D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */,
 				D5A775B92C08C692004DA914 /* ControlCommandDisplayOptions.swift in Sources */,
-				D5A775E72C2DA494004DA914 /* GameControllerButton.swift in Sources */,
 				D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */,
-				D5A775E02C2C10DF004DA914 /* GameControllerManager.swift in Sources */,
 				D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */,
 				D581E9172C3BFC2800F9EDE8 /* MessageBar.swift in Sources */,
+				D581A7302C3ED08700E5C626 /* CustomGameController.swift in Sources */,
 				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
 				D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */,
+				D581A7412C3ED20A00E5C626 /* Node.swift in Sources */,
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
-				D5A775C32C0A27EA004DA914 /* Switch.swift in Sources */,
 				D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */,
 				D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */,
 				D5A775A62C076151004DA914 /* Helpers.swift in Sources */,
 				D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */,
+				D581A7322C3ED0AA00E5C626 /* ControllerManager.swift in Sources */,
 				D577B3AD2C00A98800F064F2 /* BottomText.swift in Sources */,
+				D581A73E2C3ED20A00E5C626 /* Settings.swift in Sources */,
 				D5A775B52C08C5C2004DA914 /* PredictionOnboarding.swift in Sources */,
 				D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */,
 				D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */,
 				D577B38F2BFF9A2800F064F2 /* EchoSwiftDataApp.swift in Sources */,
 				D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */,
+				D581A7402C3ED20A00E5C626 /* Vocabulary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
