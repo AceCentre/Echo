@@ -182,7 +182,6 @@ struct SwiftDataInitialiser: View {
                         }
                                                 
                         for currentNode in nodesToDelete {
-                            print(currentNode.displayText, currentNode)
                             context.delete(currentNode)
                         }
                     } catch {

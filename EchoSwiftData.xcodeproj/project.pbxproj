@@ -22,6 +22,7 @@
 		D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */; };
 		D577B3B52C00C78600F064F2 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3B42C00C78600F064F2 /* Vocabulary.swift */; };
 		D581A72C2C3D3A3A00E5C626 /* SQLiteSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D581A72B2C3D3A3A00E5C626 /* SQLiteSwift */; };
+		D581A72E2C3D556B00E5C626 /* KeyPressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A72D2C3D556B00E5C626 /* KeyPressController.swift */; };
 		D581E9082C382C5200F9EDE8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9072C382C5200F9EDE8 /* Array.swift */; };
 		D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9092C38302700F9EDE8 /* Spelling.swift */; };
 		D581E90F2C38444200F9EDE8 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D581E90E2C38444200F9EDE8 /* dictionary.sqlite */; };
@@ -93,6 +94,7 @@
 		D577B3B02C00C2AF00F064F2 /* SecondStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondStep.swift; sourceTree = "<group>"; };
 		D577B3B22C00C32300F064F2 /* VocabularyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOnboarding.swift; sourceTree = "<group>"; };
 		D577B3B42C00C78600F064F2 /* Vocabulary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vocabulary.swift; sourceTree = "<group>"; };
+		D581A72D2C3D556B00E5C626 /* KeyPressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPressController.swift; sourceTree = "<group>"; };
 		D581E9072C382C5200F9EDE8 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		D581E9092C38302700F9EDE8 /* Spelling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spelling.swift; sourceTree = "<group>"; };
 		D581E90E2C38444200F9EDE8 /* dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dictionary.sqlite; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */,
 				D5A775F02C32E9C2004DA914 /* ScrollLock.swift */,
 				D581E9162C3BFC2800F9EDE8 /* MessageBar.swift */,
+				D581A72D2C3D556B00E5C626 /* KeyPressController.swift */,
 				D5A775C82C0F5F6E004DA914 /* AddSwitch.swift */,
 				D5A775CA2C0F5FA9004DA914 /* ActionPicker.swift */,
 				D5A775CC2C0F66AC004DA914 /* KeyboardDetector.swift */,
@@ -417,6 +420,7 @@
 				D581E9192C3BFC4200F9EDE8 /* NodeTreeView.swift in Sources */,
 				D581E9082C382C5200F9EDE8 /* Array.swift in Sources */,
 				D577B3B12C00C2AF00F064F2 /* SecondStep.swift in Sources */,
+				D581A72E2C3D556B00E5C626 /* KeyPressController.swift in Sources */,
 				D5A775E92C2DA5C1004DA914 /* ScanningOptionsArea.swift in Sources */,
 				D5A775CF2C131F63004DA914 /* ErrorHandling.swift in Sources */,
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,

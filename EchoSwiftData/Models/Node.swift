@@ -23,6 +23,9 @@ class Node {
     var currentWord: String
     var index: Int?
     
+    @Transient
+    private var childrenInOrder: [Node]? = nil
+    
     init(
         type: NodeType,
         cueText: String? = nil,
@@ -64,11 +67,18 @@ class Node {
         }
         
         self.children = children
-    }
-    
-    func getChildren() -> [Node]? {
-        return self.children?.sorted {
+        self.childrenInOrder = children.sorted {
             return $0.index ?? 0 < $1.index ?? 0
         }
+    }
+    
+    func getChildren(_ label: String = "unknown") -> [Node]? {
+        if childrenInOrder == nil {
+            childrenInOrder = children?.sorted {
+                return $0.index ?? 0 < $1.index ?? 0
+            }
+        }
+        
+        return childrenInOrder
     }
 }

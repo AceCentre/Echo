@@ -33,6 +33,8 @@ class MainCommunicationPageState: ObservableObject {
     var settings: Settings?
     var spelling: Spelling?
     
+    
+    
     init() {
         hoveredNode = Node(type: .root)
     }
@@ -66,7 +68,7 @@ class MainCommunicationPageState: ObservableObject {
             levels.append(
                 Level(
                     hoveredNode: temp,
-                    nodes: parent.getChildren() ?? [],
+                    nodes: parent.getChildren("levels") ?? [],
                     last: last
                 )
             )
@@ -135,10 +137,12 @@ class MainCommunicationPageState: ObservableObject {
         if isStartup {
             shouldScan = settings?.scanOnAppLaunch ?? false
         }
-                
+        
+        let nodeChildren = node?.getChildren("clickNode")
+        
         // If you 'click' the root node then we hover on its first child
         if node?.type == .root {
-            if let firstNode = node?.getChildren()?.first {
+            if let firstNode = nodeChildren?.first {
                 hoverNode(firstNode, shouldScan: shouldScan)
             } else {
                 errorHandling?.handle(error: EchoError.noChildren)
@@ -154,7 +158,7 @@ class MainCommunicationPageState: ObservableObject {
             })
             
         } else if node?.type == .branch {
-            hoverNode(node?.getChildren()?.first ?? hoveredNode, shouldScan: shouldScan)
+            hoverNode(nodeChildren?.first ?? hoveredNode, shouldScan: shouldScan)
         } else if node?.type == .rootAndSpelling {
             let nodeToHover = try resetSpellingNodes(parentNode: node)
             hoverNode(nodeToHover, shouldScan: shouldScan)
@@ -265,10 +269,8 @@ class MainCommunicationPageState: ObservableObject {
                 
         parent.setChildren(spellingNodes)
         
-        var nodeToHover: Node? = parent.getChildren()?.first
-        
-        nodeToHover = parent.getChildren()?.first
-        
+        var nodeToHover: Node? = parent.getChildren("resetSpellingNodes")?.first
+                
         if let unwrappedSentenceWordNode = currentSentenceNode {
             nodeToHover = unwrappedSentenceWordNode
         }
@@ -378,7 +380,7 @@ class MainCommunicationPageState: ObservableObject {
         // If there is text, delete a character
         if enteredText == "" {
             if let parentNode = hoveredNode.parent {
-                if let firstNode = parentNode.getChildren()?.first, parentNode.type == .rootAndSpelling || parentNode.type == .root {
+                if let firstNode = parentNode.getChildren("userback")?.first, parentNode.type == .rootAndSpelling || parentNode.type == .root {
                     hoverNode(firstNode, shouldScan: scanAfterSelection)
                 } else {
                     hoverNode(parentNode, shouldScan: scanAfterSelection)
@@ -413,35 +415,25 @@ class MainCommunicationPageState: ObservableObject {
     
     func userNextNode() {
         scanLoops = 0
-        
+
         do {
-            try self.nextNode()
+            guard let siblings = hoveredNode.parent?.getChildren("usernextnode") else {
+                throw EchoError.noSiblings
+            }
+            
+            try self.nextNode(siblings)
         } catch {
             errorHandling?.handle(error: error)
         }
     }
     
-    private func nextNodeIndex() throws -> Int {
-        guard let siblings = hoveredNode.parent?.getChildren() else {
-            throw EchoError.noSiblings
-        }
-        
-        let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
-        let nextIndex = (Int(currentIndex) + 1) % siblings.count
-        
-        return nextIndex
-    }
-    
-    private func nextNode() throws {
+    private func nextNode( _ siblings: [Node]) throws {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
         
-        guard let siblings = hoveredNode.parent?.getChildren() else {
-            throw EchoError.noSiblings
-        }
-        
-        let nextIndex = try nextNodeIndex()
+        let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
+        let nextIndex = (Int(currentIndex) + 1) % siblings.count
         
         guard let nextNode = siblings[safe: nextIndex] else {
             throw EchoError.invalidNodeIndex
@@ -455,7 +447,7 @@ class MainCommunicationPageState: ObservableObject {
             unwrappedWorkItem.cancel()
         }
         
-        guard let siblings = hoveredNode.parent?.getChildren() else {
+        guard let siblings = hoveredNode.parent?.getChildren("prevNode") else {
             throw EchoError.noSiblings
         }
         
@@ -499,7 +491,11 @@ class MainCommunicationPageState: ObservableObject {
             if isFastScan {
                 unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
                     do {
-                        try self.nextNode()
+                        guard let siblings = self.hoveredNode.parent?.getChildren("hoverNode") else {
+                            throw EchoError.noSiblings
+                        }
+                        
+                        try self.nextNode(siblings)
                     } catch {
                         self.errorHandling?.handle(error: error)
                     }
@@ -541,9 +537,13 @@ class MainCommunicationPageState: ObservableObject {
         
         let maxScanLoops = settings?.scanLoops ?? 0
         
+        guard let siblings = hoveredNode.parent?.getChildren("setnextmovetimer") else {
+            throw EchoError.noSiblings
+        }
+        
         let newWorkItem = DispatchWorkItem(block: {
             do {
-                try self.nextNode()
+                try self.nextNode(siblings)
             } catch {
                 self.errorHandling?.handle(error: error)
             }
@@ -551,10 +551,9 @@ class MainCommunicationPageState: ObservableObject {
         
         workItem = newWorkItem
         let timeInterval = settings?.scanWaitTime ?? 3
+                
         
-        let nextIndex = try nextNodeIndex()
-        
-        if nextIndex == 0 {
+        if hoveredNode.index ?? 0 == siblings.count - 1 {
             scanLoops += 1
         }
         
@@ -568,9 +567,13 @@ class MainCommunicationPageState: ObservableObject {
             unwrappedWorkItem.cancel()
         }
         
+        guard let siblings = hoveredNode.parent?.getChildren("startfastscan") else {
+            throw EchoError.noSiblings
+        }
+        
         isFastScan = true
         
-        try nextNode()
+        try nextNode(siblings)
     }
     
     func stopFastScan() {
