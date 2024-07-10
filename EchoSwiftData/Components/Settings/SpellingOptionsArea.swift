@@ -37,7 +37,7 @@ struct SpellingOptionsArea: View {
                     step: 1
                 ) {
                     HStack {
-                        Text("Message Bar Font Size")
+                        Text("Message Bar Font Size", comment: "Label for stepper for font size")
                         Spacer()
                         Text("\(settings.messageBarFontSize)")
                     }

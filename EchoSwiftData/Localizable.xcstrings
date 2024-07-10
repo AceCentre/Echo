@@ -1,0 +1,468 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "**Cue Voice**" : {
+      "comment" : "Label for the cue voice during onboarding"
+    },
+    "**Speaking Voice**" : {
+      "comment" : "Label for the speaking voice during onboarding"
+    },
+    "**Vocabulary**" : {
+      "comment" : "Label for the Vocabulary during onboarding"
+    },
+    "**Word and Letter Prediction**" : {
+      "comment" : "Label for the prediction during onboarding"
+    },
+    "%@" : {
+
+    },
+    "%lld" : {
+
+    },
+    "A four way arrow keypad" : {
+      "comment" : "Accessibility label for arrows"
+    },
+    "A slash to indicate disabled" : {
+      "comment" : "Accessibility label for slash"
+    },
+    "About Us" : {
+      "comment" : "A link to the about page"
+    },
+    "Access Methods" : {
+      "comment" : "Label for the navigation link to the access methods options page"
+    },
+    "Access Options" : {
+      "comment" : "The navigation title for the access options page"
+    },
+    "Actions" : {
+      "comment" : "The header of the actions area when adding a new switch"
+    },
+    "Activate your external switch" : {
+      "comment" : "Shown when detecting the switch press when adding a new switch"
+    },
+    "Add Switch" : {
+      "comment" : "Button label to add a new switch to the list"
+    },
+    "Alphabet Order" : {
+      "comment" : "The label that is shown next to the alphabet order picker"
+    },
+    "Alphabetical Order" : {
+      "comment" : "The value for the order of the alphabet"
+    },
+    "An apple device with letters on screen, represents scanning" : {
+      "comment" : "Accesibility label for logo"
+    },
+    "An Error Occurred" : {
+      "comment" : "Title on errors popup"
+    },
+    "Arabic (Experimental)" : {
+      "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Are you sure you want to delete '%@'?" : {
+      "comment" : "Message in alert for deleting switch"
+    },
+    "Arrow pointing down" : {
+      "comment" : "An accessibility label for the down arrow image"
+    },
+    "Arrow pointing left" : {
+      "comment" : "An accessibility label for the left arrow image"
+    },
+    "Arrow pointing right" : {
+      "comment" : "An accessibility label for the right arrow image"
+    },
+    "Arrow pointing up" : {
+      "comment" : "An accessibility label for the up arrow image"
+    },
+    "Audio" : {
+      "comment" : "Label for the navigation link to the audio options page\nThe label for the section about analytics"
+    },
+    "Audio Settings" : {
+      "comment" : "The navigation title for the Audio options page"
+    },
+    "Back" : {
+      "comment" : "The button text for the navigation back button"
+    },
+    "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
+      "comment" : "A description of why audio splitting exists"
+    },
+    "Cancel" : {
+      "comment" : "Cancel button label"
+    },
+    "Clear all the inputted text" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Contact Us" : {
+      "comment" : "A link to the contact page"
+    },
+    "Control **Echo** using an arrow keypad on screen." : {
+      "comment" : "Explain of Echo onboarding process"
+    },
+    "Control **Echo** using Swipes" : {
+      "comment" : "Explaination of swipe controls"
+    },
+    "Control Commands" : {
+      "comment" : "Header for commands area"
+    },
+    "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
+      "comment" : "Description describing what switch access is"
+    },
+    "Croatian (Experimental)" : {
+      "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Cue Voice" : {
+      "comment" : "The heading for the options that control the cue voice"
+    },
+    "Cue Voice Direction" : {
+      "comment" : "Label for cue voice audio direction"
+    },
+    "Current Sentence: " : {
+      "comment" : "This label prefixes the current full sentance in the scrollable area. Make sure to leave the colon and space"
+    },
+    "Current Word: " : {
+      "comment" : "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
+    },
+    "Delete" : {
+      "comment" : "Button label to confirm deletion"
+    },
+    "Delete Switch" : {
+      "comment" : "Title for alert about deleting a switch"
+    },
+    "Detect Switch" : {
+      "comment" : "Label for a NavigationLink that will get a user to press their external switch"
+    },
+    "Directional Audio" : {
+      "comment" : "Label for directional audio toggle"
+    },
+    "Disable" : {
+      "comment" : "Label to disable swipe"
+    },
+    "Dismiss" : {
+      "comment" : "Message on dismiss button for errors"
+    },
+    "Display" : {
+      "comment" : "Label for display header in settings"
+    },
+    "Display control commands" : {
+      "comment" : "Picker label for control commands"
+    },
+    "Done" : {
+      "comment" : "The label for the button to exit onboarding"
+    },
+    "Echo prefixes some items with 'current sentence' and 'current word'. However, this might slow you down so you may choose to disable the prompt." : {
+      "comment" : "Footer for the section in settings about prompts"
+    },
+    "Echo: Auditory Scanning" : {
+      "comment" : "The main navigation title for the whole app"
+    },
+    "Enable" : {
+      "comment" : "Label to enable swipe"
+    },
+    "End of list" : {
+      "comment" : "Picker option for control command"
+    },
+    "English" : {
+      "comment" : "The label for the English language when setting prediction language"
+    },
+    "Every Character Speaks Volumes" : {
+      "comment" : "Explain what Echo is"
+    },
+    "External Links" : {
+      "comment" : "Label for the navigation link to the externalLinks options page"
+    },
+    "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
+      "comment" : "Explains what an external switch is"
+    },
+    "Frequency Order" : {
+      "comment" : "The value for the order of the alphabet"
+    },
+    "Game Controllers" : {
+      "comment" : "Header for game controller settings area"
+    },
+    "Getting Started" : {
+      "comment" : "Getting started onboarding"
+    },
+    "Go back to the last level of the vocabulary (or delete the last inputted letter)" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Go to the next item" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Go to the previous item" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Hebrew (Experimental)" : {
+      "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Hide" : {
+      "comment" : "Label to hide arrows\nPicker option for control command"
+    },
+    "History" : {
+      "comment" : "Header for settings about history"
+    },
+    "Hold" : {
+      "comment" : "The label that is shown next to the single hold action"
+    },
+    "Initial Setup" : {
+      "comment" : "Label for the navigation link to the initial options page"
+    },
+    "Language" : {
+      "comment" : "The label that is shown next to the language picker"
+    },
+    "Language and Alphabet" : {
+      "comment" : "Header for the language settings"
+    },
+    "Left Channel" : {
+      "comment" : "Label for picker of audio channels"
+    },
+    "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
+      "comment" : "A description of how detecting switches works and how to reset it"
+    },
+    "Lets setup **Echo**. You can change your settings at any time." : {
+      "comment" : "Explain of Echo onboarding process"
+    },
+    "Letter prediction" : {
+      "comment" : "Label for toggle to turn letter based prediction off and on"
+    },
+    "Māori (Experimental)" : {
+      "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Map Buttons" : {
+      "comment" : "The help text on the controller button"
+    },
+    "Message Bar Font Size" : {
+      "comment" : "Label for stepper for font size"
+    },
+    "New Switch" : {
+      "comment" : "The navigation title when adding a given switch."
+    },
+    "Next" : {
+      "comment" : "The label for the to go to the next onboarding step"
+    },
+    "No game controller connect to device. Please connect a controller to access these settings" : {
+      "comment" : "Notification of no game controllers connected"
+    },
+    "None" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "On Screen Arrows?" : {
+      "comment" : "Getting started onboarding"
+    },
+    "On-screen" : {
+      "comment" : "Header for on screen arrow options area"
+    },
+    "Onscreen Arrows" : {
+      "comment" : "Label for onboarding picker"
+    },
+    "Play Sample" : {
+      "comment" : "Label for button that plays an audio sample"
+    },
+    "Polish (Experimental)" : {
+      "comment" : "The label for the Polish language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Portuguese (Experimental)" : {
+      "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Predict which words and letters come next and you enter each letter." : {
+      "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
+    },
+    "Prediction" : {
+      "comment" : "Label for the section in settings about prediction\nLabel for toggle to turn prediction off and on"
+    },
+    "Prediction helps you to get to the words you want to speak faster" : {
+      "comment" : "Footer for the section in settings about prediction"
+    },
+    "Predition Language" : {
+      "comment" : "The label that is shown next to the language picker"
+    },
+    "Quickly scan through the items" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Rate" : {
+      "comment" : "Label for a slider that controls the rate of a voice"
+    },
+    "Read Documentation" : {
+      "comment" : "A link to the external documentation"
+    },
+    "Required" : {
+      "comment" : "Prompt for required text input"
+    },
+    "Right Channel" : {
+      "comment" : "Label for picker of audio channels"
+    },
+    "Save" : {
+      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
+    },
+    "Scan **%lld** times before stopping" : {
+      "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
+    },
+    "Scan after selection" : {
+      "comment" : "Label for toggle that controls when scanning starts"
+    },
+    "Scan on app launch" : {
+      "comment" : "Label for toggle that controls when scanning starts"
+    },
+    "Scanning" : {
+      "comment" : "Label for the navigation link to the scanning options page\nLabel for the scanning during onboarding\nLabel for toggle to turn scanning off and on"
+    },
+    "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time." : {
+      "comment" : "Explaination of scanning during onboarding\nThe footer explaining what scanning loops is"
+    },
+    "Scanning Options" : {
+      "comment" : "The navigation title for the scanning options page"
+    },
+    "Scanning speed" : {
+      "comment" : "Slider label to control the speed of scanning"
+    },
+    "Select the currently selected item" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Select the vocabulary of phrases, words and letters to be used" : {
+      "comment" : "Footer of vocabulary options"
+    },
+    "Selected Key" : {
+      "comment" : "Label for showing the value of the key that has been selected for an external switch"
+    },
+    "Settings" : {
+      "comment" : "The navigation title for the settings page"
+    },
+    "Show" : {
+      "comment" : "Label to show arrows"
+    },
+    "Show **%lld** level of your vocabulary" : {
+      "comment" : "Describe to the user the number of history levels"
+    },
+    "Show on-screen arrows" : {
+      "comment" : "Label for toggle for on screen arrows"
+    },
+    "Single Tap" : {
+      "comment" : "The label that is shown next to the single tap action"
+    },
+    "Skip" : {
+      "comment" : "The label for the button to exit onboarding"
+    },
+    "Spanish (Experimental)" : {
+      "comment" : "The label for the Spanish language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Speaking Voice" : {
+      "comment" : "The heading for the options that control the speaking voice"
+    },
+    "Speaking Voice Direction" : {
+      "comment" : "Label for speaking voice audio direction"
+    },
+    "Spelling & Alphabet" : {
+      "comment" : "Label for the navigation link to the spelling, alphabet and predictions options page"
+    },
+    "Spelling & Alphabet Options" : {
+      "comment" : "The navigation title for the Spelling & Alphabet options page"
+    },
+    "Start of list" : {
+      "comment" : "Picker option for control command"
+    },
+    "Start scanning from the current item, scanning must be enabled" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Swipe Gestures" : {
+      "comment" : "Label for swipe picker"
+    },
+    "Swipe up, down, left or right to control Echo\n   • **Tap:** Select the current item\n   • **Left to Right:** Select the current item\n   • **Right to Left:** Remove the last entered character\n   • **Top to Bottom:** Go to the previous item in the list\n   • **Bottom to Top:** Go to the next item in the list" : {
+      "comment" : "A description of all the swiping gestures. Please use the same format including bold text"
+    },
+    "Swipe?" : {
+      "comment" : "Header for swipe onboarding page"
+    },
+    "Switch Control" : {
+      "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
+    },
+    "Switch Key" : {
+      "comment" : "Header text for the switch keyboard area"
+    },
+    "Switch Name" : {
+      "comment" : "Label for switch name TextField"
+    },
+    "Switch: %@" : {
+      "comment" : "The navigation title when editing a given switch. It contains the user entered name after the colon"
+    },
+    "Tap and Gesture control" : {
+      "comment" : "Toggle for swiping gestures"
+    },
+    "Thank you for using Echo, this is your cue voice" : {
+      "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
+    },
+    "Thank you for using Echo, this is your speaking voice" : {
+      "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
+    },
+    "The control commands are commands like backspace and clear. They can be shown the list of items and selected." : {
+      "comment" : "Footer for commands area"
+    },
+    "The language chosen here will change the alphabet that is shown and will change which words are used for prediction" : {
+      "comment" : "Footer for the language settings"
+    },
+    "The length of time that Echo will wait before moving onto the next item" : {
+      "comment" : "A description of what scanning speed does"
+    },
+    "The voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
+      "comment" : "Explanation of cuevoice during onboarding"
+    },
+    "These are the actions that will happen when you tap or hold your switch" : {
+      "comment" : "The footer description of the area of the actions area when adding a new switch"
+    },
+    "This is the number of levels of your phrases to show at once." : {
+      "comment" : "Footer for settings about history"
+    },
+    "Unknown Button" : {
+      "comment" : "Name of a button when none is given"
+    },
+    "Unknown Controller" : {
+      "comment" : "Name of the controller if none is givens"
+    },
+    "Urdu (Experimental)" : {
+      "comment" : "The label for the urdu language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Use a game controller to control Echo" : {
+      "comment" : "Footer for game controller settings area"
+    },
+    "Use Prompts" : {
+      "comment" : "Label for toggle prompts"
+    },
+    "Vocabulary" : {
+      "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
+    },
+    "Voice" : {
+      "comment" : "Label for NavigationLink that takes you to a voice picker page"
+    },
+    "Voice Options" : {
+      "comment" : "The navigation title for the voice options page"
+    },
+    "Voice Selection" : {
+      "comment" : "Label for the navigation link to the voice options page"
+    },
+    "Volume" : {
+      "comment" : "Label for a slider that controls the volume of a voice"
+    },
+    "Welcome to **Echo**" : {
+      "comment" : "Welcome message in onboarding"
+    },
+    "Welsh (Experimental)" : {
+      "comment" : "The label for the Welsh language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Word and Letter Prompt" : {
+      "comment" : "Label for the section in settings about prompts"
+    },
+    "Word prediction" : {
+      "comment" : "Label for toggle to turn word prediction off and on"
+    },
+    "Word prediction limit" : {
+      "comment" : "Label for the stepper that controls word prediction limit"
+    },
+    "Yiddish (Experimental)" : {
+      "comment" : "The label for the Yiddish language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Your cue voice is the voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
+      "comment" : "The footer for the options that control the cue voice"
+    },
+    "Your speaking voice is the voice that is used to communicate with your communication partner. Select the options that you want to represent your voice." : {
+      "comment" : "Explanation of speaking voice during onboarding\nThe footer for the options that control the speaking voice"
+    }
+  },
+  "version" : "1.0"
+}

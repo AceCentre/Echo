@@ -167,7 +167,7 @@ class MainCommunicationPageState: ObservableObject {
                 hoverNode(parentNode, shouldScan: shouldScan)
             }
         } else if node?.type == .predictedWord {
-            var words = enteredText.components(separatedBy: "·")
+            var words = enteredText.components(separatedBy: " ")
             
             if !words.isEmpty {
                 words.removeLast()
@@ -177,7 +177,7 @@ class MainCommunicationPageState: ObservableObject {
             
             let allWords = words + [displayText]
             
-            enteredText = allWords.joined(separator: "·") + "·"
+            enteredText = allWords.joined(separator: " ") + " "
             
             let nodeToHover = try resetSpellingNodes(parentNode: node?.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
@@ -200,7 +200,7 @@ class MainCommunicationPageState: ObservableObject {
                 }
             })
         } else if node?.type == .currentWord {
-            var words = enteredText.components(separatedBy: "·")
+            var words = enteredText.components(separatedBy: " ")
             
             if !words.isEmpty {
                 words.removeLast()
@@ -210,7 +210,7 @@ class MainCommunicationPageState: ObservableObject {
             
             let allWords = words + [currentWord]
             
-            enteredText = allWords.joined(separator: "·") + "·"
+            enteredText = allWords.joined(separator: " ") + " "
             
             let nodeToHover = try resetSpellingNodes(parentNode: node?.parent)
             hoverNode(nodeToHover, shouldScan: shouldScan)
@@ -294,7 +294,7 @@ class MainCommunicationPageState: ObservableObject {
             localized: "Current Word: ",
             comment: "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
         ) : ""
-        let splitBySpace = self.enteredText.components(separatedBy: "·")
+        let splitBySpace = self.enteredText.components(separatedBy: " ")
         let prefix = splitBySpace.last ?? ""
         let prefixWithHyphens = currentWordPrefix + "<say-as interpret-as=\"characters\">\(prefix)</say-as>"
         var currentWordNode: Node?

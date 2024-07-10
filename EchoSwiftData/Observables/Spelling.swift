@@ -44,13 +44,13 @@ class Spelling: ObservableObject {
     }
     
     func getApplePredictionNodes(_ enteredText: String) -> [Node] {
-        let predictionText = enteredText.replacingOccurrences(of: "·", with: " ")
+        let predictionText = enteredText.replacingOccurrences(of: " ", with: " ")
         
         if predictionText.last == " " {
             return []
         }
         
-        let lastWord = enteredText.components(separatedBy: "·").last ?? ""
+        let lastWord = enteredText.components(separatedBy: " ").last ?? ""
         let lastWordRange = NSRange(location: predictionText.utf16.count - lastWord.count, length: lastWord.count)
 
         let textChecker = UITextChecker()
@@ -70,7 +70,7 @@ class Spelling: ObservableObject {
         guard let db = dbConn else { return [] }
         guard let words = wordsTable else { return [] }
         
-        let splitBySpace = enteredText.components(separatedBy: "·")
+        let splitBySpace = enteredText.components(separatedBy: " ")
         
         guard let prefix = splitBySpace.last else {
             return []
@@ -120,7 +120,7 @@ class Spelling: ObservableObject {
         guard let db = dbConn else { return alphabetItems }
         guard let words = wordsTable else { return alphabetItems }
         
-        let splitBySpace = enteredText.components(separatedBy: "·")
+        let splitBySpace = enteredText.components(separatedBy: " ")
         
         guard let prefix = splitBySpace.last else {
             return alphabetItems

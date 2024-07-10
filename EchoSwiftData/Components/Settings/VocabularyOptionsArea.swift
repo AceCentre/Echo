@@ -31,9 +31,9 @@ struct VocabularyOptionsArea: View {
                     }
                 }
             }, header: {
-                Text("Vocabulary")
+                Text("Vocabulary", comment: "Header of vocabulary options")
             }, footer: {
-                Text("Select the vocabulary of phrases, words and letters to be used")
+                Text("Select the vocabulary of phrases, words and letters to be used", comment: "Footer of vocabulary options")
             })
             Section(content: {
                 Stepper(
@@ -42,13 +42,14 @@ struct VocabularyOptionsArea: View {
                     step: 1
                 ) {
                     Text(
-                        "Show **\(bindableSettings.vocabHistory)** level of your vocabulary"
+                        "Show **\(bindableSettings.vocabHistory)** level of your vocabulary",
+                        comment: "Describe to the user the number of history levels"
                     )
                 }
             }, header: {
-                Text("History")
+                Text("History", comment: "Header for settings about history")
             }, footer: {
-                Text("This is the number of levels of your phrases to show at once.")
+                Text("This is the number of levels of your phrases to show at once.", comment: "Footer for settings about history")
             })
         }
         .navigationTitle(

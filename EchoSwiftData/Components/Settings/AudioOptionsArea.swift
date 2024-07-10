@@ -17,8 +17,8 @@ struct DirectionPicker: View {
         VStack(alignment: .leading) {
             Text(labelText)
             Picker(labelText, selection: $selection, content: {
-                Text("Left Channel").tag(AudioDirection.left)
-                Text("Right Channel").tag(AudioDirection.right)
+                Text("Left Channel", comment: "Label for picker of audio channels").tag(AudioDirection.left)
+                Text("Right Channel", comment: "Label for picker of audio channels").tag(AudioDirection.right)
             })
             .pickerStyle(.segmented)
         }

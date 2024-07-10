@@ -71,9 +71,9 @@ struct ErrorView: View {
         ZStack {}
             .alert(item: $errorHandling.currentAlert) { currentAlert in
                 Alert(
-                    title: Text("An Error Occurred"),
+                    title: Text("An Error Occurred", comment: "Title on errors popup"),
                     message: Text(currentAlert.message),
-                    dismissButton: .default(Text("Ok")) {
+                    dismissButton: .default(Text("Dismiss", comment: "Message on dismiss button for errors")) {
                         currentAlert.dismissAction?()
                     }
                 )
