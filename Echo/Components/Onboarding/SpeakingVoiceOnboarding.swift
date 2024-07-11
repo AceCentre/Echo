@@ -1,48 +1,25 @@
 //
 //  SpeakingVoiceOnboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 30/10/2023.
+//  Created by Gavin Henderson on 30/05/2024.
 //
 
 import Foundation
 import SwiftUI
 import AVKit
 
-struct SpeakingVoiceOnboarding: View {
-    @EnvironmentObject var voiceEngine: VoiceController
-    
+struct SpeakingVoiceOnboarding: View {    
     @State var speakingPitch: Double = 0
     @State var speakingVolume: Double = 0
     @State var speakingRate: Double = 0
     @State var speakingVoiceId: String = ""
     @State var speakingVoiceName: String = ""
     
-    func loadSettings() {
-        speakingPitch = Double(voiceEngine.speakingVoiceOptions.pitch)
-        speakingVolume = Double(voiceEngine.speakingVoiceOptions.volume)
-        speakingRate = Double(voiceEngine.speakingVoiceOptions.rate)
-    }
+    @Environment(Settings.self) var settings: Settings
+    @Environment(\.scenePhase) var scenePhase
     
-    func loadVoices() {
-        speakingVoiceId = voiceEngine.speakingVoiceOptions.voiceId
-        
-        let speakingVoice = AVSpeechSynthesisVoice(identifier: speakingVoiceId) ?? AVSpeechSynthesisVoice()
-        
-        speakingVoiceName = "\(speakingVoice.name) (\(getLanguage(speakingVoice.language)))"
-    }
-    
-    func save() {
-        let speakingVoice = VoiceOptions(
-            voiceId: speakingVoiceId,
-            rate: Float(speakingRate),
-            pitch: Float(speakingPitch),
-            volume: Float(speakingVolume)
-        )
-        
-        voiceEngine.speakingVoiceOptions = speakingVoice
-        voiceEngine.save()
-    }
+    @StateObject var voiceController = VoiceController()
     
     var body: some View {
         VStack {
@@ -62,36 +39,47 @@ struct SpeakingVoiceOnboarding: View {
                 VoiceOptionsArea(
                     title: "",
                     helpText: "",
-                    pitch: $speakingPitch,
                     rate: $speakingRate,
                     volume: $speakingVolume,
                     voiceId: $speakingVoiceId,
                     voiceName: $speakingVoiceName,
                     playSample: {
-                        let cueVoice = VoiceOptions(
-                            voiceId: speakingVoiceId,
-                            rate: Float(speakingRate),
-                            pitch: Float(speakingPitch),
-                            volume: Float(speakingVolume)
+                        voiceController.playSpeaking(
+                            String(
+                                localized: "Thank you for using Echo, this is your speaking voice",
+                                comment: "This is text is read aloud by the Text-To-Speech system as a preview"
+                            )
                         )
-                        voiceEngine.play(String(
-                            localized: "Thank you for using Echo, this is your cue voice",
-                            comment: "This is text is read aloud by the Text-To-Speech system as a preview"
-                        ), voiceOptions: cueVoice, pan: AudioDirection.center.pan)
                     }
                 )
             }
             .scrollContentBackground(.hidden)
         }
         .onAppear {
-            loadSettings()
-            
-            if speakingVoiceId == "" {
-                loadVoices()
+            if let unwrapped = settings.speakingVoice {
+                speakingRate = unwrapped.rate
+                speakingVolume = unwrapped.volume
+                speakingVoiceId = unwrapped.voiceId
+                speakingVoiceName = unwrapped.voiceName
             }
+            
+            voiceController.loadSettings(settings)
+            voiceController.setPhase(scenePhase)
         }
-        .onDisappear {
-            save()
+        .onChange(of: speakingRate) {
+            settings.speakingVoice?.rate = speakingRate
+        }
+        .onChange(of: speakingVolume) {
+            settings.speakingVoice?.volume = speakingVolume
+        }
+        .onChange(of: speakingVoiceId) {
+            settings.speakingVoice?.voiceId = speakingVoiceId
+        }
+        .onChange(of: speakingVoiceName) {
+            settings.speakingVoice?.voiceName = speakingVoiceName
+        }
+        .onChange(of: scenePhase) {
+            voiceController.setPhase(scenePhase)
         }
     }
 }

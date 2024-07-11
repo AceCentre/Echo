@@ -1,15 +1,15 @@
 //
 //  Swipe.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 27/10/2023.
+//  Created by Gavin Henderson on 31/05/2024.
 //
 
 import Foundation
 import SwiftUI
 
 struct SwipeOnboarding: View {
-    @EnvironmentObject var access: AccessOptions
+    @Environment(Settings.self) var settings: Settings
     
     var body: some View {
         VStack {
@@ -21,7 +21,7 @@ struct SwipeOnboarding: View {
                         .resizable()
                         .frame(width: 200, height: 200)
                         .foregroundStyle(Color("aceBlue"))
-                    if !access.allowSwipeGestures {
+                    if !settings.allowSwipeGestures {
                         Image("Slash")
                             .resizable()
                             .frame(width: 200, height: 200)
@@ -44,7 +44,8 @@ struct SwipeOnboarding: View {
                     comment: "Explaination of swipe controls"
                 )
             )
-            Picker(String(localized: "Swipe Gestures", comment: "Label for swipe picker"), selection: access.$allowSwipeGestures) {
+            @Bindable var settingsBindable = settings
+            Picker(String(localized: "Swipe Gestures", comment: "Label for swipe picker"), selection: $settingsBindable.allowSwipeGestures) {
                 Text("Disable", comment: "Label to disable swipe").tag(false)
                 Text("Enable", comment: "Label to enable swipe").tag(true)
             }

@@ -1,17 +1,20 @@
 //
 //  ScanningOnboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 30/10/2023.
+//  Created by Gavin Henderson on 30/05/2024.
 //
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct ScanningOnboarding: View {
-    @EnvironmentObject var scanningOptions: ScanningOptions
+    @Environment(Settings.self) var settings: Settings
     
     var body: some View {
+        @Bindable var settingsBindable = settings
+        
         VStack {
             VStack {
                 ZStack {
@@ -23,7 +26,7 @@ struct ScanningOnboarding: View {
                         ))
                         .frame(width: 69, height: 100)
                         .foregroundStyle(Color("aceBlue"))
-                    if !scanningOptions.scanning {
+                    if !settingsBindable.scanning {
                         Image("Slash")
                             .resizable()
                             .frame(width: 89, height: 120)
@@ -53,17 +56,17 @@ struct ScanningOnboarding: View {
                             localized: "Scanning",
                             comment: "Label for toggle to turn scanning off and on"
                         ),
-                        isOn: $scanningOptions.scanning
+                        isOn: $settingsBindable.scanning
                     )
-                    if scanningOptions.scanning {
+                    if settingsBindable.scanning {
                         VStack {
                             HStack {
                                 Text("Scanning speed", comment: "Slider label to control the speed of scanning")
                                 Spacer()
-                                Text(String(format: "%.1f", scanningOptions.scanWaitTime) + "s")
+                                Text(String(format: "%.1f", settingsBindable.scanWaitTime) + "s")
                             }
                             Slider(
-                                value: $scanningOptions.scanWaitTime,
+                                value: $settingsBindable.scanWaitTime,
                                 in: 0.3...10,
                                 step: 0.1
                             )
@@ -80,14 +83,14 @@ struct ScanningOnboarding: View {
                                 localized: "Scan on app launch",
                                 comment: "Label for toggle that controls when scanning starts"
                             ),
-                            isOn: $scanningOptions.scanOnAppLaunch
+                            isOn: $settingsBindable.scanOnAppLaunch
                         )
                         Toggle(
                             String(
                                 localized: "Scan after selection",
                                 comment: "Label for toggle that controls when scanning starts"
                             ),
-                            isOn: $scanningOptions.scanAfterSelection
+                            isOn: $settingsBindable.scanAfterSelection
                         )
                     }
                     

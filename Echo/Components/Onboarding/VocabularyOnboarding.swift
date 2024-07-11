@@ -1,17 +1,24 @@
 //
 //  VocabularyOnboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 19/02/2024.
+//  Created by Gavin Henderson on 24/05/2024.
 //
 
 import SwiftUI
+import SwiftData
 
 struct VocabularyOnboarding: View {
-    @EnvironmentObject var itemsList: ItemsList
+    @Environment(Settings.self) var settings: Settings
+    
+    @Query(filter: #Predicate<Vocabulary> { vocab in
+        vocab.systemVocab == true
+    }, sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
+    
+    @State var selectedVocab = Vocabulary(name: "temp", rootNode: Node(type: .root))
     
     var body: some View {
-        VStack {
+        VStack { 
             VStack {
                 Spacer()
                 ZStack {
@@ -41,15 +48,23 @@ struct VocabularyOnboarding: View {
                             localized: "Vocabulary",
                             comment: "The label that is shown next to the vocab picker"
                         ),
-                        selection: itemsList.$vocabulary
+                        selection: $selectedVocab
                     ) {
-                        ForEach(Vocabulary.allCases) { vocab in
-                            Text(vocab.tree.name).tag(vocab)
+                        ForEach(allVocabs, id: \.self) { vocab in
+                            Text(vocab.name).tag(vocab)
                         }
                     }
                 })
             }
             .scrollContentBackground(.hidden)
+            .onAppear {
+                if let unwrapped = settings.currentVocab {
+                    selectedVocab = unwrapped
+                }
+            }
+            .onChange(of: selectedVocab) {
+                settings.currentVocab = selectedVocab
+            }
 
         }
 

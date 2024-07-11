@@ -1,8 +1,8 @@
 //
-//  VoiceOptions.swift
-//  Echo
+//  VoiceOptionsDisplay.swift
+// Echo
 //
-//  Created by Gavin Henderson on 04/10/2023.
+//  Created by Gavin Henderson on 29/05/2024.
 //
 
 import Foundation
@@ -12,7 +12,6 @@ struct VoiceOptionsArea: View {
     var title: String
     var helpText: String
     
-    @Binding var pitch: Double
     @Binding var rate: Double
     @Binding var volume: Double
     @Binding var voiceId: String
@@ -50,26 +49,7 @@ struct VoiceOptionsArea: View {
                 }
                
             })
-            VStack {
-                HStack {
-                    Text(
-                        "Pitch",
-                        comment: "Label for a slider that controls the pitch of a voice"
-                    )
-                    Spacer()
-                    Text(String(Int(pitch)))
-                        .foregroundStyle(.gray)
-                }
-                Slider(
-                    value: $pitch,
-                    in: 0...100,
-                    onEditingChanged: { isEditing in
-                        if isEditing == false {
-                            playSample()
-                        }
-                    }
-                )
-            }
+            
             VStack {
                 HStack {
                     Text(

@@ -1,8 +1,8 @@
 //
 //  VoicePicker.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 29/09/2023.
+//  Created by Gavin Henderson on 29/05/2024.
 //
 
 import Foundation
@@ -28,7 +28,7 @@ struct VoicePicker: View {
                         Button(action: {
                             voiceId = voice.identifier
                             voiceName = "\(voice.name) (\(getLanguage(voice.language)))"
-                            presentationMode.wrappedValue.dismiss()  
+                            presentationMode.wrappedValue.dismiss()
                         }, label: {
                             HStack {
                                 Text(voice.name)
@@ -47,40 +47,5 @@ struct VoicePicker: View {
             }
             
         }
-    }
-}
-
-private struct PreviewWrapper: View {
-    @State var voiceId = ""
-    @State var voiceName = ""
-    
-    var body: some View {
-        NavigationStack {
-            Text("Main Page")
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        navigationDestination(isPresented: .constant(true), destination: {
-                            VoicePicker(
-                                voiceId: $voiceId,
-                                voiceName: $voiceName
-                            )
-                        })
-                        
-                    }
-                }
-                .navigationTitle("Voice Options")
-                .navigationBarTitleDisplayMode(.inline)
-            
-        }
-        
-    }
-}
-
-// periphery:ignore
-struct VoicePickerPage_Previews: PreviewProvider {
-    static var previews: some SwiftUI.View {
-        PreviewWrapper().preferredColorScheme(.light)
-        PreviewWrapper().preferredColorScheme(.dark)
-        
     }
 }

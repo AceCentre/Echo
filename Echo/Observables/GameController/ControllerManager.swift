@@ -1,8 +1,8 @@
 //
 //  ControllerManager.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 18/12/2023.
+//  Created by Gavin Henderson on 10/07/2024.
 //
 
 import Foundation
@@ -11,8 +11,7 @@ import GameController
 class ControllerManager: ObservableObject {
     @Published var controllers: [CustomGameController] = []
 
-    var itemsList: ItemsList?
-    var analytics: Analytics?
+    var mainCommunicationPageState: MainCommunicationPageState?
     
     var keyMap: [String: KeyStage] = [:]
     var workItemsMap: [String: DispatchWorkItem] = [:]
@@ -25,13 +24,10 @@ class ControllerManager: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(resetControllers), name: NSNotification.Name.GCControllerDidDisconnect, object: nil)
     }
     
-    func loadItems(_ itemsList: ItemsList) {
-        self.itemsList = itemsList
+    func loadMainCommunicationPageState(_ mainCommunicationPageState: MainCommunicationPageState) {
+        self.mainCommunicationPageState = mainCommunicationPageState
     }
     
-    func loadAnalytics(_ analytics: Analytics) {
-        self.analytics = analytics
-    }
     
     @objc
     func resetControllers() {
@@ -41,9 +37,6 @@ class ControllerManager: ObservableObject {
         
         for controller in controllers {
             controller.responder = { (button: ControllerButton, pressed: Bool) in
-                if pressed {
-                    self.analytics?.gamePadButtonPress(controllerName: controller.displayName, buttonName: button.displayName)
-                }
                 
                 let buttonName = "\(controller.displayName)-\(button.displayName)"
                 
@@ -63,7 +56,7 @@ class ControllerManager: ObservableObject {
                         if keyStage == .pressed {
                             self.keyMap.updateValue(.held, forKey: buttonName)
                             
-                            self.itemsList?.doAction(action: button.holdAction)
+                            self.mainCommunicationPageState?.doAction(action: button.holdAction)
                         }
                     })
                     
@@ -76,13 +69,13 @@ class ControllerManager: ObservableObject {
                 if !pressed {
                     // Normal length press
                     if currentKeyStage == .pressed {
-                        self.itemsList?.doAction(action: button.tapAction)
+                        self.mainCommunicationPageState?.doAction(action: button.tapAction)
                     }
                     
                     // The key was held for longer than the threshold
                     if currentKeyStage == .held {
                         if button.holdAction == .fast {
-                            self.itemsList?.stopFastScan()
+                            self.mainCommunicationPageState?.stopFastScan()
                         }
                     }
                     

@@ -1,20 +1,19 @@
 //
 //  Rating.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 03/11/2023.
+//  Created by Gavin Henderson on 24/06/2024.
 //
 
 import Foundation
 import SwiftUI
-import SharedEcho
 import StoreKit
 
 class Rating: ObservableObject {
     var ratingsPromptIntervals = [10, 30, 50]
     
-    @AppStorage(StorageKeys.numberOfOpens) var numberOfOpens: Int = 0
-    @AppStorage(StorageKeys.numberOfRatingPromptsShown) var numberOfRatingPromptsShown: Int = 0
+    @AppStorage("numberOfOpens") var numberOfOpens: Int = 0
+    @AppStorage("numberOfRatingPromptsShown") var numberOfRatingPromptsShown: Int = 0
     
     func shouldShowRating() -> Bool {
         if numberOfRatingPromptsShown >= ratingsPromptIntervals.count {

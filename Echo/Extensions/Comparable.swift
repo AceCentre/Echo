@@ -1,8 +1,8 @@
 //
 //  Comparable.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 05/10/2023.
+//  Created by Gavin Henderson on 05/07/2024.
 //
 
 import Foundation

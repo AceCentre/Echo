@@ -1,8 +1,8 @@
 //
 //  BottomText.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 27/10/2023.
+//  Created by Gavin Henderson on 24/05/2024.
 //
 
 import Foundation

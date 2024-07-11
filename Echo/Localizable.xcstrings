@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "**Cue Voice**" : {
       "comment" : "Label for the cue voice during onboarding"
     },
@@ -15,6 +12,9 @@
     },
     "**Word and Letter Prediction**" : {
       "comment" : "Label for the prediction during onboarding"
+    },
+    "%@" : {
+
     },
     "%lld" : {
 
@@ -43,9 +43,6 @@
     "Add Switch" : {
       "comment" : "Button label to add a new switch to the list"
     },
-    "Allow tracking" : {
-      "comment" : "Label to enable swipe"
-    },
     "Alphabet Order" : {
       "comment" : "The label that is shown next to the alphabet order picker"
     },
@@ -56,19 +53,7 @@
       "comment" : "Accesibility label for logo"
     },
     "An Error Occurred" : {
-
-    },
-    "Analytics" : {
-      "comment" : "Label for analytics picker\nThe label for the section about analytics"
-    },
-    "Analytics & Telemetry" : {
-      "comment" : "The navigation title for the Analytics & Telemetry options page"
-    },
-    "Analytics & Tracking" : {
-      "comment" : "Label for the navigation link to the tracking options page"
-    },
-    "Analytics ID" : {
-      "comment" : "Label for the section that shows the users analytics ID"
+      "comment" : "Title on errors popup"
     },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
@@ -106,12 +91,6 @@
     "Clear all the inputted text" : {
       "comment" : "Label for action that happens on a keypress"
     },
-    "Collect Analytics" : {
-      "comment" : "Label for toggle to analytics off and on"
-    },
-    "Collect Analytics?" : {
-      "comment" : "Header for analytics onboarding page"
-    },
     "Contact Us" : {
       "comment" : "A link to the contact page"
     },
@@ -125,16 +104,19 @@
       "comment" : "Header for commands area"
     },
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
-      "comment" : "Description describing what switch access is\nFooter description describing what switch access is"
+      "comment" : "Description describing what switch access is"
     },
-    "Copied!" : {
-      "comment" : "Label thats shown when text is copied"
+    "Copy" : {
+      "comment" : "Text for copy vocabulary button"
     },
-    "Copy to clipboard" : {
-      "comment" : "Label thats shown prompting the user to copy text"
+    "Copy Vocabulary" : {
+      "comment" : "Alert title for copying vocab"
     },
     "Croatian (Experimental)" : {
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Cue Text" : {
+      "comment" : "Text field placeholder for cue text"
     },
     "Cue Voice" : {
       "comment" : "The heading for the options that control the cue voice"
@@ -163,29 +145,35 @@
     "Disable" : {
       "comment" : "Label to disable swipe"
     },
+    "Dismiss" : {
+      "comment" : "Message on dismiss button for errors"
+    },
     "Display" : {
       "comment" : "Label for display header in settings"
     },
     "Display control commands" : {
       "comment" : "Picker label for control commands"
     },
-    "Do not track" : {
-      "comment" : "Label to disable swipe"
+    "Display Text" : {
+      "comment" : "Text field placeholder for display text"
     },
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
-    },
-    "Echo does not currently support system accessibility controls. To use Echo please disable your system accessibility controls. We hope to improve this in the future." : {
-      "comment" : "An explaination to users using Voice over about how to use Echo"
-    },
-    "Echo is loading, thank you for waiting" : {
-      "comment" : "Text shown on loading screen."
     },
     "Echo prefixes some items with 'current sentence' and 'current word'. However, this might slow you down so you may choose to disable the prompt." : {
       "comment" : "Footer for the section in settings about prompts"
     },
     "Echo: Auditory Scanning" : {
       "comment" : "The main navigation title for the whole app"
+    },
+    "Edit" : {
+      "comment" : "Text for edit vocabulary button"
+    },
+    "Edit node display text" : {
+      "comment" : "Placeholder for text field"
+    },
+    "Editing Vocabulary: '%@'" : {
+      "comment" : "The main navigation title for editing page"
     },
     "Enable" : {
       "comment" : "Label to enable swipe"
@@ -195,9 +183,6 @@
     },
     "English" : {
       "comment" : "The label for the English language when setting prediction language"
-    },
-    "Enter Switch" : {
-
     },
     "Every Character Speaks Volumes" : {
       "comment" : "Explain what Echo is"
@@ -233,19 +218,13 @@
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
     "History" : {
-
+      "comment" : "Header for settings about history"
     },
     "Hold" : {
       "comment" : "The label that is shown next to the single hold action"
     },
-    "If enabled we collect analytics when the events listed below happen. We collect what your settings are and your basic device information. We will never sell or use your data for marketing purposes, its purely to help us to improve the app.\n\nEvents:\n%@" : {
-      "comment" : "A description of the analytics that we capture."
-    },
     "Initial Setup" : {
       "comment" : "Label for the navigation link to the initial options page"
-    },
-    "Label" : {
-
     },
     "Language" : {
       "comment" : "The label that is shown next to the language picker"
@@ -254,7 +233,7 @@
       "comment" : "Header for the language settings"
     },
     "Left Channel" : {
-
+      "comment" : "Label for picker of audio channels"
     },
     "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
       "comment" : "A description of how detecting switches works and how to reset it"
@@ -265,8 +244,11 @@
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
     },
-    "Main Page" : {
-      "comment" : "Placeholder text for preview"
+    "Make a copy of the current vocabulary so you can make edits." : {
+      "comment" : "Message for copying vocab alert"
+    },
+    "Make copy" : {
+      "comment" : "Button text for making copy of a vocabulary"
     },
     "Māori (Experimental)" : {
       "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
@@ -275,7 +257,13 @@
       "comment" : "The help text on the controller button"
     },
     "Message Bar Font Size" : {
-
+      "comment" : "Label for stepper for font size"
+    },
+    "Name of the new vocabulary" : {
+      "comment" : "TextField label for new vocabulary (hidden"
+    },
+    "New Switch" : {
+      "comment" : "The navigation title when adding a given switch."
     },
     "Next" : {
       "comment" : "The label for the to go to the next onboarding step"
@@ -283,14 +271,8 @@
     "No game controller connect to device. Please connect a controller to access these settings" : {
       "comment" : "Notification of no game controllers connected"
     },
-    "Node Type" : {
-
-    },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
-    },
-    "Ok" : {
-
     },
     "On Screen Arrows?" : {
       "comment" : "Getting started onboarding"
@@ -300,12 +282,6 @@
     },
     "Onscreen Arrows" : {
       "comment" : "Label for onboarding picker"
-    },
-    "Open" : {
-      "comment" : "Label for open button (preview only)"
-    },
-    "Pitch" : {
-      "comment" : "Label for a slider that controls the pitch of a voice"
     },
     "Play Sample" : {
       "comment" : "Label for button that plays an audio sample"
@@ -341,10 +317,10 @@
       "comment" : "Prompt for required text input"
     },
     "Right Channel" : {
-
+      "comment" : "Label for picker of audio channels"
     },
     "Save" : {
-      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
+      "comment" : "Save button text for saving vocab changes\nThe label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -371,7 +347,7 @@
       "comment" : "Label for action that happens on a keypress"
     },
     "Select the vocabulary of phrases, words and letters to be used" : {
-
+      "comment" : "Footer of vocabulary options"
     },
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
@@ -383,7 +359,7 @@
       "comment" : "Label to show arrows"
     },
     "Show **%lld** level of your vocabulary" : {
-
+      "comment" : "Describe to the user the number of history levels"
     },
     "Show on-screen arrows" : {
       "comment" : "Label for toggle for on screen arrows"
@@ -393,9 +369,6 @@
     },
     "Skip" : {
       "comment" : "The label for the button to exit onboarding"
-    },
-    "Space Switch" : {
-
     },
     "Spanish (Experimental)" : {
       "comment" : "The label for the Spanish language when setting prediction language, make sure to include the experimental tag"
@@ -412,6 +385,9 @@
     "Spelling & Alphabet Options" : {
       "comment" : "The navigation title for the Spelling & Alphabet options page"
     },
+    "Spoken Text" : {
+      "comment" : "Text field placeholder for spoken text"
+    },
     "Start of list" : {
       "comment" : "Picker option for control command"
     },
@@ -426,9 +402,6 @@
     },
     "Swipe?" : {
       "comment" : "Header for swipe onboarding page"
-    },
-    "Switch %lld" : {
-      "comment" : "The default switch name"
     },
     "Switch Control" : {
       "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"
@@ -445,20 +418,29 @@
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
     },
-    "temp" : {
-
+    "Text that is displayed in the tree" : {
+      "comment" : "Footer for editing display text"
     },
-    "Temp, picker here" : {
-
+    "Text that is read in the cue voice" : {
+      "comment" : "Footer for editing cue text"
+    },
+    "Text that is read in the spoken voice when selected" : {
+      "comment" : "Footer for editing spoken text"
     },
     "Thank you for using Echo, this is your cue voice" : {
       "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
     },
-    "Thank you for using Echo, this is your speaking voice." : {
+    "Thank you for using Echo, this is your speaking voice" : {
       "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"
     },
     "The control commands are commands like backspace and clear. They can be shown the list of items and selected." : {
       "comment" : "Footer for commands area"
+    },
+    "The copy and edit button are disabled because you cannot copy or edit the spelling vocabulary. Click the spelling and alphabet tab to change spelling options." : {
+      "comment" : "Explanation of why the copy button on the vocab is disabled"
+    },
+    "The edit button is currently disabled because you are trying to edit a system vocabulary. To edit this vocabulary you must make a copy first." : {
+      "comment" : "Explanation of why the edit button on the vocab is disabled"
     },
     "The language chosen here will change the alphabet that is shown and will change which words are used for prediction" : {
       "comment" : "Footer for the language settings"
@@ -466,23 +448,14 @@
     "The length of time that Echo will wait before moving onto the next item" : {
       "comment" : "A description of what scanning speed does"
     },
-    "The node type indicates what will happen when you select the specific node" : {
-
-    },
-    "The text that is displayed and read aloud for the given node." : {
-
-    },
     "The voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
       "comment" : "Explanation of cuevoice during onboarding"
     },
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"
     },
-    "This ID is used to identify you in the analytics collected. Do not share it unless you are willing to be identified." : {
-      "comment" : "Explanation of what an ID is"
-    },
     "This is the number of levels of your phrases to show at once." : {
-
+      "comment" : "Footer for settings about history"
     },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"
@@ -514,35 +487,11 @@
     "Volume" : {
       "comment" : "Label for a slider that controls the volume of a voice"
     },
-    "We collect analytics to help us improve the app. All data is anonymised and never shared with any third party." : {
-      "comment" : "Explaination of analytics controls"
-    },
     "Welcome to **Echo**" : {
       "comment" : "Welcome message in onboarding"
     },
     "Welsh (Experimental)" : {
       "comment" : "The label for the Welsh language when setting prediction language, make sure to include the experimental tag"
-    },
-    "When something is read out in the cue voice" : {
-      "comment" : "A label for an analytics event"
-    },
-    "When something is read out in the speaking voice" : {
-      "comment" : "A label for an analytics event"
-    },
-    "When the app is opened" : {
-      "comment" : "A label for an analytics event"
-    },
-    "When you complete the initial onboarding steps." : {
-      "comment" : "A label for an analytics event"
-    },
-    "When you enter a full word we log if it was predicted or not. We do not log the word" : {
-      "comment" : "A label for an analytics event"
-    },
-    "When you enter a letter we log if it was predicted or not. We do not log the word" : {
-      "comment" : "A label for an analytics event"
-    },
-    "When you press a switch, use the arrow or swipe on the screen" : {
-      "comment" : "A label for an analytics event"
     },
     "Word and Letter Prompt" : {
       "comment" : "Label for the section in settings about prompts"

@@ -1,28 +1,35 @@
 //
 //  PredictionOnboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 30/10/2023.
+//  Created by Gavin Henderson on 30/05/2024.
 //
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct PredictionOnboarding: View {
-    @EnvironmentObject var spellingOptions: SpellingOptions
-    
+    @Environment(Settings.self) var settings: Settings
+
     @State var prediction: Bool = true
+    @State var allWordPrediction: Bool = true
     @State var showIndividualPredictionOptions: Bool = false
     
     func initState() {
-        if spellingOptions.wordPrediction == spellingOptions.letterPrediction {
-            prediction = spellingOptions.wordPrediction
+        if settings.wordPrediction == settings.letterPrediction {
+            prediction = settings.wordPrediction
         } else {
             showIndividualPredictionOptions = true
         }
+        
+        allWordPrediction = settings.wordPrediction
+        settings.appleWordPrediction = settings.wordPrediction
     }
     
     var body: some View {
+        @Bindable var settingsBindable = settings
+
         VStack {
             VStack {
                 Spacer()
@@ -31,7 +38,7 @@ struct PredictionOnboarding: View {
                         .resizable()
                         .frame(width: 200, height: 144)
                         .foregroundStyle(Color("aceBlue"))
-                    if !prediction || (!spellingOptions.allWordPrediction && !spellingOptions.letterPrediction) {
+                    if !prediction || (!settings.wordPrediction && !settings.appleWordPrediction && !settings.letterPrediction) {
                         Image("Slash")
                             .resizable()
                             .frame(width: 200, height: 200)
@@ -57,20 +64,21 @@ struct PredictionOnboarding: View {
             }.padding()
             Form {
                 Section(content: {
+                    @Bindable var settingsBindable = settings
                     if showIndividualPredictionOptions {
                         Toggle(
                             String(
                                 localized: "Letter prediction",
                                 comment: "Label for toggle to turn letter based prediction off and on"
                             ),
-                            isOn: spellingOptions.$letterPrediction
+                            isOn: $settingsBindable.letterPrediction
                         )
                         Toggle(
                             String(
                                 localized: "Word prediction",
                                 comment: "Label for toggle to turn word prediction off and on"
                             ),
-                            isOn: $spellingOptions.allWordPrediction
+                            isOn: $allWordPrediction
                         )
                     } else {
                         Toggle(
@@ -86,10 +94,10 @@ struct PredictionOnboarding: View {
                             localized: "Predition Language",
                             comment: "The label that is shown next to the language picker"
                         ),
-                        selection: spellingOptions.$predictionLanguage
+                        selection: $settingsBindable.predictionLanguage
                     ) {
-                        ForEach(PredictionLanguage.allLanguages) { language in
-                            Text(language.display).tag(language.id)
+                        ForEach(PredictionLanguage.allCases) { language in
+                            Text(language.display).tag(language)
                         }
                     }
                 })
@@ -99,8 +107,13 @@ struct PredictionOnboarding: View {
                 initState()
             }
             .onChange(of: prediction) {
-                spellingOptions.allWordPrediction = prediction
-                spellingOptions.letterPrediction = prediction
+                settings.wordPrediction = prediction
+                settings.appleWordPrediction = prediction
+                settings.letterPrediction = prediction
+            }
+            .onChange(of: allWordPrediction) {
+                settings.wordPrediction = allWordPrediction
+                settings.appleWordPrediction = allWordPrediction
             }
         }
     }

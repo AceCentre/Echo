@@ -1,16 +1,17 @@
 //
 //  ScrollLock.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 26/09/2023.
+//  Created by Gavin Henderson on 01/07/2024.
 //
 
 import Foundation
 import SwiftUI
 import SwiftUIIntrospect
+import SwiftData
 
 struct HorizontalScrollLock<Content: View>: SwiftUI.View {
-    var selectedUUID: UUID
+    var selectedNode: Node?
     var locked: Bool = true
     
     @ViewBuilder var content: Content
@@ -20,7 +21,7 @@ struct HorizontalScrollLock<Content: View>: SwiftUI.View {
             ScrollView([.horizontal]) {
                 HStack {
                     content
-                        .onChange(of: selectedUUID) {
+                        .onChange(of: selectedNode) {
                             withAnimation {
                                 scrollControl.scrollTo("FINAL_ID", anchor: .trailing)
                             }
@@ -51,19 +52,19 @@ struct HorizontalScrollLock<Content: View>: SwiftUI.View {
     Renders a ScrollView and keeps the given UUID always in the center of the scroll area
  */
 struct ScrollLock<Content: View>: SwiftUI.View {
-    var selectedUUID: UUID
+    var selectedNode: Node?
     var locked: Bool = true
     @ViewBuilder var content: Content
 
     var body: some View {
         ScrollViewReader { scrollControl in
             content
-                .onChange(of: selectedUUID) {
+                .onChange(of: selectedNode) {
                     withAnimation {
-                        scrollControl.scrollTo(selectedUUID, anchor: .center)
+                        scrollControl.scrollTo(selectedNode, anchor: .center)
                     }
                 }.onAppear {
-                    scrollControl.scrollTo(selectedUUID, anchor: .center)
+                    scrollControl.scrollTo(selectedNode, anchor: .center)
                 }.scrollDisabled(locked)
         }
         .introspect(.scrollView, on: .iOS(.v17)) { scrollView in

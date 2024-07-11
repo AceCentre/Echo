@@ -1,8 +1,8 @@
 //
 //  ButtonDefaults.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 18/12/2023.
+//  Created by Gavin Henderson on 10/07/2024.
 //
 
 import Foundation
@@ -45,7 +45,7 @@ enum ButtonDefaults: String {
     case triangle = "Triangle Button"
     case cross = "Cross Button"
     
-    var tapAction: Action {
+    var tapAction: SwitchAction {
         switch self {
         case .a:
             return .select
@@ -108,7 +108,7 @@ enum ButtonDefaults: String {
         }
     }
     
-    var holdAction: Action {
+    var holdAction: SwitchAction {
         switch self {
         case .a:
             return .none

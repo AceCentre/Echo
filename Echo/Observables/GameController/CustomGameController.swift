@@ -1,8 +1,8 @@
 //
-//  CustomGameController.swift
-//  Echo
+//  GameController.swift
+// Echo
 //
-//  Created by Gavin Henderson on 18/12/2023.
+//  Created by Gavin Henderson on 10/07/2024.
 //
 
 import Foundation
@@ -25,8 +25,8 @@ class CustomGameController: Identifiable {
     }
     
     func save() {
-        var tapButtonMap: [String: Action] = [:]
-        var holdButtonMap: [String: Action] = [:]
+        var tapButtonMap: [String: SwitchAction] = [:]
+        var holdButtonMap: [String: SwitchAction] = [:]
         
         for button in buttons {
             tapButtonMap.updateValue(button.tapAction, forKey: button.displayName)
@@ -46,13 +46,13 @@ class CustomGameController: Identifiable {
     }
     
     func load() {
-        var tapButtonMap: [String: Action] = [:]
-        var holdButtonMap: [String: Action] = [:]
+        var tapButtonMap: [String: SwitchAction] = [:]
+        var holdButtonMap: [String: SwitchAction] = [:]
         
         if let tapData = UserDefaults.standard.data(forKey: "\(id)-tap-controller") {
             do {
                 let decoder = JSONDecoder()
-                tapButtonMap = try decoder.decode([String: Action].self, from: tapData)
+                tapButtonMap = try decoder.decode([String: SwitchAction].self, from: tapData)
             } catch {
                 print("Failed to load your settings")
             }
@@ -61,7 +61,7 @@ class CustomGameController: Identifiable {
         if let holdData = UserDefaults.standard.data(forKey: "\(id)-hold-controller") {
             do {
                 let decoder = JSONDecoder()
-                holdButtonMap = try decoder.decode([String: Action].self, from: holdData)
+                holdButtonMap = try decoder.decode([String: SwitchAction].self, from: holdData)
             } catch {
                 print("Failed to load your settings")
             }
@@ -135,7 +135,7 @@ class CustomGameController: Identifiable {
             )
             buttons.append(rightButton)
             
-            let dPadHandler: GCControllerDirectionPadValueChangedHandler = { button, _, _ in                
+            let dPadHandler: GCControllerDirectionPadValueChangedHandler = { button, _, _ in
                 if let unwrappedResponser = self.responder {
                     if self.down != button.down.value {
                         unwrappedResponser(downButton, button.down.value != 0)

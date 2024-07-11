@@ -1,55 +1,21 @@
 //
-//  File.swift
-//  Echo
+//  SettingsPage.swift
+// Echo
 //
-//  Created by Gavin Henderson on 28/09/2023.
+//  Created by Gavin Henderson on 07/06/2024.
 //
 
 import Foundation
 import SwiftUI
 
-struct ExternalLinksSection: View {
-    var body: some View {
-        if
-            let docsUrl = URL(string: "https://docs.acecentre.org.uk/products/v/echo"),
-            let contactUrl = URL(string: "https://acecentre.org.uk/contact"),
-            let aboutUrl = URL(string: "https://acecentre.org.uk/about")
-        {
-            Section {
-                Link(String(
-                    localized: "Read Documentation",
-                    comment: "A link to the external documentation"
-                ), destination: docsUrl)
-                Link(String(
-                    localized: "Contact Us",
-                    comment: "A link to the contact page"
-                ), destination: contactUrl)
-                Link(String(
-                    localized: "About Us",
-                    comment: "A link to the about page"
-                ), destination: aboutUrl)
-            }
-        }
-    }
-}
-
-struct ExternalLinksForm: View {
-    var body: some View {
-        VStack {
-            Form {
-                ExternalLinksSection()
-            }
-        }
-    }
-}
 
 enum SettingsPath: CaseIterable, Identifiable {
-    case voice, access, scanning, spelling, analytics, onboarding, externalLinks, audio, vocabulary
+    case voice, access, scanning, spelling, onboarding, externalLinks, audio, vocabulary
     
     // periphery:ignore
-    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary]
+    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary]
     // periphery:ignore
-    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .analytics, .audio, .vocabulary, .onboarding, .externalLinks]
+    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary, .onboarding, .externalLinks]
     
     var id: String {
         switch self {
@@ -57,7 +23,6 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .access: return "access"
         case .scanning: return "scanning"
         case .spelling: return "spelling"
-        case .analytics: return "analytics"
         case .onboarding: return "onboarding"
         case .externalLinks: return "external"
         case .audio: return "audio"
@@ -67,15 +32,14 @@ enum SettingsPath: CaseIterable, Identifiable {
     
     @ViewBuilder var page: some View {
         switch self {
-        case .voice: VoiceSelectionPage()
-        case .access: AccessOptionsPage()
-        case .scanning:  ScanningOptionsPage()
-        case .spelling: SpellingAndAlphabetPage()
-        case .analytics: AnalyticsOptions()
+        case .voice: VoiceSelectionArea()
+        case .access: AccessOptionsArea()
+        case .scanning: ScanningOptionsArea()
+        case .spelling: SpellingOptionsArea()
         case .onboarding: OnboardingSettingsPage()
         case .externalLinks: ExternalLinksForm()
-        case .audio: AudioPage()
-        case .vocabulary: VocabularyPage()
+        case .audio: AudioOptionsArea()
+        case .vocabulary: VocabularyOptionsArea()
         }
     }
     
@@ -96,10 +60,6 @@ enum SettingsPath: CaseIterable, Identifiable {
         case .spelling: return String(
             localized: "Spelling & Alphabet",
             comment: "Label for the navigation link to the spelling, alphabet and predictions options page"
-        )
-        case .analytics: return String(
-            localized: "Analytics & Tracking",
-            comment: "Label for the navigation link to the tracking options page"
         )
         case .onboarding: return String(
             localized: "Initial Setup",
@@ -168,9 +128,10 @@ struct SettingsPagePhone: View {
 }
 
 struct SettingsPagePad: View {
-    @State private var selection: SettingsPath? = .voice
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+        
+    @Binding var selection: SettingsPath?
+
     var body: some View {
         NavigationSplitView {
             List(SettingsPath.allPadPages, id: \.self, selection: $selection) { path in
@@ -180,7 +141,7 @@ struct SettingsPagePad: View {
             if let unwrappedSelection = selection {
                 unwrappedSelection.page
             } else {
-                VoiceSelectionPage()
+                VoiceSelectionArea()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -205,14 +166,17 @@ struct SettingsPagePad: View {
     }
 }
 
-// Not a huge fan of this if im honest
 struct SettingsPage: View {
-    @EnvironmentObject var rating: Rating
+    @StateObject var rating: Rating = Rating()
+    @StateObject var editState = EditState()
+    @State var selection: SettingsPath? = .voice
     
     var body: some View {
         ZStack {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                SettingsPagePad()
+            if editState.showEditMode {
+                EditPage(editState: editState)
+            } else if UIDevice.current.userInterfaceIdiom == .pad {
+                SettingsPagePad(selection: $selection)
             } else {
                 SettingsPagePhone()
             }
@@ -221,31 +185,6 @@ struct SettingsPage: View {
                 rating.openPrompt()
             }
         }
-    }
-}
-
-private struct PreviewWrapper: View {
-    var body: some View {
-        NavigationStack {
-            Text("Main Page")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    navigationDestination(isPresented: .constant(true), destination: {
-                        SettingsPage()
-                    })
-                    
-                }
-            }
-            .navigationTitle("Echo: Auditory Scanning")
-            
-        }
-        
-    }
-}
-
-// periphery:ignore
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some SwiftUI.View {
-        PreviewWrapper()
+        .environmentObject(editState)
     }
 }

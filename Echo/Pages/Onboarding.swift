@@ -1,8 +1,8 @@
 //
 //  Onboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 26/10/2023.
+//  Created by Gavin Henderson on 24/05/2024.
 //
 
 import Foundation
@@ -19,7 +19,6 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
     case onScreenArrows = 7
     case swipeOnboarding = 8
     case switchOnboarding = 9
-    case analytics = 10
 
     var id: String {
         switch self {
@@ -29,7 +28,6 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .swipeOnboarding: "swipe"
         case .cueVoice: "cueVoice"
         case .speakingVoice: "speakingVoice"
-        case .analytics: "analytics"
         case .prediction: "prediction"
         case .switchOnboarding: "switch"
         case .scanning: "Scanning"
@@ -45,7 +43,6 @@ enum OnboardingSteps: Int, CaseIterable, Identifiable {
         case .swipeOnboarding: SwipeOnboarding()
         case .cueVoice: CueVoiceOnboarding()
         case .speakingVoice: SpeakingVoiceOnboarding()
-        case .analytics: AnalyticsOnboarding()
         case .prediction: PredictionOnboarding()
         case .switchOnboarding: SwitchOnboarding()
         case .scanning: ScanningOnboarding()
@@ -58,7 +55,7 @@ struct OnboardingSettingsPage: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        Onboarding(endOnboarding: { _, _ in
+        Onboarding(endOnboarding: {
             self.presentationMode.wrappedValue.dismiss()
         })
     }
@@ -67,7 +64,7 @@ struct OnboardingSettingsPage: View {
 struct Onboarding: View {
     @State var currentPage: Int = 0
     @AccessibilityFocusState var isFocused: Bool
-    var endOnboarding: (_ pageNumber: Int, _ finishType: String) -> Void
+    var endOnboarding: () -> Void
     
     var body: some View {
         NavigationStack {
@@ -83,11 +80,10 @@ struct Onboarding: View {
                         ForEach(OnboardingSteps.allCases) { step in
                             VStack {
                                 step.page
-                                   
                                 HStack {
                                     if currentPage + 1 < OnboardingSteps.allCases.count {
                                         Button(action: {
-                                            endOnboarding(currentPage, "skip")
+                                            endOnboarding()
                                         }, label: {
                                             Text("Skip", comment: "The label for the button to exit onboarding")
                                         })
@@ -100,13 +96,12 @@ struct Onboarding: View {
                                         }).buttonStyle(NextButton())
                                     } else {
                                         Button(action: {
-                                            endOnboarding(currentPage, "completed")
+                                            endOnboarding()
                                         }, label: {
                                             Text("Done", comment: "The label for the button to exit onboarding")
                                         }).buttonStyle(NextButton())
                                     }
                                 }.padding(.vertical)
-                                
                             }
                             .accessibilityFocused($isFocused)
                             .padding(.bottom, 32)
@@ -118,36 +113,5 @@ struct Onboarding: View {
                 }.frame(maxWidth: 800)
             }
         }
-    }
-}
-
-struct OnboardingWrapper: View {
-    @StateObject var access: AccessOptions = AccessOptions()
-    @StateObject var voiceEngine: VoiceController = VoiceController()
-    @StateObject var analytics: Analytics = Analytics()
-    @StateObject var spelling: SpellingOptions = SpellingOptions()
-    @StateObject var scanning: ScanningOptions = ScanningOptions()
-    
-    var body: some View {
-        ZStack {
-            Onboarding(endOnboarding: { _, _ in
-                print("Done")
-            })
-        }
-        .environmentObject(access)
-        .environmentObject(voiceEngine)
-        .environmentObject(analytics)
-        .environmentObject(spelling)
-        .environmentObject(scanning)
-    }
-}
-
-// periphery:ignore
-struct Onboarding_Previews: PreviewProvider {
-    static var previews: some SwiftUI.View {
-        OnboardingWrapper()
-            .preferredColorScheme(.light)
-        OnboardingWrapper()
-            .preferredColorScheme(.dark)
     }
 }

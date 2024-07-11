@@ -1,8 +1,8 @@
 //
 //  ActionPicker.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 04/01/2024.
+//  Created by Gavin Henderson on 04/06/2024.
 //
 
 import Foundation
@@ -13,8 +13,8 @@ struct ActionPickerDestination: View {
     @Environment(\.colorScheme) var colorScheme
 
     var label: String
-    @Binding var selected: Action
-    var actions: [Action]
+    @Binding var selected: SwitchAction
+    var actions: [SwitchAction]
     
     var body: some View {
         Form {
@@ -46,26 +46,35 @@ struct ActionPickerDestination: View {
  */
 struct ActionPicker: View {
     var label: String
-    @Binding var selected: Action
-    var actions: [Action]
+//    var action: SwitchAction
+    var actions: [SwitchAction]
+    
+    var actionChange: (SwitchAction) -> Void
+    
+    @State var actionState: SwitchAction
+    
     
     var body: some View {
         NavigationStack {
             NavigationLink(destination: {
                 ActionPickerDestination(
                     label: label,
-                    selected: $selected,
+                    selected: $actionState,
                     actions: actions
                 )
             }, label: {
                 HStack {
                     Text(label)
                     Spacer()
-                    Text(selected.display)
+                    Text(actionState.display)
                         .foregroundStyle(.gray)
                 }
             })
+        }.onAppear {
+            // actionState = action
         }
-    
+        .onChange(of: actionState) {
+            actionChange(actionState)
+        }
     }
 }

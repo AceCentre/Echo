@@ -1,48 +1,26 @@
 //
 //  CueVoice.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 27/10/2023.
+//  Created by Gavin Henderson on 29/05/2024.
 //
+
+import Foundation
 
 import Foundation
 import SwiftUI
 import AVFAudio
 
 struct CueVoiceOnboarding: View {
-    @EnvironmentObject var voiceEngine: VoiceController
-    
-    @State var cuePitch: Double = 0
     @State var cueVolume: Double = 0
     @State var cueRate: Double = 0
     @State var cueVoiceId: String = ""
     @State var cueVoiceName: String = ""
     
-    func loadSettings() {
-        cuePitch = Double(voiceEngine.cueVoiceOptions.pitch)
-        cueVolume = Double(voiceEngine.cueVoiceOptions.volume)
-        cueRate = Double(voiceEngine.cueVoiceOptions.rate)
-    }
+    @Environment(Settings.self) var settings: Settings
+    @Environment(\.scenePhase) var scenePhase
     
-    func loadVoices() {
-        cueVoiceId = voiceEngine.cueVoiceOptions.voiceId
-        
-        let cueVoice = AVSpeechSynthesisVoice(identifier: cueVoiceId) ?? AVSpeechSynthesisVoice()
-        
-        cueVoiceName = "\(cueVoice.name) (\(getLanguage(cueVoice.language)))"
-    }
-    
-    func save() {
-        let cueVoice = VoiceOptions(
-            voiceId: cueVoiceId,
-            rate: Float(cueRate),
-            pitch: Float(cuePitch),
-            volume: Float(cueVolume)
-        )
-        
-        voiceEngine.cueVoiceOptions = cueVoice
-        voiceEngine.save()
-    }
+    @StateObject var voiceController = VoiceController()
     
     var body: some View {
         VStack {
@@ -62,36 +40,48 @@ struct CueVoiceOnboarding: View {
                 VoiceOptionsArea(
                     title: "",
                     helpText: "",
-                    pitch: $cuePitch,
                     rate: $cueRate,
                     volume: $cueVolume,
                     voiceId: $cueVoiceId,
                     voiceName: $cueVoiceName,
                     playSample: {
-                        let cueVoice = VoiceOptions(
-                            voiceId: cueVoiceId,
-                            rate: Float(cueRate),
-                            pitch: Float(cuePitch),
-                            volume: Float(cueVolume)
+                        voiceController.playCue(
+                            String(
+                                localized: "Thank you for using Echo, this is your cue voice",
+                                comment: "This is text is read aloud by the Text-To-Speech system as a preview"
+                            )
                         )
-                        voiceEngine.play(String(
-                            localized: "Thank you for using Echo, this is your cue voice",
-                            comment: "This is text is read aloud by the Text-To-Speech system as a preview"
-                        ), voiceOptions: cueVoice, pan: AudioDirection.center.pan)
                     }
                 )
             }
             .scrollContentBackground(.hidden)
         }
         .onAppear {
-            loadSettings()
-            
-            if cueVoiceId == "" {
-                loadVoices()
+            if let unwrapped = settings.cueVoice {
+                cueRate = unwrapped.rate
+                cueVolume = unwrapped.volume
+                cueVoiceId = unwrapped.voiceId
+                cueVoiceName = unwrapped.voiceName
             }
+            
+            voiceController.loadSettings(settings)
+            voiceController.setPhase(scenePhase)
         }
-        .onDisappear {
-            save()
+        .onChange(of: cueRate) {
+            settings.cueVoice?.rate = cueRate
         }
+        .onChange(of: cueVolume) {
+            settings.cueVoice?.volume = cueVolume
+        }
+        .onChange(of: cueVoiceId) {
+            settings.cueVoice?.voiceId = cueVoiceId
+        }
+        .onChange(of: cueVoiceName) {
+            settings.cueVoice?.voiceName = cueVoiceName
+        }
+        .onChange(of: scenePhase) {
+            voiceController.setPhase(scenePhase)
+        }
+        
     }
 }

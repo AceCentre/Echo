@@ -1,12 +1,13 @@
 //
 //  KeyPressController.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 13/10/2023.
+//  Created by Gavin Henderson on 09/07/2024.
 //
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 enum KeyStage {
     case unpressed, pressed, held
@@ -19,10 +20,10 @@ enum KeyStage {
  It then triggers the correct action for the given switch
  */
 struct KeyPressController: View {
-    @EnvironmentObject var items: ItemsList
-    @EnvironmentObject var accessOptions: AccessOptions
-    @EnvironmentObject var analytics: Analytics
-            
+    @ObservedObject var mainCommunicationPageState: MainCommunicationPageState
+    
+    @Query var switches: [Switch]
+    
     // This method does complain that 'Publishing changes from within view updates is not allowed,
     // this will cause undefined behavior.'
     // Im not sure why because im changing it in an onKeyPress function not a view update
@@ -37,12 +38,8 @@ struct KeyPressController: View {
             }
             
             // We only want to capture buttons that the user has specifed
-            guard let currentSwitch = accessOptions.listOfSwitches.first(where: { $0.key == currentKeyCode }) else {
+            guard let currentSwitch = switches.first(where: { $0.key == currentKeyCode }) else {
                 return
-            }
-            
-            if press.phase == .began {
-                analytics.userInteraction(type: "SwitchPress", extraInfo: keyToDisplay(currentKeyCode))
             }
             
             let currentKeyStage = keyMap[currentKeyCode] ?? .unpressed
@@ -62,7 +59,7 @@ struct KeyPressController: View {
                     if keyStage == .pressed {
                         self.keyMap.updateValue(.held, forKey: currentKeyCode)
                         
-                        items.doAction(action: currentSwitch.holdAction)
+                        mainCommunicationPageState.doAction(action: currentSwitch.holdAction)
                     }
                 })
                 
@@ -75,13 +72,13 @@ struct KeyPressController: View {
             if press.phase == .ended {
                 // Normal length press
                 if currentKeyStage == .pressed {
-                    self.items.doAction(action: currentSwitch.tapAction)
+                    mainCommunicationPageState.doAction(action: currentSwitch.tapAction)
                 }
                 
                 // The key was held for longer than the threshold
                 if currentKeyStage == .held {
                     if currentSwitch.holdAction == .fast {
-                        items.stopFastScan()
+                        mainCommunicationPageState.stopFastScan()
                     }
                 }
                 

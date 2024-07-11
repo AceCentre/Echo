@@ -1,95 +1,180 @@
 //
-//  EchoApp.swift
-//  Echo
+// EchoApp.swift
+// Echo
 //
-//  Created by Gavin Henderson on 14/07/2023.
+//  Created by Gavin Henderson on 23/05/2024.
 //
 
 import SwiftUI
-import SharedEcho
+import SwiftData
 
 @main
 struct EchoApp: App {
-    @StateObject var voiceEngine: VoiceController = VoiceController()
-    @StateObject var itemsList: ItemsList = ItemsList()
-    @StateObject var accessOptions: AccessOptions = AccessOptions()
-    @StateObject var scanningOptions: ScanningOptions = ScanningOptions()
-    @StateObject var spellingOptions: SpellingOptions = SpellingOptions()
-    @StateObject var analytics: Analytics = Analytics()
-    @StateObject var rating: Rating = Rating()
-    @StateObject var controllerManager = ControllerManager()
+    @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
     @StateObject var errorHandling = ErrorHandling()
-
-    @State var loading = true
-    
-    @Environment(\.scenePhase) var scenePhase
-    
-    @AppStorage(StorageKeys.showOnboarding) var showOnboarding = true
+    @StateObject var controllerManager = ControllerManager()
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                if loading {
-                    VStack {
-                        ProgressView()
-                        Text("Echo is loading, thank you for waiting", comment: "Text shown on loading screen.")
-                    }
-                } else {
-                    ContentView(showOnboarding: $showOnboarding)
-                }
-                ErrorView(errorHandling: errorHandling)
-            }
-                .environmentObject(errorHandling)
-                .environmentObject(voiceEngine)
-                .environmentObject(itemsList)
-                .environmentObject(accessOptions)
-                .environmentObject(scanningOptions)
-                .environmentObject(spellingOptions)
-                .environmentObject(analytics)
-                .environmentObject(rating)
-                .environmentObject(controllerManager)
-                .onAppear {
-                    loading = true
-                    voiceEngine.setPhase(scenePhase)
-                    #if DEBUG
-                    for current in StorageKeys.allowedViaTest {
-                        if let unwrappedValue = ProcessInfo.processInfo.environment[current] {
-                            UserDefaults.standard.setValue(unwrappedValue == "true", forKey: current)
-                        }
-                    }
-                    #endif
-                    
-                    rating.countOpen()
- 
-                    voiceEngine.load(analytics: analytics)
-                    accessOptions.load()
-                    
-                    itemsList.loadEngine(voiceEngine)
-                    itemsList.loadSpelling(spellingOptions)
-                    itemsList.loadScanning(scanningOptions)
-                    itemsList.loadErrorHandling(errorHandling)
-                    
-                    controllerManager.loadItems(itemsList)
-                    controllerManager.loadAnalytics(analytics)
-                    
-                    analytics.load(
-                        voiceEngine: voiceEngine, accessOptions: accessOptions, scanningOptions: scanningOptions, spellingOptions: spellingOptions
-                    )
-                    analytics.event(.appLaunch)
-                                        
-                    loading = false
-                }
-                .onDisappear {
-                    voiceEngine.save()
-                    accessOptions.save()
-                }
-                .onChange(of: scenePhase) {
-                    voiceEngine.setPhase(scenePhase)
-                    if scenePhase == .active && showOnboarding == false {
-                        itemsList.onAppear()
-                    }
-                }
+            SwiftDataInitialiser(errorHandling: errorHandling)
+            ErrorView(errorHandling: errorHandling)
         }
-        
+        .environmentObject(controllerManager)
+        .modelContainer(for: [Settings.self, Switch.self]) { result in
+            do {
+                /*+
+                 Create the initial settings object if it does not exist
+                 */
+                let container = try result.get()
+                let allSettings = try container.mainContext.fetch(FetchDescriptor<Settings>())
+                var currentSettings = Settings()
+                if let firstSettings = allSettings.first {
+                    currentSettings = firstSettings
+                } else {
+                    container.mainContext.insert(currentSettings)
+                }
+                try container.mainContext.save()
+                
+                if let url = container.configurations.first?.url.path(percentEncoded: false) {
+                    print("Database Location: \"\(url)\"")
+                }
+                
+                /*
+                 Initialise the default switches once
+                 */
+                if !hasLoadedSwitches {
+                    container.mainContext.insert(
+                        Switch(
+                            name: "Enter Switch",
+                            key: .keyboardReturnOrEnter,
+                            tapAction: .nextNode,
+                            holdAction: .none
+                        )
+                    )
+                    container.mainContext.insert(
+                        Switch(
+                            name: "Space Switch",
+                            key: .keyboardSpacebar,
+                            tapAction: .select,
+                            holdAction: .none
+                        )
+                    )
+                    try container.mainContext.save()
+                    hasLoadedSwitches = true
+                }
+                
+                
+                /*
+                 Insert the system vocabularies
+                 */
+                let existingVocabs = try container.mainContext.fetch(FetchDescriptor<Vocabulary>())
+                for newSystemVocab in Vocabulary.getSystemVocabs() {
+                    if !existingVocabs.contains(where: { $0.slug == newSystemVocab.slug }) {
+                        container.mainContext.insert(newSystemVocab)
+                    }
+                }
+                
+                
+                try container.mainContext.save()
+                
+                
+                /*
+                 Set the default vocab if there is no vocab
+                 */
+                if currentSettings.currentVocab == nil {
+                    let defaultVocab = try container.mainContext.fetch(FetchDescriptor<Vocabulary>(
+                        predicate: #Predicate {
+                            $0.isDefault == true
+                        }
+                    ))
+                    
+                    if let unwrappedVocab = defaultVocab.first {
+                        currentSettings.currentVocab = unwrappedVocab
+                        try container.mainContext.save()
+                    }
+                }
+                
+                /*
+                 Create and store a cueVoice
+                 */
+                if currentSettings.cueVoice == nil {
+                    let cueVoice = Voice(
+                        rate: 35,
+                        volume: 100,
+                        voiceId: "unknown",
+                        voiceName: "unkown"
+                    )
+                    cueVoice.setToDefaultCueVoice()
+                    
+                    container.mainContext.insert(cueVoice)
+                    try container.mainContext.save()
+                    
+                    currentSettings.cueVoice = cueVoice
+                    try container.mainContext.save()
+                }
+                
+                /*
+                 Create and store a speakingVoice
+                 */
+                if currentSettings.speakingVoice == nil {
+                    let speakingVoice = Voice(
+                        rate: 35,
+                        volume: 100,
+                        voiceId: "unknown",
+                        voiceName: "unkown"
+                    )
+                    speakingVoice.setToDefaultSpeakingVoice()
+                    
+                    container.mainContext.insert(speakingVoice)
+                    try container.mainContext.save()
+                    
+                    currentSettings.speakingVoice = speakingVoice
+                    try container.mainContext.save()
+                }
+            } catch {
+                errorHandling.handle(error: error)
+            }
+        }
+    }
+}
+
+struct SwiftDataInitialiser: View {
+    @ObservedObject var errorHandling: ErrorHandling
+    
+    
+    @Environment(\.modelContext) var context
+    @Environment(\.scenePhase) var scenePhase
+
+    @Query var settings: [Settings]
+    
+    var body: some View {
+        ContentView(errorHandling: errorHandling)
+            .environment(settings.first ?? Settings())
+           
+            .onChange(of: scenePhase) {
+                /*
+                 When the app goes into the background we want to clean up our data
+                 We find nodes that have no parent and are left out of a tree (not root nodes though)
+                 */
+                if scenePhase == .background  {
+                    do {
+                        let nodes = try context.fetch(FetchDescriptor<Node>())
+                        
+                        let nodesToDelete = nodes.filter { currentNode in
+                            if currentNode.type == .root || currentNode.type == .rootAndSpelling {
+                                return false
+                            }
+                            
+                            return currentNode.parent == nil
+                        }
+                                                
+                        for currentNode in nodesToDelete {
+                            context.delete(currentNode)
+                        }
+                    } catch {
+                        errorHandling.handle(error: EchoError.cleanupFailed)
+                    }
+                }
+            }
     }
 }

@@ -1,20 +1,19 @@
 //
 //  SwitchOnboarding.swift
-//  Echo
+// Echo
 //
-//  Created by Gavin Henderson on 30/10/2023.
+//  Created by Gavin Henderson on 31/05/2024.
 //
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct SwitchOnboarding: View {
-    @EnvironmentObject var accessOptions: AccessOptions
-    @State var showNewSwitchSheet = false
+    @Environment(Settings.self) var settings: Settings
     
-    @State var currentSwitch: Switch?
-
     var body: some View {
+        @Bindable var settingsBindable = settings
         VStack {
             VStack {
                 Spacer()
@@ -23,7 +22,7 @@ struct SwitchOnboarding: View {
                         .resizable()
                         .frame(width: 100, height: 100)
                         .foregroundStyle(Color("aceBlue"))
-                    if !accessOptions.enableSwitchControl {
+                    if !settings.enableSwitchControl {
                         Image("Slash")
                             .resizable()
                             .frame(width: 100, height: 100)
@@ -47,51 +46,9 @@ struct SwitchOnboarding: View {
                 )
             )
             Form {
-                Section(content: {
-                    Toggle(
-                        String(
-                            localized: "Switch Control",
-                            comment: "Label for toggle to turn switch control off and on"
-                        ),
-                        isOn: $accessOptions.enableSwitchControl
-                    )
-                    
-                    ForEach(accessOptions.listOfSwitches) { switchForButton in
-                        Button(action: {
-                            currentSwitch = switchForButton
-                        }, label: {
-                            HStack {
-                                Text(switchForButton.name)
-                                Spacer()
-                                Text(keyToDisplay(switchForButton.key))
-                                    .foregroundStyle(.gray)
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(.gray)
-                            }
-                        })
-                    }
-                    
-                    Button(action: {
-                        showNewSwitchSheet.toggle()
-                    }, label: {
-                        Label(
-                            String(
-                                localized: "Add Switch",
-                                comment: "Button label to add a new switch to the list"
-                            ),
-                            systemImage: "plus.circle.fill"
-                        )
-                    })
-                })
-                .onDisappear {
-                    accessOptions.save()
-                }
-                
+                SwitchControlSection()
             }
             .scrollContentBackground(.hidden)
-            AddSwitchSheet(
-                showNewSwitchSheet: $showNewSwitchSheet, currentSwitch: $currentSwitch
-            )
         }
         
     }
