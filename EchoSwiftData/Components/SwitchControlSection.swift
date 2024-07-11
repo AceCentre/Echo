@@ -1,6 +1,6 @@
 //
 //  SwitchControlSection.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 26/06/2024.
 //

@@ -1,6 +1,6 @@
 //
 //  ScrollLock.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 01/07/2024.
 //

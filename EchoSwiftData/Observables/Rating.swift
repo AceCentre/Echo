@@ -1,6 +1,6 @@
 //
 //  Rating.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 24/06/2024.
 //

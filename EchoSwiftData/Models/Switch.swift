@@ -1,6 +1,6 @@
 //
 //  Switch.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 31/05/2024.
 //

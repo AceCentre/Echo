@@ -1,6 +1,6 @@
 //
 //  KeyboardDetector.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 04/06/2024.
 //

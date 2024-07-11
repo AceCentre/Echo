@@ -1,6 +1,6 @@
 //
 //  VocabularyOptionsArea.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 27/06/2024.
 //

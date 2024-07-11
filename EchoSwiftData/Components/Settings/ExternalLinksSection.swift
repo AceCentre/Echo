@@ -1,6 +1,6 @@
 //
 //  ExternalLinksSection.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 25/06/2024.
 //

@@ -1,6 +1,6 @@
 //
 //  Settings.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 24/05/2024.
 //

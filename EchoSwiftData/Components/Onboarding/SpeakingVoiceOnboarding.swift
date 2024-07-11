@@ -1,6 +1,6 @@
 //
 //  SpeakingVoiceOnboarding.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 30/05/2024.
 //

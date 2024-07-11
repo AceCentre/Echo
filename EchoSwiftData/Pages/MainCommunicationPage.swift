@@ -1,6 +1,6 @@
 //
 //  MainCommunicationPage.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 07/06/2024.
 //

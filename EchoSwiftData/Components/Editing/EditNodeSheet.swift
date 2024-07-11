@@ -1,6 +1,6 @@
 //
 //  EditNodeSheet.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 11/07/2024.
 //

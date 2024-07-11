@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 23/05/2024.
 //

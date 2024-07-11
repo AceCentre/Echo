@@ -1,6 +1,6 @@
 //
 //  NodeTreeState.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 03/07/2024.
 //

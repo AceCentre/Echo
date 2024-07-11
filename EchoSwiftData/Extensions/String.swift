@@ -1,6 +1,6 @@
 //
 //  String.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 28/05/2024.
 //

@@ -1,6 +1,6 @@
 //
 //  SwitchAction.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 03/06/2024.
 //

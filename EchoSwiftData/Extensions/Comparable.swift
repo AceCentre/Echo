@@ -1,6 +1,6 @@
 //
 //  Comparable.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 05/07/2024.
 //

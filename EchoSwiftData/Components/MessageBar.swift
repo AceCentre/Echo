@@ -1,6 +1,6 @@
 //
 //  MessageBar.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 08/07/2024.
 //

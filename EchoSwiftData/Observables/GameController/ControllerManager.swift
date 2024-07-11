@@ -1,6 +1,6 @@
 //
 //  ControllerManager.swift
-//  EchoSwiftData
+// Echo
 //
 //  Created by Gavin Henderson on 10/07/2024.
 //
