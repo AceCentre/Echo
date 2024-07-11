@@ -17,7 +17,11 @@
 			<string>ExtendedGamepad</string>
 		</dict>
 	</array>
+	<key>GCSupportsMultipleMicroGamepads</key>
+	<true/>
 	<key>GCSupportsControllerUserInteraction</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
