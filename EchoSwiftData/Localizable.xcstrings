@@ -115,6 +115,9 @@
     "Croatian (Experimental)" : {
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
     },
+    "Cue Text" : {
+      "comment" : "Text field placeholder for cue text"
+    },
     "Cue Voice" : {
       "comment" : "The heading for the options that control the cue voice"
     },
@@ -151,6 +154,9 @@
     "Display control commands" : {
       "comment" : "Picker label for control commands"
     },
+    "Display Text" : {
+      "comment" : "Text field placeholder for display text"
+    },
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
     },
@@ -162,6 +168,12 @@
     },
     "Edit" : {
       "comment" : "Text for edit vocabulary button"
+    },
+    "Edit node display text" : {
+      "comment" : "Placeholder for text field"
+    },
+    "Editing Vocabulary: '%@'" : {
+      "comment" : "The main navigation title for editing page"
     },
     "Enable" : {
       "comment" : "Label to enable swipe"
@@ -308,7 +320,7 @@
       "comment" : "Label for picker of audio channels"
     },
     "Save" : {
-      "comment" : "The label for the save changes button\nThe save toolbar button when saving controller mapping"
+      "comment" : "Save button text for saving vocab changes\nThe label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -373,6 +385,9 @@
     "Spelling & Alphabet Options" : {
       "comment" : "The navigation title for the Spelling & Alphabet options page"
     },
+    "Spoken Text" : {
+      "comment" : "Text field placeholder for spoken text"
+    },
     "Start of list" : {
       "comment" : "Picker option for control command"
     },
@@ -402,6 +417,15 @@
     },
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
+    },
+    "Text that is displayed in the tree" : {
+      "comment" : "Footer for editing display text"
+    },
+    "Text that is read in the cue voice" : {
+      "comment" : "Footer for editing cue text"
+    },
+    "Text that is read in the spoken voice when selected" : {
+      "comment" : "Footer for editing spoken text"
     },
     "Thank you for using Echo, this is your cue voice" : {
       "comment" : "This is text is read aloud by the Text-To-Speech system as a preview"

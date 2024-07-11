@@ -9,6 +9,7 @@ import SwiftData
 
 struct VocabularyOptionsArea: View {
     @Environment(Settings.self) var settings: Settings
+    @EnvironmentObject var editState: EditState
 
     @Query(sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
     
@@ -37,10 +38,11 @@ struct VocabularyOptionsArea: View {
                 }
                 VStack {
                     HStack {
-                        Button(action: {}) {
+                        Button(action: {
+                            editState.showEditMode = true
+                        }) {
                             Text("Edit", comment: "Text for edit vocabulary button")
                                 .frame(maxWidth: .infinity)
-                            
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(selectedVocab.systemVocab)

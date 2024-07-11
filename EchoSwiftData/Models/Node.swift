@@ -14,7 +14,7 @@ enum NodeType: Int, Codable {
 
 @Model
 class Node {
-    @Relationship(inverse: \Node.parent) private var children: [Node]?
+    @Relationship(inverse: \Node.parent) var children: [Node]?
     var parent: Node?
     var displayText: String
     var speakText: String

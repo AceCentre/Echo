@@ -122,6 +122,16 @@ class MainCommunicationPageState: ObservableObject {
         }
     }
     
+    func onAppearEdit() {
+        scanLoops = 0
+        disableScanningAsHidden = false
+        do {
+            try clickNode(settings?.currentVocab?.rootNode, isStartup: false)
+        } catch {
+            self.errorHandling?.handle(error: error)
+        }
+    }
+    
     public func expandNode(_ node: Node) throws {
         try clickNode(node, isStartup: false)
     }

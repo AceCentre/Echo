@@ -128,9 +128,10 @@ struct SettingsPagePhone: View {
 }
 
 struct SettingsPagePad: View {
-    @State private var selection: SettingsPath? = .voice
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+        
+    @Binding var selection: SettingsPath?
+
     var body: some View {
         NavigationSplitView {
             List(SettingsPath.allPadPages, id: \.self, selection: $selection) { path in
@@ -167,11 +168,15 @@ struct SettingsPagePad: View {
 
 struct SettingsPage: View {
     @StateObject var rating: Rating = Rating()
+    @StateObject var editState = EditState()
+    @State var selection: SettingsPath? = .voice
     
     var body: some View {
         ZStack {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                SettingsPagePad()
+            if editState.showEditMode {
+                EditPage(editState: editState)
+            } else if UIDevice.current.userInterfaceIdiom == .pad {
+                SettingsPagePad(selection: $selection)
             } else {
                 SettingsPagePhone()
             }
@@ -180,5 +185,6 @@ struct SettingsPage: View {
                 rating.openPrompt()
             }
         }
+        .environmentObject(editState)
     }
 }

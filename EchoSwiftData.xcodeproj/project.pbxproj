@@ -31,6 +31,11 @@
 		D581A7402C3ED20A00E5C626 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */; };
 		D581A7412C3ED20A00E5C626 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A73C2C3ED20A00E5C626 /* Node.swift */; };
 		D581A7432C3EE29D00E5C626 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D581A7422C3EE29D00E5C626 /* Localizable.xcstrings */; };
+		D581A7452C3FED8200E5C626 /* EditState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7442C3FED8200E5C626 /* EditState.swift */; };
+		D581A7472C3FF39600E5C626 /* EditPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7462C3FF39600E5C626 /* EditPage.swift */; };
+		D581A74A2C401E7700E5C626 /* EditNodeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A7492C401E7700E5C626 /* EditNodeSheet.swift */; };
+		D581A74C2C401EA000E5C626 /* EditingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A74B2C401EA000E5C626 /* EditingNode.swift */; };
+		D581A74E2C401EBF00E5C626 /* SheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581A74D2C401EBF00E5C626 /* SheetButton.swift */; };
 		D581E9082C382C5200F9EDE8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9072C382C5200F9EDE8 /* Array.swift */; };
 		D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D581E9092C38302700F9EDE8 /* Spelling.swift */; };
 		D581E90F2C38444200F9EDE8 /* dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D581E90E2C38444200F9EDE8 /* dictionary.sqlite */; };
@@ -105,6 +110,11 @@
 		D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Vocabulary.swift; path = EchoSwiftData/Models/Vocabulary.swift; sourceTree = SOURCE_ROOT; };
 		D581A73C2C3ED20A00E5C626 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Node.swift; path = EchoSwiftData/Models/Node.swift; sourceTree = SOURCE_ROOT; };
 		D581A7422C3EE29D00E5C626 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		D581A7442C3FED8200E5C626 /* EditState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditState.swift; path = EchoSwiftData/Observables/EditState.swift; sourceTree = SOURCE_ROOT; };
+		D581A7462C3FF39600E5C626 /* EditPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPage.swift; sourceTree = "<group>"; };
+		D581A7492C401E7700E5C626 /* EditNodeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNodeSheet.swift; sourceTree = "<group>"; };
+		D581A74B2C401EA000E5C626 /* EditingNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingNode.swift; sourceTree = "<group>"; };
+		D581A74D2C401EBF00E5C626 /* SheetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetButton.swift; sourceTree = "<group>"; };
 		D581E9072C382C5200F9EDE8 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		D581E9092C38302700F9EDE8 /* Spelling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spelling.swift; sourceTree = "<group>"; };
 		D581E90E2C38444200F9EDE8 /* dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dictionary.sqlite; sourceTree = "<group>"; };
@@ -230,6 +240,7 @@
 			children = (
 				D577B3A12C0099B500F064F2 /* Onboarding.swift */,
 				D5A775D02C1324AB004DA914 /* MainCommunicationPage.swift */,
+				D581A7462C3FF39600E5C626 /* EditPage.swift */,
 				D5A775D22C136264004DA914 /* SettingsPage.swift */,
 			);
 			path = Pages;
@@ -238,10 +249,12 @@
 		D577B3A52C009AC800F064F2 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D581A7482C401E5600E5C626 /* Editing */,
 				D577B3A62C009AED00F064F2 /* Onboarding */,
 				D5A775D82C2B18CD004DA914 /* Settings */,
 				D5A7759E2C075FBF004DA914 /* VoiceOptionsDisplay.swift */,
 				D5A775E12C2C1D1D004DA914 /* GameControllerSection.swift */,
+				D581A74D2C401EBF00E5C626 /* SheetButton.swift */,
 				D5A775F02C32E9C2004DA914 /* ScrollLock.swift */,
 				D581E9162C3BFC2800F9EDE8 /* MessageBar.swift */,
 				D581A72D2C3D556B00E5C626 /* KeyPressController.swift */,
@@ -298,11 +311,21 @@
 			path = GameController;
 			sourceTree = "<group>";
 		};
+		D581A7482C401E5600E5C626 /* Editing */ = {
+			isa = PBXGroup;
+			children = (
+				D581A7492C401E7700E5C626 /* EditNodeSheet.swift */,
+				D581A74B2C401EA000E5C626 /* EditingNode.swift */,
+			);
+			path = Editing;
+			sourceTree = "<group>";
+		};
 		D5A775A22C076111004DA914 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
 				D581A7332C3ED0B500E5C626 /* GameController */,
 				D5A775A32C076122004DA914 /* AvailableVoices.swift */,
+				D581A7442C3FED8200E5C626 /* EditState.swift */,
 				D5A775F52C35A269004DA914 /* MainCommunicationPageState.swift */,
 				D5A775A92C0780C4004DA914 /* VoiceController.swift */,
 				D581E9092C38302700F9EDE8 /* Spelling.swift */,
@@ -418,11 +441,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D581A74C2C401EA000E5C626 /* EditingNode.swift in Sources */,
 				D5A775C52C0E0700004DA914 /* SwitchAction.swift in Sources */,
 				D5A775BB2C08CC07004DA914 /* PredictionLanguage.swift in Sources */,
 				D5A775C92C0F5F6E004DA914 /* AddSwitch.swift in Sources */,
 				D581A73F2C3ED20A00E5C626 /* Voice.swift in Sources */,
 				D5A775BD2C09E5F4004DA914 /* OnScreenArrowsOnboarding.swift in Sources */,
+				D581A74A2C401E7700E5C626 /* EditNodeSheet.swift in Sources */,
 				D5A775A12C075FFE004DA914 /* VoicePicker.swift in Sources */,
 				D581E9192C3BFC4200F9EDE8 /* NodeTreeView.swift in Sources */,
 				D581E9082C382C5200F9EDE8 /* Array.swift in Sources */,
@@ -457,6 +482,7 @@
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
 				D581A7352C3ED0D000E5C626 /* ControllerButton.swift in Sources */,
 				D5A775B32C08C10F004DA914 /* ScanningOnboarding.swift in Sources */,
+				D581A74E2C401EBF00E5C626 /* SheetButton.swift in Sources */,
 				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
 				D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */,
 				D5A775B92C08C692004DA914 /* ControlCommandDisplayOptions.swift in Sources */,
@@ -467,6 +493,7 @@
 				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
 				D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */,
 				D581A7412C3ED20A00E5C626 /* Node.swift in Sources */,
+				D581A7452C3FED8200E5C626 /* EditState.swift in Sources */,
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
 				D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */,
 				D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */,
@@ -480,6 +507,7 @@
 				D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */,
 				D577B38F2BFF9A2800F064F2 /* EchoSwiftDataApp.swift in Sources */,
 				D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */,
+				D581A7472C3FF39600E5C626 /* EditPage.swift in Sources */,
 				D581A7402C3ED20A00E5C626 /* Vocabulary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
