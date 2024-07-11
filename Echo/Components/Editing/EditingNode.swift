@@ -20,7 +20,14 @@ struct EditingNode: View {
     var body: some View {
         VStack {
             Button(action: {
-                print("Add above") // TODO
+                let newNode = Node(
+                    type: .phrase,
+                    text: "New Phrase"
+                )
+                
+                node.addBefore(newNode)
+                
+                mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
                 Image(systemName: "plus.circle")
                     .foregroundStyle(.green)
@@ -62,7 +69,14 @@ struct EditingNode: View {
             }
             
             Button(action: {
-                print("Add below") // TODO
+                let newNode = Node(
+                    type: .phrase,
+                    text: "New Phrase"
+                )
+                
+                node.addAfter(newNode)
+                
+                mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
                 Image(systemName: "plus.circle")
                     .foregroundStyle(.green)

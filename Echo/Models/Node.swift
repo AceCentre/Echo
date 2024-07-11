@@ -98,4 +98,36 @@ class Node {
         
         return childrenInOrder
     }
+    
+    func addBefore(_ newNode: Node) {
+        let siblings = self.parent?.children?.sorted {
+            return $0.index ?? 0 < $1.index ?? 0
+        }
+        
+        if var unwrappedSiblings = siblings {
+            unwrappedSiblings.insert(newNode, at: (self.index ?? 0))
+            
+            for (index, child) in unwrappedSiblings.enumerated() {
+                child.index = index
+            }
+            
+            parent?.children = unwrappedSiblings
+        }
+    }
+    
+    func addAfter(_ newNode: Node) {
+        let siblings = self.parent?.children?.sorted {
+            return $0.index ?? 0 < $1.index ?? 0
+        }
+        
+        if var unwrappedSiblings = siblings {
+            unwrappedSiblings.insert(newNode, at: (self.index ?? 0) + 1)
+            
+            for (index, child) in unwrappedSiblings.enumerated() {
+                child.index = index
+            }
+            
+            parent?.children = unwrappedSiblings
+        }
+    }
 }
