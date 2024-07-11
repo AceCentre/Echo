@@ -52,11 +52,11 @@ struct EditPage: View {
                                                         }.id(node)
                                                     }
                                                 }
-//                                                .padding(.vertical, geoReader.size.height/2) // TODO
+                                                .padding(.vertical, UIScreen.main.bounds.size.height / 2)
                                             }
                                         }
                                     }
-//                                    .frame(maxWidth: geoReader.size.width / 2) // TODO
+                                    .frame(maxWidth: UIScreen.main.bounds.size.width / 2)
                                 }
                             }
                         }
