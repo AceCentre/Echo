@@ -58,7 +58,7 @@ class Spelling: ObservableObject {
         let completions = textChecker.completions(
             forPartialWordRange: lastWordRange,
             in: predictionText,
-            language: Locale.current.language.languageCode?.identifier ?? "en"
+            language: settings?.predictionLanguage.databaseLanguageCode ?? "en"
         )
                 
         return (completions ?? []).map { word in
