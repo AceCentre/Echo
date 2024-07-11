@@ -16,7 +16,7 @@ struct NodeTreeView: View {
     var body: some View {
         HStack {
             GeometryReader { geoReader in
-                HorizontalScrollLock(selectedUUID: mainCommunicationPageState.hoveredNode.id) {
+                HorizontalScrollLock(selectedNode: mainCommunicationPageState.hoveredNode) {
                     ForEach(mainCommunicationPageState.getLevels(), id: \.self) { currentLevel in
                         
                         HStack {
@@ -25,7 +25,7 @@ struct NodeTreeView: View {
                                     Image(systemName: "chevron.right")
                                 }
                             }.frame(minWidth: 25)
-                            ScrollLock(selectedUUID: currentLevel.hoveredNode.id) {
+                            ScrollLock(selectedNode: currentLevel.hoveredNode) {
                                 ScrollView {
                                     
                                     VStack(alignment: .leading) {
@@ -43,7 +43,7 @@ struct NodeTreeView: View {
                                                         .padding()
                                                         .opacity(currentLevel.last ? 1 : 0.5)
                                                 }
-                                            }.id(node.id)
+                                            }.id(node)
                                         }
                                     }.padding(.vertical, geoReader.size.height / 2)
                                 }
