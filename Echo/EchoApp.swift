@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct EchoSwiftDataApp: App {
+struct EchoApp: App {
     @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
     @StateObject var errorHandling = ErrorHandling()
     @StateObject var controllerManager = ControllerManager()

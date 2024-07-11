@@ -1,5 +1,5 @@
 {
-  "originHash" : "90f64e8bc429bb4e54884395282aa150db870d50a30067fb8f6edb5d8f63f377",
+  "originHash" : "b602d6fc951957ffeb9b75986abca302b915507144de805c999606d8edf9fab0",
   "pins" : [
     {
       "identity" : "sqlite.swift",
