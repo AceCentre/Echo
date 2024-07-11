@@ -61,6 +61,23 @@ class Node {
         setChildren(children)
     }
     
+    func copy() -> Node {
+        let copiedChildren = self.children?.map { currentNode in
+            return currentNode.copy()
+        } ?? []
+        
+        let newNode = Node(
+            type: self.type,
+            cueText: self.cueText,
+            speakText: self.speakText,
+            displayText: self.displayText,
+            children: copiedChildren,
+            currentWord: self.currentWord
+        )
+        
+        return newNode
+    }
+    
     func setChildren(_ children: [Node]) {
         for (index, child) in children.enumerated() {
             child.index = index

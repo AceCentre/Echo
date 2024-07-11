@@ -106,6 +106,12 @@
     "Control Echo using switch presses to perform actions. Add new switches and change what they trigger." : {
       "comment" : "Description describing what switch access is"
     },
+    "Copy" : {
+      "comment" : "Text for copy vocabulary button"
+    },
+    "Copy Vocabulary" : {
+      "comment" : "Alert title for copying vocab"
+    },
     "Croatian (Experimental)" : {
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
     },
@@ -153,6 +159,9 @@
     },
     "Echo: Auditory Scanning" : {
       "comment" : "The main navigation title for the whole app"
+    },
+    "Edit" : {
+      "comment" : "Text for edit vocabulary button"
     },
     "Enable" : {
       "comment" : "Label to enable swipe"
@@ -223,6 +232,12 @@
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
     },
+    "Make a copy of the current vocabulary so you can make edits." : {
+      "comment" : "Message for copying vocab alert"
+    },
+    "Make copy" : {
+      "comment" : "Button text for making copy of a vocabulary"
+    },
     "Māori (Experimental)" : {
       "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
     },
@@ -231,6 +246,9 @@
     },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
+    },
+    "Name of the new vocabulary" : {
+      "comment" : "TextField label for new vocabulary (hidden"
     },
     "New Switch" : {
       "comment" : "The navigation title when adding a given switch."
@@ -393,6 +411,12 @@
     },
     "The control commands are commands like backspace and clear. They can be shown the list of items and selected." : {
       "comment" : "Footer for commands area"
+    },
+    "The copy and edit button are disabled because you cannot copy or edit the spelling vocabulary. Click the spelling and alphabet tab to change spelling options." : {
+      "comment" : "Explanation of why the copy button on the vocab is disabled"
+    },
+    "The edit button is currently disabled because you are trying to edit a system vocabulary. To edit this vocabulary you must make a copy first." : {
+      "comment" : "Explanation of why the edit button on the vocab is disabled"
     },
     "The language chosen here will change the alphabet that is shown and will change which words are used for prediction" : {
       "comment" : "Footer for the language settings"

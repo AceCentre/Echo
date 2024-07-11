@@ -20,6 +20,8 @@ class Vocabulary {
      */
     var systemVocab: Bool
     
+    var allowCopy: Bool
+    
     /**
      Lets you know if this is the default vocabulary to use on a freshly created app, this will only be used the first time the app is setup.
      */
@@ -34,13 +36,28 @@ class Vocabulary {
     
     var createdAt: Date
     
-    init(name: String, systemVocab: Bool = false, isDefault: Bool = false, slug: String? = nil, rootNode: Node) {
+    init(name: String, systemVocab: Bool = false, allowCopy: Bool = true, isDefault: Bool = false, slug: String? = nil, rootNode: Node) {
         self.name = name
         self.systemVocab = systemVocab
         self.isDefault = isDefault
         self.slug = slug ?? name.slugified()
         self.rootNode = rootNode
         self.createdAt = Date.now
+        self.allowCopy = allowCopy
+    }
+    
+    func copy(_ newName: String) -> Vocabulary {
+        let newRootNode = self.rootNode?.copy() ?? Node(type: .root, text: "root")
+        
+        let newVocab = Vocabulary(
+            name: newName,
+            systemVocab: self.systemVocab,
+            allowCopy: self.allowCopy,
+            isDefault: self.isDefault,
+            rootNode: newRootNode
+        )
+        
+        return newVocab
     }
     
     public static func getSystemVocabs() -> [Vocabulary] {
@@ -233,6 +250,7 @@ class Vocabulary {
             Vocabulary(
                 name: "Spelling",
                 systemVocab: true,
+                allowCopy: false,
                 rootNode: Node(type: .rootAndSpelling)
             )
         ]
