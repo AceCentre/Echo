@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 struct EditPage: View {
-    @ObservedObject var editState: EditState
+    var save: () -> Void
+    
     @Environment(Settings.self) var settings: Settings
     
     @StateObject var mainCommunicationPageState = MainCommunicationPageState()
@@ -75,7 +76,7 @@ struct EditPage: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(String(localized: "Save", comment: "Save button text for saving vocab changes")) {
-                    editState.showEditMode = false
+                    save()
                 }
             }
         }

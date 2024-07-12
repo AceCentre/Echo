@@ -174,7 +174,9 @@ struct SettingsPage: View {
     var body: some View {
         ZStack {
             if editState.showEditMode {
-                EditPage(editState: editState)
+                EditPage(save: {
+                    editState.showEditMode = false
+                })
             } else if UIDevice.current.userInterfaceIdiom == .pad {
                 SettingsPagePad(selection: $selection)
             } else {
