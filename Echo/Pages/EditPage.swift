@@ -28,7 +28,6 @@ struct EditPage: View {
                 }
                 VStack {
                     HStack {
-                        GeometryReader { geoReader in
                             HorizontalScrollLock(selectedNode: mainCommunicationPageState.hoveredNode, locked: false) {
                                 ForEach(mainCommunicationPageState.getLevels(), id: \.self) { currentLevel in
                                     HStack {
@@ -57,10 +56,9 @@ struct EditPage: View {
                                             }
                                         }
                                     }
-                                    .frame(maxWidth: UIScreen.main.bounds.size.width / 2)
                                 }
                             }
-                        }
+                        
                     }
                 }
             }
