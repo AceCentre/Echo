@@ -280,6 +280,9 @@
     "None" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Note, if there are children to this node they will be lost if you make it a spelling branch" : {
+      "comment" : "Footer for spelling in node editing"
+    },
     "On Screen Arrows?" : {
       "comment" : "Getting started onboarding"
     },
@@ -385,11 +388,17 @@
     "Speaking Voice Direction" : {
       "comment" : "Label for speaking voice audio direction"
     },
+    "Spelling" : {
+      "comment" : "Section title for spelling in node editing"
+    },
     "Spelling & Alphabet" : {
       "comment" : "Label for the navigation link to the spelling, alphabet and predictions options page"
     },
     "Spelling & Alphabet Options" : {
       "comment" : "The navigation title for the Spelling & Alphabet options page"
+    },
+    "Spelling mode" : {
+      "comment" : "label for toggle around node spelling"
     },
     "Spoken Text" : {
       "comment" : "Text field placeholder for spoken text"

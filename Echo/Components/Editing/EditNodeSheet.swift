@@ -19,6 +19,8 @@ struct EditNodeSheet: View {
 
     @State var showDeleteAlert = false
     
+    @State var isSpelling: Bool = false
+    
     var body: some View {
         @Bindable var bindableNode = node
         NavigationStack {
@@ -47,6 +49,14 @@ struct EditNodeSheet: View {
                     })
                 }
                 
+                Section(content: {
+                    Toggle(String(localized: "Spelling mode", comment: "label for toggle around node spelling"), isOn: $isSpelling)
+                }, header: {
+                    Text("Spelling", comment: "Section title for spelling in node editing")
+                }, footer: {
+                    Text("Note, if there are children to this node they will be lost if you make it a spelling branch", comment: "Footer for spelling in node editing")
+                })
+                
                 if node.parent?.type != .root || (node.parent?.children?.count ?? 0) > 1 {
                     Section(content: {
                         Button(role: .destructive, action: {
@@ -72,9 +82,6 @@ struct EditNodeSheet: View {
                                 if let unwrappedNewNode = newHovered {
                                     mainCommunicationPageState.hoverNode(unwrappedNewNode, shouldScan: false)
                                 }
-                                
-                                
-                                
                             }
                             Button("Cancel", role: .cancel) {
                                 showDeleteAlert = true
@@ -88,6 +95,22 @@ struct EditNodeSheet: View {
                     })
                 }
                 
+            }
+            .onAppear {
+                isSpelling = bindableNode.type == .spelling
+            }
+            .onChange(of: isSpelling) {
+                if isSpelling {
+                    bindableNode.type = .spelling
+                } else {
+                    let childrenCount = bindableNode.children?.count ?? 0
+                    
+                    if childrenCount > 0 {
+                        bindableNode.type = .branch
+                    } else {
+                        bindableNode.type = .phrase
+                    }
+                }
             }
             .navigationTitle("Editing: " + node.displayText)
             .toolbar {
