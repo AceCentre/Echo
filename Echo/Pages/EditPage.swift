@@ -13,7 +13,7 @@ struct EditPage: View {
     
     @Environment(Settings.self) var settings: Settings
     
-    @StateObject var mainCommunicationPageState = MainCommunicationPageState()
+    @StateObject var mainCommunicationPageState = MainCommunicationPageState(disabledSpelling: true)
     
     var body: some View {
         NavigationStack {

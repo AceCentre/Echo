@@ -33,10 +33,12 @@ class MainCommunicationPageState: ObservableObject {
     var settings: Settings?
     var spelling: Spelling?
     
+    var disabledSpelling: Bool?
     
-    
-    init() {
+    init(disabledSpelling: Bool? = false) {
         hoveredNode = Node(type: .root)
+        
+        self.disabledSpelling = disabledSpelling
     }
     
     struct Level: Hashable, Equatable {
@@ -139,6 +141,10 @@ class MainCommunicationPageState: ObservableObject {
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_body_length
     private func clickNode(_ node: Node?, isStartup: Bool) throws {
+        if node?.type == .spelling && disabledSpelling == true {
+            return
+        }
+        
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
