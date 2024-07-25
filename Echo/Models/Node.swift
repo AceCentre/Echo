@@ -127,4 +127,48 @@ class Node {
 
         }
     }
+    
+    func unlink() {
+        for child in children ?? [] {
+            child.unlink()
+            
+            child.parent = nil
+        }
+        
+        self.setChildren([])
+    }
+    
+    func delete() -> Node? {
+        let preDeleteParent = self.parent
+        
+        unlink()
+        
+        let siblings = self.parent?.children?.sorted {
+            return $0.index ?? 0 < $1.index ?? 0
+        } ?? []
+        
+        
+        let siblingsMissingSelf = siblings.filter {
+            $0 != self
+        }
+        
+        var newHoverNode: Node? = siblingsMissingSelf.first
+        
+        for child in siblings {
+            if child == self {
+                break
+            }
+            
+            newHoverNode = child
+        }
+        
+        self.parent?.setChildren(siblingsMissingSelf)
+        
+        if let unwrappedHoverNode = newHoverNode {
+            return unwrappedHoverNode
+        } else {
+            preDeleteParent?.type = .phrase
+            return preDeleteParent
+        }
+    }
 }

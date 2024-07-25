@@ -46,7 +46,7 @@ struct EditingNode: View {
                 SheetButton(sheetLabel: {
                     Image(systemName: "gear")
                 }, sheetContent: {
-                    EditNodeSheet(node: node)
+                    EditNodeSheet(node: node, mainCommunicationPageState: mainCommunicationPageState)
                 }, onDismiss: {
                     text = node.displayText
                 })
