@@ -105,13 +105,11 @@ class Node {
         }
         
         if var unwrappedSiblings = siblings {
-            unwrappedSiblings.insert(newNode, at: (self.index ?? 0))
+            let newIndex = self.index ?? 0
+            unwrappedSiblings.insert(newNode, at: newIndex)
+        
+            parent?.setChildren(unwrappedSiblings)
             
-            for (index, child) in unwrappedSiblings.enumerated() {
-                child.index = index
-            }
-            
-            parent?.children = unwrappedSiblings
         }
     }
     
@@ -121,13 +119,12 @@ class Node {
         }
         
         if var unwrappedSiblings = siblings {
-            unwrappedSiblings.insert(newNode, at: (self.index ?? 0) + 1)
+            let newIndex = (self.index ?? 0) + 1
+
+            unwrappedSiblings.insert(newNode, at: newIndex)
             
-            for (index, child) in unwrappedSiblings.enumerated() {
-                child.index = index
-            }
-            
-            parent?.children = unwrappedSiblings
+            parent?.setChildren(unwrappedSiblings)
+
         }
     }
 }

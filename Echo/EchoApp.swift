@@ -149,8 +149,7 @@ struct SwiftDataInitialiser: View {
     
     var body: some View {
         ContentView(errorHandling: errorHandling)
-            .environment(settings.first ?? Settings())
-           
+            .environment(settings.first ?? Settings())           
             .onChange(of: scenePhase) {
                 /*
                  When the app goes into the background we want to clean up our data

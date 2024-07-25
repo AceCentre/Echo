@@ -10,6 +10,8 @@ import SwiftUI
 
 struct EditingNode: View {
     @ObservedObject var mainCommunicationPageState: MainCommunicationPageState
+    @Environment(\.modelContext) var modelContext
+    @EnvironmentObject var errorHandling: ErrorHandling
 
     @State var text = ""
     
@@ -26,6 +28,12 @@ struct EditingNode: View {
                 )
                 
                 node.addBefore(newNode)
+                
+                do {
+                    try modelContext.save()
+                } catch {
+                    errorHandling.handle(error: error)
+                }
                 
                 mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
@@ -52,14 +60,29 @@ struct EditingNode: View {
                 .textFieldStyle(.roundedBorder)
                 .cornerRadius(6)
                 
-                if node.children?.count == 0 {
+                if node.type == .phrase {
                     Button(action: {
-                        print("Add next") // TODO
+                        let newNode = Node(
+                            type: .phrase,
+                            text: "New Phrase"
+                        )
+                        
+                        node.setChildren([newNode])
+                        node.type = .branch
+                        
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            errorHandling.handle(error: error)
+                        }
+                        
+                        mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
+                        
                     }, label: {
                         Image(systemName: "plus.circle")
                             .foregroundStyle(.green)
                     })
-                } else {
+                } else if node.type == .branch {
                     Button(action: {
                         mainCommunicationPageState.userClickHovered()
                     }, label: {
@@ -76,6 +99,11 @@ struct EditingNode: View {
                 
                 node.addAfter(newNode)
                 
+                do {
+                    try modelContext.save()
+                } catch {
+                    errorHandling.handle(error: error)
+                }
                 mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
                 Image(systemName: "plus.circle")
