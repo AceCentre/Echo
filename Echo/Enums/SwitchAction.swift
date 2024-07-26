@@ -8,13 +8,13 @@
 import Foundation
 
 enum SwitchAction: String, CaseIterable, Identifiable, Codable {
-    case nextNode, prevNode, none, fast, select, back, clear, startScanning
+    case nextNode, prevNode, none, fast, select, goBack, clear, startScanning
     var id: Self { self }
     
     // periphery:ignore
-    static public var tapCases: [SwitchAction] = [.nextNode, .prevNode, .none, .select, .back, .clear, .startScanning]
+    static public var tapCases: [SwitchAction] = [.nextNode, .prevNode, .none, .select, .goBack, .clear, .startScanning]
     // periphery:ignore
-    static public var holdCases: [SwitchAction] = [.nextNode, .prevNode, .none, .fast, .select, .back, .clear, .startScanning]
+    static public var holdCases: [SwitchAction] = [.nextNode, .prevNode, .none, .fast, .select, .goBack, .clear, .startScanning]
 
     var display: String {
         switch self {
@@ -38,7 +38,7 @@ enum SwitchAction: String, CaseIterable, Identifiable, Codable {
             localized: "Select the currently selected item",
             comment: "Label for action that happens on a keypress"
         )
-        case .back: return String(
+        case .goBack: return String(
             localized: "Go back to the last level of the vocabulary (or delete the last inputted letter)",
             comment: "Label for action that happens on a keypress"
         )

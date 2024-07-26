@@ -98,7 +98,7 @@ class MainCommunicationPageState: ObservableObject {
              userStartFastScan()
         case .clear:
             userClear()
-        case .back:
+        case .goBack:
             userBack()
         case .startScanning:
             userStartScanning()
@@ -115,6 +115,14 @@ class MainCommunicationPageState: ObservableObject {
     }
     
     func onAppear() {
+        // Remove back nodes
+        settings?.currentVocab?.rootNode?.removeBackNodes()
+        
+        // Add back nodes
+        if settings?.showBackInList == true {
+            settings?.currentVocab?.rootNode?.addBackNodes(settings?.backButtonPosition)
+        }
+        
         scanLoops = 0
         disableScanningAsHidden = false
         do {

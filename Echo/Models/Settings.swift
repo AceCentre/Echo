@@ -14,6 +14,8 @@ class Settings {
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
+    var showBackInList: Bool
+    var backButtonPosition: BackButtonPosition
     
     var cueVoice: Voice?
     var speakingVoice: Voice?
@@ -74,5 +76,8 @@ class Settings {
         self.allowSwipeGestures = true
         
         self.enableSwitchControl = true
+        
+        self.showBackInList = true
+        self.backButtonPosition = .bottom
     }
 }

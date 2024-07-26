@@ -56,7 +56,7 @@ enum ButtonDefaults: String {
         case .down:
             return .nextNode
         case .left:
-            return .back
+            return .goBack
         case .right:
             return .select
         case .share:
@@ -74,9 +74,9 @@ enum ButtonDefaults: String {
         case .x:
             return .prevNode
         case .y:
-            return .back
+            return .goBack
         case .zl:
-            return .back
+            return .goBack
         case .zr:
             return .select
         case .leftStick:
@@ -100,7 +100,7 @@ enum ButtonDefaults: String {
         case .sharePs:
             return .none
         case .square:
-            return .back
+            return .goBack
         case .triangle:
             return .prevNode
         case .cross:

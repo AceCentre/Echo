@@ -82,6 +82,8 @@
 		D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */; };
 		D5A775F12C32E9C2004DA914 /* ScrollLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775F02C32E9C2004DA914 /* ScrollLock.swift */; };
 		D5A775F62C35A269004DA914 /* MainCommunicationPageState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A775F52C35A269004DA914 /* MainCommunicationPageState.swift */; };
+		D5CC49862C53BA7800700583 /* BackButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CC49852C53BA7800700583 /* BackButtonPosition.swift */; };
+		D5CC498C2C53C2CD00700583 /* NodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CC498B2C53C2CD00700583 /* NodeType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -161,6 +163,8 @@
 		D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyOptionsArea.swift; sourceTree = "<group>"; };
 		D5A775F02C32E9C2004DA914 /* ScrollLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLock.swift; sourceTree = "<group>"; };
 		D5A775F52C35A269004DA914 /* MainCommunicationPageState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCommunicationPageState.swift; sourceTree = "<group>"; };
+		D5CC49852C53BA7800700583 /* BackButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonPosition.swift; sourceTree = "<group>"; };
+		D5CC498B2C53C2CD00700583 /* NodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,7 +345,9 @@
 			children = (
 				D5A775AD2C0784D0004DA914 /* AudioDirection.swift */,
 				D5A775C42C0E0700004DA914 /* SwitchAction.swift */,
+				D5CC498B2C53C2CD00700583 /* NodeType.swift */,
 				D5A775B82C08C692004DA914 /* ControlCommandDisplayOptions.swift */,
+				D5CC49852C53BA7800700583 /* BackButtonPosition.swift */,
 				D5A775BA2C08CC07004DA914 /* PredictionLanguage.swift */,
 				D5A775B62C08C661004DA914 /* CharacterOrder.swift */,
 			);
@@ -469,6 +475,7 @@
 				D5A775D52C29A527004DA914 /* Rating.swift in Sources */,
 				D5A775AC2C078127004DA914 /* AudioEngine.swift in Sources */,
 				D581E9132C384BD800F9EDE8 /* Comparable.swift in Sources */,
+				D5CC498C2C53C2CD00700583 /* NodeType.swift in Sources */,
 				D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */,
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
 				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
@@ -484,6 +491,7 @@
 				D5A775992C0627D8004DA914 /* String.swift in Sources */,
 				D581A7352C3ED0D000E5C626 /* ControllerButton.swift in Sources */,
 				D5A775B32C08C10F004DA914 /* ScanningOnboarding.swift in Sources */,
+				D5CC49862C53BA7800700583 /* BackButtonPosition.swift in Sources */,
 				D581A74E2C401EBF00E5C626 /* SheetButton.swift in Sources */,
 				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
 				D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */,

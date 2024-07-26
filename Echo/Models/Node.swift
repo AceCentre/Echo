@@ -8,10 +8,6 @@
 import Foundation
 import SwiftData
 
-enum NodeType: Int, Codable {
-    case root, branch, phrase, spelling, back, rootAndSpelling, letter, predictedWord, currentSentence, currentWord, backspace, clear
-}
-
 @Model
 class Node {
     @Relationship(inverse: \Node.parent) var children: [Node]?
@@ -54,7 +50,7 @@ class Node {
         if let unwrappedSpeakText = speakText {
             self.speakText = unwrappedSpeakText
         }
-
+        
         self.type = type
         self.currentWord = currentWord
         
@@ -107,8 +103,40 @@ class Node {
         if var unwrappedSiblings = siblings {
             let newIndex = self.index ?? 0
             unwrappedSiblings.insert(newNode, at: newIndex)
-        
+            
             parent?.setChildren(unwrappedSiblings)
+            
+        }
+    }
+    
+    func addBackNodes(_ backButtonPosition: BackButtonPosition?) {
+        if type == .branch {
+            let currentChildren = getChildren() ?? []
+            let backNode = Node(type: .back, text: "Back")
+            
+            if backButtonPosition == .top {
+                setChildren([backNode] + currentChildren)
+            } else if backButtonPosition == .bottom {
+                setChildren(currentChildren + [backNode])
+            }
+            
+            for child in (children ?? []) {
+                child.addBackNodes(backButtonPosition)
+            }
+        } else if type == .root {
+            for child in (children ?? []) {
+                child.addBackNodes(backButtonPosition)
+            }
+        }
+    }
+    
+    func removeBackNodes() {
+        for child in (children ?? []) {
+            if child.type == .back {
+                _ = child.delete()
+            }
+            
+            child.removeBackNodes()
             
         }
     }
@@ -120,11 +148,11 @@ class Node {
         
         if var unwrappedSiblings = siblings {
             let newIndex = (self.index ?? 0) + 1
-
+            
             unwrappedSiblings.insert(newNode, at: newIndex)
             
             parent?.setChildren(unwrappedSiblings)
-
+            
         }
     }
     

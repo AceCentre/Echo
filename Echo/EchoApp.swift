@@ -22,10 +22,23 @@ struct EchoApp: App {
         .environmentObject(controllerManager)
         .modelContainer(for: [Settings.self, Switch.self]) { result in
             do {
+                let container = try result.get()
+                
+                /**
+                Delete existing back nodes as we no longer want to have them in the database
+                 */
+                let nodes = try container.mainContext.fetch(FetchDescriptor<Node>())
+                let nodesToDelete = nodes.filter { currentNode in
+                    return currentNode.type == .back
+                }
+                for currentNode in nodesToDelete {
+                    container.mainContext.delete(currentNode)
+                }
+                try container.mainContext.save()
+                
                 /*+
                  Create the initial settings object if it does not exist
                  */
-                let container = try result.get()
                 let allSettings = try container.mainContext.fetch(FetchDescriptor<Settings>())
                 var currentSettings = Settings()
                 if let firstSettings = allSettings.first {

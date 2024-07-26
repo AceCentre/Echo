@@ -82,6 +82,9 @@
     "Back" : {
       "comment" : "The button text for the navigation back button"
     },
+    "Back Position" : {
+      "comment" : "Label for picker for back position"
+    },
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
       "comment" : "Alert explanation of node deletion"
     },
@@ -370,6 +373,12 @@
     "Show **%lld** level of your vocabulary" : {
       "comment" : "Describe to the user the number of history levels"
     },
+    "Show a 'back' item in each branch letting you navigate to the previous branch" : {
+      "comment" : "Footer description for back button"
+    },
+    "Show Back Button" : {
+      "comment" : "Label on settings toggle for back button"
+    },
     "Show on-screen arrows" : {
       "comment" : "Label for toggle for on screen arrows"
     },
@@ -417,6 +426,12 @@
     },
     "Swipe?" : {
       "comment" : "Header for swipe onboarding page"
+    },
+    "Switch 1 (Enter)" : {
+      "comment" : "Default switch name"
+    },
+    "Switch 2 (Space)" : {
+      "comment" : "Default switch name"
     },
     "Switch Control" : {
       "comment" : "Header for switch control in onboarding page\nLabel for toggle to turn switch control off and on"

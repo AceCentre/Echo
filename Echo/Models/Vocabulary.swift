@@ -209,7 +209,7 @@ class Vocabulary {
                         Node(type: .phrase, text: "I'm angry")
                     ])
                 ])
-
+                
             ),
             Vocabulary(
                 name: "Demo Vocabulary",
@@ -229,23 +229,16 @@ class Vocabulary {
                                         Node(type: .branch, text: "Another level", children: [
                                             Node(type: .branch, text: "Another level", children: [
                                                 Node(type: .phrase, text: "Final level"),
-                                                Node(type: .back, text: "Back")
                                             ]),
-                                            Node(type: .back, text: "Back")
                                         ]),
-                                        Node(type: .back, text: "Back")
                                     ]),
-                                    Node(type: .back, text: "Back")
                                 ]),
-                                Node(type: .back, text: "Back")
                             ]),
-                            Node(type: .back, text: "Back")
                         ]),
-                        Node(type: .back, text: "Back")
                     ]),
                     Node(type: .spelling, text: "I will spell it")
                 ])
-
+                
             ),
             Vocabulary(
                 name: "Spelling",
@@ -255,5 +248,5 @@ class Vocabulary {
             )
         ]
     }
-
+    
 }

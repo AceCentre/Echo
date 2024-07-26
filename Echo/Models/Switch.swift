@@ -42,3 +42,4 @@ class Switch {
         self.holdAction = holdAction
     }
 }
+

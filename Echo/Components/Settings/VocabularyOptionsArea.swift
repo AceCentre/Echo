@@ -120,6 +120,22 @@ struct VocabularyOptionsArea: View {
                 }, footer: {
                     Text("This is the number of levels of your phrases to show at once.", comment: "Footer for settings about history")
                 })
+                
+                Section(content: {
+                    Toggle(isOn: $bindableSettings.showBackInList) {
+                        Text("Show Back Button", comment: "Label on settings toggle for back button")
+                    }
+                    
+                    if bindableSettings.showBackInList == true {
+                        Picker(String(localized: "Back Position", comment: "Label for picker for back position"), selection: $bindableSettings.backButtonPosition) {
+                            Text("Start of list").tag(BackButtonPosition.top)
+                            Text("End of list").tag(BackButtonPosition.bottom)
+                        }
+                        
+                    }
+                }, footer: {
+                    Text("Show a 'back' item in each branch letting you navigate to the previous branch", comment: "Footer description for back button")
+                })
             }
             .navigationTitle(
                 String(
