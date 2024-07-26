@@ -52,8 +52,8 @@
     "An apple device with letters on screen, represents scanning" : {
       "comment" : "Accesibility label for logo"
     },
-    "An Error Occurred" : {
-      "comment" : "Title on errors popup"
+    "An error has occurred. If echo is broken please contact enquiries@acecentre.org.uk" : {
+      "comment" : "Message in error pop up"
     },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"

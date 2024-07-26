@@ -24,27 +24,27 @@ enum EchoError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unknown:
-            return "Error 00: An unknown error occurred. If you don't know why you are seeing this please contact ghenderson@acecentre.org.uk"
+            return "Error 00: An unknown error occurred."
         case .noChildren:
-            return "Error 01: Your vocabulary is empty"
+            return "Error 01: Your vocabulary is empty."
         case .unhandledNodeType:
-            return "Error 03: You clicked an unknown node type"
+            return "Error 03: You clicked an unknown node type."
         case .noParent:
-            return "Error 04: This node has no parent"
+            return "Error 04: This node has no paren.t"
         case .noSiblings:
-            return "Error 05: This node has no siblings"
+            return "Error 05: This node has no siblings."
         case .invalidNodeIndex:
-            return "Error 06: You selected an invalid node index"
+            return "Error 06: You selected an invalid node index."
         case .hoveredRootNode:
-            return "Error 07: You cannot hover the root node"
+            return "Error 07: You cannot hover the root node."
         case .hoveredInvalidNodeType:
-            return "Error 08: You hovered an invalid node type"
+            return "Error 08: You hovered an invalid node type."
         case .noHoverNode:
-            return "Error 09: No node to hover"
+            return "Error 09: No node to hover."
         case .tooManySettings:
-            return "Error 10: Too many settings initialised"
+            return "Error 10: Too many settings initialised."
         case .cleanupFailed:
-            return "Error 11: Failed to cleanup nodes"
+            return "Error 11: Failed to cleanup nodes."
         }
         
     }
@@ -60,6 +60,8 @@ class ErrorHandling: ObservableObject {
     @Published var currentAlert: ErrorAlert?
     
     func handle(error: Error) {
+        print(Thread.callStackSymbols.joined(separator: "\n"))
+        
         currentAlert = ErrorAlert(message: error.localizedDescription)
     }
 }
@@ -71,8 +73,8 @@ struct ErrorView: View {
         ZStack {}
             .alert(item: $errorHandling.currentAlert) { currentAlert in
                 Alert(
-                    title: Text("An Error Occurred", comment: "Title on errors popup"),
-                    message: Text(currentAlert.message),
+                    title: Text(currentAlert.message),
+                    message: Text("An error has occurred. If echo is broken please contact enquiries@acecentre.org.uk", comment: "Message in error pop up"),
                     dismissButton: .default(Text("Dismiss", comment: "Message on dismiss button for errors")) {
                         currentAlert.dismissAction?()
                     }

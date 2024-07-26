@@ -275,7 +275,8 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         guard let parent = parentNode else {
-            // errorHandling?.handle(error: EchoError.noParent)
+            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+
             throw EchoError.noParent
         }
         
@@ -434,6 +435,8 @@ class MainCommunicationPageState: ObservableObject {
 
         do {
             guard let siblings = hoveredNode.parent?.getChildren("usernextnode") else {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+                
                 throw EchoError.noSiblings
             }
             
@@ -464,6 +467,8 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         guard let siblings = hoveredNode.parent?.getChildren("prevNode") else {
+            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+
             throw EchoError.noSiblings
         }
         
@@ -508,6 +513,8 @@ class MainCommunicationPageState: ObservableObject {
                 unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
                     do {
                         guard let siblings = self.hoveredNode.parent?.getChildren("hoverNode") else {
+                            try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: true)
+
                             throw EchoError.noSiblings
                         }
                         
@@ -554,6 +561,8 @@ class MainCommunicationPageState: ObservableObject {
         let maxScanLoops = settings?.scanLoops ?? 0
         
         guard let siblings = hoveredNode.parent?.getChildren("setnextmovetimer") else {
+            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            
             throw EchoError.noSiblings
         }
         
@@ -584,6 +593,8 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         guard let siblings = hoveredNode.parent?.getChildren("startfastscan") else {
+            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+
             throw EchoError.noSiblings
         }
         
