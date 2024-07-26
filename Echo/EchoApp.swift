@@ -45,7 +45,7 @@ struct EchoApp: App {
                 if !hasLoadedSwitches {
                     container.mainContext.insert(
                         Switch(
-                            name: "Enter Switch",
+                            name: String(localized: "Switch 1 (Enter)", comment: "Default switch name"),
                             key: .keyboardReturnOrEnter,
                             tapAction: .nextNode,
                             holdAction: .none
@@ -53,7 +53,7 @@ struct EchoApp: App {
                     )
                     container.mainContext.insert(
                         Switch(
-                            name: "Space Switch",
+                            name: String(localized: "Switch 2 (Space)", comment: "Default switch name"),
                             key: .keyboardSpacebar,
                             tapAction: .select,
                             holdAction: .none
