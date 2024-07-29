@@ -120,7 +120,9 @@ class MainCommunicationPageState: ObservableObject {
         
         // Add back nodes
         if settings?.showBackInList == true {
-            settings?.currentVocab?.rootNode?.addBackNodes(settings?.backButtonPosition)
+            settings?.currentVocab?.rootNode?.addBackNodes(
+                BackButtonPosition(rawValue: settings?.backButtonPosition ?? 0) ?? .bottom
+            )
         }
         
         scanLoops = 0

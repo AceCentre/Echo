@@ -128,8 +128,8 @@ struct VocabularyOptionsArea: View {
                     
                     if bindableSettings.showBackInList == true {
                         Picker(String(localized: "Back Position", comment: "Label for picker for back position"), selection: $bindableSettings.backButtonPosition) {
-                            Text("Start of list").tag(BackButtonPosition.top)
-                            Text("End of list").tag(BackButtonPosition.bottom)
+                            Text("Start of list").tag(BackButtonPosition.top.rawValue)
+                            Text("End of list").tag(BackButtonPosition.bottom.rawValue)
                         }
                         
                     }

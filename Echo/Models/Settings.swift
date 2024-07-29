@@ -15,7 +15,7 @@ class Settings {
     var currentVocab: Vocabulary?
     var vocabHistory: Int
     var showBackInList: Bool = true
-    var backButtonPosition: BackButtonPosition = BackButtonPosition.bottom
+    var backButtonPosition: Int = BackButtonPosition.bottom.rawValue
     
     var cueVoice: Voice?
     var speakingVoice: Voice?
@@ -78,6 +78,6 @@ class Settings {
         self.enableSwitchControl = true
         
         self.showBackInList = true
-        self.backButtonPosition = .bottom
+        self.backButtonPosition = BackButtonPosition.bottom.rawValue
     }
 }
