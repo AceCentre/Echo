@@ -14,8 +14,8 @@ class Settings {
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
-    var showBackInList: Bool
-    var backButtonPosition: BackButtonPosition
+    var showBackInList: Bool = true
+    var backButtonPosition: BackButtonPosition = BackButtonPosition.bottom
     
     var cueVoice: Voice?
     var speakingVoice: Voice?
