@@ -92,7 +92,7 @@
       "comment" : "A description of why audio splitting exists"
     },
     "Cancel" : {
-      "comment" : "Cancel button label"
+      "comment" : "Cancel button label\nLabel for closing an alert"
     },
     "Clear all the inputted text" : {
       "comment" : "Label for action that happens on a keypress"
@@ -113,10 +113,19 @@
       "comment" : "Description describing what switch access is"
     },
     "Copy" : {
-      "comment" : "Text for copy vocabulary button"
+      "comment" : "Label for copying a vocab"
     },
-    "Copy Vocabulary" : {
-      "comment" : "Alert title for copying vocab"
+    "Copy of '%@'" : {
+      "comment" : "Placeholder text for copying a vocab"
+    },
+    "Copy vocabulary" : {
+      "comment" : "Navigation Title for copy vocab"
+    },
+    "Create" : {
+      "comment" : "Create new vocab button"
+    },
+    "Create a new vocabulary" : {
+      "comment" : "Navigation title for creating a new vocab"
     },
     "Croatian (Experimental)" : {
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
@@ -137,13 +146,19 @@
       "comment" : "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
     },
     "Delete" : {
-      "comment" : "Button label to confirm deletion\nButton text for deleting a node"
+      "comment" : "Button label to confirm deletion\nButton text for deleting a node\nLabel for deleting a vocab"
     },
     "Delete Node" : {
       "comment" : "Alert title for deleting node"
     },
     "Delete Switch" : {
       "comment" : "Title for alert about deleting a switch"
+    },
+    "Delete Vocabulary: %@" : {
+      "comment" : "Alert title for deleting vocab"
+    },
+    "Deleting a vocabulary is irreversible." : {
+      "comment" : "Warning about deleting a vocab"
     },
     "Detect Switch" : {
       "comment" : "Label for a NavigationLink that will get a user to press their external switch"
@@ -176,7 +191,7 @@
       "comment" : "The main navigation title for the whole app"
     },
     "Edit" : {
-      "comment" : "Text for edit vocabulary button"
+      "comment" : "Edit text shown to edit a vocab"
     },
     "Edit node display text" : {
       "comment" : "Placeholder for text field"
@@ -201,6 +216,9 @@
     },
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
+    },
+    "First phrase in new vocab" : {
+      "comment" : "Default new node text"
     },
     "Frequency Order" : {
       "comment" : "The value for the order of the alphabet"
@@ -253,12 +271,6 @@
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
     },
-    "Make a copy of the current vocabulary so you can make edits." : {
-      "comment" : "Message for copying vocab alert"
-    },
-    "Make copy" : {
-      "comment" : "Button text for making copy of a vocabulary"
-    },
     "Māori (Experimental)" : {
       "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
     },
@@ -268,11 +280,14 @@
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
     },
-    "Name of the new vocabulary" : {
-      "comment" : "TextField label for new vocabulary (hidden"
+    "My new vocabulary" : {
+      "comment" : "Placeholder for new vocab name"
     },
     "New Switch" : {
       "comment" : "The navigation title when adding a given switch."
+    },
+    "New Vocabulary" : {
+      "comment" : "Label to create a new vocab"
     },
     "Next" : {
       "comment" : "The label for the to go to the next onboarding step"
@@ -466,12 +481,6 @@
     "The control commands are commands like backspace and clear. They can be shown the list of items and selected." : {
       "comment" : "Footer for commands area"
     },
-    "The copy and edit button are disabled because you cannot copy or edit the spelling vocabulary. Click the spelling and alphabet tab to change spelling options." : {
-      "comment" : "Explanation of why the copy button on the vocab is disabled"
-    },
-    "The edit button is currently disabled because you are trying to edit a system vocabulary. To edit this vocabulary you must make a copy first." : {
-      "comment" : "Explanation of why the edit button on the vocab is disabled"
-    },
     "The language chosen here will change the alphabet that is shown and will change which words are used for prediction" : {
       "comment" : "Footer for the language settings"
     },
@@ -504,6 +513,9 @@
     },
     "Vocabulary" : {
       "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
+    },
+    "Vocabulary Name" : {
+      "comment" : "Header for vocab name section"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"

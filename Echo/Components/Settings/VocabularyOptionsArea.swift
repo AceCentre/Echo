@@ -7,9 +7,11 @@
 import SwiftUI
 import SwiftData
 
+
 struct VocabularyOptionsArea: View {
     @Environment(Settings.self) var settings: Settings
     @EnvironmentObject var editState: EditState
+    @Environment(\.colorScheme) var colorScheme
     
     @Query(sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
     
@@ -19,138 +21,266 @@ struct VocabularyOptionsArea: View {
     
     @State var showCopyAlert = false
     @State var copyVocabName = ""
+    @State var vocabToCopy = Vocabulary(name: "temp", rootNode: Node(type: .root))
+
+    @State var showDeleteAlert = false
+    @State var vocabToDelete = Vocabulary(name: "temp", rootNode: Node(type: .root))
+
+    @State var newVocabAlert = false
+    @State var newVocabName = ""
     
     @State var showEditMode = false
-    
+
     var body: some View {
-        
-        if showEditMode {
-            EditPage(save: {
-                showEditMode = false
-            })
-        } else {
-            
-            @Bindable var bindableSettings = settings
-            
-            Form {
-                Section(content: {
-                    Picker(
-                        String(
-                            localized: "Vocabulary",
-                            comment: "The label that is shown next to the vocab picker"
-                        ),
-                        selection: $selectedVocab
-                    ) {
-                        ForEach(allVocabs, id: \.self) { vocab in
-                            Text(vocab.name).tag(vocab)
-                        }
-                    }
-                    VStack {
-                        HStack {
-                            Button(action: {
-                                
-                                if UIDevice.current.userInterfaceIdiom == .pad {
-                                    editState.showEditMode = true
-                                    
-                                } else {
-                                    showEditMode = true
-                                }
-                            }) {
-                                Text("Edit", comment: "Text for edit vocabulary button")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(selectedVocab.systemVocab)
-                            
-                            
-                            Button(action: {
-                                showCopyAlert = true
-                                copyVocabName = "Copy of '\(selectedVocab.name)'"
-                            }) {
-                                Text("Copy", comment: "Text for copy vocabulary button")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.bordered)
-                            .disabled(!selectedVocab.allowCopy)
-                        }
-                        .alert(
-                            String(localized: "Copy Vocabulary", comment: "Alert title for copying vocab"),
-                            isPresented: $showCopyAlert
-                        ) {
-                            TextField(String(localized: "Name of the new vocabulary", comment: "TextField label for new vocabulary (hidden"), text: $copyVocabName)
-                            Button(String(localized: "Make copy", comment: "Button text for making copy of a vocabulary")) {
-                                if let newVocab = settings.currentVocab?.copy(copyVocabName) {
-                                    newVocab.systemVocab = false
-                                    modelContext.insert(newVocab)
-                                    selectedVocab = newVocab
-                                }
-                            }
-                            .disabled(selectedVocab.name == copyVocabName)
-                            Button("Cancel", role: .cancel) {
-                                showCopyAlert = false
-                            }
-                        } message: {
-                            Text("Make a copy of the current vocabulary so you can make edits.", comment: "Message for copying vocab alert")
-                        }
-                        
-                        if !selectedVocab.allowCopy {
-                            Text("The copy and edit button are disabled because you cannot copy or edit the spelling vocabulary. Click the spelling and alphabet tab to change spelling options.", comment: "Explanation of why the copy button on the vocab is disabled")
-                        } else if selectedVocab.systemVocab {
-                            Text("The edit button is currently disabled because you are trying to edit a system vocabulary. To edit this vocabulary you must make a copy first.", comment: "Explanation of why the edit button on the vocab is disabled")
-                        }
-                    }
-                }, header: {
-                    Text("Vocabulary", comment: "Header of vocabulary options")
-                }, footer: {
-                    Text("Select the vocabulary of phrases, words and letters to be used", comment: "Footer of vocabulary options")
+        ZStack {
+            if showEditMode {
+                EditPage(save: {
+                    showEditMode = false
                 })
-                Section(content: {
-                    Stepper(
-                        value: $bindableSettings.vocabHistory,
-                        in: 1...10,
-                        step: 1
-                    ) {
-                        Text(
-                            "Show **\(bindableSettings.vocabHistory)** level of your vocabulary",
-                            comment: "Describe to the user the number of history levels"
-                        )
-                    }
-                }, header: {
-                    Text("History", comment: "Header for settings about history")
-                }, footer: {
-                    Text("This is the number of levels of your phrases to show at once.", comment: "Footer for settings about history")
-                })
+            } else {
                 
-                Section(content: {
-                    Toggle(isOn: $bindableSettings.showBackInList) {
-                        Text("Show Back Button", comment: "Label on settings toggle for back button")
+                @Bindable var bindableSettings = settings
+                
+                Form {
+                    Section(content: {
+                        List(allVocabs) { currentVocab in
+                            Button(action: {
+                                selectedVocab = currentVocab
+                            }) {
+                                HStack {
+                                    if selectedVocab == currentVocab {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.blue)
+                                    } else {
+                                        Image(systemName: "circle")
+                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    Text(currentVocab.name)
+                                        .foregroundStyle(colorScheme == .light ? .black : .white)
+                                    Spacer()
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    if !currentVocab.systemVocab {
+                                        Button(action: {
+                                            selectedVocab = currentVocab
+                                            if UIDevice.current.userInterfaceIdiom == .pad {
+                                                editState.showEditMode = true
+                                                
+                                            } else {
+                                                showEditMode = true
+                                            }
+                                        }, label: {
+                                            Label(String(localized: "Edit", comment: "Edit text shown to edit a vocab"), systemImage: "square.and.pencil")
+                                        })
+                                        
+                                    }
+                                }
+                            }
+                            .padding(.vertical, 8)
+                            .swipeActions(allowsFullSwipe: false) {
+                                if !currentVocab.systemVocab {
+                                    Button(role: .destructive) {
+                                        vocabToDelete = currentVocab
+                                        showDeleteAlert = true
+                                        
+                                    } label: {
+                                        Label(String(localized: "Delete", comment: "Label for deleting a vocab"), systemImage: "trash.fill")
+                                    }
+                                }
+                            }
+                            .swipeActions(edge: .leading) {
+                                if currentVocab.allowCopy {
+                                    Button {
+                                        vocabToCopy = currentVocab
+                                        copyVocabName = ""
+                                        showCopyAlert = true
+                                    } label: {
+                                        Label(String(localized: "Copy", comment: "Label for copying a vocab"), systemImage: "doc.on.doc")
+                                    }
+                                    .tint(.blue)
+                                }
+                            }
+                        }
+                        Button(action: {
+                            newVocabAlert = true
+                            newVocabName = ""
+                        }, label: {
+                            Label(String(localized: "New Vocabulary", comment: "Label to create a new vocab"), systemImage: "plus")
+                        })
+                        .padding(.vertical, 8)
+                        
+                    }, header: {
+                        Text("Vocabulary", comment: "Header of vocabulary options")
+                    }, footer: {
+                        Text("Select the vocabulary of phrases, words and letters to be used", comment: "Footer of vocabulary options")
+                    })
+                    .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
+                        return viewDimensions[.leading]
+                    }
+                    .alignmentGuide(.listRowSeparatorTrailing) { viewDimensions in
+                        return viewDimensions[.trailing]
                     }
                     
-                    if bindableSettings.showBackInList == true {
-                        Picker(String(localized: "Back Position", comment: "Label for picker for back position"), selection: $bindableSettings.backButtonPosition) {
-                            Text("Start of list").tag(BackButtonPosition.top.rawValue)
-                            Text("End of list").tag(BackButtonPosition.bottom.rawValue)
+                    Section(content: {
+                        Stepper(
+                            value: $bindableSettings.vocabHistory,
+                            in: 1...10,
+                            step: 1
+                        ) {
+                            Text(
+                                "Show **\(bindableSettings.vocabHistory)** level of your vocabulary",
+                                comment: "Describe to the user the number of history levels"
+                            )
+                        }
+                    }, header: {
+                        Text("History", comment: "Header for settings about history")
+                    }, footer: {
+                        Text("This is the number of levels of your phrases to show at once.", comment: "Footer for settings about history")
+                    })
+                    
+                    Section(content: {
+                        Toggle(isOn: $bindableSettings.showBackInList) {
+                            Text("Show Back Button", comment: "Label on settings toggle for back button")
                         }
                         
-                    }
-                }, footer: {
-                    Text("Show a 'back' item in each branch letting you navigate to the previous branch", comment: "Footer description for back button")
-                })
-            }
-            .navigationTitle(
-                String(
-                    localized: "Vocabulary",
-                    comment: "The navigation title for the Vocabulary options page"
-                )
-            )
-            .onAppear {
-                if let unwrapped = settings.currentVocab {
-                    selectedVocab = unwrapped
+                        if bindableSettings.showBackInList == true {
+                            Picker(String(localized: "Back Position", comment: "Label for picker for back position"), selection: $bindableSettings.backButtonPosition) {
+                                Text("Start of list").tag(BackButtonPosition.top.rawValue)
+                                Text("End of list").tag(BackButtonPosition.bottom.rawValue)
+                            }
+                            
+                        }
+                    }, footer: {
+                        Text("Show a 'back' item in each branch letting you navigate to the previous branch", comment: "Footer description for back button")
+                    })
                 }
-            }
-            .onChange(of: selectedVocab) {
-                settings.currentVocab = selectedVocab
+                .navigationTitle(
+                    String(
+                        localized: "Vocabulary",
+                        comment: "The navigation title for the Vocabulary options page"
+                    )
+                )
+                .onAppear {
+                    if let unwrapped = settings.currentVocab {
+                        selectedVocab = unwrapped
+                    }
+                }
+                .onChange(of: selectedVocab) {
+                    settings.currentVocab = selectedVocab
+                }
+                
             }
         }
+        .alert(
+            String(localized: "Delete Vocabulary: \(vocabToDelete.name)", comment: "Alert title for deleting vocab"),
+            isPresented: $showDeleteAlert
+        ) {
+            Button(String(localized: "Delete", comment: "Button text for deleting a vocabulary")) {
+                _ = vocabToDelete.rootNode?.delete()
+                modelContext.delete(vocabToDelete)
+
+                if let firstVocab = allVocabs.first, selectedVocab == vocabToDelete {
+                    selectedVocab = firstVocab
+                }
+            }
+            Button(String(localized: "Cancel", comment: "Label for closing an alert"), role: .cancel) {
+                showDeleteAlert = false
+            }
+        } message: {
+            Text("Deleting a vocabulary is irreversible.", comment: "Warning about deleting a vocab")
+        }
+        .textCase(nil)
+        
+        .sheet(isPresented: $showCopyAlert, content: {
+            NavigationStack {
+                
+                Form {
+                    Section(content: {
+                        TextField(String(localized: "Copy of '\(vocabToCopy.name)'", comment: "Placeholder text for copying a vocab"), text: $copyVocabName)
+                    }, header: {
+                        Text("Vocabulary Name", comment: "Header for vocab name section")
+                    })
+                    Button(action: {
+                        let newVocab = vocabToCopy.copy(copyVocabName)
+                        newVocab.systemVocab = false
+                        modelContext.insert(newVocab)
+                        selectedVocab = newVocab
+                        
+                        showCopyAlert = false
+                    }, label: {
+                        HStack {
+                            Spacer()
+                                .frame(maxWidth: .infinity)
+                            Text("Copy", comment: "Label for copy vocab button")
+                            Spacer()
+                                .frame(maxWidth: .infinity)
+                        }
+                    })
+                    .disabled((allVocabs.map { $0.name }).contains(copyVocabName) || copyVocabName == "")
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .listRowBackground(Color.clear)
+                }
+                
+                .navigationTitle(String(localized: "Copy vocabulary", comment: "Navigation Title for copy vocab"))
+                .toolbar {
+                    ToolbarItem {
+                        Button(String(localized: "Cancel", comment: "label for closing a sheet"), role: .cancel) {
+                            showCopyAlert = false
+                        }
+                    }
+                }
+            }
+        })
+
+        
+        .sheet(isPresented: $newVocabAlert, content: {
+            NavigationStack {
+                
+                Form {
+                    Section(content: {
+                        TextField(String(localized: "My new vocabulary", comment: "Placeholder for new vocab name"), text: $newVocabName)
+                    }, header: {
+                        Text("Vocabulary Name", comment: "Header for new vocab name section")
+                    })
+                    Button(action: {
+                        let newVocab = Vocabulary(
+                            name: newVocabName,
+                            systemVocab: false,
+                            allowCopy: true,
+                            rootNode: Node(type: .root, children: [
+                                Node(type: .phrase, text: String(localized: "First phrase in new vocab", comment: "Default new node text"), children: [])
+                            ])
+                        )
+                        modelContext.insert(newVocab)
+                        selectedVocab = newVocab
+                        newVocabAlert = false
+                    }, label: {
+                        HStack {
+                            Spacer()
+                                .frame(maxWidth: .infinity)
+                            Text("Create", comment: "Create new vocab button")
+                            Spacer()
+                                .frame(maxWidth: .infinity)
+                        }
+                    })
+                    .disabled((allVocabs.map { $0.name }).contains(newVocabName) || newVocabName == "")
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .listRowBackground(Color.clear)
+                }
+                
+                .navigationTitle(String(localized: "Create a new vocabulary", comment: "Navigation title for creating a new vocab"))
+                .toolbar {
+                    ToolbarItem {
+                        Button(String(localized: "Cancel", comment: "Button to close modal"), role: .cancel) {
+                            newVocabAlert = false
+                        }
+                    }
+                }
+            }
+        })
     }
+    
 }
