@@ -12,6 +12,7 @@ Swipes trigger the following actions:
 * Down - Go forward/down in the list
 * Right - Select the current item
 * Left - Remove the previous character
+* Tap - Select the current item
 
 You can enable and disable the swipes in the settings
 
@@ -42,3 +43,10 @@ Possible actions are:
 * Clear all the inputted text
 * Start scanning from the current item, scanning must be enabled
 * Quickly scan through the items - This is only available when holding the switch
+
+## Game Controller
+
+Echo also supports the use of Game Controllers to control the app. [Read Apples official guide on how to connect your game controller to your device.](https://support.apple.com/en-gb/111099) Once you have connected your controller to your device it will appear in the access methods section of the Echo settings. You can then map each button on the controller to do any action you want inside of Echo.&#x20;
+
+A game controller has all the same actions as external switches.
+

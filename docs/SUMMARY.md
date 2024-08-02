@@ -6,4 +6,5 @@
 * [Access Methods](../access-methods.md)
 * [Scanning](scanning.md)
 * [Prediction](spelling-and-alphabet.md)
-* [Analytics](analytics.md)
+* [Audio](audio.md)
+* [Vocabulary](vocabulary.md)
