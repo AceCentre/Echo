@@ -135,6 +135,7 @@ class MainCommunicationPageState: ObservableObject {
     }
     
     func onAppearEdit() {
+        settings?.currentVocab?.rootNode?.removeBackNodes()
         scanLoops = 0
         disableScanningAsHidden = false
         do {
