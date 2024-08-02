@@ -2,6 +2,8 @@
 
 Echo allows for multiple access methods.
 
+{% embed url="https://youtu.be/i5KYUj7epeo?si=blhUycVauqQjhvCT&t=110" %}
+
 ## Swipe Gestures
 
 You can swipe up, down, left or right. You must do the swipe across the main part of the screen for it to register.&#x20;

@@ -1,5 +1,7 @@
 # Vocabulary
 
+{% embed url="https://youtu.be/i5KYUj7epeo?si=0QKiIqQAVmPSE5KP&t=538" %}
+
 Echo lets you pick between different vocabularies and even create your own.
 
 You can pick from the list of vocabularies we provide. We suggest you give them all a try and see what best matches your needs. If you would like to edit one of the provided vocabularies then you can 'copy' it by swiping the right on the vocabulary and clicking the 'copy' button. You can then edit this vocabulary.

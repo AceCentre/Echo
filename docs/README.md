@@ -14,7 +14,6 @@ Echo is based around the concept of auditory scanning. Auditory scanning is a co
 
 Echo provides you with two different voices, one for your auditory cues and the another to represent your voice.
 
-{% embed url="https://youtu.be/GzZOlZMKyCY" %}
-A demo of Echo in use
-{% endembed %}
+For a detailed video how to use Echo checkout the video below.
 
+{% embed url="https://youtu.be/i5KYUj7epeo" %}

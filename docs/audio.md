@@ -17,3 +17,5 @@ Some devices we recommend to help you setup a multi speaker solution:
 * [Audio Splitter Cable](https://www.amazon.co.uk/HosaTech-YMP-137-3-5mm-Stereo-Breakout/dp/B000068O5E/ref=sr\_1\_7?crid=1GAL99VANVPGO\&dib=eyJ2IjoiMSJ9.PSi88q6Gy1uW3Davw5yiI4cGrsJ7bl2\_s94g8\_rSM1dPK6znR--Azjmk9wUeqRiXkCKb3W7EAX2IYpdEUL706sVP2H6DKUHB2Vd85mHgHPKKZyVK1n3xx65PPi4Iydkjoxw\_Piq6lgT4mx-hCTi6aNnjDqAcvWnCFHC82uM0B3qmw3BFk6xJo8GfurnKJQYgc0vzPwNA6Hz9Z5n569cHRD\_B1PsRgCPmzJxIKse6ELTD0C2ZtQIDAxZlqwfhNuKgVD9G0L0dsCiEHJFFKxSkz9sH3Anyb9zEUSayHP3cPvQ.j\_HJYUNrK-CVUgzma\_tXogfYmzFrvHprokJioVmHPow\&dib\_tag=se\&keywords=stereo%2Bbreakout%2Bcable%2B3.5\&qid=1722593708\&sprefix=stereo%2Bbreakout%2Bcable%2Caps%2C102\&sr=8-7\&th=1) - Create an output for the left and right audio channel separately
 
 To test your multi speaker setup fully works before going into Echo use this [youtube video](https://www.youtube.com/watch?v=6TWJaFD6R2s) and make sure the outputs go to your separate speakers.
+
+{% embed url="https://youtu.be/i5KYUj7epeo?si=hhmL3L6A-0Pswbn0&t=486" %}

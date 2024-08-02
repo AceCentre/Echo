@@ -23,3 +23,5 @@ This lets you pick the default order of the alphabet that is used. You can choos
 ## Prompts
 
 By default Echo will show and speak a prompt of 'current sentence/word' infront of those selection items. Once you become familiar with Echo you may chose to turn these off so you can hear the text without hearing the prompt.
+
+{% embed url="https://youtu.be/i5KYUj7epeo?si=M8j00jgBzRvmu5JI&t=304" %}

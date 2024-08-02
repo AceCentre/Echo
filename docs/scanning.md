@@ -11,3 +11,5 @@ Scan on app launch means that the app will start automatically scanning as soon 
 Scan after selection means the app will continue scanning even after you make a selection. If disabled the scanning will stop after you select an item.
 
 Scanning will automatically loop back to the start once it reaches the end. You can adjust how many times it scans through before stopping in the settings.
+
+{% embed url="https://youtu.be/i5KYUj7epeo?si=vsy-sKbDRZVmATky&t=234" %}
