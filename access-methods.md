@@ -46,6 +46,10 @@ Possible actions are:
 * Start scanning from the current item, scanning must be enabled
 * Quickly scan through the items - This is only available when holding the switch
 
+#### Speech Case
+
+If you are using a ['speech case'](https://uk.tobiidynavox.com/products/speech-case) from TD you need to make sure that the toggle on the side of the case is in 'touch' mode. Once you have done that you can then setup the switches inside of Echo the same way you would any other switch.
+
 ## Game Controller
 
 Echo also supports the use of Game Controllers to control the app. [Read Apples official guide on how to connect your game controller to your device.](https://support.apple.com/en-gb/111099) Once you have connected your controller to your device it will appear in the access methods section of the Echo settings. You can then map each button on the controller to do any action you want inside of Echo.&#x20;
