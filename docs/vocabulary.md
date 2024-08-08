@@ -16,6 +16,14 @@ Clicking the 'settings' button on a node will show you options for that specific
 
 You can also chose to change it to a 'spelling' node. This means that when its selected it will enter spelling mode and allow users to type out messages using prediction. Spelling settinsg are controlled directly in the main settings area.
 
+## Importing / Exporting Vocabularies
+
+You can export your vocabularies to a file with the 'export current vocabulary' button. You will get a pop up asking you to save the file. You can then save this file anywhere you want, including off the device or in cloud storage. Just bear in mind that if the vocabulary has private information in it this will then be in the file.
+
+You can then at a later date click the 'import a vocabulary' button which will prompt you to select a file. You can then select a file your previously exported and it will load it into the app and select it as the current vocabulary.
+
+{% embed url="https://youtu.be/ZwwqrEAkPM8" %}
+
 ## Extra options
 
 You can chose how much 'history' you wnt to show at once. You can create folders within folders and this lets you decide how many to show at once on the screen. This doesn't effect the functionality of Echo, just what is displayed to users.
