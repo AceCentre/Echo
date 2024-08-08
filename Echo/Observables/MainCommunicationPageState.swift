@@ -106,6 +106,7 @@ class MainCommunicationPageState: ObservableObject {
     }
     
     func onDisappear() {
+        enteredText = ""
         scanLoops = 0
         disableScanningAsHidden = true
         voiceEngine?.stop()
