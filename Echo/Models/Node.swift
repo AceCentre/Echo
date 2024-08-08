@@ -83,10 +83,10 @@ class Node: Encodable, Decodable {
         self.setChildren(tempChildren)
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {        
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(self.children, forKey: .children)
+        try container.encode(self.getChildren(), forKey: .children)
         try container.encode(self.displayText, forKey: .displayText)
         try container.encode(self.speakText, forKey: .speakText)
         try container.encode(self.type, forKey: .type)

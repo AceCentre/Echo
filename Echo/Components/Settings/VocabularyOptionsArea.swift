@@ -156,7 +156,24 @@ struct VocabularyOptionsArea: View {
                                            if let data = fileContent.data(using: .utf8) {
                                                let newVocab = try decoder.decode(Vocabulary.self, from: data)
 
+                                               
+                                               var vocabName = newVocab.name
+                                               var counter = 1
+                                               
+                                               let vocabNames = allVocabs.map { $0.name }
+                                               
+                                               while vocabNames.contains(vocabName) {
+                                                   vocabName = "\(vocabName) \(counter)"
+                                                   counter += 1
+                                               }
+                                               
+                                               
+                                               newVocab.name = vocabName
+                                               newVocab.slug = vocabName.slugified()
+                                               
                                                modelContext.insert(newVocab)
+                                               try modelContext.save()
+                                               
                                                selectedVocab = newVocab
                                            } else {
                                                throw EchoError.failedToParseFile

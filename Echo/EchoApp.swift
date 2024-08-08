@@ -20,6 +20,7 @@ struct EchoApp: App {
             ErrorView(errorHandling: errorHandling)
         }
         .environmentObject(controllerManager)
+        .environmentObject(errorHandling)
         .modelContainer(for: [Settings.self, Switch.self]) { result in
             do {
                 let container = try result.get()
