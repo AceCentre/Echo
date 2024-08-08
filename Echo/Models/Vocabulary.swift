@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Vocabulary {
+class Vocabulary: Encodable, Decodable {
     /**
      The name of the vocabulary
      */
@@ -36,6 +36,11 @@ class Vocabulary {
     
     var createdAt: Date
     
+    enum CodingKeys: String, CodingKey {
+        case name
+        case rootNode
+    }
+    
     init(name: String, systemVocab: Bool = false, allowCopy: Bool = true, isDefault: Bool = false, slug: String? = nil, rootNode: Node) {
         self.name = name
         self.systemVocab = systemVocab
@@ -44,6 +49,26 @@ class Vocabulary {
         self.rootNode = rootNode
         self.createdAt = Date.now
         self.allowCopy = allowCopy
+    }
+    
+    required init(from decoder:Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let tempName = try values.decode(String.self, forKey: .name)
+        let newName = "Imported '\(tempName)'"
+        self.rootNode = try values.decode(Node.self, forKey: .rootNode)
+        self.name = newName
+        self.systemVocab = false
+        self.allowCopy = true
+        self.isDefault = false
+        self.slug = newName.slugified()
+        self.createdAt = Date.now
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.rootNode, forKey: .rootNode)
     }
     
     func copy(_ newName: String) -> Vocabulary {

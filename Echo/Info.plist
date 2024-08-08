@@ -23,5 +23,23 @@
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>uk.org.acecentre.echo</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>echo</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

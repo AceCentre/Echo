@@ -6,12 +6,13 @@
 //
 import SwiftUI
 import SwiftData
-
+import UniformTypeIdentifiers
 
 struct VocabularyOptionsArea: View {
     @Environment(Settings.self) var settings: Settings
     @EnvironmentObject var editState: EditState
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var errorHandling: ErrorHandling
     
     @Query(sort: \Vocabulary.createdAt) var allVocabs: [Vocabulary]
     
@@ -30,7 +31,12 @@ struct VocabularyOptionsArea: View {
     @State var newVocabName = ""
     
     @State var showEditMode = false
+    
+    @State var currentFilePath: URL?
+    @State var showFileImporter = false
 
+    let echoType = UTType(exportedAs: "uk.org.acecentre.echo", conformingTo: .text)
+    
     var body: some View {
         ZStack {
             if showEditMode {
@@ -123,6 +129,55 @@ struct VocabularyOptionsArea: View {
                     }
                     
                     Section(content: {
+                        if let unwrappedFile = currentFilePath, selectedVocab.allowCopy == true {
+                            ShareLink(String(localized: "Export current vocabulary", comment: "Text on export vocab button"), item: unwrappedFile)
+                        }
+                        Button(action: {
+                            showFileImporter = true
+                            
+                        }) {
+                            Text("Import a vocabulary", comment: "Text on inport vocab button")
+                        }
+                        .fileImporter(
+                               isPresented: $showFileImporter,
+                               allowedContentTypes: [echoType],
+                               allowsMultipleSelection: false
+                           ) { result in
+                               do {
+                                   switch result {
+                                   case .success(let files):
+                                       for file in files {
+                                           let gotAccess = file.startAccessingSecurityScopedResource()
+                                           if !gotAccess { throw EchoError.noFileAccess }
+                                           
+                                           let fileContent = try String(contentsOf: file, encoding: String.Encoding.utf8)
+                                                                                      
+                                           let decoder = JSONDecoder()
+                                           if let data = fileContent.data(using: .utf8) {
+                                               let newVocab = try decoder.decode(Vocabulary.self, from: data)
+
+                                               modelContext.insert(newVocab)
+                                               selectedVocab = newVocab
+                                           } else {
+                                               throw EchoError.failedToParseFile
+                                           }
+                                           
+                                           file.stopAccessingSecurityScopedResource()
+                                       }
+                                   case .failure(let error):
+                                       throw error
+                                   }
+                               } catch {
+                                   errorHandling.handle(error: error)
+                               }
+                           }
+                    }, header: {
+                        Text("Backup Vocabulary", comment: "Header text for vocab backup section")
+                    }, footer: {
+                        Text("You can export your vocabulary to a file and then save it and store it. You can then import the same file on any device running echo", comment: "Footer text for vocab backup section")
+                    })
+                    
+                    Section(content: {
                         Stepper(
                             value: $bindableSettings.vocabHistory,
                             in: 1...10,
@@ -168,6 +223,27 @@ struct VocabularyOptionsArea: View {
                 }
                 .onChange(of: selectedVocab) {
                     settings.currentVocab = selectedVocab
+                    
+                    do {
+                        if let unwrappedVocab = settings.currentVocab {
+                            let jsonEncoder = JSONEncoder()
+                            let jsonData = try jsonEncoder.encode(unwrappedVocab)
+                            if let json = String(data: jsonData, encoding: String.Encoding.utf8) {
+                                let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                                let filename = paths[0].appendingPathComponent("\(unwrappedVocab.name).echo")
+                                
+                                try json.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+                                
+                                currentFilePath = filename
+                            } else {
+                                throw EchoError.failedToSaveVocabFile
+                            }
+                        } else {
+                            throw EchoError.failedToSaveVocabFile
+                        }
+                    } catch {
+                        errorHandling.handle(error: error)
+                    }
                 }
                 
             }

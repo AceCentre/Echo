@@ -20,7 +20,10 @@ enum EchoError: LocalizedError {
     case noHoverNode
     case tooManySettings
     case cleanupFailed
-
+    case failedToParseFile
+    case noFileAccess
+    case failedToSaveVocabFile
+    
     var errorDescription: String? {
         switch self {
         case .unknown:
@@ -45,6 +48,12 @@ enum EchoError: LocalizedError {
             return "Error 10: Too many settings initialised."
         case .cleanupFailed:
             return "Error 11: Failed to cleanup nodes."
+        case .failedToParseFile:
+            return "Error 12: Failed to parse imported vocabulary file."
+        case .noFileAccess:
+            return "Error 13: Failed to access imported vocabulary file."
+        case .failedToSaveVocabFile:
+            return "Error 14: Failed to save vocabulary to file"
         }
         
     }

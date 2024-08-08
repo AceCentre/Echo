@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Node {
+class Node: Encodable, Decodable {
     @Relationship(inverse: \Node.parent) var children: [Node]?
     var parent: Node?
     var displayText: String
@@ -21,6 +21,15 @@ class Node {
     
     @Transient
     private var childrenInOrder: [Node]? = nil
+    
+    enum CodingKeys: String, CodingKey {
+        case children
+        case displayText
+        case speakText
+        case type
+        case cueText
+        case currentWord
+    }
     
     init(
         type: NodeType,
@@ -55,6 +64,35 @@ class Node {
         self.currentWord = currentWord
         
         setChildren(children)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.children = []
+        self.parent = nil
+        
+        self.displayText = try values.decode(String.self, forKey: .displayText)
+        self.speakText = try values.decode(String.self, forKey: .speakText)
+        self.type = try values.decode(NodeType.self, forKey: .type)
+        self.cueText = try values.decode(String.self, forKey: .cueText)
+        self.currentWord = try values.decode(String.self, forKey: .currentWord)
+        
+        let tempChildren = try values.decode([Node].self, forKey: .children)
+        
+        self.setChildren(tempChildren)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(self.children, forKey: .children)
+        try container.encode(self.displayText, forKey: .displayText)
+        try container.encode(self.speakText, forKey: .speakText)
+        try container.encode(self.type, forKey: .type)
+        try container.encode(self.cueText, forKey: .cueText)
+        try container.encode(self.currentWord, forKey: .currentWord)
+
     }
     
     func copy() -> Node {

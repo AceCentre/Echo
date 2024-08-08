@@ -85,6 +85,9 @@
     "Back Position" : {
       "comment" : "Label for picker for back position"
     },
+    "Backup Vocabulary" : {
+      "comment" : "Header text for vocab backup section"
+    },
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
       "comment" : "Alert explanation of node deletion"
     },
@@ -211,6 +214,9 @@
     "Every Character Speaks Volumes" : {
       "comment" : "Explain what Echo is"
     },
+    "Export current vocabulary" : {
+      "comment" : "Text on export vocab button"
+    },
     "External Links" : {
       "comment" : "Label for the navigation link to the externalLinks options page"
     },
@@ -249,6 +255,9 @@
     },
     "Hold" : {
       "comment" : "The label that is shown next to the single hold action"
+    },
+    "Import a vocabulary" : {
+      "comment" : "Text on inport vocab button"
     },
     "Initial Setup" : {
       "comment" : "Label for the navigation link to the initial options page"
@@ -546,6 +555,9 @@
     },
     "Yiddish (Experimental)" : {
       "comment" : "The label for the Yiddish language when setting prediction language, make sure to include the experimental tag"
+    },
+    "You can export your vocabulary to a file and then save it and store it. You can then import the same file on any device running echo" : {
+      "comment" : "Footer text for vocab backup section"
     },
     "Your cue voice is the voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
       "comment" : "The footer for the options that control the cue voice"
