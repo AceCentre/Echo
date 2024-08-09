@@ -50,6 +50,7 @@ struct SwitchControlSection: View {
             }
             
             Button(action: {
+                currentSwitch = nil
                 showNewSwitchSheet.toggle()
             }, label: {
                 Label(
