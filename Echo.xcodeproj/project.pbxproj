@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */; };
+		3FF236602C6E9AFF00810250 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365F2C6E9AFF00810250 /* Color.swift */; };
 		D577B38F2BFF9A2800F064F2 /* EchoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B38E2BFF9A2800F064F2 /* EchoApp.swift */; };
 		D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3902BFF9A2800F064F2 /* ContentView.swift */; };
 		D577B3932BFF9A2B00F064F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D577B3922BFF9A2B00F064F2 /* Assets.xcassets */; };
@@ -87,6 +89,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOptionsArea.swift; sourceTree = "<group>"; };
+		3FF2365F2C6E9AFF00810250 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		D577B38B2BFF9A2800F064F2 /* Echo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D577B38E2BFF9A2800F064F2 /* EchoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoApp.swift; sourceTree = "<group>"; };
 		D577B3902BFF9A2800F064F2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -302,6 +306,7 @@
 				D581E9072C382C5200F9EDE8 /* Array.swift */,
 				D581E9122C384BD800F9EDE8 /* Comparable.swift */,
 				D5A775982C0627D8004DA914 /* String.swift */,
+				3FF2365F2C6E9AFF00810250 /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 				D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */,
 				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
 				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
+				3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -467,6 +473,7 @@
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
 				D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */,
+				3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */,
 				D5A775F12C32E9C2004DA914 /* ScrollLock.swift in Sources */,
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
@@ -501,6 +508,7 @@
 				D581E9172C3BFC2800F9EDE8 /* MessageBar.swift in Sources */,
 				D581A7302C3ED08700E5C626 /* CustomGameController.swift in Sources */,
 				D577B3AB2C00A23A00F064F2 /* Intro.swift in Sources */,
+				3FF236602C6E9AFF00810250 /* Color.swift in Sources */,
 				D5A775A42C076122004DA914 /* AvailableVoices.swift in Sources */,
 				D581A7412C3ED20A00E5C626 /* Node.swift in Sources */,
 				D581A7452C3FED8200E5C626 /* EditState.swift in Sources */,

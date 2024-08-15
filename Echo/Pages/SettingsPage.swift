@@ -10,15 +10,16 @@ import SwiftUI
 
 
 enum SettingsPath: CaseIterable, Identifiable {
-    case voice, access, scanning, spelling, onboarding, externalLinks, audio, vocabulary
+    case display, voice, access, scanning, spelling, onboarding, externalLinks, audio, vocabulary
     
     // periphery:ignore
-    static public var allPhonePages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary]
+    static public var allPhonePages: [SettingsPath] = [.display, .voice, .access, .scanning, .spelling, .audio, .vocabulary]
     // periphery:ignore
-    static public var allPadPages: [SettingsPath] = [.voice, .access, .scanning, .spelling, .audio, .vocabulary, .onboarding, .externalLinks]
+    static public var allPadPages: [SettingsPath] = [.display, .voice, .access, .scanning, .spelling, .audio, .vocabulary, .onboarding, .externalLinks]
     
     var id: String {
         switch self {
+        case .display: return "display"
         case .voice: return "voice"
         case .access: return "access"
         case .scanning: return "scanning"
@@ -32,6 +33,7 @@ enum SettingsPath: CaseIterable, Identifiable {
     
     @ViewBuilder var page: some View {
         switch self {
+        case .display: DisplayOptionsArea()
         case .voice: VoiceSelectionArea()
         case .access: AccessOptionsArea()
         case .scanning: ScanningOptionsArea()
@@ -45,6 +47,10 @@ enum SettingsPath: CaseIterable, Identifiable {
     
     var description: String {
         switch self {
+        case .display: return String(
+            localized: "Display Options",
+            comment: "Label for the navigation link to the display options page"
+        )
         case .voice: return String(
             localized: "Voice Selection",
             comment: "Label for the navigation link to the voice options page"

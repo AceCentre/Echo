@@ -7,10 +7,13 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 class Settings {
     var showOnboarding: Bool
+    
+    var highlightColor: String = "black"
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
