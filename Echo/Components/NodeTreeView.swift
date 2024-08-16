@@ -40,7 +40,7 @@ struct NodeTreeView: View {
                                                                     ? .primary
                                                                     : Color.fromString(settings.highlightColor)
                                                                 )
-                                                        .bold()
+                                                        .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
                                                         .opacity(currentLevel.last ? 1 : 0.5)
                                                     
                                                 } else {
