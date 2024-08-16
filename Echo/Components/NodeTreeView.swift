@@ -35,7 +35,11 @@ struct NodeTreeView: View {
                                                 if node == currentLevel.hoveredNode {
                                                     Text("\(node.displayText)")
                                                         .padding()
-                                                        .foregroundColor(Color.fromString(settings.highlightColor))
+                                                        .foregroundColor(
+                                                                    settings.highlightColor == "system color"
+                                                                    ? .primary
+                                                                    : Color.fromString(settings.highlightColor)
+                                                                )
                                                         .bold()
                                                         .opacity(currentLevel.last ? 1 : 0.5)
                                                     

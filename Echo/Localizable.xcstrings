@@ -181,6 +181,9 @@
     "Display control commands" : {
       "comment" : "Picker label for control commands"
     },
+    "Display Options" : {
+      "comment" : "Label for the navigation link to the display options page"
+    },
     "Display Text" : {
       "comment" : "Text field placeholder for display text"
     },
@@ -286,6 +289,9 @@
     "Map Buttons" : {
       "comment" : "The help text on the controller button"
     },
+    "Message Bar" : {
+
+    },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
     },
@@ -378,6 +384,9 @@
     },
     "Scanning speed" : {
       "comment" : "Slider label to control the speed of scanning"
+    },
+    "Select Highlight Color" : {
+
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
