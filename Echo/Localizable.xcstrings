@@ -91,6 +91,12 @@
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
       "comment" : "Alert explanation of node deletion"
     },
+    "Bold Highlight Text" : {
+
+    },
+    "Bold Message Bar Text" : {
+
+    },
     "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
       "comment" : "A description of why audio splitting exists"
     },
@@ -175,11 +181,11 @@
     "Dismiss" : {
       "comment" : "Message on dismiss button for errors"
     },
-    "Display" : {
-      "comment" : "Label for display header in settings"
-    },
     "Display control commands" : {
       "comment" : "Picker label for control commands"
+    },
+    "Display Options" : {
+      "comment" : "Label for the navigation link to the display options page"
     },
     "Display Text" : {
       "comment" : "Text field placeholder for display text"
@@ -286,6 +292,9 @@
     "Map Buttons" : {
       "comment" : "The help text on the controller button"
     },
+    "Message Bar" : {
+
+    },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
     },
@@ -378,6 +387,9 @@
     },
     "Scanning speed" : {
       "comment" : "Slider label to control the speed of scanning"
+    },
+    "Select Highlight Color" : {
+
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"

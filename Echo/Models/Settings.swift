@@ -7,10 +7,14 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 class Settings {
     var showOnboarding: Bool
+    
+    var highlightColor: String = "black"
+    var isHighlightTextBold: Bool = false
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
@@ -39,6 +43,8 @@ class Settings {
     var appleWordPrediction: Bool
     var controlCommandPosition: ControlCommandDisplayOptions
     var messageBarFontSize: Int
+    var messageBarColor: String = "system color"
+    var isMessageBarTextBold: Bool = false
     
     var showOnScreenArrows: Bool
     

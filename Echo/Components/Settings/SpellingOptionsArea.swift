@@ -30,22 +30,6 @@ struct SpellingOptionsArea: View {
         @Bindable var settingsBindable = settings
         
         Form {
-            Section(content: {
-                Stepper(
-                    value: $settingsBindable.messageBarFontSize,
-                    in: 10...100,
-                    step: 1
-                ) {
-                    HStack {
-                        Text("Message Bar Font Size", comment: "Label for stepper for font size")
-                        Spacer()
-                        Text("\(settings.messageBarFontSize)")
-                    }
-                    
-                }
-            }, header: {
-                Text("Display", comment: "Label for display header in settings")
-            })
             
             Section(content: {
                 Toggle(
