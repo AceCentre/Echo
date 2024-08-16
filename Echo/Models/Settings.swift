@@ -16,6 +16,9 @@ class Settings {
     var highlightColor: String = "black"
     var isHighlightTextBold: Bool = false
     
+    var arrowSize: CGFloat = 172.0
+    var arrowBorderOpacity: Double = 1.0 
+    
     var currentVocab: Vocabulary?
     var vocabHistory: Int
     var showBackInList: Bool = true
