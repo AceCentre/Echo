@@ -36,9 +36,7 @@ struct NodeTreeView: View {
                                                     Text("\(node.displayText)")
                                                         .padding()
                                                         .foregroundColor(
-                                                                    settings.highlightColor == "system color"
-                                                                    ? .primary
-                                                                    : Color.fromString(settings.highlightColor)
+                                                                Color.fromString(settings.highlightColor)
                                                                 )
                                                         .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
                                                         .opacity(currentLevel.last ? 1 : 0.5)

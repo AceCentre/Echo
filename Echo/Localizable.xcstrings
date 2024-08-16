@@ -389,7 +389,7 @@
       "comment" : "Slider label to control the speed of scanning"
     },
     "Select Highlight Color" : {
-
+      "comment" : "This is the text for a label for settings to change the colour of the highlight colour"
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
