@@ -22,9 +22,7 @@ struct MessageBar: View {
                         .font(.system(size: CGFloat(settings.messageBarFontSize)))
                         .fontWeight(settings.isMessageBarTextBold ? .bold : .regular) // Apply bold based on settings
                         .foregroundColor(
-                            settings.messageBarColor == "system color"
-                            ? .primary
-                            : Color.fromString(settings.messageBarColor)
+                            Color.fromString(settings.messageBarColor)
                         )
         }
         .frame(maxWidth: .infinity)

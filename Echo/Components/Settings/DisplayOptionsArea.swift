@@ -16,7 +16,7 @@ struct DisplayOptionsArea: View {
         @Bindable var settingsBindable = settings
         Form {
             // Section for Highlight Color Options
-            Section(header: Text("Select Highlight Color")) {
+            Section(header: Text("Select Highlight Color",comment:"This is the text for a label for settings to change the colour of the highlight colour")) {
                 ForEach(colorOptions, id: \.0) { name, color in
                     Button(action: {
                         settings.highlightColor = name.lowercased()

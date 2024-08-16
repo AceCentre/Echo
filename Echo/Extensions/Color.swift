@@ -11,6 +11,8 @@ import SwiftUI
 extension Color {
     static func fromString(_ colorString: String) -> Color {
         switch colorString.lowercased() {
+        case "system color":
+            return .primary
         case "yellow":
             return .yellow
         case "black":
