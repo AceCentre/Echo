@@ -82,6 +82,19 @@ struct DisplayOptionsArea: View {
                     Text("Bold Message Bar Text")
                 }
             }
+            if settings.showOnScreenArrows {
+                Section(header: Text("On-Screen Arrow Size")) {
+                    Stepper(value: $settingsBindable.arrowSize, in: 50...300, step: 10) {
+                        Text("Arrow Size: \(Int(settings.arrowSize))")
+                    }
+                }
+                
+                Section(header: Text("Arrow Border Opacity")) {
+                    Slider(value: $settingsBindable.arrowBorderOpacity, in: 0.0...1.0, step: 0.1) {
+                        Text("Arrow Border Opacity: \(Int(settings.arrowBorderOpacity * 100))%")
+                    }
+                }
+            }
         }
         .navigationTitle("Display Options")
     }

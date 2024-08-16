@@ -61,6 +61,12 @@
     "Are you sure you want to delete '%@'?" : {
       "comment" : "Message in alert for deleting switch"
     },
+    "Arrow Border Opacity" : {
+
+    },
+    "Arrow Border Opacity: %lld%%" : {
+
+    },
     "Arrow pointing down" : {
       "comment" : "An accessibility label for the down arrow image"
     },
@@ -72,6 +78,9 @@
     },
     "Arrow pointing up" : {
       "comment" : "An accessibility label for the up arrow image"
+    },
+    "Arrow Size: %lld" : {
+
     },
     "Audio" : {
       "comment" : "Label for the navigation link to the audio options page\nThe label for the section about analytics"
@@ -324,6 +333,9 @@
     },
     "On-screen" : {
       "comment" : "Header for on screen arrow options area"
+    },
+    "On-Screen Arrow Size" : {
+
     },
     "Onscreen Arrows" : {
       "comment" : "Label for onboarding picker"
