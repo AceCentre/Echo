@@ -33,10 +33,12 @@ struct NodeTreeView: View {
                                             
                                             HStack {
                                                 if node == currentLevel.hoveredNode {
+                                                    let highlightColorOption = ColorOption.colorFromName(settings.highlightColor)
+
                                                     Text("\(node.displayText)")
                                                         .padding()
                                                         .foregroundColor(
-                                                                Color.fromString(settings.highlightColor)
+                                                            highlightColorOption.color
                                                                 )
                                                         .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
                                                         .opacity(currentLevel.last ? 1 : 0.5)

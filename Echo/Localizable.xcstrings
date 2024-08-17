@@ -61,9 +61,6 @@
     "Are you sure you want to delete '%@'?" : {
       "comment" : "Message in alert for deleting switch"
     },
-    "Arrow Border Opacity" : {
-
-    },
     "Arrow Border Opacity: %lld%%" : {
 
     },
@@ -93,6 +90,9 @@
     },
     "Back Position" : {
       "comment" : "Label for picker for back position"
+    },
+    "Background Opacity: %lld%%" : {
+
     },
     "Backup Vocabulary" : {
       "comment" : "Header text for vocab backup section"
@@ -265,6 +265,9 @@
     "Hide" : {
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
+    "Highlight Text Preview" : {
+
+    },
     "History" : {
       "comment" : "Header for settings about history"
     },
@@ -307,6 +310,9 @@
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
     },
+    "Message Bar Text Preview" : {
+
+    },
     "My new vocabulary" : {
       "comment" : "Placeholder for new vocab name"
     },
@@ -334,11 +340,14 @@
     "On-screen" : {
       "comment" : "Header for on screen arrow options area"
     },
-    "On-Screen Arrow Size" : {
+    "On-Screen Arrow" : {
 
     },
     "Onscreen Arrows" : {
       "comment" : "Label for onboarding picker"
+    },
+    "Opacity: %lld%%" : {
+
     },
     "Play Sample" : {
       "comment" : "Label for button that plays an audio sample"
@@ -376,6 +385,12 @@
     "Right Channel" : {
       "comment" : "Label for picker of audio channels"
     },
+    "Sample Highlight Text" : {
+
+    },
+    "Sample Message Bar Text" : {
+
+    },
     "Save" : {
       "comment" : "Save button text for saving vocab changes\nThe label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
@@ -403,11 +418,20 @@
     "Select Highlight Color" : {
       "comment" : "This is the text for a label for settings to change the colour of the highlight colour"
     },
+    "Select Message Bar Background Color" : {
+
+    },
+    "Select Message Bar Text Color" : {
+
+    },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
     },
     "Select the vocabulary of phrases, words and letters to be used" : {
       "comment" : "Footer of vocabulary options"
+    },
+    "Select Theme" : {
+
     },
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
@@ -496,6 +520,9 @@
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
     },
+    "Text Opacity: %lld%%" : {
+
+    },
     "Text that is displayed in the tree" : {
       "comment" : "Footer for editing display text"
     },
@@ -522,6 +549,9 @@
     },
     "The voice that is used to speak information to you. Select the options tht you want to hear when Echo is talking to you." : {
       "comment" : "Explanation of cuevoice during onboarding"
+    },
+    "Theme" : {
+
     },
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"

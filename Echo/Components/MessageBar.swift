@@ -16,14 +16,15 @@ struct MessageBar: View {
     var body: some View {
         VStack {
             let currentText = mainCommunicationPageState.enteredText
-            
+            let selectedColorOption = ColorOption.colorFromName(settings.messageBarColorName)
+                    
+
             Text(currentText.isEmpty ? " " : currentText)
                         .padding(10)
                         .font(.system(size: CGFloat(settings.messageBarFontSize)))
                         .fontWeight(settings.isMessageBarTextBold ? .bold : .regular) // Apply bold based on settings
-                        .foregroundColor(
-                            Color.fromString(settings.messageBarColor)
-                        )
+                        .foregroundColor(selectedColorOption.color.opacity(settings.messageBarOpacity))
+
         }
         .frame(maxWidth: .infinity)
         .background(Color("lightGray"))
