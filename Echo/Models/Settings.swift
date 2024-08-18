@@ -19,9 +19,6 @@ class Settings {
 
     var entriesColor: String = "System Default"
     var entriesOpacity: Double = 0.5
-
-    var arrowSize: CGFloat = 172.0
-    var arrowBorderOpacity: Double = 1.0 
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
@@ -65,6 +62,9 @@ class Settings {
     var enableSwitchControl: Bool
     var selectedTheme: String = "System Default"
     
+    var arrowSize: CGFloat = 100.0 // Default actual size
+    var arrowBorderOpacity: Double = 1.0
+        
     init(showOnboarding: Bool = true) {
         self.vocabHistory = 2
         

@@ -12,6 +12,9 @@ import SwiftUI
 
 struct AppearanceOptionsArea: View {
     @Environment(Settings.self) var settings
+    let minArrowSize: CGFloat = 50.0
+    let maxArrowSize: CGFloat = 300.0
+    @State private var arrowSizePercentage: Double = 50.0
     
     var body: some View {
         @Bindable var settingsBindable = settings
@@ -132,18 +135,28 @@ struct AppearanceOptionsArea: View {
                     )
                     
                 }
-                if
-                    settings.showOnScreenArrows {
+                
+                if settings.showOnScreenArrows {
                     Section(header: Text("On-Screen Arrow")) {
-                        Stepper(value: $settingsBindable.arrowSize, in: 50...300, step: 10) {
-                            Text("Arrow Size: \(Int(settings.arrowSize))")
-                        }
+                        // Percentage slider to adjust arrow size
+                        Slider(value: $arrowSizePercentage, in: 0...100, onEditingChanged: { _ in
+                            // Calculate the actual arrow size based on the percentage when the slider stops moving
+                            settings.arrowSize = minArrowSize + (maxArrowSize - minArrowSize) * CGFloat(arrowSizePercentage / 100)
+                            print("Arrow Size Percentage: \(arrowSizePercentage)%")
+                            print("Corresponding Actual Arrow Size: \(settings.arrowSize)")
+                        })
                         
-                        Slider(value: $settingsBindable.arrowBorderOpacity, in: 0.0...1.0, step: 0.1)
+                        // Display the percentage for reference
+                        Text("Arrow Size: \(Int(arrowSizePercentage)) %")
+                        
+                        Slider(value: $settingsBindable.arrowBorderOpacity, in: 0.0...1.0, step: 0.01)
                         Text("Arrow Border Opacity: \(Int(settings.arrowBorderOpacity * 100))%")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+                    }
+                    .onAppear {
+                        // Initialize the slider value based on the current arrow size
+                        arrowSizePercentage = Double((settings.arrowSize - minArrowSize) / (maxArrowSize - minArrowSize) * 100)
                     }
                 }
                 
@@ -151,6 +164,7 @@ struct AppearanceOptionsArea: View {
             .navigationTitle("Display Options")
         }
     }
+    
     
     // Helper function to reduce complexity in the body
     private func colorOptionView(for colorOption: ColorOption) -> some View {

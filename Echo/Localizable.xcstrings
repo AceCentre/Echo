@@ -85,7 +85,7 @@
     "Arrow pointing up" : {
       "comment" : "An accessibility label for the up arrow image"
     },
-    "Arrow Size: %lld" : {
+    "Arrow Size: %lld %%" : {
 
     },
     "Audio" : {
