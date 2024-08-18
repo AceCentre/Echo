@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */; };
+		3F586C5A2C70D09700B8107B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F586C592C70D09700B8107B /* Theme.swift */; };
+		3F586C5C2C70D0C300B8107B /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F586C5B2C70D0C300B8107B /* Themes.swift */; };
+		3FF2365E2C6E99AA00810250 /* AppearanceOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */; };
 		3FF236602C6E9AFF00810250 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365F2C6E9AFF00810250 /* Color.swift */; };
 		D577B38F2BFF9A2800F064F2 /* EchoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B38E2BFF9A2800F064F2 /* EchoApp.swift */; };
 		D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3902BFF9A2800F064F2 /* ContentView.swift */; };
@@ -89,7 +91,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOptionsArea.swift; sourceTree = "<group>"; };
+		3F586C592C70D09700B8107B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		3F586C5B2C70D0C300B8107B /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
+		3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceOptionsArea.swift; sourceTree = "<group>"; };
 		3FF2365F2C6E9AFF00810250 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		D577B38B2BFF9A2800F064F2 /* Echo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D577B38E2BFF9A2800F064F2 /* EchoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoApp.swift; sourceTree = "<group>"; };
@@ -241,6 +245,7 @@
 				D581A73B2C3ED20A00E5C626 /* Vocabulary.swift */,
 				D581A7382C3ED20900E5C626 /* Switch.swift */,
 				D581A73C2C3ED20A00E5C626 /* Node.swift */,
+				3F586C592C70D09700B8107B /* Theme.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -307,6 +312,7 @@
 				D581E9122C384BD800F9EDE8 /* Comparable.swift */,
 				D5A775982C0627D8004DA914 /* String.swift */,
 				3FF2365F2C6E9AFF00810250 /* Color.swift */,
+				3F586C5B2C70D0C300B8107B /* Themes.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -369,7 +375,7 @@
 				D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */,
 				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
 				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
-				3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */,
+				3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -473,7 +479,7 @@
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
 				D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */,
-				3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */,
+				3FF2365E2C6E99AA00810250 /* AppearanceOptionsArea.swift in Sources */,
 				D5A775F12C32E9C2004DA914 /* ScrollLock.swift in Sources */,
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
@@ -486,6 +492,7 @@
 				D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */,
 				D5A775AE2C0784D0004DA914 /* AudioDirection.swift in Sources */,
 				D577B3A92C00A05100F064F2 /* View.swift in Sources */,
+				3F586C5A2C70D09700B8107B /* Theme.swift in Sources */,
 				D5A775DC2C2C0BE5004DA914 /* AccessOptionsArea.swift in Sources */,
 				D5A775BF2C09E6F2004DA914 /* Swipe.swift in Sources */,
 				D581E9112C384B8B00F9EDE8 /* OnScreenArrows.swift in Sources */,
@@ -515,6 +522,7 @@
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
 				D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */,
 				D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */,
+				3F586C5C2C70D0C300B8107B /* Themes.swift in Sources */,
 				D5A775A62C076151004DA914 /* Helpers.swift in Sources */,
 				D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */,
 				D581A7322C3ED0AA00E5C626 /* ControllerManager.swift in Sources */,

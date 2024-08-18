@@ -13,9 +13,13 @@ import SwiftUI
 class Settings {
     var showOnboarding: Bool
     
-    var highlightColor: String = "black"
+    var highlightColor: String = "Black"
     var isHighlightTextBold: Bool = false
-    
+    var highlightOpacity: Double = 1.0
+
+    var entriesColor: String = "System Default"
+    var entriesOpacity: Double = 0.5
+
     var arrowSize: CGFloat = 172.0
     var arrowBorderOpacity: Double = 1.0 
     
@@ -45,8 +49,13 @@ class Settings {
     var wordAndLetterPrompt: Bool
     var appleWordPrediction: Bool
     var controlCommandPosition: ControlCommandDisplayOptions
-    var messageBarFontSize: Int
-    var messageBarColor: String = "system color"
+    
+    var messageBarBackgroundColorName: String = "Light Gray" // Default background color
+    var messageBarTextColorName: String = "Black" // Default text color
+    var messageBarBackgroundOpacity: Double = 1.0
+    var messageBarOpacity: Double = 1.0
+    var messageBarTextOpacity: Double = 1.0
+    var messageBarFontSize: Int = 16
     var isMessageBarTextBold: Bool = false
     
     var showOnScreenArrows: Bool
@@ -54,6 +63,7 @@ class Settings {
     var allowSwipeGestures: Bool
     
     var enableSwitchControl: Bool
+    var selectedTheme: String = "System Default"
     
     init(showOnboarding: Bool = true) {
         self.vocabHistory = 2
@@ -89,4 +99,22 @@ class Settings {
         self.showBackInList = true
         self.backButtonPosition = BackButtonPosition.bottom.rawValue
     }
+    
+    func applyTheme(_ theme: Theme) {
+            highlightColor = theme.highlightColor
+            highlightOpacity = theme.highlightOpacity
+            isHighlightTextBold = theme.isHighlightTextBold
+
+            entriesColor = theme.entriesColor
+            entriesOpacity = theme.entriesOpacity
+            
+            messageBarBackgroundColorName = theme.messageBarBackgroundColorName
+            messageBarBackgroundOpacity = theme.messageBarBackgroundOpacity
+            
+            messageBarTextColorName = theme.messageBarTextColorName
+            messageBarTextOpacity = theme.messageBarTextOpacity
+            messageBarFontSize = theme.messageBarFontSize
+            
+            selectedTheme = theme.name
+        }
 }

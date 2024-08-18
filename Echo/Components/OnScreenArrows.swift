@@ -35,7 +35,7 @@
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .offset(CGSize(width: 0, height: 3))
-                                    .opacity(settings.arrowBorderOpacity) 
+                                    .opacity(settings.arrowBorderOpacity)
                                     .accessibilityLabel(
                                         String(
                                             localized: "Arrow pointing up",

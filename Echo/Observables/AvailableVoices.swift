@@ -11,6 +11,7 @@ import AVKit
 class AvailableVoices: ObservableObject {
     @Published var voices: [AVSpeechSynthesisVoice] = []
     @Published var voicesByLang: [String: [AVSpeechSynthesisVoice]]
+    @Published var personalVoiceAuthorized: Bool = false
     
     init() {
         voices = AVSpeechSynthesisVoice.speechVoices()
@@ -21,6 +22,36 @@ class AvailableVoices: ObservableObject {
             voicesByLang[voice.language] = currentList
         }
     }
+    
+    func requestPersonalVoiceAuthorization() {
+            AVSpeechSynthesizer.requestPersonalVoiceAuthorization { status in
+                DispatchQueue.main.async {
+                    switch status {
+                    case .authorized:
+                        self.personalVoiceAuthorized = true
+                    case .denied, .notDetermined, .unsupported:
+                        self.personalVoiceAuthorized = false
+                    @unknown default:
+                        self.personalVoiceAuthorized = false
+                    }
+                    // You might want to fetch voices again if the status changes
+                    if self.personalVoiceAuthorized {
+                        self.fetchPersonalVoices()
+                    }
+                }
+            }
+        }
+    
+    private func fetchPersonalVoices() {
+           // Add Personal Voice if authorized
+           if let personalVoice = AVSpeechSynthesisVoice(identifier: "com.apple.ttsbundle.PersonalVoice") {
+               voices.append(personalVoice)
+               let language = personalVoice.language
+               var currentList = voicesByLang[language] ?? []
+               currentList.append(personalVoice)
+               voicesByLang[language] = currentList
+           }
+       }
     
     /***
         Sorts all the languages availble by the following criteria
