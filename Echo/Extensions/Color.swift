@@ -28,7 +28,13 @@ struct ColorOption: Identifiable {
         ColorOption(name: "System Default", color: .primary)
     ]
     
-    static func colorFromName(_ name: String) -> ColorOption {
-        return colorOptions.first { $0.name.lowercased() == name.lowercased() } ?? ColorOption(name: "Black", color: .black)
-    }
+    static func colorFromName(_ name: String, useSecondary: Bool = false) -> ColorOption {
+            if let matchedOption = colorOptions.first(where: { $0.name.lowercased() == name.lowercased() }) {
+                return matchedOption
+            } else if name.lowercased() == "system default" {
+                return ColorOption(name: "System Default", color: useSecondary ? .secondary : .primary)
+            } else {
+                return ColorOption(name: "Black", color: .black) // Default color if name doesn't match
+            }
+        }
 }

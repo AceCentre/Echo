@@ -43,6 +43,15 @@
     "Add Switch" : {
       "comment" : "Button label to add a new switch to the list"
     },
+    "All Other Entries Text Preview" : {
+
+    },
+    "All other items" : {
+
+    },
+    "All other items color" : {
+
+    },
     "Alphabet Order" : {
       "comment" : "The label that is shown next to the alphabet order picker"
     },
@@ -54,6 +63,9 @@
     },
     "An error has occurred. If echo is broken please contact enquiries@acecentre.org.uk" : {
       "comment" : "Message in error pop up"
+    },
+    "Appearance" : {
+      "comment" : "Label for the navigation link to the appearance options page"
     },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
@@ -384,6 +396,9 @@
     },
     "Right Channel" : {
       "comment" : "Label for picker of audio channels"
+    },
+    "Sample Entries Text" : {
+
     },
     "Sample Highlight Text" : {
 

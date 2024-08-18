@@ -10,7 +10,7 @@
 import Foundation
 import SwiftUI
 
-struct DisplayOptionsArea: View {
+struct AppearanceOptionsArea: View {
     @Environment(Settings.self) var settings
     
     var body: some View {
@@ -58,6 +58,25 @@ struct DisplayOptionsArea: View {
                     // Preview for Highlight Text
                     Section(header: Text("Highlight Text Preview")) {
                         highlightTextPreview()
+                    }
+                }
+                
+                Section(header: Text("All other items")) {
+                    Picker("All other items color", selection: $settingsBindable.entriesColor) {
+                        ForEach(ColorOption.colorOptions) { colorOption in
+                            colorOptionView(for: colorOption)
+                        }
+                    }
+                    
+                    // Slider for Highlight Color Opacity
+                    Slider(value: $settingsBindable.entriesOpacity, in: 0.0...1.0)
+                    Text("Opacity: \(Int(settingsBindable.entriesOpacity * 100))%")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    // Preview for Highlight Text
+                    Section(header: Text("All Other Entries Text Preview")) {
+                        entriesTextPreview()
                     }
                 }
                 
@@ -145,7 +164,7 @@ struct DisplayOptionsArea: View {
                 .cornerRadius(3)
             Text(colorOption.name)
         }
-        .tag(colorOption.name.lowercased())
+        .tag(colorOption.name)
     }
     
     // Helper function to preview the highlight text
@@ -159,6 +178,15 @@ struct DisplayOptionsArea: View {
             .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
     }
 
+    private func entriesTextPreview() -> some View {
+        let entriesColor = ColorOption.colorFromName(settings.entriesColor).color
+        let entriesColorWithOpacity = entriesColor.opacity(settings.entriesOpacity)
+        
+        return Text("Sample Entries Text")
+            .padding()
+            .foregroundColor(entriesColorWithOpacity)
+    }
+    
     // Updated helper function to preview the message bar text
     private func messageBarTextPreview(backgroundColor: Color, textColor: Color) -> some View {
         Text("Sample Message Bar Text")

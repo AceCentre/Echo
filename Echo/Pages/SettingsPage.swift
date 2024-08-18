@@ -33,7 +33,7 @@ enum SettingsPath: CaseIterable, Identifiable {
     
     @ViewBuilder var page: some View {
         switch self {
-        case .display: DisplayOptionsArea()
+        case .display: AppearanceOptionsArea()
         case .voice: VoiceSelectionArea()
         case .access: AccessOptionsArea()
         case .scanning: ScanningOptionsArea()
@@ -48,8 +48,8 @@ enum SettingsPath: CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .display: return String(
-            localized: "Display Options",
-            comment: "Label for the navigation link to the display options page"
+            localized: "Appearance",
+            comment: "Label for the navigation link to the appearance options page"
         )
         case .voice: return String(
             localized: "Voice Selection",

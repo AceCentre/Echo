@@ -13,6 +13,8 @@ struct Theme {
     let highlightColor: String
     let highlightOpacity: Double
     let isHighlightTextBold: Bool
+    let entriesColor: String
+    let entriesOpacity: Double
     let messageBarColorName: String
     let messageBarBackgroundColorName: String
     let messageBarTextColorName: String

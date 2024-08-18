@@ -34,19 +34,26 @@ struct NodeTreeView: View {
                                             HStack {
                                                 if node == currentLevel.hoveredNode {
                                                     let highlightColorOption = ColorOption.colorFromName(settings.highlightColor)
-
+                                                    
                                                     Text("\(node.displayText)")
                                                         .padding()
                                                         .foregroundColor(
                                                             highlightColorOption.color
                                                                 )
                                                         .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
-                                                        .opacity(currentLevel.last ? 1 : 0.5)
+                                                        .opacity(settings.highlightOpacity)
+                                                    //currentLevel.last ? 1 : 0.5) used to be this. I could be making this worse by dropping this.
                                                     
                                                 } else {
+                                                    let entriesColorOption = ColorOption.colorFromName(settings.entriesColor)
+                                                    
                                                     Text(node.displayText)
                                                         .padding()
-                                                        .opacity(currentLevel.last ? 1 : 0.5)
+                                                        .foregroundColor(
+                                                            entriesColorOption.color
+                                                                )
+                                                        .opacity(settings.entriesOpacity)
+                                                    //.opacity(currentLevel.last ? 1 : 0.5)
                                                 }
                                             }.id(node)
                                         }

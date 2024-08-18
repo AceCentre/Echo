@@ -16,7 +16,10 @@ class Settings {
     var highlightColor: String = "black"
     var isHighlightTextBold: Bool = false
     var highlightOpacity: Double = 1.0
-    
+
+    var entriesColor: String = "system default"
+    var entriesOpacity: Double = 0.5
+
     var arrowSize: CGFloat = 172.0
     var arrowBorderOpacity: Double = 1.0 
     
@@ -47,8 +50,7 @@ class Settings {
     var appleWordPrediction: Bool
     var controlCommandPosition: ControlCommandDisplayOptions
     
-    var messageBarColorName: String = "black"
-    var messageBarBackgroundColorName: String = "white" // Default background color
+    var messageBarBackgroundColorName: String = "lightGray" // Default background color
     var messageBarTextColorName: String = "black" // Default text color
     var messageBarBackgroundOpacity: Double = 1.0
     var messageBarOpacity: Double = 1.0
@@ -102,12 +104,17 @@ class Settings {
             highlightColor = theme.highlightColor
             highlightOpacity = theme.highlightOpacity
             isHighlightTextBold = theme.isHighlightTextBold
-            messageBarColorName = theme.messageBarColorName
+
+            entriesColor = theme.entriesColor
+            entriesOpacity = theme.entriesOpacity
+            
             messageBarBackgroundColorName = theme.messageBarBackgroundColorName
+            messageBarBackgroundOpacity = theme.messageBarBackgroundOpacity
+            
             messageBarTextColorName = theme.messageBarTextColorName
             messageBarTextOpacity = theme.messageBarTextOpacity
-            messageBarBackgroundOpacity = theme.messageBarBackgroundOpacity
             messageBarFontSize = theme.messageBarFontSize
+            
             selectedTheme = theme.name
         }
 }

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3F586C5A2C70D09700B8107B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F586C592C70D09700B8107B /* Theme.swift */; };
 		3F586C5C2C70D0C300B8107B /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F586C5B2C70D0C300B8107B /* Themes.swift */; };
-		3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */; };
+		3FF2365E2C6E99AA00810250 /* AppearanceOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */; };
 		3FF236602C6E9AFF00810250 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365F2C6E9AFF00810250 /* Color.swift */; };
 		D577B38F2BFF9A2800F064F2 /* EchoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B38E2BFF9A2800F064F2 /* EchoApp.swift */; };
 		D577B3912BFF9A2800F064F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D577B3902BFF9A2800F064F2 /* ContentView.swift */; };
@@ -93,7 +93,7 @@
 /* Begin PBXFileReference section */
 		3F586C592C70D09700B8107B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		3F586C5B2C70D0C300B8107B /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
-		3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOptionsArea.swift; sourceTree = "<group>"; };
+		3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceOptionsArea.swift; sourceTree = "<group>"; };
 		3FF2365F2C6E9AFF00810250 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		D577B38B2BFF9A2800F064F2 /* Echo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D577B38E2BFF9A2800F064F2 /* EchoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoApp.swift; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 				D5A775EE2C2DBB7F004DA914 /* VocabularyOptionsArea.swift */,
 				D5A775DB2C2C0BE5004DA914 /* AccessOptionsArea.swift */,
 				D5A775EC2C2DB026004DA914 /* AudioOptionsArea.swift */,
-				3FF2365D2C6E99AA00810250 /* DisplayOptionsArea.swift */,
+				3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -479,7 +479,7 @@
 				D5A7759F2C075FBF004DA914 /* VoiceOptionsDisplay.swift in Sources */,
 				D5A775AA2C0780C4004DA914 /* VoiceController.swift in Sources */,
 				D5A775EF2C2DBB7F004DA914 /* VocabularyOptionsArea.swift in Sources */,
-				3FF2365E2C6E99AA00810250 /* DisplayOptionsArea.swift in Sources */,
+				3FF2365E2C6E99AA00810250 /* AppearanceOptionsArea.swift in Sources */,
 				D5A775F12C32E9C2004DA914 /* ScrollLock.swift in Sources */,
 				D5A7759D2C075F4E004DA914 /* CueVoice.swift in Sources */,
 				D5A775CD2C0F66AC004DA914 /* KeyboardDetector.swift in Sources */,
