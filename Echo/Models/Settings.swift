@@ -13,11 +13,11 @@ import SwiftUI
 class Settings {
     var showOnboarding: Bool
     
-    var highlightColor: String = "black"
+    var highlightColor: String = "Black"
     var isHighlightTextBold: Bool = false
     var highlightOpacity: Double = 1.0
 
-    var entriesColor: String = "system default"
+    var entriesColor: String = "System Default"
     var entriesOpacity: Double = 0.5
 
     var arrowSize: CGFloat = 172.0
@@ -50,8 +50,8 @@ class Settings {
     var appleWordPrediction: Bool
     var controlCommandPosition: ControlCommandDisplayOptions
     
-    var messageBarBackgroundColorName: String = "lightGray" // Default background color
-    var messageBarTextColorName: String = "black" // Default text color
+    var messageBarBackgroundColorName: String = "Light Gray" // Default background color
+    var messageBarTextColorName: String = "Black" // Default text color
     var messageBarBackgroundOpacity: Double = 1.0
     var messageBarOpacity: Double = 1.0
     var messageBarTextOpacity: Double = 1.0

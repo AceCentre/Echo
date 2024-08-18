@@ -43,9 +43,6 @@
     "Add Switch" : {
       "comment" : "Button label to add a new switch to the list"
     },
-    "All Other Entries Text Preview" : {
-
-    },
     "All other items" : {
 
     },
@@ -277,9 +274,6 @@
     "Hide" : {
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
-    "Highlight Text Preview" : {
-
-    },
     "History" : {
       "comment" : "Header for settings about history"
     },
@@ -321,9 +315,6 @@
     },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
-    },
-    "Message Bar Text Preview" : {
-
     },
     "My new vocabulary" : {
       "comment" : "Placeholder for new vocab name"

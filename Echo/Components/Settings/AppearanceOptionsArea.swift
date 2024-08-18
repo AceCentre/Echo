@@ -56,9 +56,8 @@ struct AppearanceOptionsArea: View {
                     }
                     
                     // Preview for Highlight Text
-                    Section(header: Text("Highlight Text Preview")) {
-                        highlightTextPreview()
-                    }
+                    highlightTextPreview()
+                    
                 }
                 
                 Section(header: Text("All other items")) {
@@ -75,9 +74,8 @@ struct AppearanceOptionsArea: View {
                         .foregroundColor(.secondary)
                     
                     // Preview for Highlight Text
-                    Section(header: Text("All Other Entries Text Preview")) {
-                        entriesTextPreview()
-                    }
+                    entriesTextPreview()
+                    
                 }
                 
                 // Section for Message Bar Settings
@@ -128,12 +126,11 @@ struct AppearanceOptionsArea: View {
                     }
                     
                     // Preview for Message Bar Text
-                    Section(header: Text("Message Bar Text Preview")) {
-                        messageBarTextPreview(
+                    messageBarTextPreview(
                             backgroundColor: messageBarBackgroundColor,
                             textColor: messageBarTextColor
-                        )
-                    }
+                    )
+                    
                 }
                 if
                     settings.showOnScreenArrows {
