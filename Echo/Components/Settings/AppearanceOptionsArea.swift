@@ -33,7 +33,7 @@ struct AppearanceOptionsArea: View {
                             settings.applyTheme(selectedTheme)
                         }
                     }
-
+                    
                 }
                 
                 // Section for Highlight Color Options
@@ -92,34 +92,34 @@ struct AppearanceOptionsArea: View {
                             Text("\(settingsBindable.messageBarFontSize)")
                         }
                     }
-
+                    
                     // Picker for Message Bar Background Color
                     Picker("Select Message Bar Background Color", selection: $settingsBindable.messageBarBackgroundColorName) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
                         }
                     }
-
+                    
                     // Slider for Background Opacity
                     Slider(value: $settingsBindable.messageBarBackgroundOpacity, in: 0.0...1.0)
                     Text("Background Opacity: \(Int(settingsBindable.messageBarBackgroundOpacity * 100))%")
                         .font(.caption)
                         .foregroundColor(.secondary)
-
+                    
                     // Picker for Message Bar Text Color
                     Picker("Select Message Bar Text Color", selection: $settingsBindable.messageBarTextColorName) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
                         }
                     }
-
+                    
                     // Slider for Text Opacity
-
+                    
                     Slider(value: $settingsBindable.messageBarTextOpacity, in: 0.0...1.0)
                     Text("Text Opacity: \(Int(settingsBindable.messageBarTextOpacity * 100))%")
                         .font(.caption)
                         .foregroundColor(.secondary)
-
+                    
                     // Toggle for Bold Message Bar Text
                     Toggle(isOn: $settingsBindable.isMessageBarTextBold) {
                         Text("Bold Message Bar Text")
@@ -127,8 +127,8 @@ struct AppearanceOptionsArea: View {
                     
                     // Preview for Message Bar Text
                     messageBarTextPreview(
-                            backgroundColor: messageBarBackgroundColor,
-                            textColor: messageBarTextColor
+                        backgroundColor: messageBarBackgroundColor,
+                        textColor: messageBarTextColor
                     )
                     
                 }
@@ -146,7 +146,7 @@ struct AppearanceOptionsArea: View {
                         
                     }
                 }
-                           
+                
             }
             .navigationTitle("Display Options")
         }
@@ -174,7 +174,7 @@ struct AppearanceOptionsArea: View {
             .foregroundColor(highlightColorWithOpacity)
             .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
     }
-
+    
     private func entriesTextPreview() -> some View {
         let entriesColor = ColorOption.colorFromName(settings.entriesColor).color
         let entriesColorWithOpacity = entriesColor.opacity(settings.entriesOpacity)
