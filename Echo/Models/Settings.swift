@@ -13,17 +13,17 @@ import SwiftUI
 class Settings {
     var showOnboarding: Bool
     
-    var highlightColor: String = "Black"
-    var isHighlightTextBold: Bool = false
-    var highlightOpacity: Double = 1.0
+    var highlightColor: String
+    var isHighlightTextBold: Bool
+    var highlightOpacity: Double
 
-    var entriesColor: String = "System Default"
-    var entriesOpacity: Double = 0.5
+    var entriesColor: String
+    var entriesOpacity: Double
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
-    var showBackInList: Bool = true
-    var backButtonPosition: Int = BackButtonPosition.bottom.rawValue
+    var showBackInList: Bool
+    var backButtonPosition: Int
     
     var cueVoice: Voice?
     var speakingVoice: Voice?
@@ -47,35 +47,47 @@ class Settings {
     var appleWordPrediction: Bool
     var controlCommandPosition: ControlCommandDisplayOptions
     
-    var messageBarBackgroundColorName: String = "Light Gray" // Default background color
-    var messageBarTextColorName: String = "Black" // Default text color
-    var messageBarBackgroundOpacity: Double = 1.0
-    var messageBarOpacity: Double = 1.0
-    var messageBarTextOpacity: Double = 1.0
-    var messageBarFontSize: Int = 16
-    var isMessageBarTextBold: Bool = false
+    var messageBarBackgroundColorName: String
+    var messageBarTextColorName: String
+    var messageBarBackgroundOpacity: Double
+    var messageBarTextOpacity: Double
+    var messageBarFontSize: Int
+    var isMessageBarTextBold: Bool
     
     var showOnScreenArrows: Bool
     
     var allowSwipeGestures: Bool
     
     var enableSwitchControl: Bool
-    var selectedTheme: String = Theme.themes.first?.name ?? "System Default"
+    var selectedTheme: String
 
-    var arrowSize: CGFloat = 100.0 // Default actual size
-    var arrowBorderOpacity: Double = 1.0
-        
+    var arrowSize: CGFloat
+    var arrowBorderOpacity: Double
+    
     init(showOnboarding: Bool = true) {
-        self.vocabHistory = 2
-        
         self.showOnboarding = showOnboarding
+        
+        self.highlightColor = "Black"
+        self.isHighlightTextBold = false
+        self.highlightOpacity = 1.0
+        
+        self.entriesColor = "System Default"
+        self.entriesOpacity = 0.5
+        
+        self.vocabHistory = 2
+        self.currentVocab = nil
+        self.showBackInList = true
+        self.backButtonPosition = BackButtonPosition.bottom.rawValue
+        
+        self.cueVoice = nil
+        self.speakingVoice = nil
         
         self.splitAudio = false
         self.cueDirection = .left
         self.speakDirection = .right
         
         self.scanning = true
-        self.scanWaitTime = 2
+        self.scanWaitTime = 2.0
         self.scanLoops = 3
         self.scanOnAppLaunch = true
         self.scanAfterSelection = true
@@ -83,12 +95,18 @@ class Settings {
         self.letterPrediction = true
         self.wordPrediction = true
         self.wordPredictionLimit = 3
-        self.predictionLanguage = PredictionLanguage.english
+        self.predictionLanguage = .english
         self.characterOrderId = CharacterOrder.defaultOrder.id
         self.wordAndLetterPrompt = true
         self.appleWordPrediction = true
         self.controlCommandPosition = .top
-        self.messageBarFontSize = 25
+        
+        self.messageBarBackgroundColorName = "Light Gray"
+        self.messageBarTextColorName = "Black"
+        self.messageBarBackgroundOpacity = 1.0
+        self.messageBarTextOpacity = 1.0
+        self.messageBarFontSize = 16
+        self.isMessageBarTextBold = false
         
         self.showOnScreenArrows = true
         
@@ -96,31 +114,32 @@ class Settings {
         
         self.enableSwitchControl = true
         
-        self.showBackInList = true
-        self.backButtonPosition = BackButtonPosition.bottom.rawValue
+        self.selectedTheme = Theme.themes.first?.name ?? "System Default"
+        
+        self.arrowSize = 100.0
+        self.arrowBorderOpacity = 1.0
     }
     
     func applyTheme(_ theme: Theme, for colorScheme: ColorScheme) {
-            let themeVariant: Theme.ThemeVariant
-            
-            if colorScheme == .dark {
-                themeVariant = theme.darkVariant
-            } else {
-                themeVariant = theme.lightVariant
-            }
-            
-            // Apply the selected themeVariant to your UI
-            self.highlightColor = themeVariant.highlightColor
-            self.highlightOpacity = themeVariant.highlightOpacity
-            self.isHighlightTextBold = themeVariant.isHighlightTextBold
-            self.entriesColor = themeVariant.entriesColor
-            self.entriesOpacity = themeVariant.entriesOpacity
-            self.messageBarBackgroundColorName = themeVariant.messageBarBackgroundColorName
-            self.messageBarTextColorName = themeVariant.messageBarTextColorName
-            self.messageBarTextOpacity = themeVariant.messageBarTextOpacity
-            self.messageBarBackgroundOpacity = themeVariant.messageBarBackgroundOpacity
-            self.messageBarFontSize = themeVariant.messageBarFontSize
+        let themeVariant: Theme.ThemeVariant
+        
+        if colorScheme == .dark {
+            themeVariant = theme.darkVariant
+        } else {
+            themeVariant = theme.lightVariant
         }
-
-
+        
+        // Apply the selected themeVariant to your UI
+        self.highlightColor = themeVariant.highlightColor
+        self.highlightOpacity = themeVariant.highlightOpacity
+        self.isHighlightTextBold = themeVariant.isHighlightTextBold
+        self.entriesColor = themeVariant.entriesColor
+        self.entriesOpacity = themeVariant.entriesOpacity
+        self.messageBarBackgroundColorName = themeVariant.messageBarBackgroundColorName
+        self.messageBarTextColorName = themeVariant.messageBarTextColorName
+        self.messageBarTextOpacity = themeVariant.messageBarTextOpacity
+        self.messageBarBackgroundOpacity = themeVariant.messageBarBackgroundOpacity
+        self.messageBarFontSize = themeVariant.messageBarFontSize
+    }
 }
+
