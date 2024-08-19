@@ -108,7 +108,7 @@ struct MainCommunicationPage: View {
         .onChange(of: scenePhase) {
             voiceController.setPhase(scenePhase)
         }
-        .onChange(of: colorScheme) { newColorScheme in
+        .onChange(of: colorScheme) { oldColorScheme, newColorScheme in
             // Re-apply the theme when the color scheme changes
             settings.applyTheme(currentTheme, for: newColorScheme)
         }
