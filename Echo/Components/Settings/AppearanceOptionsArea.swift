@@ -16,12 +16,21 @@ struct AppearanceOptionsArea: View {
     let maxArrowSize: CGFloat = 300.0
     @State private var arrowSizePercentage: Double = 50.0
     @Environment(\.colorScheme) var colorScheme
+    
+    // Define availableFonts
+    let availableFonts: [String] = {
+        var fonts = ["System"] // Add "System" as a default option
+        for family in UIFont.familyNames {
+            fonts.append(contentsOf: UIFont.fontNames(forFamilyName: family))
+        }
+        return fonts
+    }()
 
     var body: some View {
         @Bindable var settingsBindable = settings
         
-        let messageBarBackgroundColor = ColorOption.colorFromName(settings.messageBarBackgroundColorName).color
-        let messageBarTextColor = ColorOption.colorFromName(settings.messageBarTextColorName).color
+        let messageBarBackgroundColor = ColorOption.colorFromName(settings.messageBarBackgroundColor).color
+        let messageBarTextColor = ColorOption.colorFromName(settings.messageBarTextColor).color
         
         return VStack {
             Form {
@@ -46,6 +55,17 @@ struct AppearanceOptionsArea: View {
                 
                 // Section for Highlight Color Options
                 Section(header: Text("Select Highlight Color")) {
+                    Toggle("Use System Font Size", isOn: $settingsBindable.useCustomHighlightFontSize)
+                    
+                    if !settings.useCustomHighlightFontSize {
+                        Stepper("Font Size: \(settings.highlightFontSize)", value: $settingsBindable.highlightFontSize, in: 10...100)
+                    }
+                    Picker("Select Font", selection: $settingsBindable.highlightFontName) {
+                        ForEach(availableFonts, id: \.self) { font in
+                            Text(font).tag(font)
+                        }
+                    }
+                    
                     Picker("Select Highlight Color", selection: $settingsBindable.highlightColor) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
@@ -69,6 +89,16 @@ struct AppearanceOptionsArea: View {
                 }
                 
                 Section(header: Text("All other items")) {
+                    Toggle("Use System Font Size", isOn: $settingsBindable.useCustomEntriesFontSize)
+                    
+                    if !settings.useCustomEntriesFontSize {
+                        Stepper("Font Size: \(Int(settings.entriesFontSize))", value: $settingsBindable.entriesFontSize, in: 10...100)
+                    }
+                    Picker("Select Font", selection: $settingsBindable.entriesFontName) {
+                        ForEach(availableFonts, id: \.self) { font in
+                            Text(font).tag(font)
+                        }
+                    }
                     Picker("All other items color", selection: $settingsBindable.entriesColor) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
@@ -88,6 +118,12 @@ struct AppearanceOptionsArea: View {
                 
                 // Section for Message Bar Settings
                 Section(header: Text("Message Bar")) {
+                                    
+                    Picker("Select Font", selection: $settingsBindable.messageBarFontName) {
+                        ForEach(availableFonts, id: \.self) { font in
+                            Text(font).tag(font)
+                        }
+                    }
                     // Stepper for Font Size
                     Stepper(
                         value: $settingsBindable.messageBarFontSize,
@@ -99,10 +135,9 @@ struct AppearanceOptionsArea: View {
                             Spacer()
                             Text("\(settingsBindable.messageBarFontSize)")
                         }
-                    }
-                    
+                    }                    
                     // Picker for Message Bar Background Color
-                    Picker("Select Message Bar Background Color", selection: $settingsBindable.messageBarBackgroundColorName) {
+                    Picker("Select Message Bar Background Color", selection: $settingsBindable.messageBarBackgroundColor) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
                         }
@@ -115,7 +150,7 @@ struct AppearanceOptionsArea: View {
                         .foregroundColor(.secondary)
                     
                     // Picker for Message Bar Text Color
-                    Picker("Select Message Bar Text Color", selection: $settingsBindable.messageBarTextColorName) {
+                    Picker("Select Message Bar Text Color", selection: $settingsBindable.messageBarTextColor) {
                         ForEach(ColorOption.colorOptions) { colorOption in
                             colorOptionView(for: colorOption)
                         }
@@ -166,7 +201,7 @@ struct AppearanceOptionsArea: View {
                 }
                 
             }
-            .navigationTitle("Display Options")
+            .navigationTitle("Appearance Options")
         }
     }
     
