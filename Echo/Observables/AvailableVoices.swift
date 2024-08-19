@@ -10,51 +10,60 @@ import AVKit
 
 class AvailableVoices: ObservableObject {
     @Published var voices: [AVSpeechSynthesisVoice] = []
-    @Published var voicesByLang: [String: [AVSpeechSynthesisVoice]]
+    @Published var voicesByLang: [String: [AVSpeechSynthesisVoice]] = [:]
     @Published var personalVoiceAuthorized: Bool = false
     
     init() {
-        voices = AVSpeechSynthesisVoice.speechVoices()
-        voicesByLang = [:]
-        for voice in voices {
-            var currentList = voicesByLang[voice.language] ?? []
-            currentList.append(voice)
-            voicesByLang[voice.language] = currentList
-        }
+        requestPersonalVoiceAuthorization()
     }
     
     func requestPersonalVoiceAuthorization() {
+        if #available(iOS 17.0, *) {
             AVSpeechSynthesizer.requestPersonalVoiceAuthorization { status in
                 DispatchQueue.main.async {
                     switch status {
                     case .authorized:
                         self.personalVoiceAuthorized = true
+                        self.fetchVoices()  // Fetch all voices including personal voices
                     case .denied, .notDetermined, .unsupported:
                         self.personalVoiceAuthorized = false
+                        self.fetchVoices()  // Fetch only non-personal voices
                     @unknown default:
                         self.personalVoiceAuthorized = false
-                    }
-                    // You might want to fetch voices again if the status changes
-                    if self.personalVoiceAuthorized {
-                        self.fetchPersonalVoices()
+                        self.fetchVoices()
                     }
                 }
             }
+        } else {
+            fetchVoices() // iOS < 17.0, no personal voice support
         }
+    }
     
-    private func fetchPersonalVoices() {
-           // Add Personal Voice if authorized
-           if let personalVoice = AVSpeechSynthesisVoice(identifier: "com.apple.ttsbundle.PersonalVoice") {
-               voices.append(personalVoice)
-               let language = personalVoice.language
-               var currentList = voicesByLang[language] ?? []
-               currentList.append(personalVoice)
-               voicesByLang[language] = currentList
-           }
-       }
+    func fetchVoices() {
+        let aVFvoices = AVSpeechSynthesisVoice.speechVoices()
+        voicesByLang = [:]
+        
+        for voice in aVFvoices {
+            var currentList = voicesByLang[voice.language] ?? []
+            currentList.append(voice)
+            voicesByLang[voice.language] = currentList
+        }
+        
+        voices = aVFvoices
+        
+        if #available(iOS 17.0, *), personalVoiceAuthorized {
+            let personalVoices = aVFvoices.filter { $0.voiceTraits.contains(.isPersonalVoice) }
+            for personalVoice in personalVoices {
+                let language = personalVoice.language
+                var currentList = voicesByLang[language] ?? []
+                currentList.append(personalVoice)
+                voicesByLang[language] = currentList
+            }
+        }
+    }
     
     /***
-        Sorts all the languages availble by the following criteria
+        Sorts all the languages available by the following criteria
      
         * Push users language and region to the top
         * Push users language to the top
@@ -91,7 +100,6 @@ class AvailableVoices: ObservableObject {
             }
             
             return zeroFullLanguage < oneFullLanguage
-
         })
     }
     

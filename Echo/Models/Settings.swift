@@ -1,5 +1,5 @@
 //
-//  Settings.swift
+//  self.swift
 // Echo
 //
 //  Created by Gavin Henderson on 24/05/2024.
@@ -19,9 +19,6 @@ class Settings {
 
     var entriesColor: String = "System Default"
     var entriesOpacity: Double = 0.5
-
-    var arrowSize: CGFloat = 172.0
-    var arrowBorderOpacity: Double = 1.0 
     
     var currentVocab: Vocabulary?
     var vocabHistory: Int
@@ -63,8 +60,11 @@ class Settings {
     var allowSwipeGestures: Bool
     
     var enableSwitchControl: Bool
-    var selectedTheme: String = "System Default"
-    
+    var selectedTheme: String = Theme.themes.first?.name ?? "System Default"
+
+    var arrowSize: CGFloat = 100.0 // Default actual size
+    var arrowBorderOpacity: Double = 1.0
+        
     init(showOnboarding: Bool = true) {
         self.vocabHistory = 2
         
@@ -100,21 +100,27 @@ class Settings {
         self.backButtonPosition = BackButtonPosition.bottom.rawValue
     }
     
-    func applyTheme(_ theme: Theme) {
-            highlightColor = theme.highlightColor
-            highlightOpacity = theme.highlightOpacity
-            isHighlightTextBold = theme.isHighlightTextBold
-
-            entriesColor = theme.entriesColor
-            entriesOpacity = theme.entriesOpacity
+    func applyTheme(_ theme: Theme, for colorScheme: ColorScheme) {
+            let themeVariant: Theme.ThemeVariant
             
-            messageBarBackgroundColorName = theme.messageBarBackgroundColorName
-            messageBarBackgroundOpacity = theme.messageBarBackgroundOpacity
+            if colorScheme == .dark {
+                themeVariant = theme.darkVariant
+            } else {
+                themeVariant = theme.lightVariant
+            }
             
-            messageBarTextColorName = theme.messageBarTextColorName
-            messageBarTextOpacity = theme.messageBarTextOpacity
-            messageBarFontSize = theme.messageBarFontSize
-            
-            selectedTheme = theme.name
+            // Apply the selected themeVariant to your UI
+            self.highlightColor = themeVariant.highlightColor
+            self.highlightOpacity = themeVariant.highlightOpacity
+            self.isHighlightTextBold = themeVariant.isHighlightTextBold
+            self.entriesColor = themeVariant.entriesColor
+            self.entriesOpacity = themeVariant.entriesOpacity
+            self.messageBarBackgroundColorName = themeVariant.messageBarBackgroundColorName
+            self.messageBarTextColorName = themeVariant.messageBarTextColorName
+            self.messageBarTextOpacity = themeVariant.messageBarTextOpacity
+            self.messageBarBackgroundOpacity = themeVariant.messageBarBackgroundOpacity
+            self.messageBarFontSize = themeVariant.messageBarFontSize
         }
+
+
 }
