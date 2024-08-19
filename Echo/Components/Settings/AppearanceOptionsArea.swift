@@ -36,7 +36,6 @@ struct AppearanceOptionsArea: View {
                             settings.applyTheme(selectedTheme)
                         }
                     }
-                    
                 }
                 
                 // Section for Highlight Color Options
