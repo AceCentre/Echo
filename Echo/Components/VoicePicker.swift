@@ -33,7 +33,7 @@ struct VoicePicker: View {
             ForEach(filteredVoiceLanguages(), id: \.self) { lang in
                 Section(header: Text(getLanguageAndRegion(lang))) {
                     let voices = filteredVoices(for: lang)
-                    ForEach(Array(voices.enumerated()), id: \.element) { _, voice in
+                    ForEach(Array(voices.enumerated()), id: \.element.identifier) { _, voice in
                         Button(action: {
                             voiceId = voice.identifier
                             voiceName = "\(voice.name) (\(getLanguage(voice.language)))"
@@ -65,16 +65,22 @@ struct VoicePicker: View {
         return matchingLanguages
     }
     
-    // Filtered voices based on search text and novelty toggle
     private func filteredVoices(for lang: String) -> [AVSpeechSynthesisVoice] {
         return voiceList.voicesForLang(lang).filter { voice in
             let matchesSearch = searchText.isEmpty ||
-                voice.name.localizedCaseInsensitiveContains(searchText) ||
-                getLanguage(voice.language).localizedCaseInsensitiveContains(searchText)
+            voice.name.localizedCaseInsensitiveContains(searchText) ||
+            getLanguage(voice.language).localizedCaseInsensitiveContains(searchText)
             
-            let matchesNovelty = showNoveltyVoices || !voice.voiceTraits.contains(.isNoveltyVoice)
+            var isNovelty = false
             
-            return matchesSearch && matchesNovelty
+            if #available(iOS 17.0, *) {
+                let traits = voice.voiceTraits
+                isNovelty = traits.contains(.isNoveltyVoice)
+            }
+            
+            // Return true if the search matches and the novelty filter is satisfied
+            return matchesSearch && (showNoveltyVoices || !isNovelty)
         }
+        
     }
 }
