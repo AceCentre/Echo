@@ -64,6 +64,9 @@
     "Appearance" : {
       "comment" : "Label for the navigation link to the appearance options page"
     },
+    "Appearance Options" : {
+
+    },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
     },
@@ -201,9 +204,6 @@
     },
     "Display control commands" : {
       "comment" : "Picker label for control commands"
-    },
-    "Display Options" : {
-      "comment" : "Label for the navigation link to the display options page"
     },
     "Display Text" : {
       "comment" : "Text field placeholder for display text"
