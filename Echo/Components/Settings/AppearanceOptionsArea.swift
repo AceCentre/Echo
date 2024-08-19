@@ -32,12 +32,12 @@ struct AppearanceOptionsArea: View {
                                 .tag(theme.name)
                         }
                     }
-                    .onChange(of: settings.selectedTheme) { newThemeName in
+                    .onChange(of: settings.selectedTheme) { oldThemeName, newThemeName in
                         if let selectedTheme = Theme.themes.first(where: { $0.name == newThemeName }) {
                             settings.applyTheme(selectedTheme, for: colorScheme)
                         }
                     }
-                    .onChange(of: colorScheme) { newColorScheme in
+                    .onChange(of: colorScheme) { oldColorScheme, newColorScheme in
                         if let selectedTheme = Theme.themes.first(where: { $0.name == settings.selectedTheme }) {
                             settings.applyTheme(selectedTheme, for: newColorScheme)
                         }

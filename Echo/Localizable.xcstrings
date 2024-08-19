@@ -421,6 +421,12 @@
     "Scanning speed" : {
       "comment" : "Slider label to control the speed of scanning"
     },
+    "Search by language or name" : {
+
+    },
+    "Select a Voice" : {
+
+    },
     "Select Highlight Color" : {
       "comment" : "This is the text for a label for settings to change the colour of the highlight colour"
     },
@@ -456,6 +462,9 @@
     },
     "Show Back Button" : {
       "comment" : "Label on settings toggle for back button"
+    },
+    "Show Novelty Voices" : {
+
     },
     "Show on-screen arrows" : {
       "comment" : "Label for toggle for on screen arrows"
