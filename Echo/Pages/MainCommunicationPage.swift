@@ -21,8 +21,10 @@ struct MainCommunicationPage: View {
     @StateObject var spelling = Spelling()
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var didApplyTheme = false
+
+    
     var body: some View {
-        let currentTheme = Theme.themes.first { $0.name == settings.selectedTheme } ?? Theme.themes.first!
 
         NavigationStack {
             ZStack {
@@ -103,14 +105,22 @@ struct MainCommunicationPage: View {
             
             controllerManager.loadMainCommunicationPageState(mainCommunicationPageState)
             
-            settings.applyTheme(currentTheme, for: colorScheme)
+            if !didApplyTheme {
+                applyThemeIfNecessary()
+                didApplyTheme = true
+            }
         }
         .onChange(of: scenePhase) {
             voiceController.setPhase(scenePhase)
         }
         .onChange(of: colorScheme) { oldColorScheme, newColorScheme in
-            // Re-apply the theme when the color scheme changes
-            settings.applyTheme(currentTheme, for: newColorScheme)
+            applyThemeIfNecessary()
+        }
+    }
+    
+    private func applyThemeIfNecessary() {
+        if let selectedTheme = Theme.themes.first(where: { $0.name == settings.selectedTheme }) {
+            settings.applyTheme(selectedTheme, for: colorScheme)
         }
     }
     
