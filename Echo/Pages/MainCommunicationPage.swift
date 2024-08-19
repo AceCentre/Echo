@@ -19,8 +19,11 @@ struct MainCommunicationPage: View {
     @StateObject var voiceController = VoiceController()
     @StateObject var mainCommunicationPageState = MainCommunicationPageState()
     @StateObject var spelling = Spelling()
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
+        let currentTheme = Theme.themes.first { $0.name == settings.selectedTheme } ?? Theme.themes.first!
+
         NavigationStack {
             ZStack {
                 if settings.showOnScreenArrows {
@@ -99,9 +102,15 @@ struct MainCommunicationPage: View {
             mainCommunicationPageState.loadEngine(voiceController)
             
             controllerManager.loadMainCommunicationPageState(mainCommunicationPageState)
+            
+            settings.applyTheme(currentTheme, for: colorScheme)
         }
         .onChange(of: scenePhase) {
             voiceController.setPhase(scenePhase)
+        }
+        .onChange(of: colorScheme) { newColorScheme in
+            // Re-apply the theme when the color scheme changes
+            settings.applyTheme(currentTheme, for: newColorScheme)
         }
     }
     

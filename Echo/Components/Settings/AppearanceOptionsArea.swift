@@ -15,7 +15,8 @@ struct AppearanceOptionsArea: View {
     let minArrowSize: CGFloat = 50.0
     let maxArrowSize: CGFloat = 300.0
     @State private var arrowSizePercentage: Double = 50.0
-    
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         @Bindable var settingsBindable = settings
         
@@ -33,7 +34,12 @@ struct AppearanceOptionsArea: View {
                     }
                     .onChange(of: settings.selectedTheme) { newThemeName in
                         if let selectedTheme = Theme.themes.first(where: { $0.name == newThemeName }) {
-                            settings.applyTheme(selectedTheme)
+                            settings.applyTheme(selectedTheme, for: colorScheme)
+                        }
+                    }
+                    .onChange(of: colorScheme) { newColorScheme in
+                        if let selectedTheme = Theme.themes.first(where: { $0.name == settings.selectedTheme }) {
+                            settings.applyTheme(selectedTheme, for: newColorScheme)
                         }
                     }
                 }

@@ -22,7 +22,7 @@ struct Theme {
         Theme(
             name: "High Contrast - Yellow",
             lightVariant: Theme.ThemeVariant(
-                highlightColor: "Black", // Black highlight on Yellow background
+                highlightColor: "Yellow", // Black highlight on Yellow background
                 highlightOpacity: 1.0,
                 isHighlightTextBold: true,
                 entriesColor: "Dark Gray", // Yellow entries text
@@ -35,7 +35,7 @@ struct Theme {
                 messageBarFontSize: 32 // Large font size
             ),
             darkVariant: Theme.ThemeVariant(
-                highlightColor: "Yellow", // Yellow highlight on Dark Gray background
+                highlightColor: "Blue", // Yellow highlight on Dark Gray background
                 highlightOpacity: 1.0,
                 isHighlightTextBold: true,
                 entriesColor: "Yellow", // Yellow entries text

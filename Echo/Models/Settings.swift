@@ -61,7 +61,7 @@ class Settings {
     
     var enableSwitchControl: Bool
     var selectedTheme: String = Theme.themes.first?.name ?? "System Default"
-    
+
     var arrowSize: CGFloat = 100.0 // Default actual size
     var arrowBorderOpacity: Double = 1.0
         
@@ -100,27 +100,27 @@ class Settings {
         self.backButtonPosition = BackButtonPosition.bottom.rawValue
     }
     
-    func applyTheme(_ theme: Theme) {
-        let currentAppearance = UITraitCollection.current.userInterfaceStyle
-        
-        let themeVariant: Theme.ThemeVariant
-        if currentAppearance == .dark {
-            themeVariant = theme.darkVariant
-        } else {
-            themeVariant = theme.lightVariant
+    func applyTheme(_ theme: Theme, for colorScheme: ColorScheme) {
+            let themeVariant: Theme.ThemeVariant
+            
+            if colorScheme == .dark {
+                themeVariant = theme.darkVariant
+            } else {
+                themeVariant = theme.lightVariant
+            }
+            
+            // Apply the selected themeVariant to your UI
+            self.highlightColor = themeVariant.highlightColor
+            self.highlightOpacity = themeVariant.highlightOpacity
+            self.isHighlightTextBold = themeVariant.isHighlightTextBold
+            self.entriesColor = themeVariant.entriesColor
+            self.entriesOpacity = themeVariant.entriesOpacity
+            self.messageBarBackgroundColorName = themeVariant.messageBarBackgroundColorName
+            self.messageBarTextColorName = themeVariant.messageBarTextColorName
+            self.messageBarTextOpacity = themeVariant.messageBarTextOpacity
+            self.messageBarBackgroundOpacity = themeVariant.messageBarBackgroundOpacity
+            self.messageBarFontSize = themeVariant.messageBarFontSize
         }
-        
-        // Apply the selected themeVariant to your UI
-        self.highlightColor = themeVariant.highlightColor
-        self.highlightOpacity = themeVariant.highlightOpacity
-        self.isHighlightTextBold = themeVariant.isHighlightTextBold
-        self.entriesColor = themeVariant.entriesColor
-        self.entriesOpacity = themeVariant.entriesOpacity
-        self.messageBarBackgroundColorName = themeVariant.messageBarBackgroundColorName
-        self.messageBarTextColorName = themeVariant.messageBarTextColorName
-        self.messageBarTextOpacity = themeVariant.messageBarTextOpacity
-        self.messageBarBackgroundOpacity = themeVariant.messageBarBackgroundOpacity
-        self.messageBarFontSize = themeVariant.messageBarFontSize
-    }
+
 
 }
