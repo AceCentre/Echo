@@ -40,6 +40,14 @@ struct NodeTreeView: View {
                                                         .foregroundColor(
                                                             highlightColorOption.color
                                                                 )
+                                                        .font(
+                                                                .custom(
+                                                                    settings.highlightFontName,
+                                                                    size: settings.useCustomHighlightFontSize
+                                                                    ? CGFloat(settings.highlightFontSize)
+                                                                    : UIFont.preferredFont(forTextStyle: .body).pointSize
+                                                                )
+                                                            )
                                                         .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
                                                         .opacity(settings.highlightOpacity)
                                                     //currentLevel.last ? 1 : 0.5) used to be this. I could be making this worse by dropping this.
@@ -52,6 +60,14 @@ struct NodeTreeView: View {
                                                         .foregroundColor(
                                                             entriesColorOption.color
                                                                 )
+                                                        .font(
+                                                            .custom(
+                                                                settings.entriesFontName,
+                                                                size: settings.useCustomEntriesFontSize
+                                                                ? CGFloat(settings.entriesFontSize)
+                                                                : UIFont.preferredFont(forTextStyle: .body).pointSize
+                                                            )
+                                                        )
                                                         .opacity(settings.entriesOpacity)
                                                     //.opacity(currentLevel.last ? 1 : 0.5)
                                                 }

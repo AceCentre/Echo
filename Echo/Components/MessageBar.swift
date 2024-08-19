@@ -14,15 +14,20 @@ struct MessageBar: View {
     @ObservedObject var mainCommunicationPageState: MainCommunicationPageState
     
     var body: some View {
-        let backgroundColor = ColorOption.colorFromName(settings.messageBarBackgroundColorName).color
+        let backgroundColor = ColorOption.colorFromName(settings.messageBarBackgroundColor).color
 
         VStack {
             let currentText = mainCommunicationPageState.enteredText
-            let textColor = ColorOption.colorFromName(settings.messageBarTextColorName).color
+            let textColor = ColorOption.colorFromName(settings.messageBarTextColor).color
 
             Text(currentText.isEmpty ? " " : currentText)
                 .padding(10)
-                .font(.system(size: CGFloat(settings.messageBarFontSize)))
+                .font(
+                        .custom(
+                            settings.messageBarFontName,
+                            size: CGFloat(settings.messageBarFontSize)
+                        )
+                    )
                 .fontWeight(settings.isMessageBarTextBold ? .bold : .regular) // Apply bold based on settings
                 .foregroundColor(textColor.opacity(settings.messageBarTextOpacity)) // Apply text color and opacity
 

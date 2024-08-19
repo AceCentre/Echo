@@ -64,6 +64,9 @@
     "Appearance" : {
       "comment" : "Label for the navigation link to the appearance options page"
     },
+    "Appearance Options" : {
+
+    },
     "Arabic (Experimental)" : {
       "comment" : "The label for the Arabic language when setting prediction language, make sure to include the experimental tag"
     },
@@ -202,9 +205,6 @@
     "Display control commands" : {
       "comment" : "Picker label for control commands"
     },
-    "Display Options" : {
-      "comment" : "Label for the navigation link to the display options page"
-    },
     "Display Text" : {
       "comment" : "Text field placeholder for display text"
     },
@@ -249,6 +249,9 @@
     },
     "First phrase in new vocab" : {
       "comment" : "Default new node text"
+    },
+    "Font Size: %lld" : {
+
     },
     "Frequency Order" : {
       "comment" : "The value for the order of the alphabet"
@@ -427,6 +430,9 @@
     "Select a Voice" : {
 
     },
+    "Select Font" : {
+
+    },
     "Select Highlight Color" : {
       "comment" : "This is the text for a label for settings to change the colour of the highlight colour"
     },
@@ -588,6 +594,9 @@
     },
     "Use Prompts" : {
       "comment" : "Label for toggle prompts"
+    },
+    "Use System Font Size" : {
+
     },
     "Vocabulary" : {
       "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
