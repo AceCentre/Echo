@@ -44,37 +44,37 @@ class Settings {
     var controlCommandPosition: ControlCommandDisplayOptions
 
     // UI settings
-    var showOnScreenArrows: Bool
-    var allowSwipeGestures: Bool
-    var enableSwitchControl: Bool
-    var selectedTheme: String
-    var arrowSize: CGFloat
-    var arrowBorderOpacity: Double
+    var showOnScreenArrows: Bool = true
+    var allowSwipeGestures: Bool = true
+    var enableSwitchControl: Bool = true
+    var selectedTheme: String = Theme.themes.first?.name ?? "System Default"
+    var arrowSize: CGFloat = 100.0
+    var arrowBorderOpacity: Double = 1.0
 
     // Highlight settings
-    var highlightColor: String
-    var highlightOpacity: Double
-    var isHighlightTextBold: Bool
-    var useCustomHighlightFontSize: Bool
-    var highlightFontSize: Int
-    var highlightFontName: String
+    var highlightColor: String = "Black"
+    var highlightOpacity: Double = 1.0
+    var isHighlightTextBold: Bool = false
+    var useCustomHighlightFontSize: Bool = false
+    var highlightFontSize: Int = UIFont.preferredFont(forTextStyle: .body).pointSize.toInt()
+    var highlightFontName: String = "System"
 
     // Entries settings
-    var entriesColor: String
-    var entriesOpacity: Double
-    var useCustomEntriesFontSize: Bool
-    var entriesFontSize: Int
-    var entriesFontName: String
+    var entriesColor: String = "System Default"
+    var entriesOpacity: Double = 0.5
+    var useCustomEntriesFontSize: Bool = false
+    var entriesFontSize: Int = UIFont.preferredFont(forTextStyle: .body).pointSize.toInt()
+    var entriesFontName: String = "System"
 
     // Message Bar settings
-    var isMessageBarTextBold: Bool
-    var messageBarTextColor: String
-    var messageBarTextOpacity: Double
-    var messageBarBackgroundColor: String
-    var messageBarBackgroundOpacity: Double
-    var messageBarFontName: String
-    var messageBarFontSize: Int
-
+    var isMessageBarTextBold: Bool = false
+    var messageBarTextColor: String = "Black"
+    var messageBarTextOpacity: Double = 1.0
+    var messageBarBackgroundColor: String = "Light Gray"
+    var messageBarBackgroundOpacity: Double = 1.0
+    var messageBarFontName: String = "System"
+    var messageBarFontSize: Int = 16
+    
     init(showOnboarding: Bool = true) {
         self.showOnboarding = showOnboarding
 
