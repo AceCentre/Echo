@@ -13,7 +13,7 @@ import SwiftUI
 struct AppearanceOptionsArea: View {
     @Environment(Settings.self) var settings
     let minArrowSize: CGFloat = 50.0
-    let maxArrowSize: CGFloat = 300.0
+    let maxArrowSize: CGFloat = 400.0
     @State private var arrowSizePercentage: Double = 50.0
     @Environment(\.colorScheme) var colorScheme
     
