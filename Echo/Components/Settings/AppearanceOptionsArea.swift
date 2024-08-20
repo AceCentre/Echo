@@ -55,9 +55,9 @@ struct AppearanceOptionsArea: View {
                 
                 // Section for Highlight Color Options
                 Section(header: Text("Select Highlight Color")) {
-                    Toggle("Use System Font Size", isOn: $settingsBindable.useCustomHighlightFontSize)
+                    Toggle("Use Custom Font Size", isOn: $settingsBindable.useCustomHighlightFontSize)
                     
-                    if !settings.useCustomHighlightFontSize {
+                    if settings.useCustomHighlightFontSize {
                         Stepper("Font Size: \(settings.highlightFontSize)", value: $settingsBindable.highlightFontSize, in: 10...100)
                     }
                     Picker("Select Font", selection: $settingsBindable.highlightFontName) {
@@ -89,9 +89,9 @@ struct AppearanceOptionsArea: View {
                 }
                 
                 Section(header: Text("All other items")) {
-                    Toggle("Use System Font Size", isOn: $settingsBindable.useCustomEntriesFontSize)
+                    Toggle("Use Custom Font Size", isOn: $settingsBindable.useCustomEntriesFontSize)
                     
-                    if !settings.useCustomEntriesFontSize {
+                    if settings.useCustomEntriesFontSize {
                         Stepper("Font Size: \(Int(settings.entriesFontSize))", value: $settingsBindable.entriesFontSize, in: 10...100)
                     }
                     Picker("Select Font", selection: $settingsBindable.entriesFontName) {
@@ -226,6 +226,14 @@ struct AppearanceOptionsArea: View {
         return Text("Sample Highlight Text")
             .padding()
             .foregroundColor(highlightColorWithOpacity)
+            .font(
+                .custom(
+                    settings.highlightFontName,
+                    size: settings.useCustomHighlightFontSize
+                        ? CGFloat(settings.highlightFontSize)
+                        : UIFont.preferredFont(forTextStyle: .body).pointSize
+                )
+            )
             .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
     }
     
@@ -236,13 +244,27 @@ struct AppearanceOptionsArea: View {
         return Text("Sample Entries Text")
             .padding()
             .foregroundColor(entriesColorWithOpacity)
+            .font(
+                .custom(
+                    settings.entriesFontName,
+                    size: settings.useCustomEntriesFontSize
+                        ? CGFloat(settings.entriesFontSize)
+                        : UIFont.preferredFont(forTextStyle: .body).pointSize
+                )
+            )
     }
+
     
     // Updated helper function to preview the message bar text
     private func messageBarTextPreview(backgroundColor: Color, textColor: Color) -> some View {
         Text("Sample Message Bar Text")
             .padding()
-            .font(.system(size: CGFloat(settings.messageBarFontSize)))
+            .font(
+                .custom(
+                    settings.messageBarFontName,
+                    size: CGFloat(settings.messageBarFontSize)
+                )
+            )
             .foregroundColor(textColor.opacity(settings.messageBarTextOpacity))
             .fontWeight(settings.isMessageBarTextBold ? .bold : .regular)
             .background(backgroundColor.opacity(settings.messageBarBackgroundOpacity))
