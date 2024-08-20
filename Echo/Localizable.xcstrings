@@ -592,11 +592,11 @@
     "Use a game controller to control Echo" : {
       "comment" : "Footer for game controller settings area"
     },
+    "Use Custom Font Size" : {
+
+    },
     "Use Prompts" : {
       "comment" : "Label for toggle prompts"
-    },
-    "Use System Font Size" : {
-
     },
     "Vocabulary" : {
       "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
