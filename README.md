@@ -10,7 +10,7 @@
 
 ## Releasing a new version
 
-To release a new version make sure you commit message includes `[PATCH]`, `[MINOR]` or `[MAJOR]` depending on what changes you have made. This will automatically trigger an xcode cloud build which will then release that version to TestFlight for testing. To then make the new version publicly available you have to release it via AppStoreConnect.
+To release a new version, make sure your commit message includes `[PATCH]`, `[MINOR]` or `[MAJOR]` depending on what changes you have made. This will automatically trigger an xcode cloud build which will then release that version to TestFlight for testing. To then make the new version publicly available you have to release it via AppStoreConnect.
 
 ## Prediction
 
