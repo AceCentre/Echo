@@ -36,6 +36,52 @@ struct Theme {
     }
     
     static let themes = [
+        // System Default
+        Theme(
+            name: "System Default",
+            lightVariant: ThemeVariant(
+                highlightColor: "System Default",
+                highlightOpacity: 1.0,
+                isHighlightTextBold: false,
+                useCustomHighlightFontSize: false,
+                highlightFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
+                highlightFontName: "System",
+                
+                entriesColor: "System Default",
+                entriesOpacity: 1.0,
+                useCustomEntriesFontSize: false,
+                entriesFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
+                entriesFontName: "System",
+                
+                messageBarTextColor: "System Default",
+                messageBarTextOpacity: 1.0,
+                messageBarBackgroundColor: "Light Gray",
+                messageBarBackgroundOpacity: 1.0,
+                messageBarFontName: "System",
+                messageBarFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize)
+            ),
+            darkVariant: ThemeVariant(
+                highlightColor: "System Default",
+                highlightOpacity: 1.0,
+                isHighlightTextBold: false,
+                useCustomHighlightFontSize: false,
+                highlightFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
+                highlightFontName: "System",
+                
+                entriesColor: "System Default",
+                entriesOpacity: 1.0,
+                useCustomEntriesFontSize: false,
+                entriesFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
+                entriesFontName: "System",
+                
+                messageBarTextColor: "System Default",
+                messageBarTextOpacity: 1.0,
+                messageBarBackgroundColor: "Dark Gray",
+                messageBarBackgroundOpacity: 1.0,
+                messageBarFontName: "System",
+                messageBarFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize)
+            )
+        ),
         // High Contrast - Yellow on Black
         Theme(
             name: "High Contrast - Yellow",
@@ -82,7 +128,6 @@ struct Theme {
                 messageBarFontSize: 32
             )
         ),
-        
         // Muted - Mint
         Theme(
             name: "Muted - Mint",
@@ -128,53 +173,7 @@ struct Theme {
                 messageBarFontName: "Georgia",
                 messageBarFontSize: 18
             )
-        ),
-        
-        // System Default
-        Theme(
-            name: "System Default",
-            lightVariant: ThemeVariant(
-                highlightColor: "System Default",
-                highlightOpacity: 1.0,
-                isHighlightTextBold: false,
-                useCustomHighlightFontSize: false,
-                highlightFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
-                highlightFontName: "System",
-                
-                entriesColor: "System Default",
-                entriesOpacity: 1.0,
-                useCustomEntriesFontSize: false,
-                entriesFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
-                entriesFontName: "System",
-                
-                messageBarTextColor: "System Default",
-                messageBarTextOpacity: 1.0,
-                messageBarBackgroundColor: "Light Gray",
-                messageBarBackgroundOpacity: 1.0,
-                messageBarFontName: "System",
-                messageBarFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize)
-            ),
-            darkVariant: ThemeVariant(
-                highlightColor: "System Default",
-                highlightOpacity: 1.0,
-                isHighlightTextBold: false,
-                useCustomHighlightFontSize: false,
-                highlightFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
-                highlightFontName: "System",
-                
-                entriesColor: "System Default",
-                entriesOpacity: 1.0,
-                useCustomEntriesFontSize: false,
-                entriesFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize),
-                entriesFontName: "System",
-                
-                messageBarTextColor: "System Default",
-                messageBarTextOpacity: 1.0,
-                messageBarBackgroundColor: "Dark Gray",
-                messageBarBackgroundOpacity: 1.0,
-                messageBarFontName: "System",
-                messageBarFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize)
-            )
         )
+
     ]
 }
