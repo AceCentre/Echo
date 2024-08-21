@@ -76,7 +76,7 @@ struct Theme {
                 
                 messageBarTextColor: "System Default",
                 messageBarTextOpacity: 1.0,
-                messageBarBackgroundColor: "Dark Gray",
+                messageBarBackgroundColor: "Light Gray",
                 messageBarBackgroundOpacity: 1.0,
                 messageBarFontName: "System",
                 messageBarFontSize: Int(UIFont.preferredFont(forTextStyle: .body).pointSize)
