@@ -8,3 +8,4 @@
 * [Prediction](spelling-and-alphabet.md)
 * [Audio](audio.md)
 * [Vocabulary](vocabulary.md)
+* [Appearance](appearance.md)
