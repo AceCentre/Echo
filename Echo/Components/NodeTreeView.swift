@@ -79,7 +79,7 @@ struct NodeTreeView: View {
                                 }
                             }
                         }
-                        .frame(maxWidth: geoReader.size.width / 2)
+                        .frame(maxWidth: geoReader.size.width > 0 ? geoReader.size.width / 2 : .infinity)
                     }
                 }
             }
