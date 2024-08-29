@@ -1,6 +1,6 @@
 //
 //  NodeTreeView.swift
-// Echo
+//  Echo
 //
 //  Created by Gavin Henderson on 08/07/2024.
 //
@@ -25,6 +25,7 @@ struct NodeTreeView: View {
                                     Image(systemName: "chevron.right")
                                 }
                             }.frame(minWidth: 25)
+                            
                             ScrollLock(selectedNode: currentLevel.hoveredNode) {
                                 ScrollView {
                                     
@@ -39,18 +40,18 @@ struct NodeTreeView: View {
                                                         .padding()
                                                         .foregroundColor(
                                                             highlightColorOption.color
-                                                                )
+                                                        )
                                                         .font(
-                                                                .custom(
-                                                                    settings.highlightFontName,
-                                                                    size: settings.useCustomHighlightFontSize
-                                                                    ? CGFloat(settings.highlightFontSize)
-                                                                    : UIFont.preferredFont(forTextStyle: .body).pointSize
-                                                                )
+                                                            .custom(
+                                                                settings.highlightFontName,
+                                                                size: settings.useCustomHighlightFontSize
+                                                                ? CGFloat(settings.highlightFontSize)
+                                                                : UIFont.preferredFont(forTextStyle: .body).pointSize
                                                             )
+                                                        )
                                                         .fontWeight(settings.isHighlightTextBold ? .bold : .regular)
                                                         .opacity(settings.highlightOpacity)
-                                                    //currentLevel.last ? 1 : 0.5) used to be this. I could be making this worse by dropping this.
+                                                    ///currentLevel.last ? 1 : 0.5) used to be this. I could be making this worse by dropping this.
                                                     
                                                 } else {
                                                     let entriesColorOption = ColorOption.colorFromName(settings.entriesColor)
@@ -59,7 +60,7 @@ struct NodeTreeView: View {
                                                         .padding()
                                                         .foregroundColor(
                                                             entriesColorOption.color
-                                                                )
+                                                        )
                                                         .font(
                                                             .custom(
                                                                 settings.entriesFontName,
@@ -69,31 +70,26 @@ struct NodeTreeView: View {
                                                             )
                                                         )
                                                         .opacity(settings.entriesOpacity)
-                                                    //.opacity(currentLevel.last ? 1 : 0.5)
                                                 }
                                             }.id(node)
                                         }
-                                    }.padding(.vertical, geoReader.size.height / 2)
+                                    }
+                                    // Move verticalPadding definition here
+                                    .padding(.vertical, geoReader.size.height > 0 ? geoReader.size.height / 2 : 0)
                                 }
-                                
-                                
                             }
-                            
                         }
                         .frame(maxWidth: geoReader.size.width / 2)
                     }
                 }
             }
-            
         }
         .background(Color("transparent"))
         .contentShape(Rectangle())
         .padding()
         .onAppear {
             mainCommunicationPageState.loadSettings(settings)
-            
             mainCommunicationPageState.onAppear()
-            
         }
     }
 }
