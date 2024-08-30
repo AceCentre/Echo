@@ -32,7 +32,7 @@ class Settings {
     var scanLoops: Int
     var scanOnAppLaunch: Bool
     var scanAfterSelection: Bool
-    var fastFirstLoop: Bool
+    var fastFirstLoop: Bool = false
 
     // Prediction settings
     var letterPrediction: Bool
