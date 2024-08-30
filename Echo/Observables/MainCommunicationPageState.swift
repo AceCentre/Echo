@@ -537,7 +537,7 @@ class MainCommunicationPageState: ObservableObject {
                 })
             } else {
                 var isFast=false
-                if scanLoops == 0 && settings!.fastFirstLoop {
+                if scanLoops == 0 && settings?.fastFirstLoop == true {
                     isFast = true
                 }
                 unwrappedVoice.playCue(hoveredNode.cueText, isFast:isFast, cb: {
