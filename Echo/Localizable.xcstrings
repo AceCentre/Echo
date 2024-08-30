@@ -307,6 +307,9 @@
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
     },
+    "Make first loop fast" : {
+      "comment" : "Label for toggle that controls when the first is faster"
+    },
     "Māori (Experimental)" : {
       "comment" : "The label for the Māori language when setting prediction language, make sure to include the experimental tag"
     },

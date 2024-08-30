@@ -536,7 +536,11 @@ class MainCommunicationPageState: ObservableObject {
                     }
                 })
             } else {
-                unwrappedVoice.playCue(hoveredNode.cueText, cb: {
+                var isFast=false
+                if scanLoops == 0 && settings!.fastFirstLoop {
+                    isFast = true
+                }
+                unwrappedVoice.playCue(hoveredNode.cueText, isFast:isFast, cb: {
                     if self.settings?.scanning == true && shouldScan {
                         do {
                             try self.setNextMoveTimer()
@@ -587,7 +591,10 @@ class MainCommunicationPageState: ObservableObject {
         })
         
         workItem = newWorkItem
-        let timeInterval = settings?.scanWaitTime ?? 3
+        var timeInterval = settings?.scanWaitTime ?? 3
+        if scanLoops == 0 {
+            timeInterval=0
+        }
                 
         
         if hoveredNode.index ?? 0 == siblings.count - 1 {

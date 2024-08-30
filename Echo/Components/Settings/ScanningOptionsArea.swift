@@ -68,6 +68,13 @@ struct ScanningOptionsArea: View {
                         comment: "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
                     )
                 }
+                Toggle(
+                    String(
+                        localized: "Make first loop fast",
+                        comment: "Label for toggle that controls when the first is faster"
+                    ),
+                    isOn: $settingsBindable.fastFirstLoop
+                )
             }, header: {}, footer: {
                 Text(
                     "Scanning is when Echo automatically cycles through the items in the list one ofter the other reading them aloud one a time.",

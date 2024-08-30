@@ -32,6 +32,7 @@ class Settings {
     var scanLoops: Int
     var scanOnAppLaunch: Bool
     var scanAfterSelection: Bool
+    var fastFirstLoop: Bool
 
     // Prediction settings
     var letterPrediction: Bool
@@ -97,6 +98,7 @@ class Settings {
         self.scanLoops = 3
         self.scanOnAppLaunch = true
         self.scanAfterSelection = true
+        self.fastFirstLoop = false
 
         // Initialize Prediction settings
         self.letterPrediction = true
