@@ -68,7 +68,6 @@ class VoiceController: ObservableObject {
     func playCue(_ text: String?, isFast: Bool = false, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
-            
             let defaultCueVoice = Voice()
             defaultCueVoice.setToDefaultCueVoice()
                         

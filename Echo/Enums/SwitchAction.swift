@@ -8,13 +8,13 @@
 import Foundation
 
 enum SwitchAction: String, CaseIterable, Identifiable, Codable {
-    case nextNode, prevNode, none, fast, select, goBack, clear, startScanning
+    case nextNode, prevNode, none, fast, select, goBack, clear, startScanning, cancelScan
     var id: Self { self }
     
     // periphery:ignore
-    static public var tapCases: [SwitchAction] = [.nextNode, .prevNode, .none, .select, .goBack, .clear, .startScanning]
+    static public var tapCases: [SwitchAction] = [.nextNode, .prevNode, .none, .select, .goBack, .clear, .startScanning, .cancelScan]
     // periphery:ignore
-    static public var holdCases: [SwitchAction] = [.nextNode, .prevNode, .none, .fast, .select, .goBack, .clear, .startScanning]
+    static public var holdCases: [SwitchAction] = [.nextNode, .prevNode, .none, .fast, .select, .goBack, .clear, .startScanning, .cancelScan]
 
     var display: String {
         switch self {
@@ -48,6 +48,10 @@ enum SwitchAction: String, CaseIterable, Identifiable, Codable {
         )
         case .startScanning: return String(
             localized: "Start scanning from the current item, scanning must be enabled",
+            comment: "Label for action that happens on a keypress"
+        )
+        case .cancelScan: return String(
+            localized: "Cancel scanning from the current item and restarts to the top of the tree, scanning must be enabled",
             comment: "Label for action that happens on a keypress"
         )
         }

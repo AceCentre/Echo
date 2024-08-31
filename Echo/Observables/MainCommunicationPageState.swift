@@ -102,6 +102,8 @@ class MainCommunicationPageState: ObservableObject {
             userBack()
         case .startScanning:
             userStartScanning()
+        case .cancelScan:
+            userCancelScan()
         }
     }
     
@@ -432,6 +434,24 @@ class MainCommunicationPageState: ObservableObject {
         self.hoverNode(hoveredNode, shouldScan: true)
     }
     
+    func userCancelScan() {
+        scanLoops = 0
+        let scanAfterSelection = settings?.scanAfterSelection ?? false
+        
+        // Initialize branchRoot with the hoveredNode
+        var branchRoot = hoveredNode
+        
+        // Traverse up to find the root of the current branch
+        while let parent = branchRoot.parent, parent.type != .root {
+            branchRoot = parent
+        }
+        
+        // Move the hover to the first node in this branch
+        if let firstNode = branchRoot.getChildren("userCancelScan")?.first {
+            hoverNode(firstNode, shouldScan: scanAfterSelection)
+        }
+    }
+    
     func userPrevNode() {
         scanLoops = 0
         
@@ -537,6 +557,7 @@ class MainCommunicationPageState: ObservableObject {
                 })
             } else {
                 var isFast=false
+                //This is for cue speed of text being read out for fastFirstLoop setting
                 if scanLoops == 0 && settings?.fastFirstLoop == true {
                     isFast = true
                 }
@@ -592,7 +613,8 @@ class MainCommunicationPageState: ObservableObject {
         
         workItem = newWorkItem
         var timeInterval = settings?.scanWaitTime ?? 3
-        if scanLoops == 0 {
+        // This is for the time part of fastFirstLoop. Nb. 0 is just reading out cue. No additional time
+        if scanLoops == 0 && settings?.fastFirstLoop == true {
             timeInterval=0
         }
                 

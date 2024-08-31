@@ -124,6 +124,9 @@
     "Cancel" : {
       "comment" : "Cancel button label\nLabel for closing an alert"
     },
+    "Cancel scanning from the current item and restarts to the top of the tree, scanning must be enabled" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
     "Clear all the inputted text" : {
       "comment" : "Label for action that happens on a keypress"
     },
