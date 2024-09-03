@@ -30,6 +30,8 @@ class MainCommunicationPageState: ObservableObject {
     
     var isFastScan: Bool = false
     
+    var dontQueueNextItem: Bool = false
+    
     var settings: Settings?
     var spelling: Spelling?
     
@@ -102,8 +104,12 @@ class MainCommunicationPageState: ObservableObject {
             userBack()
         case .startScanning:
             userStartScanning()
-        case .cancelScan:
-            userCancelScan()
+        case .goToHome:
+            userGoToHome()
+        case .goToStartOfBranch:
+            userGoToStartOfBranch()
+        case .pauseScan:
+            userPauseScan()
         }
     }
     
@@ -434,22 +440,29 @@ class MainCommunicationPageState: ObservableObject {
         self.hoverNode(hoveredNode, shouldScan: true)
     }
     
-    func userCancelScan() {
+    func userGoToStartOfBranch() {
         scanLoops = 0
         let scanAfterSelection = settings?.scanAfterSelection ?? false
         
-        // Initialize branchRoot with the hoveredNode
-        var branchRoot = hoveredNode
-        
-        // Traverse up to find the root of the current branch
-        while let parent = branchRoot.parent, parent.type != .root {
-            branchRoot = parent
+        let parent = hoveredNode.parent ?? settings?.currentVocab?.rootNode
+        if let firstChild = parent?.getChildren()?.first {
+            hoverNode(firstChild, shouldScan: scanAfterSelection)
         }
+    }
+    
+    func userGoToHome() {
+        scanLoops = 0
+        let scanAfterSelection = settings?.scanAfterSelection ?? false
         
-        // Move the hover to the first node in this branch
-        if let firstNode = branchRoot.getChildren("userCancelScan")?.first {
-            hoverNode(firstNode, shouldScan: scanAfterSelection)
+        let parent = settings?.currentVocab?.rootNode
+        if let firstChild = parent?.getChildren()?.first {
+            hoverNode(firstChild, shouldScan: scanAfterSelection)
         }
+    }
+    
+    func userPauseScan() {
+        scanLoops = 0
+        dontQueueNextItem = true
     }
     
     func userPrevNode() {
@@ -623,8 +636,12 @@ class MainCommunicationPageState: ObservableObject {
             scanLoops += 1
         }
         
-        if scanLoops < maxScanLoops {
-            DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval, execute: newWorkItem)
+        if dontQueueNextItem == true {
+            dontQueueNextItem = false
+        } else {
+            if scanLoops < maxScanLoops {
+                DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval, execute: newWorkItem)
+            }
         }
     }
     

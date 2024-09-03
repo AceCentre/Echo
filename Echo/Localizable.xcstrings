@@ -98,7 +98,7 @@
       "comment" : "The navigation title for the Audio options page"
     },
     "Back" : {
-      "comment" : "The button text for the navigation back button"
+      "comment" : "Label for action that happens on a keypress\nThe button text for the navigation back button"
     },
     "Back Position" : {
       "comment" : "Label for picker for back position"
@@ -124,7 +124,7 @@
     "Cancel" : {
       "comment" : "Cancel button label\nLabel for closing an alert"
     },
-    "Cancel scanning from the current item and restarts to the top of the tree, scanning must be enabled" : {
+    "Clear" : {
       "comment" : "Label for action that happens on a keypress"
     },
     "Clear all the inputted text" : {
@@ -268,6 +268,12 @@
     "Go back to the last level of the vocabulary (or delete the last inputted letter)" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Go to home" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Go to start of list" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
     "Go to the next item" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -335,7 +341,7 @@
       "comment" : "Label to create a new vocab"
     },
     "Next" : {
-      "comment" : "The label for the to go to the next onboarding step"
+      "comment" : "Label for action that happens on a keypress\nThe label for the to go to the next onboarding step"
     },
     "No game controller connect to device. Please connect a controller to access these settings" : {
       "comment" : "Notification of no game controllers connected"
@@ -361,6 +367,9 @@
     "Opacity: %lld%%" : {
 
     },
+    "Pause Scan" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
     "Play Sample" : {
       "comment" : "Label for button that plays an audio sample"
     },
@@ -382,6 +391,12 @@
     "Predition Language" : {
       "comment" : "The label that is shown next to the language picker"
     },
+    "Previous" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Quick scan" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
     "Quickly scan through the items" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -393,6 +408,12 @@
     },
     "Required" : {
       "comment" : "Prompt for required text input"
+    },
+    "Restarts to the top of the current list, scanning will resume if you have that enabled" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Restarts to the top of the tree, scanning will resume if you have that enabled" : {
+      "comment" : "Label for action that happens on a keypress"
     },
     "Right Channel" : {
       "comment" : "Label for picker of audio channels"
@@ -432,6 +453,9 @@
     },
     "Search by language or name" : {
 
+    },
+    "Select" : {
+      "comment" : "Label for action that happens on a keypress"
     },
     "Select a Voice" : {
 
@@ -514,7 +538,13 @@
     "Start of list" : {
       "comment" : "Picker option for control command"
     },
+    "Start scan" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
     "Start scanning from the current item, scanning must be enabled" : {
+      "comment" : "Label for action that happens on a keypress"
+    },
+    "Stop automatic scanning on the currently selected node." : {
       "comment" : "Label for action that happens on a keypress"
     },
     "Swipe Gestures" : {

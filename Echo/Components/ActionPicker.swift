@@ -25,7 +25,15 @@ struct ActionPickerDestination: View {
                         dismiss()
                     }, label: {
                         HStack {
-                            Text(action.display)
+                            // I HATE doing a force try. If this markdown is invalid it will crash
+                            // However, it would be messy to catch the errors and its a user defined
+                            // string, defined at build time so it shouldn't cause crashes. Famous
+                            // last words ....
+                            let markdownAction = try! AttributedString(
+                                markdown: "**\(action.title)** - \(action.description)"
+                            )
+                            
+                            Text(markdownAction)
                                 .foregroundStyle(colorScheme == .light ? .black : .white)
                             Spacer()
                             if action.id == selected.id {
@@ -66,7 +74,7 @@ struct ActionPicker: View {
                 HStack {
                     Text(label)
                     Spacer()
-                    Text(actionState.display)
+                    Text(actionState.title)
                         .foregroundStyle(.gray)
                 }
             })
