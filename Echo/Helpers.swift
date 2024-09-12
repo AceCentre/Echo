@@ -9,11 +9,19 @@ import Foundation
 import UIKit
 
 func getLanguageAndRegion(_ givenLocale: String) -> String {
+    if givenLocale == "pv" {
+        return "Personal Voice(s)"
+    }
+    
     let currentLocale: Locale = .current
     return currentLocale.localizedString(forIdentifier: givenLocale) ?? "Unknown"
 }
 
 func getLanguage(_ givenLocale: String) -> String {
+    if givenLocale == "pv" {
+        return "Personal Voice(s)"
+    }
+    
     let currentLocale: Locale = .current
     return currentLocale.localizedString(forLanguageCode: givenLocale) ?? "Unknown"
 }

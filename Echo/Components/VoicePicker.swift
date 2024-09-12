@@ -16,18 +16,12 @@ struct VoicePicker: View {
     
     var body: some View {
         Form {
-            // Search Bar
-            Section {
-                TextField("Search by language or name", text: $searchText)
-                    .padding(8)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-            }
-
             // Toggle for Novelty Voices
             Section {
                 Toggle("Show Novelty Voices", isOn: $showNoveltyVoices)
             }
+            .searchable(text: $searchText,  placement: .navigationBarDrawer(displayMode: .always), prompt: "Search by language or name")
+
 
             // List of voices filtered by search text and novelty toggle
             ForEach(filteredVoiceLanguages(), id: \.self) { lang in

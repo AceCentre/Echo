@@ -44,6 +44,10 @@ class AvailableVoices: ObservableObject {
         voicesByLang = [:]
         
         for voice in aVFvoices {
+            if voice.voiceTraits == .isPersonalVoice {
+                continue
+            }
+            
             var currentList = voicesByLang[voice.language] ?? []
             currentList.append(voice)
             voicesByLang[voice.language] = currentList
@@ -54,7 +58,7 @@ class AvailableVoices: ObservableObject {
         if #available(iOS 17.0, *), personalVoiceAuthorized {
             let personalVoices = aVFvoices.filter { $0.voiceTraits.contains(.isPersonalVoice) }
             for personalVoice in personalVoices {
-                let language = personalVoice.language
+                let language = "pv" // Personal Voice
                 var currentList = voicesByLang[language] ?? []
                 currentList.append(personalVoice)
                 voicesByLang[language] = currentList
@@ -65,6 +69,7 @@ class AvailableVoices: ObservableObject {
     /***
         Sorts all the languages available by the following criteria
      
+        * Push personal voices to the top
         * Push users language and region to the top
         * Push users language to the top
         * Sort alphabetically (by display name)
@@ -78,6 +83,14 @@ class AvailableVoices: ObservableObject {
             let oneLocale = Locale(identifier: $1).language.languageCode?.identifier ?? "en"
             let zeroFullLanguage = getLanguageAndRegion($0)
             let oneFullLanguage = getLanguageAndRegion($1)
+            
+            if($0 == "pv") {
+                return true
+            }
+            
+            if($1 == "pv") {
+                return false
+            }
             
             if $0 == currentIdentifier {
                 return true
