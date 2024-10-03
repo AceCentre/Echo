@@ -81,9 +81,9 @@ class Spelling: ObservableObject {
         var wordPredictions: [String] = []
         
         do {
-            let wordExpression = Expression<String>("word")
-            let scoreExpression = Expression<Int>("score")
-            let languageExpression = Expression<String>("language")
+            let wordExpression = Expression<String>(value: "word")
+            let scoreExpression = Expression<Int>(value: "score")
+            let languageExpression = Expression<String>(value: "language")
             
             let query = words
                 .filter(languageExpression == settings?.predictionLanguage.databaseLanguageCode ?? "en")
@@ -129,9 +129,9 @@ class Spelling: ObservableObject {
         if prefix == "" { return alphabetItems }
         
         do {
-            let wordExpression = Expression<String>("word")
-            let scoreExpression = Expression<Int>("score")
-            let languageExpression = Expression<String>("language")
+            let wordExpression = Expression<String>(value: "word")
+            let scoreExpression = Expression<Int>(value: "score")
+            let languageExpression = Expression<String>(value: "language")
             
             let query = words
                 .filter(languageExpression == settings?.predictionLanguage.databaseLanguageCode ?? "en")
@@ -141,16 +141,14 @@ class Spelling: ObservableObject {
             for word in try db.prepare(query) {
                 let nextCharPos = prefix.count
                 let unwrappedWord = try word.get(wordExpression)
-                let unwrappedScore = try word.get(scoreExpression)
                 
-                if nextCharPos < unwrappedWord.count {
-                    let nextCharIndex = unwrappedWord.index(unwrappedWord.startIndex, offsetBy: nextCharPos)
-                    let nextChar = unwrappedWord[nextCharIndex].lowercased()
-                    
-                    if currentAlphabet.contains(nextChar) {
-                        let currentScore = alphabetScores[nextChar, default: 0]
-                        alphabetScores[nextChar] = currentScore + unwrappedScore
-                    }
+                let nextCharIndex = unwrappedWord.index(unwrappedWord.startIndex, offsetBy: nextCharPos)
+                let nextChar = String(unwrappedWord[nextCharIndex]).lowercased() // Ensure this is a String
+                
+                // Fetch the score inside this if-let block
+                if let unwrappedScore = try? word.get(scoreExpression), let scoreAsInt = Int("\(unwrappedScore)") {
+                    let currentScore = alphabetScores[nextChar, default: 0]
+                    alphabetScores[nextChar] = currentScore + scoreAsInt
                 }
             }
             

@@ -110,7 +110,7 @@
       "comment" : "Header text for vocab backup section"
     },
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
-      "comment" : "Alert explanation of node deletion"
+      "comment" : "Alert explanation of node deletion\nFooter explanation of node deletion"
     },
     "Bold Highlight Text" : {
 
@@ -122,7 +122,7 @@
       "comment" : "A description of why audio splitting exists"
     },
     "Cancel" : {
-      "comment" : "Cancel button label\nLabel for closing an alert"
+      "comment" : "Button to close modal\nCancel button label\nLabel for closing an alert\nlabel for closing a sheet"
     },
     "Clear" : {
       "comment" : "Label for action that happens on a keypress"
@@ -146,7 +146,7 @@
       "comment" : "Description describing what switch access is"
     },
     "Copy" : {
-      "comment" : "Label for copying a vocab"
+      "comment" : "Label for copy vocab button\nLabel for copying a vocab"
     },
     "Copy of '%@'" : {
       "comment" : "Placeholder text for copying a vocab"
@@ -164,7 +164,7 @@
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
     },
     "Cue Text" : {
-      "comment" : "Text field placeholder for cue text"
+      "comment" : "Header for editing cue text\nText field placeholder for cue text"
     },
     "Cue Voice" : {
       "comment" : "The heading for the options that control the cue voice"
@@ -179,13 +179,13 @@
       "comment" : "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
     },
     "Delete" : {
-      "comment" : "Button label to confirm deletion\nButton text for deleting a node\nLabel for deleting a vocab"
+      "comment" : "Button label to confirm deletion\nButton text for deleting a node\nButton text for deleting a vocabulary\nLabel for deleting a vocab"
     },
     "Delete Node" : {
-      "comment" : "Alert title for deleting node"
+      "comment" : "Alert title for deleting node\nText on button for deleting a node"
     },
     "Delete Switch" : {
-      "comment" : "Title for alert about deleting a switch"
+      "comment" : "The label for the button to delete a switch\nTitle for alert about deleting a switch"
     },
     "Delete Vocabulary: %@" : {
       "comment" : "Alert title for deleting vocab"
@@ -209,7 +209,7 @@
       "comment" : "Picker label for control commands"
     },
     "Display Text" : {
-      "comment" : "Text field placeholder for display text"
+      "comment" : "Header for editing display text\nText field placeholder for display text"
     },
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
@@ -296,7 +296,7 @@
       "comment" : "Text on inport vocab button"
     },
     "Initial Setup" : {
-      "comment" : "Label for the navigation link to the initial options page"
+      "comment" : "Label for the navigation link to the initial options page\nLabel for the navigation link to the onboarding page"
     },
     "Language" : {
       "comment" : "The label that is shown next to the language picker"
@@ -533,7 +533,7 @@
       "comment" : "label for toggle around node spelling"
     },
     "Spoken Text" : {
-      "comment" : "Text field placeholder for spoken text"
+      "comment" : "Header for editing spoken text\nText field placeholder for spoken text"
     },
     "Start of list" : {
       "comment" : "Picker option for control command"
@@ -569,7 +569,7 @@
       "comment" : "Header text for the switch keyboard area"
     },
     "Switch Name" : {
-      "comment" : "Label for switch name TextField"
+      "comment" : "Label for switch name TextField\nLabel shown on the switch name input"
     },
     "Switch: %@" : {
       "comment" : "The navigation title when editing a given switch. It contains the user entered name after the colon"
@@ -635,10 +635,10 @@
       "comment" : "Label for toggle prompts"
     },
     "Vocabulary" : {
-      "comment" : "Label for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
+      "comment" : "Header of vocabulary options\nLabel for navigation link to the vocab page\nThe label that is shown next to the vocab picker\nThe navigation title for the Vocabulary options page"
     },
     "Vocabulary Name" : {
-      "comment" : "Header for vocab name section"
+      "comment" : "Header for new vocab name section\nHeader for vocab name section"
     },
     "Voice" : {
       "comment" : "Label for NavigationLink that takes you to a voice picker page"
