@@ -15,3 +15,7 @@ To release a new version, make sure your commit message includes `[PATCH]`, `[MI
 ## Prediction
 
 [Click here to view the prediction measurement results](./PREDICTION.md)
+
+## Issues
+
+See our issue queue. All welcome
