@@ -13,7 +13,7 @@ enum EchoError: LocalizedError {
     case noChildren
     case unhandledNodeType
     case noParent
-    case noSiblings
+    case noSiblings(nodeDetails: String, location: String)
     case invalidNodeIndex
     case hoveredRootNode
     case hoveredInvalidNodeType
@@ -34,8 +34,8 @@ enum EchoError: LocalizedError {
             return "Error 03: You clicked an unknown node type."
         case .noParent:
             return "Error 04: This node has no paren.t"
-        case .noSiblings:
-            return "Error 05: This node has no siblings."
+        case .noSiblings(let nodeDetails, let location):
+            return "No siblings found. Location: \(location). Node Details: \(nodeDetails)"
         case .invalidNodeIndex:
             return "Error 06: You selected an invalid node index."
         case .hoveredRootNode:
@@ -63,6 +63,7 @@ struct ErrorAlert: Identifiable {
     var id = UUID()
     var message: String
     var dismissAction: (() -> Void)?
+    var autoDismissTime: TimeInterval? = nil
 }
 
 class ErrorHandling: ObservableObject {
@@ -71,7 +72,15 @@ class ErrorHandling: ObservableObject {
     func handle(error: Error) {
         print(Thread.callStackSymbols.joined(separator: "\n"))
         
-        currentAlert = ErrorAlert(message: error.localizedDescription)
+        currentAlert = ErrorAlert(message: error.localizedDescription) {
+            self.dismissErrorAfterDelay()
+        }
+    }
+
+    private func dismissErrorAfterDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { // Auto-dismiss after 5 seconds
+            self.currentAlert = nil
+        }
     }
 }
 
@@ -83,12 +92,18 @@ struct ErrorView: View {
             .alert(item: $errorHandling.currentAlert) { currentAlert in
                 Alert(
                     title: Text(currentAlert.message),
-                    message: Text("An error has occurred. If echo is broken please contact enquiries@acecentre.org.uk", comment: "Message in error pop up"),
-                    dismissButton: .default(Text("Dismiss", comment: "Message on dismiss button for errors")) {
+                    message: Text("An error has occurred. If echo is broken please contact enquiries@acecentre.org.uk"),
+                    dismissButton: .default(Text("Dismiss")) {
                         currentAlert.dismissAction?()
                     }
                 )
             }
-        
+            .onAppear {
+                if let autoDismissTime = errorHandling.currentAlert?.autoDismissTime {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + autoDismissTime) {
+                        errorHandling.currentAlert = nil
+                    }
+                }
+            }
     }
 }

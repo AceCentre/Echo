@@ -238,3 +238,14 @@ class Node: Encodable, Decodable {
         }
     }
 }
+extension Node {
+    var details: String {
+        """
+        Type: \(type), 
+        Display Text: \(displayText), 
+        Cue Text: \(cueText), 
+        Index: \(index ?? -1), 
+        Parent Display Text: \(parent?.displayText ?? "None")
+        """
+    }
+}

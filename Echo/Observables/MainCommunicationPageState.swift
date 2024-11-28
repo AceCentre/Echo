@@ -480,11 +480,13 @@ class MainCommunicationPageState: ObservableObject {
 
         do {
             guard let siblings = hoveredNode.parent?.getChildren("usernextnode") else {
-                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
-                
-                throw EchoError.noSiblings
+                do {
+                    try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+                } catch {
+                    errorHandling?.handle(error: error)
+                }
+                throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "userNextNode")
             }
-            
             try self.nextNode(siblings)
         } catch {
             errorHandling?.handle(error: error)
@@ -512,9 +514,12 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         guard let siblings = hoveredNode.parent?.getChildren("prevNode") else {
-            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
-
-            throw EchoError.noSiblings
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details,  location: "userNextNode")
         }
         
         let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
@@ -560,7 +565,7 @@ class MainCommunicationPageState: ObservableObject {
                         guard let siblings = self.hoveredNode.parent?.getChildren("hoverNode") else {
                             try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: true)
 
-                            throw EchoError.noSiblings
+                            throw EchoError.noSiblings(nodeDetails: self.hoveredNode.details, location: "isFastScan")
                         }
                         
                         try self.nextNode(siblings)
@@ -611,9 +616,12 @@ class MainCommunicationPageState: ObservableObject {
         let maxScanLoops = settings?.scanLoops ?? 0
         
         guard let siblings = hoveredNode.parent?.getChildren("setnextmovetimer") else {
-            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
-            
-            throw EchoError.noSiblings
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "setNextMoveTimer")
         }
         
         let newWorkItem = DispatchWorkItem(block: {
@@ -651,9 +659,13 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         guard let siblings = hoveredNode.parent?.getChildren("startfastscan") else {
-            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "startFastScan")
 
-            throw EchoError.noSiblings
         }
         
         isFastScan = true
