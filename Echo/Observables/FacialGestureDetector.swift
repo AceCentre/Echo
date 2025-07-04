@@ -8,15 +8,22 @@
 import Foundation
 import ARKit
 import SwiftUI
+import AVFoundation
 
 class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     @Published var isActive: Bool = false
     @Published var isSupported: Bool = false
     @Published var errorMessage: String?
+    @Published var cameraPermissionStatus: AVAuthorizationStatus = .notDetermined
+
+    // Preview mode properties
+    @Published var isPreviewMode: Bool = false
+    @Published var previewGestureValues: [FacialGesture: Float] = [:]
     
     private var session = ARSession()
     private var gestureStates: [FacialGesture: GestureState] = [:]
     private var onGestureDetected: ((FacialGesture, Bool) -> Void)?
+    private var previewGestures: Set<FacialGesture> = []
     
     private struct GestureState {
         var isActive: Bool = false
@@ -33,6 +40,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     override init() {
         super.init()
         setupARKit()
+        checkCameraPermission()
     }
     
     deinit {
@@ -46,9 +54,22 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
-        
+
+        // Check camera permission before starting
+        checkCameraPermission()
+
+        guard cameraPermissionStatus == .authorized else {
+            if cameraPermissionStatus == .denied {
+                errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
+            } else {
+                errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
+                requestCameraPermission()
+            }
+            return
+        }
+
         self.onGestureDetected = onGestureDetected
-        
+
         let configuration = ARFaceTrackingConfiguration()
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         isActive = true
@@ -69,17 +90,90 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     func removeGesture(_ gesture: FacialGesture) {
         gestureStates.removeValue(forKey: gesture)
     }
+
+    // MARK: - Preview Mode Methods
+
+    func startPreviewMode(for gestures: [FacialGesture]) {
+        guard isSupported else {
+            errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
+            return
+        }
+
+        // Check camera permission before starting
+        checkCameraPermission()
+
+        guard cameraPermissionStatus == .authorized else {
+            if cameraPermissionStatus == .denied {
+                errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
+            } else {
+                errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
+                requestCameraPermission()
+            }
+            return
+        }
+
+        isPreviewMode = true
+        previewGestures = Set(gestures)
+        previewGestureValues = [:]
+
+        // Initialize preview values
+        for gesture in gestures {
+            previewGestureValues[gesture] = 0.0
+        }
+
+        let configuration = ARFaceTrackingConfiguration()
+        session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        isActive = true
+        errorMessage = nil
+    }
+
+    func stopPreviewMode() {
+        isPreviewMode = false
+        previewGestures.removeAll()
+        previewGestureValues.removeAll()
+        session.pause()
+        isActive = false
+    }
     
     // MARK: - Private Methods
-    
+
     private func setupARKit() {
         isSupported = ARFaceTrackingConfiguration.isSupported
         session.delegate = self
     }
+
+    private func checkCameraPermission() {
+        cameraPermissionStatus = AVCaptureDevice.authorizationStatus(for: .video)
+    }
+
+    private func requestCameraPermission() {
+        AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+            DispatchQueue.main.async {
+                self?.cameraPermissionStatus = granted ? .authorized : .denied
+                if granted {
+                    self?.errorMessage = nil
+                } else {
+                    self?.errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
+                }
+            }
+        }
+    }
     
     private func processBlendShapes(_ blendShapes: [ARFaceAnchor.BlendShapeLocation: NSNumber]) {
         let currentTime = Date()
-        
+
+        // Handle preview mode
+        if isPreviewMode {
+            for gesture in previewGestures {
+                let gestureValue = getGestureValue(for: gesture, from: blendShapes)
+                DispatchQueue.main.async {
+                    self.previewGestureValues[gesture] = gestureValue
+                }
+            }
+            return
+        }
+
+        // Handle normal gesture detection
         for (gesture, state) in gestureStates {
             let gestureValue = getGestureValue(for: gesture, from: blendShapes)
             let isGestureActive = gestureValue >= state.threshold

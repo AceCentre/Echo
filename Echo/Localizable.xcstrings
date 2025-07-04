@@ -16,7 +16,13 @@
     "%@" : {
 
     },
+    "%@s" : {
+
+    },
     "%lld" : {
+
+    },
+    "✓ Detected" : {
 
     },
     "0.5s" : {
@@ -148,6 +154,18 @@
     "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
       "comment" : "A description of why audio splitting exists"
     },
+    "Camera Access Denied" : {
+      "comment" : "Title for camera permission denied message"
+    },
+    "Camera access denied. Please enable camera access in Settings to use facial gestures." : {
+      "comment" : "Error message for denied camera permission"
+    },
+    "Camera access required for facial gesture detection." : {
+      "comment" : "Error message for camera permission needed"
+    },
+    "Camera active" : {
+      "comment" : "Status text when camera is active"
+    },
     "Cancel" : {
       "comment" : "Button to close modal\nCancel button\nCancel button label\nLabel for closing an alert\nlabel for closing a sheet"
     },
@@ -256,6 +274,18 @@
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
     },
+    "Duration for long hold gestures" : {
+
+    },
+    "Duration for short hold gestures" : {
+
+    },
+    "Duration Settings" : {
+      "comment" : "Header for duration settings section"
+    },
+    "Duration Type" : {
+      "comment" : "Label for duration type picker"
+    },
     "Duration: %@s" : {
       "comment" : "Shows current hold duration value"
     },
@@ -310,6 +340,9 @@
     "Facial Gesture" : {
       "comment" : "Label for gesture type picker"
     },
+    "Facial gesture controls require camera access. Please enable camera access in Settings > Privacy & Security > Camera > Echo." : {
+      "comment" : "Explanation for camera permission denied"
+    },
     "Facial Gestures" : {
       "comment" : "Header for facial gesture settings area"
     },
@@ -339,6 +372,9 @@
     },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
+    },
+    "Global Settings" : {
+      "comment" : "Button label for global facial gesture settings"
     },
     "Go back to the last level of the vocabulary (or delete the last inputted letter)" : {
       "comment" : "Label for action that happens on a keypress"
@@ -375,6 +411,12 @@
     },
     "Hold Gesture" : {
       "comment" : "The label that is shown next to the hold gesture action"
+    },
+    "Hold gesture briefly" : {
+      "comment" : "Description for short hold gesture duration"
+    },
+    "Hold gesture for longer" : {
+      "comment" : "Description for long hold gesture duration"
     },
     "Import a vocabulary" : {
       "comment" : "Text on inport vocab button"
@@ -456,6 +498,12 @@
     },
     "Lift the right side of your upper lip" : {
       "comment" : "Description for right upper lip up gesture"
+    },
+    "Long Hold" : {
+      "comment" : "Display name for long hold gesture duration"
+    },
+    "Long Hold Duration" : {
+
     },
     "Low" : {
 
@@ -559,6 +607,9 @@
     "Opacity: %lld%%" : {
 
     },
+    "Open Settings" : {
+      "comment" : "Button to open app settings"
+    },
     "Open your mouth" : {
       "comment" : "Description for jaw open gesture"
     },
@@ -610,6 +661,9 @@
     "Push your jaw forward" : {
       "comment" : "Description for jaw forward gesture"
     },
+    "Quick gesture detection" : {
+      "comment" : "Description for tap gesture duration"
+    },
     "Quick scan" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -633,6 +687,12 @@
     },
     "Required" : {
       "comment" : "Prompt for required text input"
+    },
+    "Reset" : {
+      "comment" : "Header for reset section"
+    },
+    "Reset to Defaults" : {
+      "comment" : "Button to reset settings to defaults"
     },
     "Restarts to the top of the current list, scanning will resume if you have that enabled" : {
       "comment" : "Label for action that happens on a keypress"
@@ -757,6 +817,12 @@
     "Settings" : {
       "comment" : "The navigation title for the settings page"
     },
+    "Short Hold" : {
+      "comment" : "Display name for short hold gesture duration"
+    },
+    "Short Hold Duration" : {
+
+    },
     "Show" : {
       "comment" : "Label to show arrows"
     },
@@ -832,6 +898,9 @@
     "Squint your right cheek" : {
       "comment" : "Description for right cheek squint gesture"
     },
+    "Start" : {
+
+    },
     "Start of list" : {
       "comment" : "Picker option for control command"
     },
@@ -844,8 +913,14 @@
     "Stick out your tongue" : {
       "comment" : "Description for tongue out gesture"
     },
+    "Stop" : {
+
+    },
     "Stop automatic scanning on the currently selected node." : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Strength: %lld%%" : {
+
     },
     "Stretch the left side of your mouth" : {
       "comment" : "Description for left mouth stretch gesture"
@@ -880,8 +955,14 @@
     "Switch: %@" : {
       "comment" : "The navigation title when editing a given switch. It contains the user entered name after the colon"
     },
+    "Tap" : {
+      "comment" : "Display name for tap gesture duration"
+    },
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
+    },
+    "Test Gesture" : {
+
     },
     "Text Opacity: %lld%%" : {
 
@@ -918,6 +999,9 @@
     },
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"
+    },
+    "These settings apply to all facial gestures configured with short hold or long hold duration types. Individual gestures can still have their own sensitivity thresholds." : {
+      "comment" : "Footer explaining global duration settings"
     },
     "This device does not support face tracking. Facial gesture controls require a device with TrueDepth camera or A12 Bionic chip or later." : {
       "comment" : "Explanation for unsupported device"

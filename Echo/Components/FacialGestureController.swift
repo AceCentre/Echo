@@ -63,10 +63,21 @@ struct FacialGestureController: View {
         // Configure gestures for enabled switches
         for gestureSwitch in facialGestureSwitches where gestureSwitch.isEnabled {
             if let gesture = gestureSwitch.gesture {
+                // Use duration from global settings based on duration type
+                let holdDuration: Double
+                switch gestureSwitch.durationType {
+                case .tap:
+                    holdDuration = 0.0 // No hold duration for tap gestures
+                case .shortHold:
+                    holdDuration = settings.facialGestureShortHoldDuration
+                case .longHold:
+                    holdDuration = settings.facialGestureLongHoldDuration
+                }
+
                 gestureDetector.configureGesture(
                     gesture,
                     threshold: gestureSwitch.threshold,
-                    holdDuration: gestureSwitch.holdDuration
+                    holdDuration: holdDuration
                 )
             }
         }
@@ -81,15 +92,23 @@ struct FacialGestureController: View {
     
     private func handleGestureDetected(gesture: FacialGesture, isHoldAction: Bool, mainCommunicationPageState: MainCommunicationPageState?) {
         guard let mainState = mainCommunicationPageState else { return }
-        
+
         // Find the corresponding switch for this gesture
         guard let gestureSwitch = facialGestureSwitches.first(where: { $0.gesture == gesture && $0.isEnabled }) else {
             return
         }
-        
-        // Determine which action to trigger
-        let action = isHoldAction ? gestureSwitch.holdAction : gestureSwitch.tapAction
-        
+
+        // Determine which action to trigger based on duration type and hold detection
+        let action: SwitchAction
+        switch gestureSwitch.durationType {
+        case .tap:
+            // For tap gestures, always use tap action regardless of hold detection
+            action = gestureSwitch.tapAction
+        case .shortHold, .longHold:
+            // For hold gestures, use hold action if detected as hold, otherwise tap action
+            action = isHoldAction ? gestureSwitch.holdAction : gestureSwitch.tapAction
+        }
+
         // Execute the switch action
         executeSwitchAction(action, on: mainState)
     }

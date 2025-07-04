@@ -52,6 +52,10 @@ class Settings {
     var arrowSize: CGFloat = 100.0
     var arrowBorderOpacity: Double = 1.0
 
+    // Facial gesture settings
+    var facialGestureShortHoldDuration: Double = 0.8 // Duration for "short hold" gestures
+    var facialGestureLongHoldDuration: Double = 2.0  // Duration for "long hold" gestures
+
     // Highlight settings
     var highlightColor: String = "Black"
     var highlightOpacity: Double = 1.0
@@ -117,6 +121,10 @@ class Settings {
         self.selectedTheme = Theme.themes.first?.name ?? "System Default"
         self.arrowSize = 100.0
         self.arrowBorderOpacity = 1.0
+
+        // Initialize Facial gesture settings
+        self.facialGestureShortHoldDuration = 0.8
+        self.facialGestureLongHoldDuration = 2.0
 
         // Initialize Highlight settings
         self.highlightColor = "Black"

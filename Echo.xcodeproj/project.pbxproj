@@ -89,9 +89,10 @@
 		D5CC498C2C53C2CD00700583 /* NodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CC498B2C53C2CD00700583 /* NodeType.swift */; };
 		DD10251D2E180D3400C42EF9 /* FacialGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10251C2E180D3400C42EF9 /* FacialGesture.swift */; };
 		DD10251F2E180D5A00C42EF9 /* FacialGestureSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10251E2E180D5A00C42EF9 /* FacialGestureSwitch.swift */; };
-		DD1025212E180D6700C42EF9 /* FacialGestureDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1025202E180D6700C42EF9 /* FacialGestureDetector.swift */; };
 		DD1025232E180D7600C42EF9 /* FacialGestureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1025222E180D7600C42EF9 /* FacialGestureController.swift */; };
 		DD1025252E180D8D00C42EF9 /* FacialGestureSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1025242E180D8D00C42EF9 /* FacialGestureSection.swift */; };
+		DD1025272E181FC400C42EF9 /* GestureDurationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1025262E181FC400C42EF9 /* GestureDurationType.swift */; };
+		DD1025292E18200500C42EF9 /* FacialGestureDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1025282E18200500C42EF9 /* FacialGestureDetector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -178,9 +179,10 @@
 		D5CC498B2C53C2CD00700583 /* NodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeType.swift; sourceTree = "<group>"; };
 		DD10251C2E180D3400C42EF9 /* FacialGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGesture.swift; sourceTree = "<group>"; };
 		DD10251E2E180D5A00C42EF9 /* FacialGestureSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGestureSwitch.swift; sourceTree = "<group>"; };
-		DD1025202E180D6700C42EF9 /* FacialGestureDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGestureDetector.swift; sourceTree = "<group>"; };
 		DD1025222E180D7600C42EF9 /* FacialGestureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGestureController.swift; sourceTree = "<group>"; };
 		DD1025242E180D8D00C42EF9 /* FacialGestureSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGestureSection.swift; sourceTree = "<group>"; };
+		DD1025262E181FC400C42EF9 /* GestureDurationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureDurationType.swift; sourceTree = "<group>"; };
+		DD1025282E18200500C42EF9 /* FacialGestureDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacialGestureDetector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,7 +351,7 @@
 		D5A775A22C076111004DA914 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
-				DD1025202E180D6700C42EF9 /* FacialGestureDetector.swift */,
+				DD1025282E18200500C42EF9 /* FacialGestureDetector.swift */,
 				D581A7332C3ED0B500E5C626 /* GameController */,
 				D5A775A32C076122004DA914 /* AvailableVoices.swift */,
 				D581A7442C3FED8200E5C626 /* EditState.swift */,
@@ -364,6 +366,7 @@
 		D5A775AF2C0784D5004DA914 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				DD1025262E181FC400C42EF9 /* GestureDurationType.swift */,
 				DD10251C2E180D3400C42EF9 /* FacialGesture.swift */,
 				D5A775AD2C0784D0004DA914 /* AudioDirection.swift */,
 				D5A775C42C0E0700004DA914 /* SwitchAction.swift */,
@@ -536,13 +539,14 @@
 				D581A7452C3FED8200E5C626 /* EditState.swift in Sources */,
 				D5A775C72C0E0782004DA914 /* UIKeyboardHIDUsage.swift in Sources */,
 				D5A775E22C2C1D1D004DA914 /* GameControllerSection.swift in Sources */,
+				DD1025292E18200500C42EF9 /* FacialGestureDetector.swift in Sources */,
 				D5A775CB2C0F5FA9004DA914 /* ActionPicker.swift in Sources */,
 				DD10251D2E180D3400C42EF9 /* FacialGesture.swift in Sources */,
+				DD1025272E181FC400C42EF9 /* GestureDurationType.swift in Sources */,
 				D5A775A62C076151004DA914 /* Helpers.swift in Sources */,
 				D577B3B32C00C32300F064F2 /* VocabularyOnboarding.swift in Sources */,
 				D581A7322C3ED0AA00E5C626 /* ControllerManager.swift in Sources */,
 				D577B3AD2C00A98800F064F2 /* BottomText.swift in Sources */,
-				DD1025212E180D6700C42EF9 /* FacialGestureDetector.swift in Sources */,
 				D581A73E2C3ED20A00E5C626 /* Settings.swift in Sources */,
 				D5A775B52C08C5C2004DA914 /* PredictionOnboarding.swift in Sources */,
 				D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */,

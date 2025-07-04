@@ -52,8 +52,8 @@ struct AccessOptionsArea: View {
             })
 
             SwitchControlSection()
-            FacialGestureSection()
             GameControllerSection()
+            FacialGestureSection()
         }
         .navigationTitle(
             String(
