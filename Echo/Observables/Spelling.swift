@@ -141,14 +141,17 @@ class Spelling: ObservableObject {
             for word in try db.prepare(query) {
                 let nextCharPos = prefix.count
                 let unwrappedWord = try word.get(wordExpression)
-                
-                let nextCharIndex = unwrappedWord.index(unwrappedWord.startIndex, offsetBy: nextCharPos)
-                let nextChar = String(unwrappedWord[nextCharIndex]).lowercased() // Ensure this is a String
-                
-                // Fetch the score inside this if-let block
-                if let unwrappedScore = try? word.get(scoreExpression), let scoreAsInt = Int("\(unwrappedScore)") {
-                    let currentScore = alphabetScores[nextChar, default: 0]
-                    alphabetScores[nextChar] = currentScore + scoreAsInt
+
+                // Check if the word is long enough to have a character at nextCharPos
+                if nextCharPos < unwrappedWord.count {
+                    let nextCharIndex = unwrappedWord.index(unwrappedWord.startIndex, offsetBy: nextCharPos)
+                    let nextChar = String(unwrappedWord[nextCharIndex]).lowercased() // Ensure this is a String
+
+                    // Fetch the score inside this if-let block
+                    if let unwrappedScore = try? word.get(scoreExpression), let scoreAsInt = Int("\(unwrappedScore)") {
+                        let currentScore = alphabetScores[nextChar, default: 0]
+                        alphabetScores[nextChar] = currentScore + scoreAsInt
+                    }
                 }
             }
             
