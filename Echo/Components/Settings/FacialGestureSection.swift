@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 import ARKit
 import UIKit
+import AudioToolbox
 
 struct FacialGestureSwitchSection: View {
     @State var tapAction: SwitchAction
@@ -156,6 +157,7 @@ struct GesturePreviewSection: View {
     let threshold: Float
     @StateObject private var detector = FacialGestureDetector()
     @State private var isActive = false
+    @State private var lastDetectionState = false
 
     var gestureValue: Float {
         detector.previewGestureValues[gesture] ?? 0.0
@@ -220,6 +222,13 @@ struct GesturePreviewSection: View {
         .onDisappear {
             stopPreview()
         }
+        .onChange(of: isGestureDetected) { _, newValue in
+            // Play sound and haptic feedback when gesture is detected
+            if newValue && !lastDetectionState {
+                playDetectionFeedback()
+            }
+            lastDetectionState = newValue
+        }
     }
 
     private func startPreview() {
@@ -230,6 +239,15 @@ struct GesturePreviewSection: View {
     private func stopPreview() {
         detector.stopPreviewMode()
         isActive = false
+    }
+
+    private func playDetectionFeedback() {
+        // Play system click sound
+        AudioServicesPlaySystemSound(1104) // System click sound
+
+        // Play haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
     }
 }
 
