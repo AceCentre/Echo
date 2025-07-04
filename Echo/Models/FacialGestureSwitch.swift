@@ -32,33 +32,15 @@ class FacialGestureSwitch {
         }
     }
 
-    /*
-     We store the GestureDurationType as a string since SwiftData doesn't support enums directly
-     This computed property provides convenient access to the enum
-     */
-    @Transient var durationType: GestureDurationType {
-        get {
-            return GestureDurationType(rawValue: durationTypeRaw) ?? .tap
-        }
-        set {
-            durationTypeRaw = newValue.rawValue
-        }
-    }
-
-    /// Computed property for display name based on gesture and duration type
+    /// Computed property for display name based on gesture
     var displayName: String {
         guard let gesture = gesture else { return name }
-        if durationType == .tap {
-            return gesture.displayName
-        } else {
-            return "\(gesture.displayName) (\(durationType.displayName))"
-        }
+        return gesture.displayName
     }
     
     init(
         name: String,
         gesture: FacialGesture,
-        durationType: GestureDurationType = .tap,
         threshold: Float? = nil,
         tapAction: SwitchAction = .none,
         holdAction: SwitchAction = .none,
@@ -67,7 +49,7 @@ class FacialGestureSwitch {
     ) {
         self.name = name
         self.gestureRaw = gesture.rawValue
-        self.durationTypeRaw = durationType.rawValue
+        self.durationTypeRaw = "tap" // Keep for compatibility but not used
         self.threshold = threshold ?? gesture.defaultThreshold
         self.tapAction = tapAction
         self.holdAction = holdAction

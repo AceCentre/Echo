@@ -17,7 +17,6 @@ struct FacialGestureSwitchSection: View {
     @State var threshold: Float
     @State var holdDuration: Double
     @State var isEnabled: Bool
-    @State var durationType: GestureDurationType
 
     var gestureSwitch: FacialGestureSwitch
 
@@ -28,7 +27,6 @@ struct FacialGestureSwitchSection: View {
         self._threshold = State(initialValue: gestureSwitch.threshold)
         self._holdDuration = State(initialValue: gestureSwitch.holdDuration)
         self._isEnabled = State(initialValue: gestureSwitch.isEnabled)
-        self._durationType = State(initialValue: gestureSwitch.durationType)
     }
     
     var body: some View {
@@ -56,43 +54,18 @@ struct FacialGestureSwitchSection: View {
                     actionState: tapAction
                 )
 
-                // Duration type picker
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(String(
-                        localized: "Duration Type",
-                        comment: "Label for duration type picker"
-                    ))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                    Picker("Duration Type", selection: $durationType) {
-                        ForEach(GestureDurationType.allCases) { type in
-                            VStack(alignment: .leading) {
-                                Text(type.displayName)
-                                Text(type.description)
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                            .tag(type)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-
-                // Hold action picker (only for hold duration types)
-                if durationType != .tap {
-                    ActionPicker(
-                        label: String(
-                            localized: "Hold Gesture",
-                            comment: "The label that is shown next to the hold gesture action"
-                        ),
-                        actions: SwitchAction.holdCases,
-                        actionChange: { newAction in
-                            holdAction = newAction
-                        },
-                        actionState: holdAction
-                    )
-                }
+                // Hold action picker
+                ActionPicker(
+                    label: String(
+                        localized: "Hold Gesture",
+                        comment: "The label that is shown next to the hold gesture action"
+                    ),
+                    actions: SwitchAction.holdCases,
+                    actionChange: { newAction in
+                        holdAction = newAction
+                    },
+                    actionState: holdAction
+                )
                 
                 // Threshold slider
                 VStack(alignment: .leading, spacing: 4) {
@@ -124,10 +97,7 @@ struct FacialGestureSwitchSection: View {
                     .foregroundColor(.secondary)
                 }
 
-                // Gesture Preview
-                if let gesture = gestureSwitch.gesture, ARFaceTrackingConfiguration.isSupported {
-                    GesturePreviewSection(gesture: gesture, threshold: threshold)
-                }
+
                 
                 // Hold duration slider (only if hold action is not .none)
                 if holdAction != .none {
@@ -138,20 +108,20 @@ struct FacialGestureSwitchSection: View {
                         ))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        
+
                         HStack {
                             Text("0.5s")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
-                            
+
                             Slider(value: $holdDuration, in: 0.5...3.0, step: 0.1)
                                 .tint(.blue)
-                            
+
                             Text("3.0s")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
-                        
+
                         Text(String(
                             localized: "Duration: \(String(format: "%.1f", holdDuration))s",
                             comment: "Shows current hold duration value"
@@ -177,95 +147,9 @@ struct FacialGestureSwitchSection: View {
         .onChange(of: isEnabled) { _, _ in
             gestureSwitch.isEnabled = isEnabled
         }
-        .onChange(of: durationType) { _, _ in
-            gestureSwitch.durationType = durationType
-        }
     }
 }
 
-struct GlobalDurationSettings: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(Settings.self) var settings: Settings
-
-    var body: some View {
-        @Bindable var settingsBindable = settings
-
-        NavigationStack {
-            Form {
-                Section(content: {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Short Hold Duration")
-                            Spacer()
-                            Text("\(String(format: "%.1f", settings.facialGestureShortHoldDuration))s")
-                                .foregroundColor(.secondary)
-                        }
-
-                        Slider(
-                            value: $settingsBindable.facialGestureShortHoldDuration,
-                            in: 0.3...2.0,
-                            step: 0.1
-                        )
-                        .tint(.blue)
-
-                        Text("Duration for short hold gestures")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Long Hold Duration")
-                            Spacer()
-                            Text("\(String(format: "%.1f", settings.facialGestureLongHoldDuration))s")
-                                .foregroundColor(.secondary)
-                        }
-
-                        Slider(
-                            value: $settingsBindable.facialGestureLongHoldDuration,
-                            in: 1.0...5.0,
-                            step: 0.1
-                        )
-                        .tint(.blue)
-
-                        Text("Duration for long hold gestures")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }, header: {
-                    Text("Duration Settings", comment: "Header for duration settings section")
-                }, footer: {
-                    Text("These settings apply to all facial gestures configured with short hold or long hold duration types. Individual gestures can still have their own sensitivity thresholds.", comment: "Footer explaining global duration settings")
-                })
-
-                Section(content: {
-                    Button(action: {
-                        resetToDefaults()
-                    }) {
-                        Text("Reset to Defaults", comment: "Button to reset settings to defaults")
-                            .foregroundColor(.red)
-                    }
-                }, header: {
-                    Text("Reset", comment: "Header for reset section")
-                })
-            }
-            .navigationTitle("Global Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-
-    private func resetToDefaults() {
-        settings.facialGestureShortHoldDuration = 0.8
-        settings.facialGestureLongHoldDuration = 2.0
-    }
-}
 
 struct GesturePreviewSection: View {
     let gesture: FacialGesture
@@ -356,7 +240,6 @@ struct FacialGestureSection: View {
 
     @State private var currentGestureSwitch: FacialGestureSwitch?
     @State private var showAddGestureSheet = false
-    @State private var showGlobalSettings = false
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
     @StateObject private var gestureDetector = FacialGestureDetector()
     
@@ -455,17 +338,7 @@ struct FacialGestureSection: View {
                     )
                 })
 
-                Button(action: {
-                    showGlobalSettings = true
-                }, label: {
-                    Label(
-                        String(
-                            localized: "Global Settings",
-                            comment: "Button label for global facial gesture settings"
-                        ),
-                        systemImage: "gearshape.fill"
-                    )
-                })
+
 
 
 
@@ -513,9 +386,6 @@ struct FacialGestureSection: View {
         })
         .sheet(isPresented: $showAddGestureSheet) {
             AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
-        }
-        .sheet(isPresented: $showGlobalSettings) {
-            GlobalDurationSettings()
         }
     }
     
@@ -605,6 +475,15 @@ struct AddFacialGesture: View {
                     Text("Actions", comment: "Header for actions section")
                 })
 
+                // Preview section for existing gesture
+                if let gesture = unwrappedGestureSwitch.gesture, ARFaceTrackingConfiguration.isSupported {
+                    Section(content: {
+                        GesturePreviewSection(gesture: gesture, threshold: unwrappedGestureSwitch.threshold)
+                    }, header: {
+                        Text("Preview", comment: "Header for gesture preview section")
+                    })
+                }
+
                 Section(content: {
                     Button(action: {
                         deleteAlert = true
@@ -667,6 +546,15 @@ struct AddFacialGesture: View {
                 }, header: {
                     Text("New Gesture", comment: "Header for new gesture section")
                 })
+
+                // Preview section for new gesture
+                if ARFaceTrackingConfiguration.isSupported {
+                    Section(content: {
+                        GesturePreviewSection(gesture: selectedGesture, threshold: selectedGesture.defaultThreshold)
+                    }, header: {
+                        Text("Preview", comment: "Header for gesture preview section")
+                    })
+                }
             }
         }
         .navigationTitle(
