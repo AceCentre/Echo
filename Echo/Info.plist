@@ -23,6 +23,10 @@
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Echo uses the front-facing camera to detect facial gestures for accessibility control. This allows users with limited mobility to control the app using facial movements.</string>
+	<key>ARKitUsageDescription</key>
+	<string>Echo uses ARKit face tracking to detect facial gestures for switch input control, providing an accessible way to navigate the app.</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
+import ARKit
 
 @main
 struct EchoApp: App {
     @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
+    @AppStorage("hasLoadedFacialGestureSwitches") var hasLoadedFacialGestureSwitches = false
     @StateObject var errorHandling = ErrorHandling()
     @StateObject var controllerManager = ControllerManager()
     
@@ -21,7 +23,7 @@ struct EchoApp: App {
         }
         .environmentObject(controllerManager)
         .environmentObject(errorHandling)
-        .modelContainer(for: [Settings.self, Switch.self]) { result in
+        .modelContainer(for: [Settings.self, Switch.self, FacialGestureSwitch.self]) { result in
             do {
                 let container = try result.get()
                 
@@ -76,8 +78,22 @@ struct EchoApp: App {
                     try container.mainContext.save()
                     hasLoadedSwitches = true
                 }
-                
-                
+
+                /*
+                 Initialise the default facial gesture switches once
+                 */
+                if !hasLoadedFacialGestureSwitches {
+                    // Only add default facial gesture switches if face tracking is supported
+                    if ARFaceTrackingConfiguration.isSupported {
+                        let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
+                        for gestureSwitch in defaultFacialGestureSwitches {
+                            container.mainContext.insert(gestureSwitch)
+                        }
+                        try container.mainContext.save()
+                    }
+                    hasLoadedFacialGestureSwitches = true
+                }
+
                 /*
                  Insert the system vocabularies
                  */

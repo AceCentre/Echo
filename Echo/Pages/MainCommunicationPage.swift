@@ -38,6 +38,7 @@ struct MainCommunicationPage: View {
                 }
                 if settings.enableSwitchControl {
                     KeyPressController(mainCommunicationPageState: mainCommunicationPageState)
+                    FacialGestureController(mainCommunicationPageState: mainCommunicationPageState) 
                 }
                 VStack {
                     NodeTreeView(mainCommunicationPageState: mainCommunicationPageState)

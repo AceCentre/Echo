@@ -50,8 +50,9 @@ struct AccessOptionsArea: View {
             comment: "A description of all the swiping gestures. Please use the same format including bold text"
                 )
             })
-       
+
             SwitchControlSection()
+            FacialGestureSection()
             GameControllerSection()
         }
         .navigationTitle(
