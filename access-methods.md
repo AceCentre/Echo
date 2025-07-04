@@ -56,3 +56,6 @@ Echo also supports the use of Game Controllers to control the app. [Read Apples 
 
 A game controller has all the same actions as external switches.
 
+## Facial gestures
+
+WIP
