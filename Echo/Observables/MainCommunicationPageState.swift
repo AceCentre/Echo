@@ -317,6 +317,11 @@ class MainCommunicationPageState: ObservableObject {
         }
         
         if let finalNodeToHover = nodeToHover {
+            // If the currently hovered node has become orphaned (no parent),
+            // we should update it to point to the new node to prevent crashes
+            if hoveredNode.parent == nil {
+                hoveredNode = finalNodeToHover
+            }
             return finalNodeToHover
         } else {
             throw EchoError.noHoverNode
@@ -479,7 +484,19 @@ class MainCommunicationPageState: ObservableObject {
         scanLoops = 0
 
         do {
-            guard let siblings = hoveredNode.parent?.getChildren("usernextnode") else {
+            // Check if the hovered node has become orphaned (lost its parent)
+            // This can happen during rapid swipe gestures when nodes are recreated
+            guard let parent = hoveredNode.parent else {
+                // If the hovered node has no parent, try to recover by going to root
+                do {
+                    try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+                } catch {
+                    errorHandling?.handle(error: error)
+                }
+                throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "userNextNode - orphaned node")
+            }
+
+            guard let siblings = parent.getChildren("usernextnode") else {
                 do {
                     try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
                 } catch {
@@ -512,14 +529,26 @@ class MainCommunicationPageState: ObservableObject {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
-        
-        guard let siblings = hoveredNode.parent?.getChildren("prevNode") else {
+
+        // Check if the hovered node has become orphaned (lost its parent)
+        // This can happen during rapid swipe gestures when nodes are recreated
+        guard let parent = hoveredNode.parent else {
+            // If the hovered node has no parent, try to recover by going to root
             do {
                 try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
             } catch {
                 errorHandling?.handle(error: error)
             }
-            throw EchoError.noSiblings(nodeDetails: hoveredNode.details,  location: "userNextNode")
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "prevNode - orphaned node")
+        }
+
+        guard let siblings = parent.getChildren("prevNode") else {
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details,  location: "prevNode")
         }
         
         let currentIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? -1
@@ -562,9 +591,15 @@ class MainCommunicationPageState: ObservableObject {
             if isFastScan {
                 unwrappedVoice.playFastCue(hoveredNode.cueText, cb: {
                     do {
-                        guard let siblings = self.hoveredNode.parent?.getChildren("hoverNode") else {
+                        // Check if the hovered node has become orphaned (lost its parent)
+                        // This can happen during rapid swipe gestures when nodes are recreated
+                        guard let parent = self.hoveredNode.parent else {
                             try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: true)
+                            throw EchoError.noSiblings(nodeDetails: self.hoveredNode.details, location: "isFastScan - orphaned node")
+                        }
 
+                        guard let siblings = parent.getChildren("hoverNode") else {
+                            try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: true)
                             throw EchoError.noSiblings(nodeDetails: self.hoveredNode.details, location: "isFastScan")
                         }
                         
@@ -612,10 +647,22 @@ class MainCommunicationPageState: ObservableObject {
     
     private func setNextMoveTimer() throws {
         if disableScanningAsHidden { return }
-        
+
         let maxScanLoops = settings?.scanLoops ?? 0
-        
-        guard let siblings = hoveredNode.parent?.getChildren("setnextmovetimer") else {
+
+        // Check if the hovered node has become orphaned (lost its parent)
+        // This can happen during rapid swipe gestures when nodes are recreated
+        guard let parent = hoveredNode.parent else {
+            // If the hovered node has no parent, try to recover by going to root
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "setNextMoveTimer - orphaned node")
+        }
+
+        guard let siblings = parent.getChildren("setnextmovetimer") else {
             do {
                 try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
             } catch {
@@ -657,15 +704,25 @@ class MainCommunicationPageState: ObservableObject {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
-        
-        guard let siblings = hoveredNode.parent?.getChildren("startfastscan") else {
+
+        // Check if the hovered node has become orphaned (lost its parent)
+        // This can happen during rapid swipe gestures when nodes are recreated
+        guard let parent = hoveredNode.parent else {
+            do {
+                try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
+            } catch {
+                errorHandling?.handle(error: error)
+            }
+            throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "startFastScan - orphaned node")
+        }
+
+        guard let siblings = parent.getChildren("startfastscan") else {
             do {
                 try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
             } catch {
                 errorHandling?.handle(error: error)
             }
             throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "startFastScan")
-
         }
         
         isFastScan = true

@@ -81,9 +81,9 @@ class Spelling: ObservableObject {
         var wordPredictions: [String] = []
         
         do {
-            let wordExpression = Expression<String>(value: "word")
-            let scoreExpression = Expression<Int>(value: "score")
-            let languageExpression = Expression<String>(value: "language")
+            let wordExpression = Expression<String>("word")
+            let scoreExpression = Expression<Int>("score")
+            let languageExpression = Expression<String>("language")
             
             let query = words
                 .filter(languageExpression == settings?.predictionLanguage.databaseLanguageCode ?? "en")
@@ -129,9 +129,9 @@ class Spelling: ObservableObject {
         if prefix == "" { return alphabetItems }
         
         do {
-            let wordExpression = Expression<String>(value: "word")
-            let scoreExpression = Expression<Int>(value: "score")
-            let languageExpression = Expression<String>(value: "language")
+            let wordExpression = Expression<String>("word")
+            let scoreExpression = Expression<Int>("score")
+            let languageExpression = Expression<String>("language")
             
             let query = words
                 .filter(languageExpression == settings?.predictionLanguage.databaseLanguageCode ?? "en")
