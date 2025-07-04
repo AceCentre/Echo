@@ -82,16 +82,42 @@ struct EchoApp: App {
                 /*
                  Initialise the default facial gesture switches once
                  */
-                if !hasLoadedFacialGestureSwitches {
-                    // Only add default facial gesture switches if face tracking is supported
-                    if ARFaceTrackingConfiguration.isSupported {
-                        let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
-                        for gestureSwitch in defaultFacialGestureSwitches {
-                            container.mainContext.insert(gestureSwitch)
-                        }
-                        try container.mainContext.save()
+                print("🎭 EchoApp: hasLoadedFacialGestureSwitches = \(hasLoadedFacialGestureSwitches)")
+
+                // Check what's already in the database
+                var existingSwitches: [FacialGestureSwitch] = []
+                do {
+                    existingSwitches = try container.mainContext.fetch(FetchDescriptor<FacialGestureSwitch>())
+                    print("🎭 EchoApp: Found \(existingSwitches.count) existing facial gesture switches in database")
+                } catch {
+                    print("🎭 EchoApp: Error checking existing switches: \(error)")
+                }
+
+                // Create default switches if:
+                // 1. We haven't loaded them before AND face tracking is supported, OR
+                // 2. Face tracking is supported but no switches exist in database (recovery case)
+                let shouldCreateSwitches = (!hasLoadedFacialGestureSwitches && ARFaceTrackingConfiguration.isSupported) ||
+                                         (ARFaceTrackingConfiguration.isSupported && existingSwitches.isEmpty)
+
+                if shouldCreateSwitches {
+                    print("🎭 EchoApp: Creating facial gesture switches")
+                    print("🎭 EchoApp: ARFaceTrackingConfiguration.isSupported = \(ARFaceTrackingConfiguration.isSupported)")
+
+                    let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
+                    print("🎭 EchoApp: Created \(defaultFacialGestureSwitches.count) default switches")
+
+                    for gestureSwitch in defaultFacialGestureSwitches {
+                        container.mainContext.insert(gestureSwitch)
+                        print("🎭 EchoApp: Inserted switch: \(gestureSwitch.name)")
                     }
+                    try container.mainContext.save()
+                    print("🎭 EchoApp: Saved facial gesture switches to database")
+                }
+
+                // Always set the flag to true after checking
+                if !hasLoadedFacialGestureSwitches {
                     hasLoadedFacialGestureSwitches = true
+                    print("🎭 EchoApp: Set hasLoadedFacialGestureSwitches = true")
                 }
 
                 /*

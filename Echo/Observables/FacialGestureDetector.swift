@@ -50,7 +50,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - Public Methods
     
     func startDetection(onGestureDetected: @escaping (FacialGesture, Bool) -> Void) {
+        print("📷 FacialGestureDetector: startDetection called")
+        print("📷 FacialGestureDetector: isSupported = \(isSupported)")
+
         guard isSupported else {
+            print("📷 FacialGestureDetector: Face tracking not supported")
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
@@ -60,16 +64,21 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // Check camera permission before starting
         checkCameraPermission()
+        print("📷 FacialGestureDetector: Camera permission status = \(cameraPermissionStatus.rawValue)")
 
         if cameraPermissionStatus == .authorized {
             // Permission already granted, start immediately
+            print("📷 FacialGestureDetector: Permission authorized, starting AR session")
             startARSession()
         } else if cameraPermissionStatus == .denied {
+            print("📷 FacialGestureDetector: Permission denied")
             errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
         } else {
             // Permission not determined, request it
+            print("📷 FacialGestureDetector: Permission not determined, requesting...")
             errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
             requestCameraPermission { [weak self] granted in
+                print("📷 FacialGestureDetector: Permission request result = \(granted)")
                 if granted {
                     self?.startARSession()
                 }
@@ -78,17 +87,28 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func startARSession() {
+        print("📷 FacialGestureDetector: startARSession called")
+        print("📷 FacialGestureDetector: Creating ARFaceTrackingConfiguration")
+
         let configuration = ARFaceTrackingConfiguration()
+        print("📷 FacialGestureDetector: Running AR session...")
+
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-        isActive = true
-        errorMessage = nil
+
+        DispatchQueue.main.async {
+            self.isActive = true
+            self.errorMessage = nil
+            print("📷 FacialGestureDetector: AR session started, isActive = \(self.isActive)")
+        }
     }
     
     func stopDetection() {
+        print("📷 FacialGestureDetector: stopDetection called")
         session.pause()
         isActive = false
         gestureStates.removeAll()
         onGestureDetected = nil
+        print("📷 FacialGestureDetector: Detection stopped, isActive = \(isActive)")
     }
     
     func configureGesture(_ gesture: FacialGesture, threshold: Float, holdDuration: Double = 1.0) {
