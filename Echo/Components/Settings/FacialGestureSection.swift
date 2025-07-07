@@ -397,6 +397,7 @@ struct FacialGestureSection: View {
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
     @State private var lastTapTime: Date = Date()
     @State private var isDatabaseReady = false
+    @State private var isSheetPresenting = false
     @StateObject private var gestureDetector = FacialGestureDetector()
     
     var body: some View {
@@ -461,17 +462,22 @@ struct FacialGestureSection: View {
                         // Prevent multiple presentations and rapid tapping
                         let now = Date()
                         guard !showAddGestureSheet &&
+                              !isSheetPresenting &&
                               now.timeIntervalSince(lastTapTime) > 0.5 &&
                               isDatabaseReady else {
-                            print("🐛 Button tap blocked - showSheet: \(showAddGestureSheet), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
+                            print("🐛 Button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
                             return
                         }
-                        lastTapTime = now
 
-                        // Ensure the gesture switch is fully loaded
                         print("🐛 Opening sheet for gesture: \(gestureSwitch.name)")
+                        lastTapTime = now
+                        isSheetPresenting = true
                         currentGestureSwitch = gestureSwitch
-                        showAddGestureSheet = true
+
+                        // Small delay to ensure state is stable
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            showAddGestureSheet = true
+                        }
                     }, label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
@@ -502,10 +508,22 @@ struct FacialGestureSection: View {
                 Button(action: {
                     // Prevent multiple presentations and rapid tapping
                     let now = Date()
-                    guard !showAddGestureSheet && now.timeIntervalSince(lastTapTime) > 0.5 else { return }
+                    guard !showAddGestureSheet &&
+                          !isSheetPresenting &&
+                          now.timeIntervalSince(lastTapTime) > 0.5 else {
+                        print("🐛 Add button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting)")
+                        return
+                    }
+
+                    print("🐛 Opening add gesture sheet")
                     lastTapTime = now
+                    isSheetPresenting = true
                     currentGestureSwitch = nil
-                    showAddGestureSheet = true
+
+                    // Small delay to ensure state is stable
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        showAddGestureSheet = true
+                    }
                 }, label: {
                     Label(
                         String(
@@ -563,8 +581,10 @@ struct FacialGestureSection: View {
             }
         })
         .sheet(isPresented: $showAddGestureSheet, onDismiss: {
-            // Reset state when sheet is dismissed
+            // Reset all state when sheet is dismissed
+            print("🐛 Sheet dismissed, resetting state")
             currentGestureSwitch = nil
+            isSheetPresenting = false
         }) {
             AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
         }
@@ -573,6 +593,20 @@ struct FacialGestureSection: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isDatabaseReady = true
                 print("🐛 Database marked as ready")
+            }
+        }
+        .onChange(of: showAddGestureSheet) { _, newValue in
+            print("🐛 showAddGestureSheet changed to: \(newValue)")
+            if !newValue {
+                // Sheet was dismissed, reset presenting state
+                isSheetPresenting = false
+            }
+        }
+        .onChange(of: showAddGestureSheet) { _, newValue in
+            print("🐛 showAddGestureSheet changed to: \(newValue)")
+            if !newValue {
+                // Sheet was dismissed, reset presenting state
+                isSheetPresenting = false
             }
         }
     }
