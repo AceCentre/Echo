@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
+import ARKit
 
 @main
 struct EchoApp: App {
     @AppStorage("hasLoadedSwitches") var hasLoadedSwitches = false
+    @AppStorage("hasLoadedFacialGestureSwitches") var hasLoadedFacialGestureSwitches = false
     @StateObject var errorHandling = ErrorHandling()
     @StateObject var controllerManager = ControllerManager()
     
@@ -21,7 +23,7 @@ struct EchoApp: App {
         }
         .environmentObject(controllerManager)
         .environmentObject(errorHandling)
-        .modelContainer(for: [Settings.self, Switch.self]) { result in
+        .modelContainer(for: [Settings.self, Switch.self, FacialGestureSwitch.self]) { result in
             do {
                 let container = try result.get()
                 
@@ -76,8 +78,19 @@ struct EchoApp: App {
                     try container.mainContext.save()
                     hasLoadedSwitches = true
                 }
-                
-                
+
+                /*
+                 Initialise the default facial gesture switches once
+                 */
+                // Don't create any default facial gesture switches
+                // Users can add them manually if they want to use facial gestures
+                // This prevents unwanted switches from appearing by default
+
+                // Always set the flag to true after checking
+                if !hasLoadedFacialGestureSwitches {
+                    hasLoadedFacialGestureSwitches = true
+                }
+
                 /*
                  Insert the system vocabularies
                  */

@@ -16,7 +16,23 @@
     "%@" : {
 
     },
+    "%@s / %@s" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@s / %2$@s"
+          }
+        }
+      }
+    },
     "%lld" : {
+
+    },
+    "0.5s" : {
+
+    },
+    "3.0s" : {
 
     },
     "A four way arrow keypad" : {
@@ -34,11 +50,23 @@
     "Access Options" : {
       "comment" : "The navigation title for the access options page"
     },
+    "Action:" : {
+
+    },
     "Actions" : {
-      "comment" : "The header of the actions area when adding a new switch"
+      "comment" : "Header for actions section\nThe header of the actions area when adding a new switch"
+    },
+    "Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action" : {
+
     },
     "Activate your external switch" : {
       "comment" : "Shown when detecting the switch press when adding a new switch"
+    },
+    "Add Facial Gesture" : {
+      "comment" : "Button label to add a new facial gesture switch"
+    },
+    "Add Gesture" : {
+      "comment" : "Navigation title for adding gesture"
     },
     "Add Switch" : {
       "comment" : "Button label to add a new switch to the list"
@@ -112,23 +140,59 @@
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
       "comment" : "Alert explanation of node deletion\nFooter explanation of node deletion"
     },
+    "Blink both eyes" : {
+      "comment" : "Description for both eyes blink gesture"
+    },
+    "Blink either eye" : {
+      "comment" : "Description for either eye blink gesture"
+    },
+    "Blink your left eye" : {
+      "comment" : "Description for left eye blink gesture"
+    },
+    "Blink your right eye" : {
+      "comment" : "Description for right eye blink gesture"
+    },
     "Bold Highlight Text" : {
 
     },
     "Bold Message Bar Text" : {
 
     },
+    "Both Eyes Blink" : {
+      "comment" : "Display name for both eyes blink gesture"
+    },
+    "BUILDING... %@s" : {
+
+    },
     "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
       "comment" : "A description of why audio splitting exists"
     },
+    "Camera Access Denied" : {
+      "comment" : "Title for camera permission denied message"
+    },
+    "Camera access denied. Please enable camera access in Settings to use facial gestures." : {
+      "comment" : "Error message for denied camera permission"
+    },
+    "Camera access required for facial gesture detection." : {
+      "comment" : "Error message for camera permission needed"
+    },
+    "Camera active" : {
+      "comment" : "Status text when camera is active"
+    },
     "Cancel" : {
-      "comment" : "Button to close modal\nCancel button label\nLabel for closing an alert\nlabel for closing a sheet"
+      "comment" : "Button to close modal\nCancel button\nCancel button label\nLabel for closing an alert\nlabel for closing a sheet"
+    },
+    "Cheek Puff" : {
+      "comment" : "Display name for cheek puff gesture"
     },
     "Clear" : {
       "comment" : "Label for action that happens on a keypress"
     },
     "Clear all the inputted text" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Close your mouth tightly" : {
+      "comment" : "Description for mouth close gesture"
     },
     "Contact Us" : {
       "comment" : "A link to the contact page"
@@ -157,8 +221,14 @@
     "Create" : {
       "comment" : "Create new vocab button"
     },
+    "Create a left dimple" : {
+      "comment" : "Description for left dimple gesture"
+    },
     "Create a new vocabulary" : {
       "comment" : "Navigation title for creating a new vocab"
+    },
+    "Create a right dimple" : {
+      "comment" : "Description for right dimple gesture"
     },
     "Croatian (Experimental)" : {
       "comment" : "The label for the Croatian language when setting prediction language, make sure to include the experimental tag"
@@ -181,6 +251,9 @@
     "Delete" : {
       "comment" : "Button label to confirm deletion\nButton text for deleting a node\nButton text for deleting a vocabulary\nLabel for deleting a vocab"
     },
+    "Delete Gesture" : {
+      "comment" : "The label for the button to delete a facial gesture\nTitle for alert about deleting a gesture"
+    },
     "Delete Node" : {
       "comment" : "Alert title for deleting node\nText on button for deleting a node"
     },
@@ -195,6 +268,9 @@
     },
     "Detect Switch" : {
       "comment" : "Label for a NavigationLink that will get a user to press their external switch"
+    },
+    "DETECTED" : {
+
     },
     "Directional Audio" : {
       "comment" : "Label for directional audio toggle"
@@ -214,6 +290,9 @@
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
     },
+    "Duration: %@s" : {
+      "comment" : "Shows current hold duration value"
+    },
     "Echo prefixes some items with 'current sentence' and 'current word'. However, this might slow you down so you may choose to disable the prompt." : {
       "comment" : "Footer for the section in settings about prompts"
     },
@@ -223,14 +302,23 @@
     "Edit" : {
       "comment" : "Edit text shown to edit a vocab"
     },
+    "Edit Gesture" : {
+      "comment" : "Navigation title for editing gesture"
+    },
     "Edit node display text" : {
       "comment" : "Placeholder for text field"
     },
     "Editing Vocabulary: '%@'" : {
       "comment" : "The main navigation title for editing page"
     },
+    "Either Eye Blink" : {
+      "comment" : "Display name for either eye blink gesture"
+    },
     "Enable" : {
       "comment" : "Label to enable swipe"
+    },
+    "Enable Gesture" : {
+      "comment" : "Toggle to enable/disable facial gesture"
     },
     "End of list" : {
       "comment" : "Picker option for control command"
@@ -250,6 +338,21 @@
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
     },
+    "Face tracking is not supported on this device" : {
+      "comment" : "Error message for unsupported device"
+    },
+    "Face Tracking Not Supported" : {
+      "comment" : "Title for unsupported device message"
+    },
+    "Facial Gesture" : {
+      "comment" : "Label for gesture type picker"
+    },
+    "Facial gesture controls require camera access. Please enable camera access in Settings > Privacy & Security > Camera > Echo." : {
+      "comment" : "Explanation for camera permission denied"
+    },
+    "Facial Gestures" : {
+      "comment" : "Header for facial gesture settings area"
+    },
     "First phrase in new vocab" : {
       "comment" : "Default new node text"
     },
@@ -259,8 +362,23 @@
     "Frequency Order" : {
       "comment" : "The value for the order of the alphabet"
     },
+    "Frown with the left side of your mouth" : {
+      "comment" : "Description for left frown gesture"
+    },
+    "Frown with the right side of your mouth" : {
+      "comment" : "Description for right frown gesture"
+    },
     "Game Controllers" : {
       "comment" : "Header for game controller settings area"
+    },
+    "Gesture Configuration" : {
+      "comment" : "Header for gesture configuration section"
+    },
+    "Gesture Name" : {
+      "comment" : "Placeholder for gesture name field"
+    },
+    "Gesture Strength" : {
+
     },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
@@ -286,11 +404,32 @@
     "Hide" : {
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
+    "High" : {
+
+    },
     "History" : {
       "comment" : "Header for settings about history"
     },
     "Hold" : {
       "comment" : "The label that is shown next to the single hold action"
+    },
+    "Hold Duration" : {
+      "comment" : "Label for hold duration slider"
+    },
+    "Hold Gesture" : {
+      "comment" : "The label that is shown next to the hold gesture action"
+    },
+    "Hold gesture briefly" : {
+      "comment" : "Description for short hold gesture duration"
+    },
+    "Hold gesture for longer" : {
+      "comment" : "Description for long hold gesture duration"
+    },
+    "Hold Progress" : {
+
+    },
+    "HOLD READY" : {
+
     },
     "Import a vocabulary" : {
       "comment" : "Text on inport vocab button"
@@ -298,14 +437,65 @@
     "Initial Setup" : {
       "comment" : "Label for the navigation link to the initial options page\nLabel for the navigation link to the onboarding page"
     },
+    "Inner Brow Up" : {
+      "comment" : "Display name for inner brow up gesture"
+    },
+    "Jaw Forward" : {
+      "comment" : "Display name for jaw forward gesture"
+    },
+    "Jaw Left" : {
+      "comment" : "Display name for jaw left gesture"
+    },
+    "Jaw Open" : {
+      "comment" : "Display name for jaw open gesture"
+    },
+    "Jaw Right" : {
+      "comment" : "Display name for jaw right gesture"
+    },
     "Language" : {
       "comment" : "The label that is shown next to the language picker"
     },
     "Language and Alphabet" : {
       "comment" : "Header for the language settings"
     },
+    "Left Brow Down" : {
+      "comment" : "Display name for left brow down gesture"
+    },
     "Left Channel" : {
       "comment" : "Label for picker of audio channels"
+    },
+    "Left Cheek Squint" : {
+      "comment" : "Display name for left cheek squint gesture"
+    },
+    "Left Dimple" : {
+      "comment" : "Display name for left dimple gesture"
+    },
+    "Left Eye Blink" : {
+      "comment" : "Display name for left eye blink gesture"
+    },
+    "Left Frown" : {
+      "comment" : "Display name for left frown gesture"
+    },
+    "Left Lip Press" : {
+      "comment" : "Display name for left lip press gesture"
+    },
+    "Left Lower Lip Down" : {
+      "comment" : "Display name for left lower lip down gesture"
+    },
+    "Left Mouth Stretch" : {
+      "comment" : "Display name for left mouth stretch gesture"
+    },
+    "Left Nose Sneer" : {
+      "comment" : "Display name for left nose sneer gesture"
+    },
+    "Left Outer Brow Up" : {
+      "comment" : "Display name for left outer brow up gesture"
+    },
+    "Left Smile" : {
+      "comment" : "Display name for left smile gesture"
+    },
+    "Left Upper Lip Up" : {
+      "comment" : "Display name for left upper lip up gesture"
     },
     "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
       "comment" : "A description of how detecting switches works and how to reset it"
@@ -315,6 +505,33 @@
     },
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
+    },
+    "Lift the left side of your upper lip" : {
+      "comment" : "Description for left upper lip up gesture"
+    },
+    "Lift the right side of your upper lip" : {
+      "comment" : "Description for right upper lip up gesture"
+    },
+    "Long Hold" : {
+      "comment" : "Display name for long hold gesture duration"
+    },
+    "Low" : {
+
+    },
+    "Lower Lip Roll" : {
+      "comment" : "Display name for lower lip roll gesture"
+    },
+    "Lower Lip Shrug" : {
+      "comment" : "Display name for lower lip shrug gesture"
+    },
+    "Lower your left eyebrow" : {
+      "comment" : "Description for left brow down gesture"
+    },
+    "Lower your right eyebrow" : {
+      "comment" : "Description for right brow down gesture"
+    },
+    "Make an 'O' shape with your mouth" : {
+      "comment" : "Description for mouth funnel gesture"
     },
     "Make first loop fast" : {
       "comment" : "Label for toggle that controls when the first is faster"
@@ -331,8 +548,38 @@
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
     },
+    "Mouth Close" : {
+      "comment" : "Display name for mouth close gesture"
+    },
+    "Mouth Funnel" : {
+      "comment" : "Display name for mouth funnel gesture"
+    },
+    "Mouth Left" : {
+      "comment" : "Display name for mouth left gesture"
+    },
+    "Mouth Pucker" : {
+      "comment" : "Display name for mouth pucker gesture"
+    },
+    "Mouth Right" : {
+      "comment" : "Display name for mouth right gesture"
+    },
+    "Move your jaw to the left" : {
+      "comment" : "Description for jaw left gesture"
+    },
+    "Move your jaw to the right" : {
+      "comment" : "Description for jaw right gesture"
+    },
+    "Move your mouth to the left" : {
+      "comment" : "Description for mouth left gesture"
+    },
+    "Move your mouth to the right" : {
+      "comment" : "Description for mouth right gesture"
+    },
     "My new vocabulary" : {
       "comment" : "Placeholder for new vocab name"
+    },
+    "New Gesture" : {
+      "comment" : "Header for new gesture section"
     },
     "New Switch" : {
       "comment" : "The navigation title when adding a given switch."
@@ -367,6 +614,12 @@
     "Opacity: %lld%%" : {
 
     },
+    "Open Settings" : {
+      "comment" : "Button to open app settings"
+    },
+    "Open your mouth" : {
+      "comment" : "Description for jaw open gesture"
+    },
     "Pause Scan" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -391,14 +644,50 @@
     "Predition Language" : {
       "comment" : "The label that is shown next to the language picker"
     },
+    "Press the left side of your lips together" : {
+      "comment" : "Description for left lip press gesture"
+    },
+    "Press the right side of your lips together" : {
+      "comment" : "Description for right lip press gesture"
+    },
+    "Preview" : {
+      "comment" : "Header for gesture preview section"
+    },
     "Previous" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Pucker your lips" : {
+      "comment" : "Description for mouth pucker gesture"
+    },
+    "Puff out your cheeks" : {
+      "comment" : "Description for cheek puff gesture"
+    },
+    "Pull down the left side of your lower lip" : {
+      "comment" : "Description for left lower lip down gesture"
+    },
+    "Pull down the right side of your lower lip" : {
+      "comment" : "Description for right lower lip down gesture"
+    },
+    "Push your jaw forward" : {
+      "comment" : "Description for jaw forward gesture"
+    },
+    "Quick gesture detection" : {
+      "comment" : "Description for tap gesture duration"
     },
     "Quick scan" : {
       "comment" : "Label for action that happens on a keypress"
     },
     "Quickly scan through the items" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Raise your inner eyebrows" : {
+      "comment" : "Description for inner brow up gesture"
+    },
+    "Raise your left outer eyebrow" : {
+      "comment" : "Description for left outer brow up gesture"
+    },
+    "Raise your right outer eyebrow" : {
+      "comment" : "Description for right outer brow up gesture"
     },
     "Rate" : {
       "comment" : "Label for a slider that controls the rate of a voice"
@@ -415,8 +704,50 @@
     "Restarts to the top of the tree, scanning will resume if you have that enabled" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Right Brow Down" : {
+      "comment" : "Display name for right brow down gesture"
+    },
     "Right Channel" : {
       "comment" : "Label for picker of audio channels"
+    },
+    "Right Cheek Squint" : {
+      "comment" : "Display name for right cheek squint gesture"
+    },
+    "Right Dimple" : {
+      "comment" : "Display name for right dimple gesture"
+    },
+    "Right Eye Blink" : {
+      "comment" : "Display name for right eye blink gesture"
+    },
+    "Right Frown" : {
+      "comment" : "Display name for right frown gesture"
+    },
+    "Right Lip Press" : {
+      "comment" : "Display name for right lip press gesture"
+    },
+    "Right Lower Lip Down" : {
+      "comment" : "Display name for right lower lip down gesture"
+    },
+    "Right Mouth Stretch" : {
+      "comment" : "Display name for right mouth stretch gesture"
+    },
+    "Right Nose Sneer" : {
+      "comment" : "Display name for right nose sneer gesture"
+    },
+    "Right Outer Brow Up" : {
+      "comment" : "Display name for right outer brow up gesture"
+    },
+    "Right Smile" : {
+      "comment" : "Display name for right smile gesture"
+    },
+    "Right Upper Lip Up" : {
+      "comment" : "Display name for right upper lip up gesture"
+    },
+    "Roll your lower lip inward" : {
+      "comment" : "Description for lower lip roll gesture"
+    },
+    "Roll your upper lip inward" : {
+      "comment" : "Description for upper lip roll gesture"
     },
     "Sample Entries Text" : {
 
@@ -428,7 +759,7 @@
 
     },
     "Save" : {
-      "comment" : "Save button text for saving vocab changes\nThe label for the save changes button\nThe save toolbar button when saving controller mapping"
+      "comment" : "Save button\nSave button text for saving vocab changes\nThe label for the save changes button\nThe save toolbar button when saving controller mapping"
     },
     "Scan **%lld** times before stopping" : {
       "comment" : "A label that outlines the number of scanning loops the app will go on. Please leave the value in bold."
@@ -484,8 +815,14 @@
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
     },
+    "Sensitivity" : {
+      "comment" : "Label for gesture sensitivity slider"
+    },
     "Settings" : {
       "comment" : "The navigation title for the settings page"
+    },
+    "Short Hold" : {
+      "comment" : "Display name for short hold gesture duration"
     },
     "Show" : {
       "comment" : "Label to show arrows"
@@ -505,11 +842,32 @@
     "Show on-screen arrows" : {
       "comment" : "Label for toggle for on screen arrows"
     },
+    "Shrug your lower lip" : {
+      "comment" : "Description for lower lip shrug gesture"
+    },
+    "Shrug your upper lip" : {
+      "comment" : "Description for upper lip shrug gesture"
+    },
+    "Single Gesture" : {
+      "comment" : "The label that is shown next to the single gesture action"
+    },
     "Single Tap" : {
       "comment" : "The label that is shown next to the single tap action"
     },
     "Skip" : {
       "comment" : "The label for the button to exit onboarding"
+    },
+    "Smile with the left side of your mouth" : {
+      "comment" : "Description for left smile gesture"
+    },
+    "Smile with the right side of your mouth" : {
+      "comment" : "Description for right smile gesture"
+    },
+    "Sneer with the left side of your nose" : {
+      "comment" : "Description for left nose sneer gesture"
+    },
+    "Sneer with the right side of your nose" : {
+      "comment" : "Description for right nose sneer gesture"
     },
     "Spanish (Experimental)" : {
       "comment" : "The label for the Spanish language when setting prediction language, make sure to include the experimental tag"
@@ -535,6 +893,15 @@
     "Spoken Text" : {
       "comment" : "Header for editing spoken text\nText field placeholder for spoken text"
     },
+    "Squint your left cheek" : {
+      "comment" : "Description for left cheek squint gesture"
+    },
+    "Squint your right cheek" : {
+      "comment" : "Description for right cheek squint gesture"
+    },
+    "Start" : {
+
+    },
     "Start of list" : {
       "comment" : "Picker option for control command"
     },
@@ -544,8 +911,23 @@
     "Start scanning from the current item, scanning must be enabled" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Stick out your tongue" : {
+      "comment" : "Description for tongue out gesture"
+    },
+    "Stop" : {
+
+    },
     "Stop automatic scanning on the currently selected node." : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Strength: %lld%%" : {
+
+    },
+    "Stretch the left side of your mouth" : {
+      "comment" : "Description for left mouth stretch gesture"
+    },
+    "Stretch the right side of your mouth" : {
+      "comment" : "Description for right mouth stretch gesture"
     },
     "Swipe Gestures" : {
       "comment" : "Label for swipe picker"
@@ -574,8 +956,14 @@
     "Switch: %@" : {
       "comment" : "The navigation title when editing a given switch. It contains the user entered name after the colon"
     },
+    "Tap" : {
+      "comment" : "Display name for tap gesture duration"
+    },
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
+    },
+    "Test Gesture" : {
+
     },
     "Text Opacity: %lld%%" : {
 
@@ -613,14 +1001,35 @@
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"
     },
+    "This device does not support face tracking. Facial gesture controls require a device with TrueDepth camera or A12 Bionic chip or later." : {
+      "comment" : "Explanation for unsupported device"
+    },
     "This is the number of levels of your phrases to show at once." : {
       "comment" : "Footer for settings about history"
+    },
+    "This will permanently delete this facial gesture switch." : {
+      "comment" : "Message for delete gesture alert"
+    },
+    "Threshold: %@" : {
+      "comment" : "Shows current threshold value"
+    },
+    "Threshold: %lld%%" : {
+      "comment" : "Shows current threshold value"
+    },
+    "Tongue Out" : {
+      "comment" : "Display name for tongue out gesture"
     },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"
     },
     "Unknown Controller" : {
       "comment" : "Name of the controller if none is givens"
+    },
+    "Upper Lip Roll" : {
+      "comment" : "Display name for upper lip roll gesture"
+    },
+    "Upper Lip Shrug" : {
+      "comment" : "Display name for upper lip shrug gesture"
     },
     "Urdu (Experimental)" : {
       "comment" : "The label for the urdu language when setting prediction language, make sure to include the experimental tag"
@@ -630,6 +1039,9 @@
     },
     "Use Custom Font Size" : {
 
+    },
+    "Use facial movements to control Echo. Ensure good lighting and position your face clearly in view of the front camera." : {
+      "comment" : "Footer for facial gesture settings area"
     },
     "Use Prompts" : {
       "comment" : "Label for toggle prompts"
@@ -651,6 +1063,9 @@
     },
     "Volume" : {
       "comment" : "Label for a slider that controls the volume of a voice"
+    },
+    "Waiting for gesture..." : {
+
     },
     "Welcome to **Echo**" : {
       "comment" : "Welcome message in onboarding"
