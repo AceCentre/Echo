@@ -66,19 +66,22 @@ extension FacialGestureSwitch {
                 name: String(localized: "Left Eye Blink", comment: "Default facial gesture switch name"),
                 gesture: .eyeBlinkLeft,
                 tapAction: .nextNode,
-                holdAction: .none
+                holdAction: .none,
+                isEnabled: false  // Disabled by default
             ),
             FacialGestureSwitch(
                 name: String(localized: "Right Eye Blink", comment: "Default facial gesture switch name"),
                 gesture: .eyeBlinkRight,
                 tapAction: .select,
-                holdAction: .none
+                holdAction: .none,
+                isEnabled: false  // Disabled by default
             ),
             FacialGestureSwitch(
                 name: String(localized: "Mouth Open", comment: "Default facial gesture switch name"),
                 gesture: .jawOpen,
                 tapAction: .goBack,
-                holdAction: .none
+                holdAction: .none,
+                isEnabled: false  // Disabled by default
             )
         ]
     }

@@ -16,9 +16,6 @@
     "%@" : {
 
     },
-    "%@s" : {
-
-    },
     "%lld" : {
 
     },
@@ -274,18 +271,6 @@
     "Done" : {
       "comment" : "The label for the button to exit onboarding"
     },
-    "Duration for long hold gestures" : {
-
-    },
-    "Duration for short hold gestures" : {
-
-    },
-    "Duration Settings" : {
-      "comment" : "Header for duration settings section"
-    },
-    "Duration Type" : {
-      "comment" : "Label for duration type picker"
-    },
     "Duration: %@s" : {
       "comment" : "Shows current hold duration value"
     },
@@ -372,9 +357,6 @@
     },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
-    },
-    "Global Settings" : {
-      "comment" : "Button label for global facial gesture settings"
     },
     "Go back to the last level of the vocabulary (or delete the last inputted letter)" : {
       "comment" : "Label for action that happens on a keypress"
@@ -501,9 +483,6 @@
     },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
-    },
-    "Long Hold Duration" : {
-
     },
     "Low" : {
 
@@ -643,6 +622,9 @@
     "Press the right side of your lips together" : {
       "comment" : "Description for right lip press gesture"
     },
+    "Preview" : {
+      "comment" : "Header for gesture preview section"
+    },
     "Previous" : {
       "comment" : "Label for action that happens on a keypress"
     },
@@ -687,12 +669,6 @@
     },
     "Required" : {
       "comment" : "Prompt for required text input"
-    },
-    "Reset" : {
-      "comment" : "Header for reset section"
-    },
-    "Reset to Defaults" : {
-      "comment" : "Button to reset settings to defaults"
     },
     "Restarts to the top of the current list, scanning will resume if you have that enabled" : {
       "comment" : "Label for action that happens on a keypress"
@@ -819,9 +795,6 @@
     },
     "Short Hold" : {
       "comment" : "Display name for short hold gesture duration"
-    },
-    "Short Hold Duration" : {
-
     },
     "Show" : {
       "comment" : "Label to show arrows"
@@ -999,9 +972,6 @@
     },
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"
-    },
-    "These settings apply to all facial gestures configured with short hold or long hold duration types. Individual gestures can still have their own sensitivity thresholds." : {
-      "comment" : "Footer explaining global duration settings"
     },
     "This device does not support face tracking. Facial gesture controls require a device with TrueDepth camera or A12 Bionic chip or later." : {
       "comment" : "Explanation for unsupported device"

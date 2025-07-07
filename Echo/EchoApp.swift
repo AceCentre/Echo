@@ -82,15 +82,12 @@ struct EchoApp: App {
                 /*
                  Initialise the default facial gesture switches once
                  */
-                print("🎭 EchoApp: hasLoadedFacialGestureSwitches = \(hasLoadedFacialGestureSwitches)")
-
                 // Check what's already in the database
                 var existingSwitches: [FacialGestureSwitch] = []
                 do {
                     existingSwitches = try container.mainContext.fetch(FetchDescriptor<FacialGestureSwitch>())
-                    print("🎭 EchoApp: Found \(existingSwitches.count) existing facial gesture switches in database")
                 } catch {
-                    print("🎭 EchoApp: Error checking existing switches: \(error)")
+                    print("Error checking existing facial gesture switches: \(error)")
                 }
 
                 // Create default switches if:
@@ -100,24 +97,20 @@ struct EchoApp: App {
                                          (ARFaceTrackingConfiguration.isSupported && existingSwitches.isEmpty)
 
                 if shouldCreateSwitches {
-                    print("🎭 EchoApp: Creating facial gesture switches")
-                    print("🎭 EchoApp: ARFaceTrackingConfiguration.isSupported = \(ARFaceTrackingConfiguration.isSupported)")
-
                     let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
-                    print("🎭 EchoApp: Created \(defaultFacialGestureSwitches.count) default switches")
 
                     for gestureSwitch in defaultFacialGestureSwitches {
                         container.mainContext.insert(gestureSwitch)
-                        print("🎭 EchoApp: Inserted switch: \(gestureSwitch.name)")
                     }
+
+                    // Force save and process pending changes to avoid relationship mapping issues
                     try container.mainContext.save()
-                    print("🎭 EchoApp: Saved facial gesture switches to database")
+                    container.mainContext.processPendingChanges()
                 }
 
                 // Always set the flag to true after checking
                 if !hasLoadedFacialGestureSwitches {
                     hasLoadedFacialGestureSwitches = true
-                    print("🎭 EchoApp: Set hasLoadedFacialGestureSwitches = true")
                 }
 
                 /*
