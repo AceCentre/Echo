@@ -228,27 +228,62 @@ struct GesturePreviewSection: View {
                     }
 
                     // Gesture strength progress bar
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            Rectangle()
-                                .fill(Color.gray.opacity(0.3))
-                                .frame(height: 4)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Gesture Strength")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
 
-                            Rectangle()
-                                .fill(isGestureDetected ? (isHoldGesture ? Color.orange : Color.green) : Color.blue)
-                                .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 4)
-                                .animation(.easeInOut(duration: 0.1), value: gestureValue)
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(height: 4)
+
+                                Rectangle()
+                                    .fill(isGestureDetected ? (isHoldGesture ? Color.orange : Color.green) : Color.blue)
+                                    .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 4)
+                                    .animation(.easeInOut(duration: 0.1), value: gestureValue)
+                            }
+                        }
+                        .frame(height: 4)
+                    }
+
+                    // Hold duration progress (always show if hold action is configured)
+                    if holdAction != .none {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text("Hold Progress")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(String(format: "%.1f", gestureHoldTime))s / \(String(format: "%.1f", holdDuration))s")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .fill(Color.gray.opacity(0.3))
+                                        .frame(height: 4)
+
+                                    Rectangle()
+                                        .fill(isHoldGesture ? Color.orange : (isGestureDetected ? Color.blue : Color.clear))
+                                        .frame(width: CGFloat(min(gestureHoldTime / holdDuration, 1.0)) * geometry.size.width, height: 4)
+                                        .animation(.easeInOut(duration: 0.1), value: gestureHoldTime)
+                                }
+                            }
+                            .frame(height: 4)
                         }
                     }
-                    .frame(height: 4)
 
                     // Show which action would be triggered
-                    if isGestureDetected {
-                        HStack {
-                            Text("Action:")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
+                    HStack {
+                        Text("Action:")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
 
+                        if isGestureDetected {
                             if isHoldGesture && holdAction != .none {
                                 Text(holdAction.title)
                                     .font(.caption2)
@@ -264,35 +299,10 @@ struct GesturePreviewSection: View {
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                             }
-                        }
-                    }
-
-                    // Hold duration progress (only show if hold action is configured)
-                    if isGestureDetected && holdAction != .none {
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack {
-                                Text("Hold Progress:")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("\(String(format: "%.1f", gestureHoldTime))s / \(String(format: "%.1f", holdDuration))s")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-
-                            GeometryReader { geometry in
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .fill(Color.gray.opacity(0.3))
-                                        .frame(height: 2)
-
-                                    Rectangle()
-                                        .fill(isHoldGesture ? Color.orange : Color.blue)
-                                        .frame(width: CGFloat(min(gestureHoldTime / holdDuration, 1.0)) * geometry.size.width, height: 2)
-                                        .animation(.easeInOut(duration: 0.1), value: gestureHoldTime)
-                                }
-                            }
-                            .frame(height: 2)
+                        } else {
+                            Text("Waiting for gesture...")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
@@ -359,6 +369,7 @@ struct FacialGestureSection: View {
     @State private var currentGestureSwitch: FacialGestureSwitch?
     @State private var showAddGestureSheet = false
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
+    @State private var lastTapTime: Date = Date()
     @StateObject private var gestureDetector = FacialGestureDetector()
     
     var body: some View {
@@ -415,11 +426,12 @@ struct FacialGestureSection: View {
             } else {
                 ForEach(facialGestureSwitches.filter { $0.gesture != nil }, id: \.gestureRaw) { gestureSwitch in
                     Button(action: {
-                        // Add a small delay to ensure the switch is fully loaded
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            currentGestureSwitch = gestureSwitch
-                            showAddGestureSheet = true
-                        }
+                        // Prevent multiple presentations and rapid tapping
+                        let now = Date()
+                        guard !showAddGestureSheet && now.timeIntervalSince(lastTapTime) > 0.5 else { return }
+                        lastTapTime = now
+                        currentGestureSwitch = gestureSwitch
+                        showAddGestureSheet = true
                     }, label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
@@ -447,6 +459,10 @@ struct FacialGestureSection: View {
                 }
                 
                 Button(action: {
+                    // Prevent multiple presentations and rapid tapping
+                    let now = Date()
+                    guard !showAddGestureSheet && now.timeIntervalSince(lastTapTime) > 0.5 else { return }
+                    lastTapTime = now
                     currentGestureSwitch = nil
                     showAddGestureSheet = true
                 }, label: {
@@ -505,7 +521,10 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        .sheet(isPresented: $showAddGestureSheet) {
+        .sheet(isPresented: $showAddGestureSheet, onDismiss: {
+            // Reset state when sheet is dismissed
+            currentGestureSwitch = nil
+        }) {
             AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
         }
     }
@@ -552,8 +571,7 @@ struct AddFacialGesture: View {
 
     var body: some View {
         Form {
-            if let unwrappedGestureSwitch = currentGestureSwitch,
-               unwrappedGestureSwitch.gesture != nil {
+            if let unwrappedGestureSwitch = currentGestureSwitch {
                 @Bindable var bindableGestureSwitch = unwrappedGestureSwitch
 
                 Section(content: {
