@@ -474,8 +474,13 @@ struct FacialGestureSection: View {
                         isSheetPresenting = true
                         currentGestureSwitch = gestureSwitch
 
-                        // Small delay to ensure state is stable
+                        // Small delay to ensure state is stable and prevent double-setting
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            guard !showAddGestureSheet else {
+                                print("🐛 Sheet already showing, skipping")
+                                return
+                            }
+                            print("🐛 Setting showAddGestureSheet to true")
                             showAddGestureSheet = true
                         }
                     }, label: {
@@ -520,8 +525,13 @@ struct FacialGestureSection: View {
                     isSheetPresenting = true
                     currentGestureSwitch = nil
 
-                    // Small delay to ensure state is stable
+                    // Small delay to ensure state is stable and prevent double-setting
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        guard !showAddGestureSheet else {
+                            print("🐛 Add sheet already showing, skipping")
+                            return
+                        }
+                        print("🐛 Setting showAddGestureSheet to true for add")
                         showAddGestureSheet = true
                     }
                 }, label: {
@@ -580,13 +590,32 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        .sheet(isPresented: $showAddGestureSheet, onDismiss: {
-            // Reset all state when sheet is dismissed
-            print("🐛 Sheet dismissed, resetting state")
-            currentGestureSwitch = nil
-            isSheetPresenting = false
+        .sheet(isPresented: Binding(
+            get: { showAddGestureSheet },
+            set: { newValue in
+                print("🐛 Sheet binding set to: \(newValue)")
+                if !newValue && showAddGestureSheet {
+                    // Only update if actually changing from true to false
+                    showAddGestureSheet = false
+                    currentGestureSwitch = nil
+                    isSheetPresenting = false
+                    print("🐛 Sheet dismissed via binding, state reset")
+                }
+            }
+        ), onDismiss: {
+            // Additional safety reset
+            print("🐛 Sheet onDismiss called")
+            DispatchQueue.main.async {
+                currentGestureSwitch = nil
+                isSheetPresenting = false
+                showAddGestureSheet = false
+            }
         }) {
-            AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
+            if let gestureSwitch = currentGestureSwitch {
+                AddFacialGestureSheet(currentGestureSwitch: .constant(gestureSwitch))
+            } else {
+                AddFacialGestureSheet(currentGestureSwitch: .constant(nil))
+            }
         }
         .onAppear {
             // Give database time to fully initialize
