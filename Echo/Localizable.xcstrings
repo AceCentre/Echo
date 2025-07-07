@@ -140,9 +140,6 @@
     "Be careful about what nodes you delete, if the node has children those will be deleted too. There is no way to restore a node." : {
       "comment" : "Alert explanation of node deletion\nFooter explanation of node deletion"
     },
-    "Blink both eyes" : {
-      "comment" : "Description for both eyes blink gesture"
-    },
     "Blink either eye" : {
       "comment" : "Description for either eye blink gesture"
     },
@@ -157,9 +154,6 @@
     },
     "Bold Message Bar Text" : {
 
-    },
-    "Both Eyes Blink" : {
-      "comment" : "Display name for both eyes blink gesture"
     },
     "BUILDING... %@s" : {
 
