@@ -764,16 +764,6 @@ struct AddFacialGesture: View {
 
                 // Actions section for new gesture
                 Section(content: {
-                    // Enable/Disable toggle
-                    Toggle(
-                        String(
-                            localized: "Enable Gesture",
-                            comment: "Toggle to enable/disable facial gesture"
-                        ),
-                        isOn: $isEnabled
-                    )
-
-                    if isEnabled {
                         // Tap action picker
                         ActionPicker(
                             label: String(
@@ -862,13 +852,12 @@ struct AddFacialGesture: View {
                             }
                         }
 
-                        // Explanatory text about tap/hold behavior
-                        if holdAction != .none {
-                            Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                                .padding(.top, 4)
-                        }
+                    // Explanatory text about tap/hold behavior
+                    if holdAction != .none {
+                        Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .padding(.top, 4)
                     }
                 }, header: {
                     Text("Actions", comment: "Header for actions section")

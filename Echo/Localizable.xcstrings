@@ -133,6 +133,9 @@
     "Blink both eyes" : {
       "comment" : "Description for both eyes blink gesture"
     },
+    "Blink either eye" : {
+      "comment" : "Description for either eye blink gesture"
+    },
     "Blink your left eye" : {
       "comment" : "Description for left eye blink gesture"
     },
@@ -147,6 +150,9 @@
     },
     "Both Eyes Blink" : {
       "comment" : "Display name for both eyes blink gesture"
+    },
+    "Either Eye Blink" : {
+      "comment" : "Display name for either eye blink gesture"
     },
     "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
       "comment" : "A description of why audio splitting exists"

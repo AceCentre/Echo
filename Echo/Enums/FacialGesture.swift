@@ -11,6 +11,7 @@ import ARKit
 enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     case eyeBlinkLeft = "eyeBlinkLeft"
     case eyeBlinkRight = "eyeBlinkRight"
+    case eyeBlinkEither = "eyeBlinkEither"
     case eyeBlinkBoth = "eyeBlinkBoth"
     case browDownLeft = "browDownLeft"
     case browDownRight = "browDownRight"
@@ -62,6 +63,10 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkRight: return String(
             localized: "Right Eye Blink",
             comment: "Display name for right eye blink gesture"
+        )
+        case .eyeBlinkEither: return String(
+            localized: "Either Eye Blink",
+            comment: "Display name for either eye blink gesture"
         )
         case .eyeBlinkBoth: return String(
             localized: "Both Eyes Blink",
@@ -232,6 +237,10 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             localized: "Blink your right eye",
             comment: "Description for right eye blink gesture"
         )
+        case .eyeBlinkEither: return String(
+            localized: "Blink either eye",
+            comment: "Description for either eye blink gesture"
+        )
         case .eyeBlinkBoth: return String(
             localized: "Blink both eyes",
             comment: "Description for both eyes blink gesture"
@@ -392,49 +401,49 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     }
     
     /// Maps FacialGesture to ARKit's BlendShapeLocation
-    /// Note: ARKit coordinates are mirrored from user perspective, so we swap left/right
     var blendShapeLocation: ARFaceAnchor.BlendShapeLocation {
         switch self {
-        case .eyeBlinkLeft: return .eyeBlinkRight  // User's left eye = camera's right
-        case .eyeBlinkRight: return .eyeBlinkLeft  // User's right eye = camera's left
+        case .eyeBlinkLeft: return .eyeBlinkLeft
+        case .eyeBlinkRight: return .eyeBlinkRight
+        case .eyeBlinkEither: return .eyeBlinkLeft // Special case - will be handled in detection logic
         case .eyeBlinkBoth: return .eyeBlinkLeft // Special case - will be handled in detection logic
-        case .browDownLeft: return .browDownRight  // User's left brow = camera's right
-        case .browDownRight: return .browDownLeft  // User's right brow = camera's left
+        case .browDownLeft: return .browDownLeft
+        case .browDownRight: return .browDownRight
         case .browInnerUp: return .browInnerUp
-        case .browOuterUpLeft: return .browOuterUpRight  // User's left outer brow = camera's right
-        case .browOuterUpRight: return .browOuterUpLeft  // User's right outer brow = camera's left
+        case .browOuterUpLeft: return .browOuterUpLeft
+        case .browOuterUpRight: return .browOuterUpRight
         case .cheekPuff: return .cheekPuff
-        case .cheekSquintLeft: return .cheekSquintRight  // User's left cheek = camera's right
-        case .cheekSquintRight: return .cheekSquintLeft  // User's right cheek = camera's left
+        case .cheekSquintLeft: return .cheekSquintLeft
+        case .cheekSquintRight: return .cheekSquintRight
         case .jawForward: return .jawForward
-        case .jawLeft: return .jawRight  // User's jaw left = camera's right
-        case .jawRight: return .jawLeft  // User's jaw right = camera's left
+        case .jawLeft: return .jawLeft
+        case .jawRight: return .jawRight
         case .jawOpen: return .jawOpen
         case .mouthClose: return .mouthClose
         case .mouthFunnel: return .mouthFunnel
         case .mouthPucker: return .mouthPucker
-        case .mouthLeft: return .mouthRight  // User's mouth left = camera's right
-        case .mouthRight: return .mouthLeft  // User's mouth right = camera's left
-        case .mouthSmileLeft: return .mouthSmileRight  // User's left smile = camera's right
-        case .mouthSmileRight: return .mouthSmileLeft  // User's right smile = camera's left
-        case .mouthFrownLeft: return .mouthFrownRight  // User's left frown = camera's right
-        case .mouthFrownRight: return .mouthFrownLeft  // User's right frown = camera's left
-        case .mouthDimpleLeft: return .mouthDimpleRight  // User's left dimple = camera's right
-        case .mouthDimpleRight: return .mouthDimpleLeft  // User's right dimple = camera's left
-        case .mouthStretchLeft: return .mouthStretchRight  // User's left stretch = camera's right
-        case .mouthStretchRight: return .mouthStretchLeft  // User's right stretch = camera's left
+        case .mouthLeft: return .mouthLeft
+        case .mouthRight: return .mouthRight
+        case .mouthSmileLeft: return .mouthSmileLeft
+        case .mouthSmileRight: return .mouthSmileRight
+        case .mouthFrownLeft: return .mouthFrownLeft
+        case .mouthFrownRight: return .mouthFrownRight
+        case .mouthDimpleLeft: return .mouthDimpleLeft
+        case .mouthDimpleRight: return .mouthDimpleRight
+        case .mouthStretchLeft: return .mouthStretchLeft
+        case .mouthStretchRight: return .mouthStretchRight
         case .mouthRollLower: return .mouthRollLower
         case .mouthRollUpper: return .mouthRollUpper
         case .mouthShrugLower: return .mouthShrugLower
         case .mouthShrugUpper: return .mouthShrugUpper
-        case .mouthPressLeft: return .mouthPressRight  // User's left press = camera's right
-        case .mouthPressRight: return .mouthPressLeft  // User's right press = camera's left
-        case .mouthLowerDownLeft: return .mouthLowerDownRight  // User's left lower = camera's right
-        case .mouthLowerDownRight: return .mouthLowerDownLeft  // User's right lower = camera's left
-        case .mouthUpperUpLeft: return .mouthUpperUpRight  // User's left upper = camera's right
-        case .mouthUpperUpRight: return .mouthUpperUpLeft  // User's right upper = camera's left
-        case .noseSneerLeft: return .noseSneerRight  // User's left sneer = camera's right
-        case .noseSneerRight: return .noseSneerLeft  // User's right sneer = camera's left
+        case .mouthPressLeft: return .mouthPressLeft
+        case .mouthPressRight: return .mouthPressRight
+        case .mouthLowerDownLeft: return .mouthLowerDownLeft
+        case .mouthLowerDownRight: return .mouthLowerDownRight
+        case .mouthUpperUpLeft: return .mouthUpperUpLeft
+        case .mouthUpperUpRight: return .mouthUpperUpRight
+        case .noseSneerLeft: return .noseSneerLeft
+        case .noseSneerRight: return .noseSneerRight
         case .tongueOut: return .tongueOut
         }
     }
@@ -442,7 +451,7 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     /// Default threshold for gesture detection
     var defaultThreshold: Float {
         switch self {
-        case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkBoth:
+        case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither, .eyeBlinkBoth:
             return 0.8 // Higher threshold for blinks
         case .jawOpen:
             return 0.3 // Lower threshold for mouth opening
@@ -458,6 +467,7 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         return [
             .eyeBlinkLeft,
             .eyeBlinkRight,
+            .eyeBlinkEither,
             .eyeBlinkBoth,
             .jawOpen,
             .mouthSmileLeft,
