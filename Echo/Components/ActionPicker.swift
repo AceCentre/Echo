@@ -56,29 +56,32 @@ struct ActionPicker: View {
     var label: String
 //    var action: SwitchAction
     var actions: [SwitchAction]
-    
+
     var actionChange: (SwitchAction) -> Void
-    
+
     @State var actionState: SwitchAction
-    
-    
+    @State private var showingPicker = false
+
+
     var body: some View {
-        NavigationStack {
-            NavigationLink(destination: {
-                ActionPickerDestination(
-                    label: label,
-                    selected: $actionState,
-                    actions: actions
-                )
-            }, label: {
-                HStack {
-                    Text(label)
-                    Spacer()
-                    Text(actionState.title)
-                        .foregroundStyle(.gray)
-                }
-            })
-        }.onAppear {
+        NavigationLink(destination: {
+            ActionPickerDestination(
+                label: label,
+                selected: $actionState,
+                actions: actions
+            )
+        }, label: {
+            HStack {
+                Text(label)
+                Spacer()
+                Text(actionState.title)
+                    .foregroundStyle(.gray)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.gray)
+                    .font(.caption)
+            }
+        })
+        .onAppear {
             // actionState = action
         }
         .onChange(of: actionState) {

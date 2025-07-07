@@ -166,8 +166,8 @@ struct GesturePreviewSection: View {
     let holdDuration: Double
     let tapAction: SwitchAction
     let holdAction: SwitchAction
+    let detector: FacialGestureDetector
 
-    @StateObject private var detector = FacialGestureDetector()
     @State private var isActive = false
     @State private var lastDetectionState = false
     @State private var gestureStartTime: Date?
@@ -415,9 +415,6 @@ struct FacialGestureSection: View {
     @State private var currentGestureSwitch: FacialGestureSwitch?
     @State private var showAddGestureSheet = false
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
-    @State private var lastTapTime: Date = Date()
-    @State private var isDatabaseReady = false
-    @State private var isSheetPresenting = false
     @StateObject private var gestureDetector = FacialGestureDetector()
     
     var body: some View {
@@ -479,21 +476,8 @@ struct FacialGestureSection: View {
                            !gestureSwitch.isDeleted
                 }, id: \.persistentModelID) { gestureSwitch in
                     Button(action: {
-                        // Prevent multiple presentations and rapid tapping
-                        let now = Date()
-                        guard !showAddGestureSheet &&
-                              !isSheetPresenting &&
-                              now.timeIntervalSince(lastTapTime) > 0.5 &&
-                              isDatabaseReady else {
-                            print("Button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
-                            return
-                        }
-
-                        print("Opening sheet for gesture: \(gestureSwitch.name)")
-                        lastTapTime = now
-                        isSheetPresenting = true
                         currentGestureSwitch = gestureSwitch
-                        showAddGestureSheet = true
+                        showAddGestureSheet.toggle()
                     }, label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
@@ -522,20 +506,8 @@ struct FacialGestureSection: View {
                 }
                 
                 Button(action: {
-                    // Prevent multiple presentations and rapid tapping
-                    let now = Date()
-                    guard !showAddGestureSheet &&
-                          !isSheetPresenting &&
-                          now.timeIntervalSince(lastTapTime) > 0.5 else {
-                        print("Add button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting)")
-                        return
-                    }
-
-                    print("Opening add gesture sheet")
-                    lastTapTime = now
-                    isSheetPresenting = true
                     currentGestureSwitch = nil
-                    showAddGestureSheet = true
+                    showAddGestureSheet.toggle()
                 }, label: {
                     Label(
                         String(
@@ -580,28 +552,17 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        .sheet(isPresented: $showAddGestureSheet, onDismiss: {
-            // Reset all state when sheet is dismissed
-            print("Sheet dismissed, resetting state")
-            currentGestureSwitch = nil
-            isSheetPresenting = false
-        }) {
-            AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
-        }
+        AddFacialGestureSheet(
+            showAddGestureSheet: $showAddGestureSheet,
+            currentGestureSwitch: $currentGestureSwitch,
+            gestureDetector: gestureDetector
+        )
         .onAppear {
-            // Give database time to fully initialize
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isDatabaseReady = true
-                print("Database marked as ready")
-                cleanupDuplicateGestures()
-            }
+            print("Database marked as ready")
+            cleanupDuplicateGestures()
         }
         .onChange(of: showAddGestureSheet) { _, newValue in
             print("showAddGestureSheet changed to: \(newValue)")
-            if !newValue {
-                // Sheet was dismissed, reset presenting state
-                isSheetPresenting = false
-            }
         }
     }
 
@@ -646,23 +607,26 @@ struct FacialGestureSection: View {
 }
 
 struct AddFacialGestureSheet: View {
+    @Binding var showAddGestureSheet: Bool
     @Binding var currentGestureSwitch: FacialGestureSwitch?
-    @Environment(\.dismiss) var dismiss
+    let gestureDetector: FacialGestureDetector
 
     var body: some View {
-        NavigationStack {
-            if let gestureSwitch = currentGestureSwitch {
-                AddFacialGesture(currentGestureSwitch: .constant(gestureSwitch))
-            } else {
-                AddFacialGesture(currentGestureSwitch: $currentGestureSwitch)
+        ZStack {}
+            .sheet(isPresented: $showAddGestureSheet, onDismiss: {
+                // Reset all state when sheet is dismissed
+                print("Sheet dismissed, resetting state")
+                currentGestureSwitch = nil
+            }) {
+                AddFacialGesture(currentGestureSwitch: $currentGestureSwitch, gestureDetector: gestureDetector)
             }
-        }
     }
 }
 
 struct AddFacialGesture: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
     @Binding var currentGestureSwitch: FacialGestureSwitch?
+    let gestureDetector: FacialGestureDetector
     @State private var deleteAlert: Bool = false
 
     @Environment(\.modelContext) var modelContext
@@ -677,7 +641,8 @@ struct AddFacialGesture: View {
     @State private var isEnabled: Bool = false
 
     var body: some View {
-        Form {
+        NavigationStack {
+            Form {
             if let unwrappedGestureSwitch = currentGestureSwitch {
                 @Bindable var bindableGestureSwitch = unwrappedGestureSwitch
 
@@ -710,7 +675,7 @@ struct AddFacialGesture: View {
                             .tag(gesture)
                         }
                     }
-                    .pickerStyle(.navigationLink)
+                    .pickerStyle(.menu)
 
                 }, header: {
                     Text("Gesture Configuration", comment: "Header for gesture configuration section")
@@ -730,7 +695,8 @@ struct AddFacialGesture: View {
                             threshold: unwrappedGestureSwitch.threshold,
                             holdDuration: unwrappedGestureSwitch.holdDuration,
                             tapAction: unwrappedGestureSwitch.tapAction,
-                            holdAction: unwrappedGestureSwitch.holdAction
+                            holdAction: unwrappedGestureSwitch.holdAction,
+                            detector: gestureDetector
                         )
                     }, header: {
                         Text("Preview", comment: "Header for gesture preview section")
@@ -756,7 +722,7 @@ struct AddFacialGesture: View {
                                 modelContext.delete(unwrappedGestureSwitch)
                                 currentGestureSwitch = nil
                             }
-                            dismiss()
+                            presentationMode.wrappedValue.dismiss()
                         }
                         Button(String(localized: "Cancel", comment: "Cancel button label"), role: .cancel) {
                             deleteAlert.toggle()
@@ -794,7 +760,7 @@ struct AddFacialGesture: View {
                             .tag(gesture)
                         }
                     }
-                    .pickerStyle(.navigationLink)
+                    .pickerStyle(.menu)
 
                 }, header: {
                     Text("New Gesture", comment: "Header for new gesture section")
@@ -909,7 +875,8 @@ struct AddFacialGesture: View {
                             threshold: threshold,
                             holdDuration: holdDuration,
                             tapAction: tapAction,
-                            holdAction: holdAction
+                            holdAction: holdAction,
+                            detector: gestureDetector
                         )
                     }, header: {
                         Text("Preview", comment: "Header for gesture preview section")
@@ -926,14 +893,14 @@ struct AddFacialGesture: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(String(localized: "Cancel", comment: "Cancel button")) {
-                    dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
 
             ToolbarItem(placement: .confirmationAction) {
                 Button(String(localized: "Save", comment: "Save button")) {
                     saveGesture()
-                    dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }
                 .disabled(currentGestureSwitch == nil && gestureName.isEmpty)
             }
@@ -948,6 +915,7 @@ struct AddFacialGesture: View {
             if currentGestureSwitch == nil && gestureName.isEmpty {
                 gestureName = newGesture.displayName
             }
+        }
         }
     }
 
