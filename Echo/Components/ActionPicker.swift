@@ -76,9 +76,6 @@ struct ActionPicker: View {
                 Spacer()
                 Text(actionState.title)
                     .foregroundStyle(.gray)
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.gray)
-                    .font(.caption)
             }
         })
         .onAppear {

@@ -149,6 +149,9 @@
     "Blink your right eye" : {
       "comment" : "Description for right eye blink gesture"
     },
+    "Blinking and eye movements" : {
+      "comment" : "Description for eye gesture category"
+    },
     "Bold Highlight Text" : {
 
     },
@@ -178,6 +181,15 @@
     },
     "Cheek Puff" : {
       "comment" : "Display name for cheek puff gesture"
+    },
+    "Cheek puffs and squints" : {
+      "comment" : "Description for cheek gesture category"
+    },
+    "Cheeks" : {
+      "comment" : "Category name for cheek gestures"
+    },
+    "Choose a facial area to see available gestures for that region" : {
+      "comment" : "Footer explaining anatomical gesture selection"
     },
     "Clear" : {
       "comment" : "Label for action that happens on a keypress"
@@ -332,6 +344,15 @@
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
     },
+    "Eyebrow raises and movements" : {
+      "comment" : "Description for eyebrow gesture category"
+    },
+    "Eyebrows" : {
+      "comment" : "Category name for eyebrow gestures"
+    },
+    "Eyes" : {
+      "comment" : "Category name for eye gestures"
+    },
     "Face tracking is not supported on this device" : {
       "comment" : "Error message for unsupported device"
     },
@@ -434,11 +455,17 @@
     "Inner Brow Up" : {
       "comment" : "Display name for inner brow up gesture"
     },
+    "Jaw" : {
+      "comment" : "Category name for jaw gestures"
+    },
     "Jaw Forward" : {
       "comment" : "Display name for jaw forward gesture"
     },
     "Jaw Left" : {
       "comment" : "Display name for jaw left gesture"
+    },
+    "Jaw movements and mouth opening" : {
+      "comment" : "Description for jaw gesture category"
     },
     "Jaw Open" : {
       "comment" : "Display name for jaw open gesture"
@@ -506,6 +533,9 @@
     "Lift the right side of your upper lip" : {
       "comment" : "Description for right upper lip up gesture"
     },
+    "Lip movements, smiles, and expressions" : {
+      "comment" : "Description for mouth gesture category"
+    },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
     },
@@ -541,6 +571,9 @@
     },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
+    },
+    "Mouth" : {
+      "comment" : "Category name for mouth gestures"
     },
     "Mouth Close" : {
       "comment" : "Display name for mouth close gesture"
@@ -589,6 +622,12 @@
     },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Nose" : {
+      "comment" : "Category name for nose gestures"
+    },
+    "Nose movements and sneers" : {
+      "comment" : "Description for nose gesture category"
     },
     "Note, if there are children to this node they will be lost if you make it a spelling branch" : {
       "comment" : "Footer for spelling in node editing"
@@ -784,6 +823,9 @@
     },
     "Select a Voice" : {
 
+    },
+    "Select Facial Gesture by Area" : {
+      "comment" : "Header for anatomical gesture selection"
     },
     "Select Font" : {
 
@@ -1009,6 +1051,12 @@
     },
     "Threshold: %lld%%" : {
       "comment" : "Shows current threshold value"
+    },
+    "Tongue" : {
+      "comment" : "Category name for tongue gestures"
+    },
+    "Tongue movements" : {
+      "comment" : "Description for tongue gesture category"
     },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"

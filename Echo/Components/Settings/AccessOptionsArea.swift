@@ -54,6 +54,13 @@ struct AccessOptionsArea: View {
             SwitchControlSection()
             GameControllerSection()
             FacialGestureSection()
+
+            // Add some bottom spacing
+            Section {
+                EmptyView()
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
         }
         .navigationTitle(
             String(

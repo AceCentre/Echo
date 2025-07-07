@@ -2,7 +2,7 @@
 //  FacialGestureSection.swift
 //  Echo
 //
-//  Created by Augment Agent on 04/07/2025.
+//  Created by Will Wade on 04/07/2025.
 //
 
 import Foundation
@@ -198,7 +198,6 @@ struct GesturePreviewSection: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Test Gesture")
-                    .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
                 Button(action: {
@@ -209,7 +208,6 @@ struct GesturePreviewSection: View {
                     }
                 }) {
                     Text(isActive ? "Stop" : "Start")
-                        .font(.caption)
                         .foregroundColor(isActive ? .red : .blue)
                 }
             }
@@ -419,6 +417,14 @@ struct FacialGestureSection: View {
     
     var body: some View {
         Section(content: {
+            ZStack {
+                AddFacialGestureSheet(
+                    showAddGestureSheet: $showAddGestureSheet,
+                    currentGestureSwitch: $currentGestureSwitch,
+                    gestureDetector: gestureDetector
+                )
+            }
+
             if !isSupported {
                 VStack(alignment: .leading, spacing: 8) {
                     Label(
@@ -480,7 +486,7 @@ struct FacialGestureSection: View {
                         showAddGestureSheet.toggle()
                     }, label: {
                         HStack {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading) {
                                 Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
                                     .foregroundColor(.primary)
 
@@ -491,9 +497,6 @@ struct FacialGestureSection: View {
                                         .foregroundColor(.secondary)
                                 }
                             }
-
-                            Spacer()
-
                             // Status indicator
                             Circle()
                                 .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
@@ -508,23 +511,18 @@ struct FacialGestureSection: View {
                 Button(action: {
                     currentGestureSwitch = nil
                     showAddGestureSheet.toggle()
-                }, label: {
-                    Label(
-                        String(
-                            localized: "Add Facial Gesture",
-                            comment: "Button label to add a new facial gesture switch"
-                        ),
-                        systemImage: "plus.circle.fill"
-                    )
-                })
-
-
-
-
-
-
-
-
+                }) {
+                    HStack {
+                        Label(
+                            String(
+                                localized: "Add Facial Gesture",
+                                comment: "Button label to add a new facial gesture switch"
+                            ),
+                            systemImage: "plus.circle.fill"
+                        )
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }, header: {
             Text("Facial Gestures", comment: "Header for facial gesture settings area")
@@ -552,11 +550,6 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        AddFacialGestureSheet(
-            showAddGestureSheet: $showAddGestureSheet,
-            currentGestureSwitch: $currentGestureSwitch,
-            gestureDetector: gestureDetector
-        )
         .onAppear {
             print("Database marked as ready")
             cleanupDuplicateGestures()
@@ -624,7 +617,7 @@ struct AddFacialGestureSheet: View {
 }
 
 struct AddFacialGesture: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Binding var currentGestureSwitch: FacialGestureSwitch?
     let gestureDetector: FacialGestureDetector
     @State private var deleteAlert: Bool = false
@@ -655,27 +648,30 @@ struct AddFacialGesture: View {
                         text: $bindableGestureSwitch.name
                     )
 
-                    Picker(
-                        String(
-                            localized: "Facial Gesture",
-                            comment: "Label for gesture type picker"
-                        ),
-                        selection: Binding(
-                            get: { bindableGestureSwitch.gesture ?? .eyeBlinkLeft },
-                            set: { bindableGestureSwitch.gesture = $0 }
+                    NavigationLink(destination: {
+                        AnatomicalFacialGesturePicker(
+                            selectedGesture: Binding(
+                                get: { bindableGestureSwitch.gesture ?? .eyeBlinkLeft },
+                                set: { bindableGestureSwitch.gesture = $0 }
+                            )
                         )
-                    ) {
-                        ForEach(FacialGesture.allCases) { gesture in
-                            VStack(alignment: .leading) {
-                                Text(gesture.displayName)
-                                Text(gesture.description)
+                    }) {
+                        HStack {
+                            Text(String(
+                                localized: "Facial Gesture",
+                                comment: "Label for gesture type picker"
+                            ))
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text((bindableGestureSwitch.gesture ?? .eyeBlinkLeft).displayName)
+                                    .foregroundColor(.secondary)
+                                Text((bindableGestureSwitch.gesture ?? .eyeBlinkLeft).description)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.trailing)
                             }
-                            .tag(gesture)
                         }
                     }
-                    .pickerStyle(.menu)
 
                 }, header: {
                     Text("Gesture Configuration", comment: "Header for gesture configuration section")
@@ -722,7 +718,7 @@ struct AddFacialGesture: View {
                                 modelContext.delete(unwrappedGestureSwitch)
                                 currentGestureSwitch = nil
                             }
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         }
                         Button(String(localized: "Cancel", comment: "Cancel button label"), role: .cancel) {
                             deleteAlert.toggle()
@@ -743,24 +739,25 @@ struct AddFacialGesture: View {
                         text: $gestureName
                     )
 
-                    Picker(
-                        String(
-                            localized: "Facial Gesture",
-                            comment: "Label for gesture type picker"
-                        ),
-                        selection: $selectedGesture
-                    ) {
-                        ForEach(FacialGesture.allCases) { gesture in
-                            VStack(alignment: .leading) {
-                                Text(gesture.displayName)
-                                Text(gesture.description)
+                    NavigationLink(destination: {
+                        AnatomicalFacialGesturePicker(selectedGesture: $selectedGesture)
+                    }) {
+                        HStack {
+                            Text(String(
+                                localized: "Facial Gesture",
+                                comment: "Label for gesture type picker"
+                            ))
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text(selectedGesture.displayName)
+                                    .foregroundColor(.secondary)
+                                Text(selectedGesture.description)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.trailing)
                             }
-                            .tag(gesture)
                         }
                     }
-                    .pickerStyle(.menu)
 
                 }, header: {
                     Text("New Gesture", comment: "Header for new gesture section")
@@ -893,14 +890,14 @@ struct AddFacialGesture: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(String(localized: "Cancel", comment: "Cancel button")) {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }
             }
 
             ToolbarItem(placement: .confirmationAction) {
                 Button(String(localized: "Save", comment: "Save button")) {
                     saveGesture()
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }
                 .disabled(currentGestureSwitch == nil && gestureName.isEmpty)
             }
