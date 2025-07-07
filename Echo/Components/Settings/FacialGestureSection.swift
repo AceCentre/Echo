@@ -362,21 +362,28 @@ struct GesturePreviewSection: View {
 
         switch type {
         case .tap:
-            // Tap gesture: Light click sound + light haptic
-            print("🔊 Playing tap sound (1104) and light haptic")
-            AudioServicesPlaySystemSound(1104) // System click sound
+            // Tap gesture: Use keyboard click sound + light haptic
+            print("🔊 Playing tap sound (1104 - keyboard click) and light haptic")
+            AudioServicesPlaySystemSound(1104) // Keyboard click
+
+            // Also try the peek sound as backup
+            AudioServicesPlaySystemSound(1519) // Peek sound
+
             let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.prepare()
             impactFeedback.impactOccurred()
 
         case .hold:
-            // Hold gesture: Different sound + stronger haptic
-            print("🔊 Playing hold sound (1105) and heavy haptic")
-            AudioServicesPlaySystemSound(1105) // Different system sound
+            // Hold gesture: Use pop sound + stronger haptic
+            print("🔊 Playing hold sound (1520 - pop) and heavy haptic")
+            AudioServicesPlaySystemSound(1520) // Pop sound
+
             let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+            impactFeedback.prepare()
             impactFeedback.impactOccurred()
         }
 
-        print("🔊 Feedback completed")
+        print("🔊 Feedback completed - Check: Silent switch off? System sounds enabled?")
     }
 }
 
@@ -389,6 +396,7 @@ struct FacialGestureSection: View {
     @State private var showAddGestureSheet = false
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
     @State private var lastTapTime: Date = Date()
+    @State private var isDatabaseReady = false
     @StateObject private var gestureDetector = FacialGestureDetector()
     
     var body: some View {
@@ -443,12 +451,25 @@ struct FacialGestureSection: View {
                     }
                 }
             } else {
-                ForEach(facialGestureSwitches.filter { $0.gesture != nil && !$0.name.isEmpty }, id: \.gestureRaw) { gestureSwitch in
+                ForEach(facialGestureSwitches.filter { gestureSwitch in
+                    // Only show switches that are fully initialized and committed to database
+                    return gestureSwitch.gesture != nil &&
+                           !gestureSwitch.name.isEmpty &&
+                           !gestureSwitch.isDeleted
+                }, id: \.gestureRaw) { gestureSwitch in
                     Button(action: {
                         // Prevent multiple presentations and rapid tapping
                         let now = Date()
-                        guard !showAddGestureSheet && now.timeIntervalSince(lastTapTime) > 0.5 else { return }
+                        guard !showAddGestureSheet &&
+                              now.timeIntervalSince(lastTapTime) > 0.5 &&
+                              isDatabaseReady else {
+                            print("🐛 Button tap blocked - showSheet: \(showAddGestureSheet), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
+                            return
+                        }
                         lastTapTime = now
+
+                        // Ensure the gesture switch is fully loaded
+                        print("🐛 Opening sheet for gesture: \(gestureSwitch.name)")
                         currentGestureSwitch = gestureSwitch
                         showAddGestureSheet = true
                     }, label: {
@@ -546,6 +567,13 @@ struct FacialGestureSection: View {
             currentGestureSwitch = nil
         }) {
             AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
+        }
+        .onAppear {
+            // Give database time to fully initialize
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                isDatabaseReady = true
+                print("🐛 Database marked as ready")
+            }
         }
     }
     
