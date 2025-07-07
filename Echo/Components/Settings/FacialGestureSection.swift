@@ -477,7 +477,7 @@ struct FacialGestureSection: View {
                     return gestureSwitch.gesture != nil &&
                            !gestureSwitch.name.isEmpty &&
                            !gestureSwitch.isDeleted
-                }, id: \.gestureRaw) { gestureSwitch in
+                }, id: \.persistentModelID) { gestureSwitch in
                     Button(action: {
                         // Prevent multiple presentations and rapid tapping
                         let now = Date()
@@ -593,6 +593,7 @@ struct FacialGestureSection: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isDatabaseReady = true
                 print("Database marked as ready")
+                cleanupDuplicateGestures()
             }
         }
         .onChange(of: showAddGestureSheet) { _, newValue in
@@ -603,7 +604,44 @@ struct FacialGestureSection: View {
             }
         }
     }
-    
+
+    private func cleanupDuplicateGestures() {
+        print("Cleaning up duplicate gestures...")
+
+        // Group gestures by their gesture type
+        var gestureGroups: [String: [FacialGestureSwitch]] = [:]
+        for gestureSwitch in facialGestureSwitches {
+            let gestureKey = gestureSwitch.gestureRaw
+            if gestureGroups[gestureKey] == nil {
+                gestureGroups[gestureKey] = []
+            }
+            gestureGroups[gestureKey]?.append(gestureSwitch)
+        }
+
+        // Remove duplicates (keep only the first one of each type)
+        var removedCount = 0
+        for (gestureType, switches) in gestureGroups {
+            if switches.count > 1 {
+                print("Found \(switches.count) duplicates of \(gestureType), removing \(switches.count - 1)")
+                // Keep the first one, remove the rest
+                for i in 1..<switches.count {
+                    modelContext.delete(switches[i])
+                    removedCount += 1
+                }
+            }
+        }
+
+        if removedCount > 0 {
+            do {
+                try modelContext.save()
+                print("Removed \(removedCount) duplicate gestures")
+            } catch {
+                print("Failed to remove duplicate gestures: \(error)")
+            }
+        } else {
+            print("No duplicate gestures found")
+        }
+    }
 
 }
 
