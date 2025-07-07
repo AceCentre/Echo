@@ -227,11 +227,6 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
             let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
             return max(leftBlink, rightBlink)
-        case .eyeBlinkBoth:
-            // Special case: both eyes blink - use the minimum of both eye blink values
-            let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
-            let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
-            return min(leftBlink, rightBlink)
         case .eyeBlinkLeft, .eyeBlinkRight:
             // Debug eye blink values to understand left/right mapping
             let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0

@@ -12,7 +12,6 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     case eyeBlinkLeft = "eyeBlinkLeft"
     case eyeBlinkRight = "eyeBlinkRight"
     case eyeBlinkEither = "eyeBlinkEither"
-    case eyeBlinkBoth = "eyeBlinkBoth"
     case browDownLeft = "browDownLeft"
     case browDownRight = "browDownRight"
     case browInnerUp = "browInnerUp"
@@ -67,10 +66,6 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkEither: return String(
             localized: "Either Eye Blink",
             comment: "Display name for either eye blink gesture"
-        )
-        case .eyeBlinkBoth: return String(
-            localized: "Both Eyes Blink",
-            comment: "Display name for both eyes blink gesture"
         )
         case .browDownLeft: return String(
             localized: "Left Brow Down",
@@ -241,10 +236,6 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             localized: "Blink either eye",
             comment: "Description for either eye blink gesture"
         )
-        case .eyeBlinkBoth: return String(
-            localized: "Blink both eyes",
-            comment: "Description for both eyes blink gesture"
-        )
         case .browDownLeft: return String(
             localized: "Lower your left eyebrow",
             comment: "Description for left brow down gesture"
@@ -406,7 +397,6 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkLeft: return .eyeBlinkLeft
         case .eyeBlinkRight: return .eyeBlinkRight
         case .eyeBlinkEither: return .eyeBlinkLeft // Special case - will be handled in detection logic
-        case .eyeBlinkBoth: return .eyeBlinkLeft // Special case - will be handled in detection logic
         case .browDownLeft: return .browDownLeft
         case .browDownRight: return .browDownRight
         case .browInnerUp: return .browInnerUp
@@ -451,7 +441,7 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     /// Default threshold for gesture detection
     var defaultThreshold: Float {
         switch self {
-        case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither, .eyeBlinkBoth:
+        case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither:
             return 0.8 // Higher threshold for blinks
         case .jawOpen:
             return 0.3 // Lower threshold for mouth opening
@@ -468,7 +458,6 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             .eyeBlinkLeft,
             .eyeBlinkRight,
             .eyeBlinkEither,
-            .eyeBlinkBoth,
             .jawOpen,
             .mouthSmileLeft,
             .mouthSmileRight,

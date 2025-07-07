@@ -914,14 +914,37 @@ struct AddFacialGesture: View {
     }
 
     private func saveGesture() {
+        // Check for duplicate gestures (only for new gestures)
         if currentGestureSwitch == nil {
-            // Create new gesture switch
+            let existingGesture = facialGestureSwitches.first { $0.gesture == selectedGesture }
+            if existingGesture != nil {
+                print("Cannot create duplicate gesture: \(selectedGesture.displayName)")
+                // TODO: Show user-facing error alert
+                return
+            }
+
+            // Create new gesture switch with all configured settings
             let newGestureSwitch = FacialGestureSwitch(
-                name: gestureName,
-                gesture: selectedGesture
+                name: gestureName.isEmpty ? selectedGesture.displayName : gestureName,
+                gesture: selectedGesture,
+                threshold: threshold,
+                tapAction: tapAction,
+                holdAction: holdAction,
+                isEnabled: true, // Enable by default when creating
+                holdDuration: holdDuration
             )
             modelContext.insert(newGestureSwitch)
             currentGestureSwitch = newGestureSwitch
+        } else {
+            // Update existing gesture switch
+            if let currentGestureSwitch = currentGestureSwitch {
+                currentGestureSwitch.name = gestureName
+                currentGestureSwitch.gesture = selectedGesture
+                currentGestureSwitch.threshold = threshold
+                currentGestureSwitch.tapAction = tapAction
+                currentGestureSwitch.holdAction = holdAction
+                currentGestureSwitch.holdDuration = holdDuration
+            }
         }
 
         do {
