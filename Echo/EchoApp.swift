@@ -82,35 +82,9 @@ struct EchoApp: App {
                 /*
                  Initialise the default facial gesture switches once
                  */
-                // Check what's already in the database
-                var existingSwitches: [FacialGestureSwitch] = []
-                do {
-                    existingSwitches = try container.mainContext.fetch(FetchDescriptor<FacialGestureSwitch>())
-                } catch {
-                    print("Error checking existing facial gesture switches: \(error)")
-                }
-
-                // Create default switches if:
-                // 1. We haven't loaded them before AND face tracking is supported, OR
-                // 2. Face tracking is supported but no switches exist in database (recovery case)
-                let shouldCreateSwitches = (!hasLoadedFacialGestureSwitches && ARFaceTrackingConfiguration.isSupported) ||
-                                         (ARFaceTrackingConfiguration.isSupported && existingSwitches.isEmpty)
-
-                if shouldCreateSwitches {
-                    do {
-                        let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
-
-                        for gestureSwitch in defaultFacialGestureSwitches {
-                            container.mainContext.insert(gestureSwitch)
-                        }
-
-                        // Force save and process pending changes to avoid relationship mapping issues
-                        try container.mainContext.save()
-                        container.mainContext.processPendingChanges()
-                    } catch {
-                        print("Error creating facial gesture switches: \(error)")
-                    }
-                }
+                // Don't create any default facial gesture switches
+                // Users can add them manually if they want to use facial gestures
+                // This prevents unwanted switches from appearing by default
 
                 // Always set the flag to true after checking
                 if !hasLoadedFacialGestureSwitches {

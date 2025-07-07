@@ -631,13 +631,6 @@ struct FacialGestureSection: View {
                 isSheetPresenting = false
             }
         }
-        .onChange(of: showAddGestureSheet) { _, newValue in
-            print("🐛 showAddGestureSheet changed to: \(newValue)")
-            if !newValue {
-                // Sheet was dismissed, reset presenting state
-                isSheetPresenting = false
-            }
-        }
     }
     
     private func addDefaultGestures() {
