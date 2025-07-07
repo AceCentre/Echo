@@ -97,21 +97,18 @@ struct EchoApp: App {
                                          (ARFaceTrackingConfiguration.isSupported && existingSwitches.isEmpty)
 
                 if shouldCreateSwitches {
-                    // Add a small delay to ensure localization system is ready
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        do {
-                            let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
+                    do {
+                        let defaultFacialGestureSwitches = FacialGestureSwitch.createDefaultSwitches()
 
-                            for gestureSwitch in defaultFacialGestureSwitches {
-                                container.mainContext.insert(gestureSwitch)
-                            }
-
-                            // Force save and process pending changes to avoid relationship mapping issues
-                            try container.mainContext.save()
-                            container.mainContext.processPendingChanges()
-                        } catch {
-                            print("Error creating facial gesture switches: \(error)")
+                        for gestureSwitch in defaultFacialGestureSwitches {
+                            container.mainContext.insert(gestureSwitch)
                         }
+
+                        // Force save and process pending changes to avoid relationship mapping issues
+                        try container.mainContext.save()
+                        container.mainContext.processPendingChanges()
+                    } catch {
+                        print("Error creating facial gesture switches: \(error)")
                     }
                 }
 

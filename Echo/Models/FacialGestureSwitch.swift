@@ -61,32 +61,29 @@ class FacialGestureSwitch {
 // MARK: - Default Facial Gesture Switches
 extension FacialGestureSwitch {
     static func createDefaultSwitches() -> [FacialGestureSwitch] {
-        // Use fallback names in case localization isn't ready
-        let leftEyeName = String(localized: "Left Eye Blink", comment: "Default facial gesture switch name")
-        let rightEyeName = String(localized: "Right Eye Blink", comment: "Default facial gesture switch name")
-        let mouthName = String(localized: "Mouth Open", comment: "Default facial gesture switch name")
-
+        // Use hardcoded English names to avoid localization timing issues
+        // These will be displayed using the gesture's own localized displayName property
         return [
             FacialGestureSwitch(
-                name: leftEyeName.isEmpty ? "Left Eye Blink" : leftEyeName,
+                name: "Left Eye Blink",  // Hardcoded to avoid localization issues
                 gesture: .eyeBlinkLeft,
                 tapAction: .nextNode,
                 holdAction: .none,
-                isEnabled: false  // Disabled by default
+                isEnabled: false  // Disabled by default - user must enable
             ),
             FacialGestureSwitch(
-                name: rightEyeName.isEmpty ? "Right Eye Blink" : rightEyeName,
+                name: "Right Eye Blink",  // Hardcoded to avoid localization issues
                 gesture: .eyeBlinkRight,
                 tapAction: .select,
                 holdAction: .none,
-                isEnabled: false  // Disabled by default
+                isEnabled: false  // Disabled by default - user must enable
             ),
             FacialGestureSwitch(
-                name: mouthName.isEmpty ? "Mouth Open" : mouthName,
+                name: "Mouth Open",  // Hardcoded to avoid localization issues
                 gesture: .jawOpen,
                 tapAction: .goBack,
                 holdAction: .none,
-                isEnabled: false  // Disabled by default
+                isEnabled: false  // Disabled by default - user must enable
             )
         ]
     }
