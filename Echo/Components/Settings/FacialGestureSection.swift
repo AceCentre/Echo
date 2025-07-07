@@ -649,6 +649,11 @@ struct AddFacialGesture: View {
 
     @State private var selectedGesture: FacialGesture = .eyeBlinkLeft
     @State private var gestureName: String = ""
+    @State private var tapAction: SwitchAction = .nextNode
+    @State private var holdAction: SwitchAction = .none
+    @State private var threshold: Float = 0.8
+    @State private var holdDuration: Double = 1.0
+    @State private var isEnabled: Bool = false
 
     var body: some View {
         Form {
@@ -774,15 +779,119 @@ struct AddFacialGesture: View {
                     Text("New Gesture", comment: "Header for new gesture section")
                 })
 
+                // Actions section for new gesture
+                Section(content: {
+                    // Enable/Disable toggle
+                    Toggle(
+                        String(
+                            localized: "Enable Gesture",
+                            comment: "Toggle to enable/disable facial gesture"
+                        ),
+                        isOn: $isEnabled
+                    )
+
+                    if isEnabled {
+                        // Tap action picker
+                        ActionPicker(
+                            label: String(
+                                localized: "Single Gesture",
+                                comment: "The label that is shown next to the single gesture action"
+                            ),
+                            actions: SwitchAction.tapCases,
+                            actionChange: { newAction in
+                                tapAction = newAction
+                            },
+                            actionState: tapAction
+                        )
+
+                        // Hold action picker
+                        ActionPicker(
+                            label: String(
+                                localized: "Hold Gesture",
+                                comment: "The label that is shown next to the hold gesture action"
+                            ),
+                            actions: SwitchAction.holdCases,
+                            actionChange: { newAction in
+                                holdAction = newAction
+                            },
+                            actionState: holdAction
+                        )
+
+                        // Sensitivity slider
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(String(
+                                localized: "Sensitivity",
+                                comment: "Label for gesture sensitivity slider"
+                            ))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                            HStack {
+                                Text("Low")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+
+                                Slider(value: $threshold, in: 0.1...1.0, step: 0.05)
+                                    .tint(.blue)
+
+                                Text("High")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Text(String(
+                                localized: "Threshold: \(Int(threshold * 100))%",
+                                comment: "Shows current threshold value"
+                            ))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        }
+
+                        // Hold duration slider (only if hold action is not .none)
+                        if holdAction != .none {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(String(
+                                    localized: "Hold Duration",
+                                    comment: "Label for hold duration slider"
+                                ))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                                HStack {
+                                    Text("0.5s")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+
+                                    Slider(value: $holdDuration, in: 0.5...3.0, step: 0.1)
+                                        .tint(.blue)
+
+                                    Text("3.0s")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Text(String(
+                                    localized: "Duration: \(String(format: "%.1f", holdDuration))s",
+                                    comment: "Shows current hold duration value"
+                                ))
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }, header: {
+                    Text("Actions", comment: "Header for actions section")
+                })
+
                 // Preview section for new gesture
                 if ARFaceTrackingConfiguration.isSupported {
                     Section(content: {
                         GesturePreviewSection(
                             gesture: selectedGesture,
-                            threshold: selectedGesture.defaultThreshold,
-                            holdDuration: 1.0, // Default hold duration
-                            tapAction: .nextNode, // Default tap action
-                            holdAction: .none // Default hold action
+                            threshold: threshold,
+                            holdDuration: holdDuration,
+                            tapAction: tapAction,
+                            holdAction: holdAction
                         )
                     }, header: {
                         Text("Preview", comment: "Header for gesture preview section")
