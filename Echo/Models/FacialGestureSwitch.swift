@@ -60,31 +60,5 @@ class FacialGestureSwitch {
 
 // MARK: - Default Facial Gesture Switches
 extension FacialGestureSwitch {
-    static func createDefaultSwitches() -> [FacialGestureSwitch] {
-        // Use hardcoded English names to avoid localization timing issues
-        // These will be displayed using the gesture's own localized displayName property
-        return [
-            FacialGestureSwitch(
-                name: "Left Eye Blink",  // Hardcoded to avoid localization issues
-                gesture: .eyeBlinkLeft,
-                tapAction: .nextNode,
-                holdAction: .none,
-                isEnabled: false  // Disabled by default - user must enable
-            ),
-            FacialGestureSwitch(
-                name: "Right Eye Blink",  // Hardcoded to avoid localization issues
-                gesture: .eyeBlinkRight,
-                tapAction: .select,
-                holdAction: .none,
-                isEnabled: false  // Disabled by default - user must enable
-            ),
-            FacialGestureSwitch(
-                name: "Mouth Open",  // Hardcoded to avoid localization issues
-                gesture: .jawOpen,
-                tapAction: .goBack,
-                holdAction: .none,
-                isEnabled: false  // Disabled by default - user must enable
-            )
-        ]
-    }
+
 }

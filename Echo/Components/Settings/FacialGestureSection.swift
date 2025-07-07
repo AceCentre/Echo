@@ -550,19 +550,7 @@ struct FacialGestureSection: View {
 
 
 
-                if facialGestureSwitches.isEmpty {
-                    Button(action: {
-                        addDefaultGestures()
-                    }, label: {
-                        Label(
-                            String(
-                                localized: "Add Default Gestures",
-                                comment: "Button label to add default facial gesture switches"
-                            ),
-                            systemImage: "wand.and.stars"
-                        )
-                    })
-                }
+
             }
         }, header: {
             Text("Facial Gestures", comment: "Header for facial gesture settings area")
@@ -633,18 +621,7 @@ struct FacialGestureSection: View {
         }
     }
     
-    private func addDefaultGestures() {
-        let defaultSwitches = FacialGestureSwitch.createDefaultSwitches()
-        for gestureSwitch in defaultSwitches {
-            modelContext.insert(gestureSwitch)
-        }
-        
-        do {
-            try modelContext.save()
-        } catch {
-            print("Failed to save default facial gesture switches: \(error)")
-        }
-    }
+
 }
 
 struct AddFacialGestureSheet: View {
