@@ -914,14 +914,23 @@ struct AddFacialGesture: View {
     }
 
     private func saveGesture() {
-        // Check for duplicate gestures (only for new gestures)
         if currentGestureSwitch == nil {
+            // Check for duplicate gestures (only for new gestures)
+            print("Checking for duplicates of: \(selectedGesture.rawValue)")
+            print("Existing gestures:")
+            for existingSwitch in facialGestureSwitches {
+                print("  - \(existingSwitch.gestureRaw) (\(existingSwitch.gesture?.displayName ?? "nil"))")
+            }
+
             let existingGesture = facialGestureSwitches.first { $0.gesture == selectedGesture }
             if existingGesture != nil {
-                print("Cannot create duplicate gesture: \(selectedGesture.displayName)")
+                print("DUPLICATE FOUND: Cannot create duplicate gesture: \(selectedGesture.displayName)")
+                print("Existing gesture: \(existingGesture?.gestureRaw ?? "unknown")")
                 // TODO: Show user-facing error alert
                 return
             }
+
+            print("No duplicate found, proceeding with creation")
 
             // Create new gesture switch with all configured settings
             let newGestureSwitch = FacialGestureSwitch(
@@ -949,6 +958,7 @@ struct AddFacialGesture: View {
 
         do {
             try modelContext.save()
+            print("Successfully saved gesture: \(selectedGesture.displayName)")
         } catch {
             print("Failed to save facial gesture switch: \(error)")
         }
