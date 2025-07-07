@@ -61,23 +61,28 @@ class FacialGestureSwitch {
 // MARK: - Default Facial Gesture Switches
 extension FacialGestureSwitch {
     static func createDefaultSwitches() -> [FacialGestureSwitch] {
+        // Use fallback names in case localization isn't ready
+        let leftEyeName = String(localized: "Left Eye Blink", comment: "Default facial gesture switch name")
+        let rightEyeName = String(localized: "Right Eye Blink", comment: "Default facial gesture switch name")
+        let mouthName = String(localized: "Mouth Open", comment: "Default facial gesture switch name")
+
         return [
             FacialGestureSwitch(
-                name: String(localized: "Left Eye Blink", comment: "Default facial gesture switch name"),
+                name: leftEyeName.isEmpty ? "Left Eye Blink" : leftEyeName,
                 gesture: .eyeBlinkLeft,
                 tapAction: .nextNode,
                 holdAction: .none,
                 isEnabled: false  // Disabled by default
             ),
             FacialGestureSwitch(
-                name: String(localized: "Right Eye Blink", comment: "Default facial gesture switch name"),
+                name: rightEyeName.isEmpty ? "Right Eye Blink" : rightEyeName,
                 gesture: .eyeBlinkRight,
                 tapAction: .select,
                 holdAction: .none,
                 isEnabled: false  // Disabled by default
             ),
             FacialGestureSwitch(
-                name: String(localized: "Mouth Open", comment: "Default facial gesture switch name"),
+                name: mouthName.isEmpty ? "Mouth Open" : mouthName,
                 gesture: .jawOpen,
                 tapAction: .goBack,
                 holdAction: .none,

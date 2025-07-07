@@ -234,6 +234,18 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
             let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
             return min(leftBlink, rightBlink)
+        case .eyeBlinkLeft, .eyeBlinkRight:
+            // Debug eye blink values to understand cross-triggering
+            let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
+            let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
+            let targetValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
+
+            // Only log when there's significant activity
+            if leftBlink > 0.1 || rightBlink > 0.1 {
+                print("👁️ Eye values - Left: \(String(format: "%.3f", leftBlink)), Right: \(String(format: "%.3f", rightBlink)), Target(\(gesture.displayName)): \(String(format: "%.3f", targetValue))")
+            }
+
+            return targetValue
         default:
             return blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
         }

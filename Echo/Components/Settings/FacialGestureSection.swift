@@ -312,22 +312,30 @@ struct GesturePreviewSection: View {
         .onDisappear {
             stopPreview()
         }
+        .onChange(of: gestureValue) { _, newValue in
+            print("🔊 Gesture value changed: \(newValue), threshold: \(threshold)")
+        }
         .onChange(of: isGestureDetected) { _, newValue in
+            print("🔊 Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")
             if newValue && !lastDetectionState {
                 // Gesture started - record start time and play tap feedback
+                print("🔊 Playing TAP feedback")
                 gestureStartTime = Date()
                 playDetectionFeedback(.tap)
                 lastFeedbackType = .tap
             } else if !newValue && lastDetectionState {
                 // Gesture ended - reset timing
+                print("🔊 Gesture ended")
                 gestureStartTime = nil
                 lastFeedbackType = nil
             }
             lastDetectionState = newValue
         }
         .onChange(of: isHoldGesture) { _, newValue in
+            print("🔊 Hold gesture changed: \(newValue), lastFeedback: \(String(describing: lastFeedbackType))")
             if newValue && lastFeedbackType != .hold {
                 // Hold threshold reached - play hold feedback
+                print("🔊 Playing HOLD feedback")
                 playDetectionFeedback(.hold)
                 lastFeedbackType = .hold
             }
@@ -335,29 +343,40 @@ struct GesturePreviewSection: View {
     }
 
     private func startPreview() {
+        print("🔊 Starting preview for gesture: \(gesture.displayName)")
+        print("🔊 Detector supported: \(detector.isSupported)")
         detector.startPreviewMode(for: [gesture])
         isActive = true
+        print("🔊 Preview started, isActive: \(isActive)")
     }
 
     private func stopPreview() {
+        print("🔊 Stopping preview")
         detector.stopPreviewMode()
         isActive = false
+        print("🔊 Preview stopped, isActive: \(isActive)")
     }
 
     private func playDetectionFeedback(_ type: GestureFeedbackType) {
+        print("🔊 playDetectionFeedback called with type: \(type)")
+
         switch type {
         case .tap:
             // Tap gesture: Light click sound + light haptic
+            print("🔊 Playing tap sound (1104) and light haptic")
             AudioServicesPlaySystemSound(1104) // System click sound
             let impactFeedback = UIImpactFeedbackGenerator(style: .light)
             impactFeedback.impactOccurred()
 
         case .hold:
             // Hold gesture: Different sound + stronger haptic
+            print("🔊 Playing hold sound (1105) and heavy haptic")
             AudioServicesPlaySystemSound(1105) // Different system sound
             let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
             impactFeedback.impactOccurred()
         }
+
+        print("🔊 Feedback completed")
     }
 }
 
@@ -424,7 +443,7 @@ struct FacialGestureSection: View {
                     }
                 }
             } else {
-                ForEach(facialGestureSwitches.filter { $0.gesture != nil }, id: \.gestureRaw) { gestureSwitch in
+                ForEach(facialGestureSwitches.filter { $0.gesture != nil && !$0.name.isEmpty }, id: \.gestureRaw) { gestureSwitch in
                     Button(action: {
                         // Prevent multiple presentations and rapid tapping
                         let now = Date()
@@ -435,11 +454,12 @@ struct FacialGestureSection: View {
                     }, label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(gestureSwitch.displayName)
+                                Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
                                     .foregroundColor(.primary)
 
                                 if let gesture = gestureSwitch.gesture {
-                                    Text(gesture.description)
+                                    let description = gesture.description
+                                    Text(description.isEmpty ? gesture.rawValue : description)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
