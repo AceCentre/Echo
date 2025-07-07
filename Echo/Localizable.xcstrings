@@ -16,10 +16,17 @@
     "%@" : {
 
     },
-    "%lld" : {
-
+    "%@s / %@s" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@s / %2$@s"
+          }
+        }
+      }
     },
-    "✓ Detected" : {
+    "%lld" : {
 
     },
     "0.5s" : {
@@ -43,14 +50,17 @@
     "Access Options" : {
       "comment" : "The navigation title for the access options page"
     },
+    "Action:" : {
+
+    },
     "Actions" : {
       "comment" : "Header for actions section\nThe header of the actions area when adding a new switch"
     },
+    "Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action" : {
+
+    },
     "Activate your external switch" : {
       "comment" : "Shown when detecting the switch press when adding a new switch"
-    },
-    "Add Default Gestures" : {
-      "comment" : "Button label to add default facial gesture switches"
     },
     "Add Facial Gesture" : {
       "comment" : "Button label to add a new facial gesture switch"
@@ -151,8 +161,8 @@
     "Both Eyes Blink" : {
       "comment" : "Display name for both eyes blink gesture"
     },
-    "Either Eye Blink" : {
-      "comment" : "Display name for either eye blink gesture"
+    "BUILDING... %@s" : {
+
     },
     "By default the cue voice and the speaking voice will be played out of the same audio device. If you would like them to be sent to different audio devices you can enable audio splitting and send each voice to either the left our right audio channel. You then have to use an audio splitter cable to direct that out." : {
       "comment" : "A description of why audio splitting exists"
@@ -259,6 +269,9 @@
     "Detect Switch" : {
       "comment" : "Label for a NavigationLink that will get a user to press their external switch"
     },
+    "DETECTED" : {
+
+    },
     "Directional Audio" : {
       "comment" : "Label for directional audio toggle"
     },
@@ -297,6 +310,9 @@
     },
     "Editing Vocabulary: '%@'" : {
       "comment" : "The main navigation title for editing page"
+    },
+    "Either Eye Blink" : {
+      "comment" : "Display name for either eye blink gesture"
     },
     "Enable" : {
       "comment" : "Label to enable swipe"
@@ -361,6 +377,9 @@
     "Gesture Name" : {
       "comment" : "Placeholder for gesture name field"
     },
+    "Gesture Strength" : {
+
+    },
     "Getting Started" : {
       "comment" : "Getting started onboarding"
     },
@@ -406,6 +425,12 @@
     "Hold gesture for longer" : {
       "comment" : "Description for long hold gesture duration"
     },
+    "Hold Progress" : {
+
+    },
+    "HOLD READY" : {
+
+    },
     "Import a vocabulary" : {
       "comment" : "Text on inport vocab button"
     },
@@ -446,7 +471,7 @@
       "comment" : "Display name for left dimple gesture"
     },
     "Left Eye Blink" : {
-      "comment" : "Default facial gesture switch name\nDisplay name for left eye blink gesture"
+      "comment" : "Display name for left eye blink gesture"
     },
     "Left Frown" : {
       "comment" : "Display name for left frown gesture"
@@ -531,9 +556,6 @@
     },
     "Mouth Left" : {
       "comment" : "Display name for mouth left gesture"
-    },
-    "Mouth Open" : {
-      "comment" : "Default facial gesture switch name"
     },
     "Mouth Pucker" : {
       "comment" : "Display name for mouth pucker gesture"
@@ -695,7 +717,7 @@
       "comment" : "Display name for right dimple gesture"
     },
     "Right Eye Blink" : {
-      "comment" : "Default facial gesture switch name\nDisplay name for right eye blink gesture"
+      "comment" : "Display name for right eye blink gesture"
     },
     "Right Frown" : {
       "comment" : "Display name for right frown gesture"
@@ -991,6 +1013,9 @@
     "Threshold: %@" : {
       "comment" : "Shows current threshold value"
     },
+    "Threshold: %lld%%" : {
+      "comment" : "Shows current threshold value"
+    },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"
     },
@@ -1038,6 +1063,9 @@
     },
     "Volume" : {
       "comment" : "Label for a slider that controls the volume of a voice"
+    },
+    "Waiting for gesture..." : {
+
     },
     "Welcome to **Echo**" : {
       "comment" : "Welcome message in onboarding"
