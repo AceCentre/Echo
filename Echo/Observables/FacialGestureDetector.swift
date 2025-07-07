@@ -194,33 +194,26 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             var updatedState = state
             
             if isGestureActive && !state.isActive {
-                // Gesture just started
+                // Gesture just started - record start time but don't trigger action yet
                 updatedState.isActive = true
                 updatedState.startTime = currentTime
-                
-                // Trigger tap action immediately
-                DispatchQueue.main.async {
-                    self.onGestureDetected?(gesture, false) // false = tap action
-                }
-                
+
             } else if !isGestureActive && state.isActive {
-                // Gesture just ended
+                // Gesture just ended - determine if it was tap or hold
                 updatedState.isActive = false
-                updatedState.startTime = nil
-                
-            } else if isGestureActive && state.isActive {
-                // Gesture is continuing - check for hold action
+
                 if let startTime = state.startTime {
-                    let duration = currentTime.timeIntervalSince(startTime)
-                    if duration >= state.holdDuration {
-                        // Trigger hold action and reset start time to prevent repeated triggers
-                        updatedState.startTime = currentTime
-                        
-                        DispatchQueue.main.async {
-                            self.onGestureDetected?(gesture, true) // true = hold action
-                        }
+                    let gestureDuration = currentTime.timeIntervalSince(startTime)
+                    let isHoldGesture = gestureDuration >= state.holdDuration
+
+                    // Trigger appropriate action based on duration
+                    DispatchQueue.main.async {
+                        self.onGestureDetected?(gesture, isHoldGesture)
                     }
                 }
+
+                updatedState.startTime = nil
+                
             }
             
             gestureStates[gesture] = updatedState

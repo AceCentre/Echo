@@ -131,6 +131,14 @@ struct FacialGestureSwitchSection: View {
                         .foregroundColor(.secondary)
                     }
                 }
+
+                // Explanatory text about tap/hold behavior
+                if holdAction != .none {
+                    Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .padding(.top, 4)
+                }
             }
         }
         .onChange(of: tapAction) { _, _ in
@@ -213,13 +221,21 @@ struct GesturePreviewSection: View {
                             .font(.caption2)
                         Spacer()
                         if isGestureDetected {
-                            if isHoldGesture {
-                                Text("🔶 HOLD")
-                                    .font(.caption2)
-                                    .foregroundColor(.orange)
-                                    .fontWeight(.bold)
+                            if let startTime = gestureStartTime {
+                                let currentDuration = Date().timeIntervalSince(startTime)
+                                if currentDuration >= holdDuration {
+                                    Text("HOLD READY")
+                                        .font(.caption2)
+                                        .foregroundColor(.orange)
+                                        .fontWeight(.bold)
+                                } else {
+                                    Text("BUILDING... \(String(format: "%.1f", currentDuration))s")
+                                        .font(.caption2)
+                                        .foregroundColor(.blue)
+                                        .fontWeight(.bold)
+                                }
                             } else {
-                                Text("✓ TAP")
+                                Text("DETECTED")
                                     .font(.caption2)
                                     .foregroundColor(.green)
                                     .fontWeight(.bold)
@@ -318,28 +334,32 @@ struct GesturePreviewSection: View {
         .onChange(of: isGestureDetected) { _, newValue in
             print("Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")
             if newValue && !lastDetectionState {
-                // Gesture started - record start time and play tap feedback
-                print("Playing TAP feedback")
+                // Gesture started - record start time but don't play feedback yet
+                print("Gesture started - waiting for release to determine tap/hold")
                 gestureStartTime = Date()
-                playDetectionFeedback(.tap)
-                lastFeedbackType = .tap
             } else if !newValue && lastDetectionState {
-                // Gesture ended - reset timing
-                print("Gesture ended")
+                // Gesture ended - determine if it was tap or hold and play appropriate feedback
+                if let startTime = gestureStartTime {
+                    let gestureDuration = Date().timeIntervalSince(startTime)
+                    let wasHoldGesture = gestureDuration >= holdDuration
+
+                    if wasHoldGesture {
+                        print("Playing HOLD feedback (duration: \(String(format: "%.1f", gestureDuration))s)")
+                        playDetectionFeedback(.hold)
+                        lastFeedbackType = .hold
+                    } else {
+                        print("Playing TAP feedback (duration: \(String(format: "%.1f", gestureDuration))s)")
+                        playDetectionFeedback(.tap)
+                        lastFeedbackType = .tap
+                    }
+                }
+
                 gestureStartTime = nil
                 lastFeedbackType = nil
             }
             lastDetectionState = newValue
         }
-        .onChange(of: isHoldGesture) { _, newValue in
-            print("Hold gesture changed: \(newValue), lastFeedback: \(String(describing: lastFeedbackType))")
-            if newValue && lastFeedbackType != .hold {
-                // Hold threshold reached - play hold feedback
-                print("Playing HOLD feedback")
-                playDetectionFeedback(.hold)
-                lastFeedbackType = .hold
-            }
-        }
+
     }
 
     private func startPreview() {
@@ -840,6 +860,14 @@ struct AddFacialGesture: View {
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                             }
+                        }
+
+                        // Explanatory text about tap/hold behavior
+                        if holdAction != .none {
+                            Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 4)
                         }
                     }
                 }, header: {
