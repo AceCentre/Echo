@@ -235,14 +235,17 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
             return min(leftBlink, rightBlink)
         case .eyeBlinkLeft, .eyeBlinkRight:
-            // Debug eye blink values to understand cross-triggering
-            let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
-            let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
+            // Debug eye blink values - note that coordinates are now corrected for user perspective
+            let leftBlinkCamera = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0  // Camera's left
+            let rightBlinkCamera = blendShapes[.eyeBlinkRight]?.floatValue ?? 0  // Camera's right
             let targetValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
 
             // Only log when there's significant activity
-            if leftBlink > 0.1 || rightBlink > 0.1 {
-                print("👁️ Eye values - Left: \(String(format: "%.3f", leftBlink)), Right: \(String(format: "%.3f", rightBlink)), Target(\(gesture.displayName)): \(String(format: "%.3f", targetValue))")
+            if leftBlinkCamera > 0.1 || rightBlinkCamera > 0.1 {
+                // Show from user's perspective (corrected)
+                let userLeftBlink = rightBlinkCamera  // User's left = camera's right
+                let userRightBlink = leftBlinkCamera  // User's right = camera's left
+                print("Eye values (user perspective) - Left: \(String(format: "%.3f", userLeftBlink)), Right: \(String(format: "%.3f", userRightBlink)), Target(\(gesture.displayName)): \(String(format: "%.3f", targetValue))")
             }
 
             return targetValue

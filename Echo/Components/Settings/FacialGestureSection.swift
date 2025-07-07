@@ -313,29 +313,29 @@ struct GesturePreviewSection: View {
             stopPreview()
         }
         .onChange(of: gestureValue) { _, newValue in
-            print("🔊 Gesture value changed: \(newValue), threshold: \(threshold)")
+            print("Gesture value changed: \(newValue), threshold: \(threshold)")
         }
         .onChange(of: isGestureDetected) { _, newValue in
-            print("🔊 Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")
+            print("Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")
             if newValue && !lastDetectionState {
                 // Gesture started - record start time and play tap feedback
-                print("🔊 Playing TAP feedback")
+                print("Playing TAP feedback")
                 gestureStartTime = Date()
                 playDetectionFeedback(.tap)
                 lastFeedbackType = .tap
             } else if !newValue && lastDetectionState {
                 // Gesture ended - reset timing
-                print("🔊 Gesture ended")
+                print("Gesture ended")
                 gestureStartTime = nil
                 lastFeedbackType = nil
             }
             lastDetectionState = newValue
         }
         .onChange(of: isHoldGesture) { _, newValue in
-            print("🔊 Hold gesture changed: \(newValue), lastFeedback: \(String(describing: lastFeedbackType))")
+            print("Hold gesture changed: \(newValue), lastFeedback: \(String(describing: lastFeedbackType))")
             if newValue && lastFeedbackType != .hold {
                 // Hold threshold reached - play hold feedback
-                print("🔊 Playing HOLD feedback")
+                print("Playing HOLD feedback")
                 playDetectionFeedback(.hold)
                 lastFeedbackType = .hold
             }
@@ -343,27 +343,27 @@ struct GesturePreviewSection: View {
     }
 
     private func startPreview() {
-        print("🔊 Starting preview for gesture: \(gesture.displayName)")
-        print("🔊 Detector supported: \(detector.isSupported)")
+        print("Starting preview for gesture: \(gesture.displayName)")
+        print("Detector supported: \(detector.isSupported)")
         detector.startPreviewMode(for: [gesture])
         isActive = true
-        print("🔊 Preview started, isActive: \(isActive)")
+        print("Preview started, isActive: \(isActive)")
     }
 
     private func stopPreview() {
-        print("🔊 Stopping preview")
+        print("Stopping preview")
         detector.stopPreviewMode()
         isActive = false
-        print("🔊 Preview stopped, isActive: \(isActive)")
+        print("Preview stopped, isActive: \(isActive)")
     }
 
     private func playDetectionFeedback(_ type: GestureFeedbackType) {
-        print("🔊 playDetectionFeedback called with type: \(type)")
+        print("playDetectionFeedback called with type: \(type)")
 
         switch type {
         case .tap:
             // Tap gesture: Use keyboard click sound + light haptic
-            print("🔊 Playing tap sound (1104 - keyboard click) and light haptic")
+            print("Playing tap sound (1104 - keyboard click) and light haptic")
             AudioServicesPlaySystemSound(1104) // Keyboard click
 
             // Also try the peek sound as backup
@@ -375,7 +375,7 @@ struct GesturePreviewSection: View {
 
         case .hold:
             // Hold gesture: Use pop sound + stronger haptic
-            print("🔊 Playing hold sound (1520 - pop) and heavy haptic")
+            print("Playing hold sound (1520 - pop) and heavy haptic")
             AudioServicesPlaySystemSound(1520) // Pop sound
 
             let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
@@ -383,7 +383,7 @@ struct GesturePreviewSection: View {
             impactFeedback.impactOccurred()
         }
 
-        print("🔊 Feedback completed - Check: Silent switch off? System sounds enabled?")
+        print("Feedback completed - Check: Silent switch off? System sounds enabled?")
     }
 }
 
@@ -465,24 +465,15 @@ struct FacialGestureSection: View {
                               !isSheetPresenting &&
                               now.timeIntervalSince(lastTapTime) > 0.5 &&
                               isDatabaseReady else {
-                            print("🐛 Button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
+                            print("Button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
                             return
                         }
 
-                        print("🐛 Opening sheet for gesture: \(gestureSwitch.name)")
+                        print("Opening sheet for gesture: \(gestureSwitch.name)")
                         lastTapTime = now
                         isSheetPresenting = true
                         currentGestureSwitch = gestureSwitch
-
-                        // Small delay to ensure state is stable and prevent double-setting
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            guard !showAddGestureSheet else {
-                                print("🐛 Sheet already showing, skipping")
-                                return
-                            }
-                            print("🐛 Setting showAddGestureSheet to true")
-                            showAddGestureSheet = true
-                        }
+                        showAddGestureSheet = true
                     }, label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
@@ -516,24 +507,15 @@ struct FacialGestureSection: View {
                     guard !showAddGestureSheet &&
                           !isSheetPresenting &&
                           now.timeIntervalSince(lastTapTime) > 0.5 else {
-                        print("🐛 Add button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting)")
+                        print("Add button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting)")
                         return
                     }
 
-                    print("🐛 Opening add gesture sheet")
+                    print("Opening add gesture sheet")
                     lastTapTime = now
                     isSheetPresenting = true
                     currentGestureSwitch = nil
-
-                    // Small delay to ensure state is stable and prevent double-setting
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        guard !showAddGestureSheet else {
-                            print("🐛 Add sheet already showing, skipping")
-                            return
-                        }
-                        print("🐛 Setting showAddGestureSheet to true for add")
-                        showAddGestureSheet = true
-                    }
+                    showAddGestureSheet = true
                 }, label: {
                     Label(
                         String(
@@ -578,42 +560,23 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        .sheet(isPresented: Binding(
-            get: { showAddGestureSheet },
-            set: { newValue in
-                print("🐛 Sheet binding set to: \(newValue)")
-                if !newValue && showAddGestureSheet {
-                    // Only update if actually changing from true to false
-                    showAddGestureSheet = false
-                    currentGestureSwitch = nil
-                    isSheetPresenting = false
-                    print("🐛 Sheet dismissed via binding, state reset")
-                }
-            }
-        ), onDismiss: {
-            // Additional safety reset
-            print("🐛 Sheet onDismiss called")
-            DispatchQueue.main.async {
-                currentGestureSwitch = nil
-                isSheetPresenting = false
-                showAddGestureSheet = false
-            }
+        .sheet(isPresented: $showAddGestureSheet, onDismiss: {
+            // Reset all state when sheet is dismissed
+            print("Sheet dismissed, resetting state")
+            currentGestureSwitch = nil
+            isSheetPresenting = false
         }) {
-            if let gestureSwitch = currentGestureSwitch {
-                AddFacialGestureSheet(currentGestureSwitch: .constant(gestureSwitch))
-            } else {
-                AddFacialGestureSheet(currentGestureSwitch: .constant(nil))
-            }
+            AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
         }
         .onAppear {
             // Give database time to fully initialize
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isDatabaseReady = true
-                print("🐛 Database marked as ready")
+                print("Database marked as ready")
             }
         }
         .onChange(of: showAddGestureSheet) { _, newValue in
-            print("🐛 showAddGestureSheet changed to: \(newValue)")
+            print("showAddGestureSheet changed to: \(newValue)")
             if !newValue {
                 // Sheet was dismissed, reset presenting state
                 isSheetPresenting = false
