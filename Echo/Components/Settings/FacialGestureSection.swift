@@ -2,7 +2,7 @@
 //  FacialGestureSection.swift
 //  Echo
 //
-//  Created by Augment Agent on 04/07/2025.
+//  Created by Will Wade on 04/07/2025.
 //
 
 import Foundation
@@ -166,8 +166,8 @@ struct GesturePreviewSection: View {
     let holdDuration: Double
     let tapAction: SwitchAction
     let holdAction: SwitchAction
+    @ObservedObject var detector: FacialGestureDetector
 
-    @StateObject private var detector = FacialGestureDetector()
     @State private var isActive = false
     @State private var lastDetectionState = false
     @State private var gestureStartTime: Date?
@@ -178,7 +178,11 @@ struct GesturePreviewSection: View {
     }
 
     var gestureValue: Float {
-        detector.previewGestureValues[gesture] ?? 0.0
+        let value = detector.previewGestureValues[gesture] ?? 0.0
+        if value > 0.1 { // Only log significant values to avoid spam
+            print("UI gestureValue for \(gesture.displayName): \(value)")
+        }
+        return value
     }
 
     var isGestureDetected: Bool {
@@ -198,7 +202,6 @@ struct GesturePreviewSection: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Test Gesture")
-                    .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
                 Button(action: {
@@ -209,7 +212,6 @@ struct GesturePreviewSection: View {
                     }
                 }) {
                     Text(isActive ? "Stop" : "Start")
-                        .font(.caption)
                         .foregroundColor(isActive ? .red : .blue)
                 }
             }
@@ -365,9 +367,15 @@ struct GesturePreviewSection: View {
     private func startPreview() {
         print("Starting preview for gesture: \(gesture.displayName)")
         print("Detector supported: \(detector.isSupported)")
+        print("Camera permission status: \(detector.cameraPermissionStatus)")
+        print("Detector isActive before: \(detector.isActive)")
+        print("Detector isPreviewMode before: \(detector.isPreviewMode)")
         detector.startPreviewMode(for: [gesture])
         isActive = true
         print("Preview started, isActive: \(isActive)")
+        print("Detector isActive after: \(detector.isActive)")
+        print("Detector isPreviewMode after: \(detector.isPreviewMode)")
+        print("Detector error message: \(detector.errorMessage ?? "none")")
     }
 
     private func stopPreview() {
@@ -412,15 +420,16 @@ struct FacialGestureSection: View {
     @Environment(Settings.self) var settings: Settings
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
-    @State private var currentGestureSwitch: FacialGestureSwitch?
-    @State private var showAddGestureSheet = false
+    @Binding var showAddGestureSheet: Bool
+    @Binding var currentGestureSwitch: FacialGestureSwitch?
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
-    @State private var lastTapTime: Date = Date()
-    @State private var isDatabaseReady = false
-    @State private var isSheetPresenting = false
-    @StateObject private var gestureDetector = FacialGestureDetector()
+    @State private var gestureDetector = FacialGestureDetector()
+    @State private var refreshTrigger = false
     
     var body: some View {
+        // Hidden view to trigger refresh when refreshTrigger changes
+        let _ = refreshTrigger // This forces the view to re-evaluate when refreshTrigger changes
+
         Section(content: {
             if !isSupported {
                 VStack(alignment: .leading, spacing: 8) {
@@ -472,87 +481,55 @@ struct FacialGestureSection: View {
                     }
                 }
             } else {
-                ForEach(facialGestureSwitches.filter { gestureSwitch in
-                    // Only show switches that are fully initialized and committed to database
-                    return gestureSwitch.gesture != nil &&
-                           !gestureSwitch.name.isEmpty &&
-                           !gestureSwitch.isDeleted
-                }, id: \.gestureRaw) { gestureSwitch in
-                    Button(action: {
-                        // Prevent multiple presentations and rapid tapping
-                        let now = Date()
-                        guard !showAddGestureSheet &&
-                              !isSheetPresenting &&
-                              now.timeIntervalSince(lastTapTime) > 0.5 &&
-                              isDatabaseReady else {
-                            print("Button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting), timeSince: \(now.timeIntervalSince(lastTapTime)), dbReady: \(isDatabaseReady)")
-                            return
-                        }
+                let visibleGestureSwitches = getVisibleGestureSwitches()
 
-                        print("Opening sheet for gesture: \(gestureSwitch.name)")
-                        lastTapTime = now
-                        isSheetPresenting = true
-                        currentGestureSwitch = gestureSwitch
-                        showAddGestureSheet = true
-                    }, label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
-                                    .foregroundColor(.primary)
+                if !visibleGestureSwitches.isEmpty {
+                    ForEach(visibleGestureSwitches, id: \.persistentModelID) { gestureSwitch in
+                        Button(action: {
+                            currentGestureSwitch = gestureSwitch
+                            showAddGestureSheet = true
+                        }, label: {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
+                                        .foregroundColor(.primary)
 
-                                if let gesture = gestureSwitch.gesture {
-                                    let description = gesture.description
-                                    Text(description.isEmpty ? gesture.rawValue : description)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
+                                    if let gesture = gestureSwitch.gesture {
+                                        let description = gesture.description
+                                        Text(description.isEmpty ? gesture.rawValue : description)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
                                 }
+
+                                Spacer()
+
+                                // Status indicator
+                                Circle()
+                                    .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
+                                    .frame(width: 8, height: 8)
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.gray)
                             }
-
-                            Spacer()
-
-                            // Status indicator
-                            Circle()
-                                .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
-                                .frame(width: 8, height: 8)
-
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.gray)
-                        }
-                    })
-                }
-                
-                Button(action: {
-                    // Prevent multiple presentations and rapid tapping
-                    let now = Date()
-                    guard !showAddGestureSheet &&
-                          !isSheetPresenting &&
-                          now.timeIntervalSince(lastTapTime) > 0.5 else {
-                        print("Add button tap blocked - showSheet: \(showAddGestureSheet), presenting: \(isSheetPresenting)")
-                        return
+                        })
                     }
+                }
 
-                    print("Opening add gesture sheet")
-                    lastTapTime = now
-                    isSheetPresenting = true
+                Button(action: {
                     currentGestureSwitch = nil
                     showAddGestureSheet = true
-                }, label: {
-                    Label(
-                        String(
-                            localized: "Add Facial Gesture",
-                            comment: "Button label to add a new facial gesture switch"
-                        ),
-                        systemImage: "plus.circle.fill"
-                    )
-                })
-
-
-
-
-
-
-
-
+                }) {
+                    HStack {
+                        Label(
+                            String(
+                                localized: "Add Facial Gesture",
+                                comment: "Button label to add a new facial gesture switch"
+                            ),
+                            systemImage: "plus.circle.fill"
+                        )                    }
+                }
+                
             }
         }, header: {
             Text("Facial Gestures", comment: "Header for facial gesture settings area")
@@ -580,57 +557,121 @@ struct FacialGestureSection: View {
                 }
             }
         })
-        .sheet(isPresented: $showAddGestureSheet, onDismiss: {
-            // Reset all state when sheet is dismissed
-            print("Sheet dismissed, resetting state")
-            currentGestureSwitch = nil
-            isSheetPresenting = false
-        }) {
-            AddFacialGestureSheet(currentGestureSwitch: $currentGestureSwitch)
-        }
         .onAppear {
-            // Give database time to fully initialize
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isDatabaseReady = true
-                print("Database marked as ready")
-            }
+            print("Database marked as ready")
+            cleanupDuplicateGestures()
+            fixEmptyGestureNames()
         }
         .onChange(of: showAddGestureSheet) { _, newValue in
             print("showAddGestureSheet changed to: \(newValue)")
             if !newValue {
-                // Sheet was dismissed, reset presenting state
-                isSheetPresenting = false
+                // Sheet was dismissed, trigger a refresh
+                print("DEBUG: Sheet dismissed, triggering refresh")
+                refreshTrigger.toggle()
+
+                // Force a small delay to ensure the model context has been updated
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    print("DEBUG: After sheet dismiss delay - facialGestureSwitches.count: \(facialGestureSwitches.count)")
+                }
             }
         }
     }
-    
 
-}
+    private func cleanupDuplicateGestures() {
+        print("Cleaning up duplicate gestures...")
 
-struct AddFacialGestureSheet: View {
-    @Binding var currentGestureSwitch: FacialGestureSwitch?
-    @Environment(\.dismiss) var dismiss
+        // Group gestures by their gesture type
+        var gestureGroups: [String: [FacialGestureSwitch]] = [:]
+        for gestureSwitch in facialGestureSwitches {
+            let gestureKey = gestureSwitch.gestureRaw
+            if gestureGroups[gestureKey] == nil {
+                gestureGroups[gestureKey] = []
+            }
+            gestureGroups[gestureKey]?.append(gestureSwitch)
+        }
 
-    var body: some View {
-        NavigationStack {
-            if let gestureSwitch = currentGestureSwitch {
-                AddFacialGesture(currentGestureSwitch: .constant(gestureSwitch))
-            } else {
-                AddFacialGesture(currentGestureSwitch: $currentGestureSwitch)
+        // Remove duplicates (keep only the first one of each type)
+        var removedCount = 0
+        for (gestureType, switches) in gestureGroups {
+            if switches.count > 1 {
+                print("Found \(switches.count) duplicates of \(gestureType), removing \(switches.count - 1)")
+                // Keep the first one, remove the rest
+                for i in 1..<switches.count {
+                    modelContext.delete(switches[i])
+                    removedCount += 1
+                }
             }
         }
+
+        if removedCount > 0 {
+            do {
+                try modelContext.save()
+                print("Removed \(removedCount) duplicate gestures")
+            } catch {
+                print("Failed to remove duplicate gestures: \(error)")
+            }
+        } else {
+            print("No duplicate gestures found")
+        }
     }
+
+    private func getVisibleGestureSwitches() -> [FacialGestureSwitch] {
+        // Debug: Print all facial gesture switches from query
+        print("DEBUG: Total facialGestureSwitches from @Query: \(facialGestureSwitches.count)")
+        for (index, gestureSwitch) in facialGestureSwitches.enumerated() {
+            print("DEBUG: Switch \(index): name='\(gestureSwitch.name)', gestureRaw='\(gestureSwitch.gestureRaw)', gesture=\(gestureSwitch.gesture?.displayName ?? "nil")")
+        }
+
+        let visibleGestureSwitches = facialGestureSwitches.filter { gestureSwitch in
+            // Only show switches that are fully initialized and committed to database
+            let hasGesture = gestureSwitch.gesture != nil
+            let hasName = !gestureSwitch.name.isEmpty
+            print("DEBUG: Filtering switch '\(gestureSwitch.name)': hasGesture=\(hasGesture), hasName=\(hasName)")
+            return hasGesture && hasName
+        }
+
+        print("DEBUG: Visible switches after filtering: \(visibleGestureSwitches.count)")
+        return visibleGestureSwitches
+    }
+
+    private func fixEmptyGestureNames() {
+        print("Fixing empty gesture names...")
+
+        var fixedCount = 0
+        for gestureSwitch in facialGestureSwitches {
+            if gestureSwitch.name.isEmpty, let gesture = gestureSwitch.gesture {
+                print("Fixing empty name for gesture: \(gesture.rawValue) -> \(gesture.displayName)")
+                gestureSwitch.name = gesture.displayName
+                fixedCount += 1
+            }
+        }
+
+        if fixedCount > 0 {
+            do {
+                try modelContext.save()
+                print("Fixed \(fixedCount) gestures with empty names")
+            } catch {
+                print("Failed to fix empty gesture names: \(error)")
+            }
+        } else {
+            print("No gestures with empty names found")
+        }
+    }
+
 }
+
+
 
 struct AddFacialGesture: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @Binding var currentGestureSwitch: FacialGestureSwitch?
+    let gestureDetector: FacialGestureDetector
     @State private var deleteAlert: Bool = false
 
     @Environment(\.modelContext) var modelContext
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
-    @State private var selectedGesture: FacialGesture = .eyeBlinkLeft
+    @State private var selectedGesture: FacialGesture = .eyeBlinkRight
     @State private var gestureName: String = ""
     @State private var tapAction: SwitchAction = .nextNode
     @State private var holdAction: SwitchAction = .none
@@ -639,7 +680,8 @@ struct AddFacialGesture: View {
     @State private var isEnabled: Bool = false
 
     var body: some View {
-        Form {
+        NavigationStack {
+            Form {
             if let unwrappedGestureSwitch = currentGestureSwitch {
                 @Bindable var bindableGestureSwitch = unwrappedGestureSwitch
 
@@ -652,27 +694,30 @@ struct AddFacialGesture: View {
                         text: $bindableGestureSwitch.name
                     )
 
-                    Picker(
-                        String(
-                            localized: "Facial Gesture",
-                            comment: "Label for gesture type picker"
-                        ),
-                        selection: Binding(
-                            get: { bindableGestureSwitch.gesture ?? .eyeBlinkLeft },
-                            set: { bindableGestureSwitch.gesture = $0 }
+                    NavigationLink(destination: {
+                        AnatomicalFacialGesturePicker(
+                            selectedGesture: Binding(
+                                get: { bindableGestureSwitch.gesture ?? .eyeBlinkLeft },
+                                set: { bindableGestureSwitch.gesture = $0 }
+                            )
                         )
-                    ) {
-                        ForEach(FacialGesture.allCases) { gesture in
-                            VStack(alignment: .leading) {
-                                Text(gesture.displayName)
-                                Text(gesture.description)
+                    }) {
+                        HStack {
+                            Text(String(
+                                localized: "Facial Gesture",
+                                comment: "Label for gesture type picker"
+                            ))
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text((bindableGestureSwitch.gesture ?? .eyeBlinkLeft).displayName)
+                                    .foregroundColor(.secondary)
+                                Text((bindableGestureSwitch.gesture ?? .eyeBlinkLeft).description)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.trailing)
                             }
-                            .tag(gesture)
                         }
                     }
-                    .pickerStyle(.navigationLink)
 
                 }, header: {
                     Text("Gesture Configuration", comment: "Header for gesture configuration section")
@@ -692,7 +737,8 @@ struct AddFacialGesture: View {
                             threshold: unwrappedGestureSwitch.threshold,
                             holdDuration: unwrappedGestureSwitch.holdDuration,
                             tapAction: unwrappedGestureSwitch.tapAction,
-                            holdAction: unwrappedGestureSwitch.holdAction
+                            holdAction: unwrappedGestureSwitch.holdAction,
+                            detector: gestureDetector
                         )
                     }, header: {
                         Text("Preview", comment: "Header for gesture preview section")
@@ -739,24 +785,25 @@ struct AddFacialGesture: View {
                         text: $gestureName
                     )
 
-                    Picker(
-                        String(
-                            localized: "Facial Gesture",
-                            comment: "Label for gesture type picker"
-                        ),
-                        selection: $selectedGesture
-                    ) {
-                        ForEach(FacialGesture.allCases) { gesture in
-                            VStack(alignment: .leading) {
-                                Text(gesture.displayName)
-                                Text(gesture.description)
+                    NavigationLink(destination: {
+                        AnatomicalFacialGesturePicker(selectedGesture: $selectedGesture)
+                    }) {
+                        HStack {
+                            Text(String(
+                                localized: "Facial Gesture",
+                                comment: "Label for gesture type picker"
+                            ))
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text(selectedGesture.displayName)
+                                    .foregroundColor(.secondary)
+                                Text(selectedGesture.description)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.trailing)
                             }
-                            .tag(gesture)
                         }
                     }
-                    .pickerStyle(.navigationLink)
 
                 }, header: {
                     Text("New Gesture", comment: "Header for new gesture section")
@@ -871,7 +918,8 @@ struct AddFacialGesture: View {
                             threshold: threshold,
                             holdDuration: holdDuration,
                             tapAction: tapAction,
-                            holdAction: holdAction
+                            holdAction: holdAction,
+                            detector: gestureDetector
                         )
                     }, header: {
                         Text("Preview", comment: "Header for gesture preview section")
@@ -904,6 +952,17 @@ struct AddFacialGesture: View {
             if currentGestureSwitch == nil {
                 // Set default name for new gesture
                 gestureName = selectedGesture.displayName
+            } else {
+                // Initialize state variables with existing gesture values
+                if let existingGesture = currentGestureSwitch {
+                    gestureName = existingGesture.name
+                    selectedGesture = existingGesture.gesture ?? .eyeBlinkRight
+                    tapAction = existingGesture.tapAction
+                    holdAction = existingGesture.holdAction
+                    threshold = existingGesture.threshold
+                    holdDuration = existingGesture.holdDuration
+                    isEnabled = existingGesture.isEnabled
+                }
             }
         }
         .onChange(of: selectedGesture) { _, newGesture in
@@ -911,17 +970,27 @@ struct AddFacialGesture: View {
                 gestureName = newGesture.displayName
             }
         }
+        }
     }
 
     private func saveGesture() {
-        // Check for duplicate gestures (only for new gestures)
         if currentGestureSwitch == nil {
+            // Check for duplicate gestures (only for new gestures)
+            print("Checking for duplicates of: \(selectedGesture.rawValue)")
+            print("Existing gestures:")
+            for existingSwitch in facialGestureSwitches {
+                print("  - \(existingSwitch.gestureRaw) (\(existingSwitch.gesture?.displayName ?? "nil"))")
+            }
+
             let existingGesture = facialGestureSwitches.first { $0.gesture == selectedGesture }
             if existingGesture != nil {
-                print("Cannot create duplicate gesture: \(selectedGesture.displayName)")
+                print("DUPLICATE FOUND: Cannot create duplicate gesture: \(selectedGesture.displayName)")
+                print("Existing gesture: \(existingGesture?.gestureRaw ?? "unknown")")
                 // TODO: Show user-facing error alert
                 return
             }
+
+            print("No duplicate found, proceeding with creation")
 
             // Create new gesture switch with all configured settings
             let newGestureSwitch = FacialGestureSwitch(
@@ -944,13 +1013,28 @@ struct AddFacialGesture: View {
                 currentGestureSwitch.tapAction = tapAction
                 currentGestureSwitch.holdAction = holdAction
                 currentGestureSwitch.holdDuration = holdDuration
+                currentGestureSwitch.isEnabled = isEnabled
             }
         }
 
         do {
             try modelContext.save()
+            print("Successfully saved gesture: \(selectedGesture.displayName)")
+
+            // Debug: Check what's in the query immediately after save
+            print("DEBUG: Immediately after save - facialGestureSwitches.count: \(facialGestureSwitches.count)")
+            for gestureSwitch in facialGestureSwitches {
+                print("DEBUG: Post-save switch: \(gestureSwitch.name) - \(gestureSwitch.gestureRaw)")
+            }
+
+            // Force a small delay to ensure UI updates properly
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                // This helps ensure the UI refreshes after the save
+                print("DEBUG: After delay - facialGestureSwitches.count: \(facialGestureSwitches.count)")
+            }
         } catch {
             print("Failed to save facial gesture switch: \(error)")
+            print("Error details: \(error.localizedDescription)")
         }
     }
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27D0C5FB2E1C804D002C5DFF /* AnatomicalFacialGesturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D0C5FA2E1C804D002C5DFF /* AnatomicalFacialGesturePicker.swift */; };
+		27D0C5FE2E1D1016002C5DFF /* AutoSelectFacialGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D0C5FD2E1D1016002C5DFF /* AutoSelectFacialGestureView.swift */; };
+		27D0C5FF2E1D1016002C5DFF /* ARCameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D0C5FC2E1D1016002C5DFF /* ARCameraPreviewView.swift */; };
 		3F586C5A2C70D09700B8107B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F586C592C70D09700B8107B /* Theme.swift */; };
 		3FF2365E2C6E99AA00810250 /* AppearanceOptionsArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */; };
 		3FF236602C6E9AFF00810250 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2365F2C6E9AFF00810250 /* Color.swift */; };
@@ -96,6 +99,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27D0C5FA2E1C804D002C5DFF /* AnatomicalFacialGesturePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnatomicalFacialGesturePicker.swift; sourceTree = "<group>"; };
+		27D0C5FC2E1D1016002C5DFF /* ARCameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraPreviewView.swift; sourceTree = "<group>"; };
+		27D0C5FD2E1D1016002C5DFF /* AutoSelectFacialGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSelectFacialGestureView.swift; sourceTree = "<group>"; };
 		3F586C592C70D09700B8107B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		3FF2365D2C6E99AA00810250 /* AppearanceOptionsArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceOptionsArea.swift; sourceTree = "<group>"; };
 		3FF2365F2C6E9AFF00810250 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -382,6 +388,9 @@
 		D5A775D82C2B18CD004DA914 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				27D0C5FC2E1D1016002C5DFF /* ARCameraPreviewView.swift */,
+				27D0C5FD2E1D1016002C5DFF /* AutoSelectFacialGestureView.swift */,
+				27D0C5FA2E1C804D002C5DFF /* AnatomicalFacialGesturePicker.swift */,
 				DD1025242E180D8D00C42EF9 /* FacialGestureSection.swift */,
 				D5A775D62C2B18C3004DA914 /* VoiceSelectionArea.swift */,
 				D5A775D92C2B2030004DA914 /* ExternalLinksSection.swift */,
@@ -528,6 +537,7 @@
 				D5A775D12C1324AB004DA914 /* MainCommunicationPage.swift in Sources */,
 				D5A775EB2C2DAAF4004DA914 /* SpellingOptionsArea.swift in Sources */,
 				D5A775B92C08C692004DA914 /* ControlCommandDisplayOptions.swift in Sources */,
+				27D0C5FB2E1C804D002C5DFF /* AnatomicalFacialGesturePicker.swift in Sources */,
 				D5A775D72C2B18C3004DA914 /* VoiceSelectionArea.swift in Sources */,
 				D5A775D32C136264004DA914 /* SettingsPage.swift in Sources */,
 				D581E9172C3BFC2800F9EDE8 /* MessageBar.swift in Sources */,
@@ -552,6 +562,8 @@
 				D5A775DE2C2C0FBD004DA914 /* SwitchControlSection.swift in Sources */,
 				D577B3A42C009AAA00F064F2 /* ButtonStyles.swift in Sources */,
 				D577B38F2BFF9A2800F064F2 /* EchoApp.swift in Sources */,
+				27D0C5FE2E1D1016002C5DFF /* AutoSelectFacialGestureView.swift in Sources */,
+				27D0C5FF2E1D1016002C5DFF /* ARCameraPreviewView.swift in Sources */,
 				D581E90A2C38302700F9EDE8 /* Spelling.swift in Sources */,
 				D581A7472C3FF39600E5C626 /* EditPage.swift in Sources */,
 				D581A7402C3ED20A00E5C626 /* Vocabulary.swift in Sources */,

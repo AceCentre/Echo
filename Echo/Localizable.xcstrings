@@ -29,6 +29,9 @@
     "%lld" : {
 
     },
+    "%lld%%" : {
+
+    },
     "0.5s" : {
 
     },
@@ -125,6 +128,18 @@
     "Audio Settings" : {
       "comment" : "The navigation title for the Audio options page"
     },
+    "Auto Select Facial Gesture" : {
+
+    },
+    "Auto Select Gesture" : {
+
+    },
+    "Auto-detection requires a device with Face ID capability (iPhone X or later, iPad Pro with TrueDepth camera). Use manual selection below." : {
+      "comment" : "Footer explaining auto-detection unavailable"
+    },
+    "Automatic Detection" : {
+      "comment" : "Header for auto-detection section"
+    },
     "Back" : {
       "comment" : "Label for action that happens on a keypress\nThe button text for the navigation back button"
     },
@@ -148,6 +163,9 @@
     },
     "Blink your right eye" : {
       "comment" : "Description for right eye blink gesture"
+    },
+    "Blinking and eye movements" : {
+      "comment" : "Description for eye gesture category"
     },
     "Bold Highlight Text" : {
 
@@ -178,6 +196,15 @@
     },
     "Cheek Puff" : {
       "comment" : "Display name for cheek puff gesture"
+    },
+    "Cheek puffs and squints" : {
+      "comment" : "Description for cheek gesture category"
+    },
+    "Cheeks" : {
+      "comment" : "Category name for cheek gestures"
+    },
+    "Choose a facial area to see available gestures for that region" : {
+      "comment" : "Footer explaining anatomical gesture selection"
     },
     "Clear" : {
       "comment" : "Label for action that happens on a keypress"
@@ -266,6 +293,9 @@
     "DETECTED" : {
 
     },
+    "Detected Gestures:" : {
+
+    },
     "Directional Audio" : {
       "comment" : "Label for directional audio toggle"
     },
@@ -320,6 +350,9 @@
     "English" : {
       "comment" : "The label for the English language when setting prediction language"
     },
+    "Error" : {
+
+    },
     "Every Character Speaks Volumes" : {
       "comment" : "Explain what Echo is"
     },
@@ -331,6 +364,15 @@
     },
     "External switches can be a bluetooth or wired device such as a keyboard, controller or switch" : {
       "comment" : "Explains what an external switch is"
+    },
+    "Eyebrow raises and movements" : {
+      "comment" : "Description for eyebrow gesture category"
+    },
+    "Eyebrows" : {
+      "comment" : "Category name for eyebrow gestures"
+    },
+    "Eyes" : {
+      "comment" : "Category name for eye gestures"
     },
     "Face tracking is not supported on this device" : {
       "comment" : "Error message for unsupported device"
@@ -434,11 +476,17 @@
     "Inner Brow Up" : {
       "comment" : "Display name for inner brow up gesture"
     },
+    "Jaw" : {
+      "comment" : "Category name for jaw gestures"
+    },
     "Jaw Forward" : {
       "comment" : "Display name for jaw forward gesture"
     },
     "Jaw Left" : {
       "comment" : "Display name for jaw left gesture"
+    },
+    "Jaw movements and mouth opening" : {
+      "comment" : "Description for jaw gesture category"
     },
     "Jaw Open" : {
       "comment" : "Display name for jaw open gesture"
@@ -494,6 +542,9 @@
     "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
       "comment" : "A description of how detecting switches works and how to reset it"
     },
+    "Let the camera detect your gesture automatically" : {
+
+    },
     "Lets setup **Echo**. You can change your settings at any time." : {
       "comment" : "Explain of Echo onboarding process"
     },
@@ -505,6 +556,9 @@
     },
     "Lift the right side of your upper lip" : {
       "comment" : "Description for right upper lip up gesture"
+    },
+    "Lip movements, smiles, and expressions" : {
+      "comment" : "Description for mouth gesture category"
     },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
@@ -541,6 +595,9 @@
     },
     "Message Bar Font Size" : {
       "comment" : "Label for stepper for font size"
+    },
+    "Mouth" : {
+      "comment" : "Category name for mouth gestures"
     },
     "Mouth Close" : {
       "comment" : "Display name for mouth close gesture"
@@ -590,8 +647,20 @@
     "None" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Nose" : {
+      "comment" : "Category name for nose gestures"
+    },
+    "Nose movements and sneers" : {
+      "comment" : "Description for nose gesture category"
+    },
+    "Not supported" : {
+
+    },
     "Note, if there are children to this node they will be lost if you make it a spelling branch" : {
       "comment" : "Footer for spelling in node editing"
+    },
+    "OK" : {
+
     },
     "On Screen Arrows?" : {
       "comment" : "Getting started onboarding"
@@ -625,6 +694,9 @@
     },
     "Portuguese (Experimental)" : {
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Position your face in the camera, follow the countdown, then make your gesture. The app will automatically detect and select it." : {
+      "comment" : "Footer explaining auto-detection"
     },
     "Predict which words and letters come next and you enter each letter." : {
       "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
@@ -691,6 +763,9 @@
     },
     "Required" : {
       "comment" : "Prompt for required text input"
+    },
+    "Requires device with TrueDepth camera" : {
+
     },
     "Restarts to the top of the current list, scanning will resume if you have that enabled" : {
       "comment" : "Label for action that happens on a keypress"
@@ -785,6 +860,9 @@
     "Select a Voice" : {
 
     },
+    "Select Facial Gesture by Area" : {
+      "comment" : "Header for anatomical gesture selection"
+    },
     "Select Font" : {
 
     },
@@ -799,6 +877,9 @@
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Select the gesture you performed:" : {
+
     },
     "Select the vocabulary of phrases, words and letters to be used" : {
       "comment" : "Footer of vocabulary options"
@@ -1010,8 +1091,17 @@
     "Threshold: %lld%%" : {
       "comment" : "Shows current threshold value"
     },
+    "Tongue" : {
+      "comment" : "Category name for tongue gestures"
+    },
+    "Tongue movements" : {
+      "comment" : "Description for tongue gesture category"
+    },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"
+    },
+    "Try Again" : {
+
     },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"

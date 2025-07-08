@@ -2,7 +2,7 @@
 //  FacialGestureController.swift
 //  Echo
 //
-//  Created by Augment Agent on 04/07/2025.
+//  Created by Will Wade on 04/07/2025.
 //
 
 import SwiftUI
@@ -26,7 +26,7 @@ struct FacialGestureController: View {
 
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
-    @StateObject private var gestureDetector = FacialGestureDetector()
+    @State private var gestureDetector = FacialGestureDetector()
     @State private var isInitialized = false
     
     var body: some View {

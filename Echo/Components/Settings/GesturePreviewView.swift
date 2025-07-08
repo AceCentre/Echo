@@ -2,7 +2,7 @@
 //  GesturePreviewView.swift
 //  Echo
 //
-//  Created by Augment Agent on 04/07/2025.
+//  Created by Will Wade on 04/07/2025.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import ARKit
 struct GesturePreviewView: View {
     let gesture: FacialGesture
     let threshold: Float
-    @StateObject private var detector = FacialGestureDetector()
+    @State private var detector = FacialGestureDetector()
     @State private var isActive = false
     
     var gestureValue: Float {

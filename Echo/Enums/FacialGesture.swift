@@ -2,7 +2,7 @@
 //  FacialGesture.swift
 //  Echo
 //
-//  Created by Augment Agent on 04/07/2025.
+//  Created by Will Wade on 04/07/2025.
 //
 
 import Foundation

@@ -12,7 +12,11 @@ import SwiftData
 
 struct AccessOptionsArea: View {
     @Environment(Settings.self) var settings: Settings
-        
+
+    // Centralized sheet state management
+    @State private var showFacialGestureSheet = false
+    @State private var currentFacialGestureSwitch: FacialGestureSwitch?
+
     var body: some View {
         @Bindable var settingsBindable = settings
         Form {
@@ -53,7 +57,17 @@ struct AccessOptionsArea: View {
 
             SwitchControlSection()
             GameControllerSection()
-            FacialGestureSection()
+            FacialGestureSection(
+                showAddGestureSheet: $showFacialGestureSheet,
+                currentGestureSwitch: $currentFacialGestureSwitch
+            )
+
+            // Add some bottom spacing
+            Section {
+                EmptyView()
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
         }
         .navigationTitle(
             String(
@@ -61,5 +75,11 @@ struct AccessOptionsArea: View {
                 comment: "The navigation title for the access options page"
             )
         )
+        .sheet(isPresented: $showFacialGestureSheet, onDismiss: {
+            // Reset all state when sheet is dismissed
+            currentFacialGestureSwitch = nil
+        }) {
+            AddFacialGesture(currentGestureSwitch: $currentFacialGestureSwitch, gestureDetector: FacialGestureDetector())
+        }
     }
 }
