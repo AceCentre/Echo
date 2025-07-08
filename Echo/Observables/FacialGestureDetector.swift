@@ -36,6 +36,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private var lastUpdateTime: Date = Date()
     private var lastFaceAnchorTime: Date = Date()
     private var sessionHealthTimer: Timer?
+
+    // Gesture responsiveness monitoring
+    private var gestureValueHistory: [FacialGesture: [Float]] = [:]
+    private var lastGestureVarianceCheck: Date = Date()
+
+    // Preview corruption detection
+    private var lastPreviewUpdateTime: Date = Date()
+    private var previewCorruptionCheckTimer: Timer?
     
     private struct GestureState {
         var isActive: Bool = false
@@ -114,6 +122,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         sessionHealthTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
             self?.checkSessionHealth()
         }
+
+        // Start preview corruption monitoring if in preview mode
+        if isPreviewMode {
+            startPreviewCorruptionMonitoring()
+        }
     }
 
     private func checkSessionHealth() {
@@ -125,12 +138,75 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             DispatchQueue.main.async {
                 self.restartARSession()
             }
+            return
+        }
+
+        // Check for unresponsive gesture values (stuck at low levels)
+        checkGestureResponsiveness()
+    }
+
+    private func checkGestureResponsiveness() {
+        let currentTime = Date()
+        let timeSinceLastCheck = currentTime.timeIntervalSince(lastGestureVarianceCheck)
+
+        // Only check every 10 seconds to allow enough data to accumulate
+        guard timeSinceLastCheck >= 10.0 else { return }
+        lastGestureVarianceCheck = currentTime
+
+        // Check if we have enough history and if gesture values are stuck
+        for (gesture, history) in gestureValueHistory {
+            guard history.count >= 20 else { continue } // Need at least 20 samples
+
+            // Calculate variance to detect if values are stuck
+            let mean = history.reduce(0, +) / Float(history.count)
+            let variance = history.map { pow($0 - mean, 2) }.reduce(0, +) / Float(history.count)
+            let standardDeviation = sqrt(variance)
+
+            // If standard deviation is very low and mean is also low, values might be stuck
+            if standardDeviation < 0.02 && mean < 0.15 {
+                print("⚠️ Gesture \(gesture.displayName) appears unresponsive - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
+                DispatchQueue.main.async {
+                    self.restartARSession()
+                }
+                return
+            }
+        }
+    }
+
+    private func startPreviewCorruptionMonitoring() {
+        previewCorruptionCheckTimer?.invalidate()
+        lastPreviewUpdateTime = Date()
+
+        previewCorruptionCheckTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.checkPreviewCorruption()
+        }
+    }
+
+    private func checkPreviewCorruption() {
+        let timeSinceLastUpdate = Date().timeIntervalSince(lastPreviewUpdateTime)
+
+        // If we haven't updated preview values in 5 seconds while in preview mode, something is wrong
+        if timeSinceLastUpdate > 5.0 && isPreviewMode && isActive {
+            print("⚠️ Preview values haven't updated in \(timeSinceLastUpdate)s - restarting preview mode")
+
+            // Restart preview mode
+            let currentGestures = Array(previewGestures)
+            DispatchQueue.main.async {
+                self.stopPreviewMode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.startPreviewMode(for: currentGestures)
+                }
+            }
         }
     }
 
     private func restartARSession() {
         print("🔄 Restarting ARKit session...")
         session.pause()
+
+        // Clear gesture value history to start fresh
+        gestureValueHistory.removeAll()
+        lastGestureVarianceCheck = Date()
 
         // Small delay before restarting
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -205,6 +281,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     func stopPreviewMode() {
         sessionHealthTimer?.invalidate()
         sessionHealthTimer = nil
+        previewCorruptionCheckTimer?.invalidate()
+        previewCorruptionCheckTimer = nil
         isPreviewMode = false
         previewGestures.removeAll()
         previewGestureValues.removeAll()
@@ -335,8 +413,19 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             for gesture in previewGestures {
                 let gestureValue = getGestureValue(for: gesture, from: blendShapes)
                 print("Preview gesture \(gesture.displayName): value = \(gestureValue)")
+
+                // Track gesture values for responsiveness monitoring
+                trackGestureValue(gesture, value: gestureValue)
+
                 DispatchQueue.main.async {
-                    self.previewGestureValues[gesture] = gestureValue
+                    // Ensure we don't accidentally clear the value
+                    if gestureValue >= 0.0 {
+                        self.previewGestureValues[gesture] = gestureValue
+                        self.lastPreviewUpdateTime = Date()
+                        print("Updated previewGestureValues[\(gesture.displayName)] = \(gestureValue)")
+                    } else {
+                        print("⚠️ Skipping invalid gesture value: \(gestureValue) for \(gesture.displayName)")
+                    }
                 }
             }
             return
@@ -366,7 +455,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         for (gesture, state) in gestureStates {
             let gestureValue = getGestureValue(for: gesture, from: blendShapes)
             let isGestureActive = gestureValue >= state.threshold
-            
+
+            // Track gesture values for responsiveness monitoring
+            trackGestureValue(gesture, value: gestureValue)
+
             var updatedState = state
             
             if isGestureActive && !state.isActive {
@@ -395,7 +487,22 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             gestureStates[gesture] = updatedState
         }
     }
-    
+
+    private func trackGestureValue(_ gesture: FacialGesture, value: Float) {
+        // Initialize history array if needed
+        if gestureValueHistory[gesture] == nil {
+            gestureValueHistory[gesture] = []
+        }
+
+        // Add new value
+        gestureValueHistory[gesture]?.append(value)
+
+        // Keep only the last 30 values (about 1 second at 30 FPS)
+        if let count = gestureValueHistory[gesture]?.count, count > 30 {
+            gestureValueHistory[gesture]?.removeFirst()
+        }
+    }
+
     private func getGestureValue(for gesture: FacialGesture, from blendShapes: [ARFaceAnchor.BlendShapeLocation: NSNumber]) -> Float {
         switch gesture {
         case .eyeBlinkEither:
@@ -444,7 +551,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             if isPreviewMode {
                 print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
             }
-            processBlendShapes(faceAnchor.blendShapes)
+
+            // Extract blend shapes immediately to avoid retaining the ARFrame
+            let blendShapes = faceAnchor.blendShapes
+
+            // Process blend shapes asynchronously to release the frame immediately
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                self?.processBlendShapes(blendShapes)
+            }
         }
     }
     

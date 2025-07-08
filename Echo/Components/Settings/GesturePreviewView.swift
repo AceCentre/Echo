@@ -155,6 +155,13 @@ struct GesturePreviewView: View {
         }
         .onChange(of: detector.previewGestureValues) { _, newValues in
             let newValue = newValues[gesture] ?? 0.0
+
+            // Protect against sudden drops to exactly 0.0 which indicate corruption
+            if newValue == 0.0 && currentGestureValue > 0.15 {
+                print("⚠️ GesturePreviewView: Detected suspicious drop to 0.0 for \(gesture.displayName) (was \(currentGestureValue)) - ignoring")
+                return
+            }
+
             if newValue != currentGestureValue {
                 currentGestureValue = newValue
             }

@@ -71,25 +71,25 @@ struct FacialGestureSwitchSection: View {
                 // Threshold slider
                 VStack(alignment: .leading, spacing: 4) {
                     Text(String(
-                        localized: "Sensitivity",
-                        comment: "Label for gesture sensitivity slider"
+                        localized: "Threshold",
+                        comment: "Label for gesture threshold slider"
                     ))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    
+
                     HStack {
-                        Text("Low")
+                        Text("0.1")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Slider(value: $threshold, in: 0.1...1.0, step: 0.1)
                             .tint(.blue)
-                        
-                        Text("High")
+
+                        Text("1.0")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Text(String(
                         localized: "Threshold: \(String(format: "%.1f", threshold))",
                         comment: "Shows current threshold value"
@@ -262,14 +262,22 @@ struct GesturePreviewSection: View {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
                                     .frame(height: 8)
+                                    .cornerRadius(4)
+
+                                // Threshold line
+                                Rectangle()
+                                    .fill(Color.orange)
+                                    .frame(width: 2, height: 12)
+                                    .offset(x: CGFloat(threshold) * geometry.size.width - 1)
 
                                 Rectangle()
                                     .fill(isGestureDetected ? (isHoldGesture ? Color.orange : Color.green) : Color.blue)
                                     .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 8)
+                                    .cornerRadius(4)
                                     .animation(.easeInOut(duration: 0.1), value: gestureValue)
                             }
                         }
-                        .frame(height: 8)
+                        .frame(height: 12)
                     }
 
                     // Hold duration progress (always show if hold action is configured)
@@ -341,7 +349,15 @@ struct GesturePreviewSection: View {
         }
         .onChange(of: detector.previewGestureValues) { _, newValues in
             let newValue = newValues[gesture] ?? 0.0
+
+            // Protect against sudden drops to exactly 0.0 which indicate corruption
+            if newValue == 0.0 && currentGestureValue > 0.15 {
+                print("⚠️ Detected suspicious drop to 0.0 for \(gesture.displayName) (was \(currentGestureValue)) - ignoring")
+                return
+            }
+
             if newValue != currentGestureValue {
+                print("Gesture value changed: \(newValue), threshold: \(threshold)")
                 currentGestureValue = newValue
                 if newValue > 0.1 { // Only log significant values to avoid spam
                     print("UI gestureValue for \(gesture.displayName): \(newValue)")
@@ -852,24 +868,24 @@ struct AddFacialGesture: View {
                             actionState: holdAction
                         )
 
-                        // Sensitivity slider
+                        // Threshold slider
                         VStack(alignment: .leading, spacing: 4) {
                             Text(String(
-                                localized: "Sensitivity",
-                                comment: "Label for gesture sensitivity slider"
+                                localized: "Threshold",
+                                comment: "Label for gesture threshold slider"
                             ))
                             .font(.caption)
                             .foregroundColor(.secondary)
 
                             HStack {
-                                Text("Low")
+                                Text("0.1")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
 
                                 Slider(value: $threshold, in: 0.1...1.0, step: 0.05)
                                     .tint(.blue)
 
-                                Text("High")
+                                Text("1.0")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                             }

@@ -23,6 +23,7 @@ struct FacialGestureController: View {
     @ObservedObject var mainCommunicationPageState: MainCommunicationPageState
     @Environment(Settings.self) var settings: Settings
     @Environment(\.modelContext) var modelContext
+    @Environment(\.scenePhase) var scenePhase
 
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
@@ -37,9 +38,9 @@ struct FacialGestureController: View {
                 print("🎯 FacialGestureController.onAppear called")
                 setupGestureDetection()
             }
-            .onDisappear {
-                print("🎯 FacialGestureController.onDisappear called")
-                gestureDetector.stopDetection()
+            .onChange(of: scenePhase) { _, newPhase in
+                print("🎯 FacialGestureController.scenePhase changed to: \(newPhase)")
+                handleScenePhaseChange(newPhase)
             }
             .onChange(of: facialGestureSwitches) { _, _ in
                 print("🎯 Facial gesture switches changed - count: \(facialGestureSwitches.count)")
@@ -96,6 +97,25 @@ struct FacialGestureController: View {
 
         isInitialized = true
         print("🎯 FacialGestureController initialization complete")
+    }
+
+    private func handleScenePhaseChange(_ newPhase: ScenePhase) {
+        switch newPhase {
+        case .active:
+            print("🎯 App became active - restarting gesture detection if needed")
+            // Only restart if we have configured gestures and detector is supported
+            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+                setupGestureDetection()
+            }
+        case .inactive:
+            print("🎯 App became inactive - keeping gesture detection running")
+            // Don't stop detection for inactive (e.g., when opening Control Center)
+        case .background:
+            print("🎯 App went to background - stopping gesture detection")
+            gestureDetector.stopDetection()
+        @unknown default:
+            break
+        }
     }
     
     private func handleGestureDetected(gesture: FacialGesture, isHoldAction: Bool, mainCommunicationPageState: MainCommunicationPageState?) {

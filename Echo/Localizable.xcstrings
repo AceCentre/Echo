@@ -42,7 +42,13 @@
     "%lld%%" : {
 
     },
+    "0.1" : {
+
+    },
     "0.5s" : {
+
+    },
+    "1.0" : {
 
     },
     "3.0s" : {
@@ -456,9 +462,6 @@
     "Hide" : {
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
-    "High" : {
-
-    },
     "History" : {
       "comment" : "Header for settings about history"
     },
@@ -581,9 +584,6 @@
     },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
-    },
-    "Low" : {
-
     },
     "Lower Lip Roll" : {
       "comment" : "Display name for lower lip roll gesture"
@@ -909,9 +909,6 @@
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
     },
-    "Sensitivity" : {
-      "comment" : "Label for gesture sensitivity slider"
-    },
     "Settings" : {
       "comment" : "The navigation title for the settings page"
     },
@@ -1106,6 +1103,9 @@
     },
     "This will permanently delete this facial gesture switch." : {
       "comment" : "Message for delete gesture alert"
+    },
+    "Threshold" : {
+      "comment" : "Label for gesture threshold slider"
     },
     "Threshold: %@" : {
       "comment" : "Shows current threshold value"
