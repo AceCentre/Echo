@@ -34,54 +34,68 @@ struct FacialGestureController: View {
         Color.clear
             .frame(width: 0, height: 0)
             .onAppear {
+                print("🎯 FacialGestureController.onAppear called")
                 setupGestureDetection()
             }
             .onDisappear {
+                print("🎯 FacialGestureController.onDisappear called")
                 gestureDetector.stopDetection()
             }
-            .onChange(of: settings.enableSwitchControl) { _, newValue in
-                if newValue {
-                    setupGestureDetection()
-                } else {
-                    gestureDetector.stopDetection()
-                }
-            }
             .onChange(of: facialGestureSwitches) { _, _ in
+                print("🎯 Facial gesture switches changed - count: \(facialGestureSwitches.count)")
                 // Reconfigure when switches change
-                if settings.enableSwitchControl && gestureDetector.isSupported {
+                if gestureDetector.isSupported {
                     setupGestureDetection()
                 }
             }
     }
     
     private func setupGestureDetection() {
-        guard settings.enableSwitchControl else { return }
-        guard gestureDetector.isSupported else { return }
+        print("🎯 FacialGestureController.setupGestureDetection() called")
+        print("🎯 Gesture detector supported: \(gestureDetector.isSupported)")
+        print("🎯 Total facial gesture switches: \(facialGestureSwitches.count)")
+
+        guard gestureDetector.isSupported else {
+            print("🎯 Gesture detection not supported - exiting")
+            return
+        }
 
         // Stop any existing detection
+        print("🎯 Stopping any existing detection")
         gestureDetector.stopDetection()
 
         // Configure gestures for enabled switches
         var configuredGestures = 0
         for gestureSwitch in facialGestureSwitches where gestureSwitch.isEnabled {
+            print("🎯 Processing switch: \(gestureSwitch.name), enabled: \(gestureSwitch.isEnabled)")
             if let gesture = gestureSwitch.gesture {
+                print("🎯 Configuring gesture: \(gesture.displayName), threshold: \(gestureSwitch.threshold)")
                 gestureDetector.configureGesture(
                     gesture,
                     threshold: gestureSwitch.threshold,
                     holdDuration: gestureSwitch.holdDuration
                 )
                 configuredGestures += 1
+            } else {
+                print("🎯 Switch has no gesture: \(gestureSwitch.name)")
             }
         }
 
+        print("🎯 Configured gestures: \(configuredGestures)")
         if configuredGestures > 0 {
             // Start detection with callback
+            print("🎯 Starting gesture detection with \(configuredGestures) gestures")
             gestureDetector.startDetection { [weak mainCommunicationPageState] gesture, isHoldAction in
+                print("🎯 Gesture detected: \(gesture.displayName), isHold: \(isHoldAction)")
                 handleGestureDetected(gesture: gesture, isHoldAction: isHoldAction, mainCommunicationPageState: mainCommunicationPageState)
             }
+            print("🎯 Gesture detection started - isActive: \(gestureDetector.isActive)")
+        } else {
+            print("🎯 No gestures configured - not starting detection")
         }
 
         isInitialized = true
+        print("🎯 FacialGestureController initialization complete")
     }
     
     private func handleGestureDetected(gesture: FacialGesture, isHoldAction: Bool, mainCommunicationPageState: MainCommunicationPageState?) {

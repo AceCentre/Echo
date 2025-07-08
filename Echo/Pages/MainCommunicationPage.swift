@@ -38,8 +38,9 @@ struct MainCommunicationPage: View {
                 }
                 if settings.enableSwitchControl {
                     KeyPressController(mainCommunicationPageState: mainCommunicationPageState)
-                    FacialGestureController(mainCommunicationPageState: mainCommunicationPageState) 
                 }
+                // Facial gestures work independently of switch control
+                FacialGestureController(mainCommunicationPageState: mainCommunicationPageState)
                 VStack {
                     NodeTreeView(mainCommunicationPageState: mainCommunicationPageState)
                         .onTapGesture(count: 1, perform: {
