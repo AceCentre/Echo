@@ -165,6 +165,12 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         gestureStates.removeValue(forKey: gesture)
     }
 
+    func resetHeadBaseline() {
+        print("🎯 Resetting head tracking baseline")
+        baselineHeadTransform = currentHeadTransform
+        headTrackingInitialized = true
+    }
+
     // MARK: - Preview Mode Methods
 
     func startPreviewMode(for gestures: [FacialGesture]) {
@@ -447,10 +453,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func processHeadTransform(_ transform: simd_float4x4) {
         currentHeadTransform = transform
 
-        // Initialize baseline if this is the first frame
+        // Initialize baseline if this is the first frame or reset periodically
         if !headTrackingInitialized {
             baselineHeadTransform = transform
             headTrackingInitialized = true
+            print("🎯 Head tracking baseline initialized")
             return
         }
 
@@ -459,53 +466,76 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Calculate relative transform (current relative to baseline)
         let relativeTransform = simd_mul(transform, simd_inverse(baseline))
 
-        // Extract rotation angles from the relative transform
+        // Extract rotation using a more robust method
+        // ARKit face coordinate system: X=right, Y=up, Z=forward (toward user)
         let rotationMatrix = simd_float3x3(
             simd_float3(relativeTransform.columns.0.x, relativeTransform.columns.0.y, relativeTransform.columns.0.z),
             simd_float3(relativeTransform.columns.1.x, relativeTransform.columns.1.y, relativeTransform.columns.1.z),
             simd_float3(relativeTransform.columns.2.x, relativeTransform.columns.2.y, relativeTransform.columns.2.z)
         )
 
-        // Convert rotation matrix to Euler angles (pitch, yaw, roll)
+        // Extract Euler angles with proper ARKit coordinate system
+        // Pitch: rotation around X-axis (nod up/down)
+        // Yaw: rotation around Y-axis (shake left/right)
+        // Roll: rotation around Z-axis (tilt left/right)
         let pitch = atan2(-rotationMatrix[2][1], sqrt(rotationMatrix[2][0] * rotationMatrix[2][0] + rotationMatrix[2][2] * rotationMatrix[2][2]))
         let yaw = atan2(rotationMatrix[2][0], rotationMatrix[2][2])
-        let roll = atan2(rotationMatrix[1][0], rotationMatrix[0][0])
+        let roll = atan2(-rotationMatrix[0][1], rotationMatrix[1][1])
+
+        // Debug logging for head movements
+        let pitchDegrees = pitch * 180.0 / Float.pi
+        let yawDegrees = yaw * 180.0 / Float.pi
+        let rollDegrees = roll * 180.0 / Float.pi
+
+        // Only log when there's significant movement
+        if abs(pitchDegrees) > 2 || abs(yawDegrees) > 2 || abs(rollDegrees) > 2 {
+            print("🎯 Head angles - Pitch: \(String(format: "%.1f", pitchDegrees))°, Yaw: \(String(format: "%.1f", yawDegrees))°, Roll: \(String(format: "%.1f", rollDegrees))°")
+        }
 
         // Update head movement gesture values based on rotation
         updateHeadMovementGestures(pitch: pitch, yaw: yaw, roll: roll)
     }
 
     private func updateHeadMovementGestures(pitch: Float, yaw: Float, roll: Float) {
-        // Convert angles to absolute values for gesture detection
-        let pitchAbs = abs(pitch)
-        let yawAbs = abs(yaw)
-        let rollAbs = abs(roll)
+        // Calculate gesture values with proper directional logic
+        let headNodUpValue = max(0, pitch)      // Positive pitch = nod up
+        let headNodDownValue = max(0, -pitch)   // Negative pitch = nod down
+        let headShakeLeftValue = max(0, -yaw)   // Negative yaw = shake left
+        let headShakeRightValue = max(0, yaw)   // Positive yaw = shake right
+        let headTiltLeftValue = max(0, -roll)   // Negative roll = tilt left
+        let headTiltRightValue = max(0, roll)   // Positive roll = tilt right
 
         // Update gesture values for preview mode
         if isPreviewMode {
             DispatchQueue.main.async {
-                // Head nod gestures (pitch)
-                self.previewGestureValues[.headNodUp] = pitch > 0 ? pitchAbs : 0
-                self.previewGestureValues[.headNodDown] = pitch < 0 ? pitchAbs : 0
+                self.previewGestureValues[.headNodUp] = headNodUpValue
+                self.previewGestureValues[.headNodDown] = headNodDownValue
+                self.previewGestureValues[.headShakeLeft] = headShakeLeftValue
+                self.previewGestureValues[.headShakeRight] = headShakeRightValue
+                self.previewGestureValues[.headTiltLeft] = headTiltLeftValue
+                self.previewGestureValues[.headTiltRight] = headTiltRightValue
 
-                // Head shake gestures (yaw)
-                self.previewGestureValues[.headShakeLeft] = yaw > 0 ? yawAbs : 0
-                self.previewGestureValues[.headShakeRight] = yaw < 0 ? yawAbs : 0
-
-                // Head tilt gestures (roll)
-                self.previewGestureValues[.headTiltLeft] = roll > 0 ? rollAbs : 0
-                self.previewGestureValues[.headTiltRight] = roll < 0 ? rollAbs : 0
+                // Debug logging for preview values
+                if headNodUpValue > 0.05 || headNodDownValue > 0.05 {
+                    print("🎯 Nod values - Up: \(String(format: "%.3f", headNodUpValue)), Down: \(String(format: "%.3f", headNodDownValue))")
+                }
+                if headShakeLeftValue > 0.05 || headShakeRightValue > 0.05 {
+                    print("🎯 Shake values - Left: \(String(format: "%.3f", headShakeLeftValue)), Right: \(String(format: "%.3f", headShakeRightValue))")
+                }
+                if headTiltLeftValue > 0.05 || headTiltRightValue > 0.05 {
+                    print("🎯 Tilt values - Left: \(String(format: "%.3f", headTiltLeftValue)), Right: \(String(format: "%.3f", headTiltRightValue))")
+                }
             }
         }
 
         // Update auto-detection values
         if isAutoDetectionMode {
-            autoDetectionCurrentValues[.headNodUp] = pitch > 0 ? pitchAbs : 0
-            autoDetectionCurrentValues[.headNodDown] = pitch < 0 ? pitchAbs : 0
-            autoDetectionCurrentValues[.headShakeLeft] = yaw > 0 ? yawAbs : 0
-            autoDetectionCurrentValues[.headShakeRight] = yaw < 0 ? yawAbs : 0
-            autoDetectionCurrentValues[.headTiltLeft] = roll > 0 ? rollAbs : 0
-            autoDetectionCurrentValues[.headTiltRight] = roll < 0 ? rollAbs : 0
+            autoDetectionCurrentValues[.headNodUp] = headNodUpValue
+            autoDetectionCurrentValues[.headNodDown] = headNodDownValue
+            autoDetectionCurrentValues[.headShakeLeft] = headShakeLeftValue
+            autoDetectionCurrentValues[.headShakeRight] = headShakeRightValue
+            autoDetectionCurrentValues[.headTiltLeft] = headTiltLeftValue
+            autoDetectionCurrentValues[.headTiltRight] = headTiltRightValue
         }
 
         // Handle normal gesture detection for head movements
@@ -548,17 +578,17 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func getHeadGestureValue(for gesture: FacialGesture, pitch: Float, yaw: Float, roll: Float) -> Float {
         switch gesture {
         case .headNodUp:
-            return pitch > 0 ? abs(pitch) : 0
+            return max(0, pitch)      // Positive pitch = nod up
         case .headNodDown:
-            return pitch < 0 ? abs(pitch) : 0
+            return max(0, -pitch)     // Negative pitch = nod down
         case .headShakeLeft:
-            return yaw > 0 ? abs(yaw) : 0
+            return max(0, -yaw)       // Negative yaw = shake left
         case .headShakeRight:
-            return yaw < 0 ? abs(yaw) : 0
+            return max(0, yaw)        // Positive yaw = shake right
         case .headTiltLeft:
-            return roll > 0 ? abs(roll) : 0
+            return max(0, -roll)      // Negative roll = tilt left
         case .headTiltRight:
-            return roll < 0 ? abs(roll) : 0
+            return max(0, roll)       // Positive roll = tilt right
         default:
             return 0
         }
