@@ -50,6 +50,14 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     case noseSneerLeft = "noseSneerLeft"
     case noseSneerRight = "noseSneerRight"
     case tongueOut = "tongueOut"
+
+    // Head movement gestures
+    case headNodUp = "headNodUp"
+    case headNodDown = "headNodDown"
+    case headShakeLeft = "headShakeLeft"
+    case headShakeRight = "headShakeRight"
+    case headTiltLeft = "headTiltLeft"
+    case headTiltRight = "headTiltRight"
     
     var id: Self { self }
     
@@ -218,6 +226,30 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .tongueOut: return String(
             localized: "Tongue Out",
             comment: "Display name for tongue out gesture"
+        )
+        case .headNodUp: return String(
+            localized: "Head Nod Up",
+            comment: "Display name for head nod up gesture"
+        )
+        case .headNodDown: return String(
+            localized: "Head Nod Down",
+            comment: "Display name for head nod down gesture"
+        )
+        case .headShakeLeft: return String(
+            localized: "Head Shake Left",
+            comment: "Display name for head shake left gesture"
+        )
+        case .headShakeRight: return String(
+            localized: "Head Shake Right",
+            comment: "Display name for head shake right gesture"
+        )
+        case .headTiltLeft: return String(
+            localized: "Head Tilt Left",
+            comment: "Display name for head tilt left gesture"
+        )
+        case .headTiltRight: return String(
+            localized: "Head Tilt Right",
+            comment: "Display name for head tilt right gesture"
         )
         }
     }
@@ -388,6 +420,30 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             localized: "Stick out your tongue",
             comment: "Description for tongue out gesture"
         )
+        case .headNodUp: return String(
+            localized: "Nod your head up",
+            comment: "Description for head nod up gesture"
+        )
+        case .headNodDown: return String(
+            localized: "Nod your head down",
+            comment: "Description for head nod down gesture"
+        )
+        case .headShakeLeft: return String(
+            localized: "Shake your head to the left",
+            comment: "Description for head shake left gesture"
+        )
+        case .headShakeRight: return String(
+            localized: "Shake your head to the right",
+            comment: "Description for head shake right gesture"
+        )
+        case .headTiltLeft: return String(
+            localized: "Tilt your head to the left",
+            comment: "Description for head tilt left gesture"
+        )
+        case .headTiltRight: return String(
+            localized: "Tilt your head to the right",
+            comment: "Description for head tilt right gesture"
+        )
         }
     }
     
@@ -435,6 +491,10 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .noseSneerLeft: return .noseSneerLeft
         case .noseSneerRight: return .noseSneerRight
         case .tongueOut: return .tongueOut
+
+        // Head movement gestures don't use blend shapes - these will be handled specially
+        case .headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight:
+            return .eyeBlinkLeft // Placeholder - not used for head movements
         }
     }
     
@@ -447,6 +507,12 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             return 0.3 // Lower threshold for mouth opening
         case .mouthSmileLeft, .mouthSmileRight:
             return 0.5 // Medium threshold for smiles
+        case .headNodUp, .headNodDown:
+            return 0.15 // Threshold for head nod (radians)
+        case .headShakeLeft, .headShakeRight:
+            return 0.15 // Threshold for head shake (radians)
+        case .headTiltLeft, .headTiltRight:
+            return 0.15 // Threshold for head tilt (radians)
         default:
             return 0.6 // Default threshold for most gestures
         }
@@ -463,7 +529,11 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             .mouthSmileRight,
             .browInnerUp,
             .cheekPuff,
-            .mouthPucker
+            .mouthPucker,
+            .headNodUp,
+            .headNodDown,
+            .headShakeLeft,
+            .headShakeRight
         ]
     }
 }

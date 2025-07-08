@@ -151,12 +151,13 @@ struct FacialGestureCategoryView: View {
 
 enum FacialGestureCategory: String, CaseIterable, Identifiable {
     case eyes = "eyes"
-    case eyebrows = "eyebrows" 
+    case eyebrows = "eyebrows"
     case cheeks = "cheeks"
     case jaw = "jaw"
     case mouth = "mouth"
     case nose = "nose"
     case tongue = "tongue"
+    case headMovement = "headMovement"
     
     var id: Self { self }
     
@@ -189,6 +190,10 @@ enum FacialGestureCategory: String, CaseIterable, Identifiable {
         case .tongue: return String(
             localized: "Tongue",
             comment: "Category name for tongue gestures"
+        )
+        case .headMovement: return String(
+            localized: "Head Movement",
+            comment: "Category name for head movement gestures"
         )
         }
     }
@@ -223,6 +228,10 @@ enum FacialGestureCategory: String, CaseIterable, Identifiable {
             localized: "Tongue movements",
             comment: "Description for tongue gesture category"
         )
+        case .headMovement: return String(
+            localized: "Head nods, shakes, and tilts",
+            comment: "Description for head movement gesture category"
+        )
         }
     }
     
@@ -249,6 +258,8 @@ enum FacialGestureCategory: String, CaseIterable, Identifiable {
             return [.noseSneerLeft, .noseSneerRight]
         case .tongue:
             return [.tongueOut]
+        case .headMovement:
+            return [.headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight]
         }
     }
 }

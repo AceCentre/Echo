@@ -36,6 +36,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private var lastUpdateTime: Date = Date()
     private var lastFaceAnchorTime: Date = Date()
     private var sessionHealthTimer: Timer?
+
+    // Head tracking properties
+    private var baselineHeadTransform: simd_float4x4?
+    private var currentHeadTransform: simd_float4x4?
+    private var headTrackingInitialized: Bool = false
     
     private struct GestureState {
         var isActive: Bool = false
@@ -145,6 +150,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         isActive = false
         gestureStates.removeAll()
         onGestureDetected = nil
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
     
     func configureGesture(_ gesture: FacialGesture, threshold: Float, holdDuration: Double = 1.0) {
@@ -210,6 +220,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         previewGestureValues.removeAll()
         session.pause()
         isActive = false
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
 
     // MARK: - Auto Detection Methods
@@ -299,6 +314,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         onAutoDetectionComplete = nil
         session.pause()
         isActive = false
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
     
     // MARK: - Private Methods
@@ -415,11 +435,135 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             }
 
             return targetValue
+        case .headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight:
+            // Head movement gestures are handled separately in processHeadTransform
+            // Return 0 here as these values are updated directly in preview/auto-detection modes
+            return 0
         default:
             return blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
         }
     }
-    
+
+    private func processHeadTransform(_ transform: simd_float4x4) {
+        currentHeadTransform = transform
+
+        // Initialize baseline if this is the first frame
+        if !headTrackingInitialized {
+            baselineHeadTransform = transform
+            headTrackingInitialized = true
+            return
+        }
+
+        guard let baseline = baselineHeadTransform else { return }
+
+        // Calculate relative transform (current relative to baseline)
+        let relativeTransform = simd_mul(transform, simd_inverse(baseline))
+
+        // Extract rotation angles from the relative transform
+        let rotationMatrix = simd_float3x3(
+            simd_float3(relativeTransform.columns.0.x, relativeTransform.columns.0.y, relativeTransform.columns.0.z),
+            simd_float3(relativeTransform.columns.1.x, relativeTransform.columns.1.y, relativeTransform.columns.1.z),
+            simd_float3(relativeTransform.columns.2.x, relativeTransform.columns.2.y, relativeTransform.columns.2.z)
+        )
+
+        // Convert rotation matrix to Euler angles (pitch, yaw, roll)
+        let pitch = atan2(-rotationMatrix[2][1], sqrt(rotationMatrix[2][0] * rotationMatrix[2][0] + rotationMatrix[2][2] * rotationMatrix[2][2]))
+        let yaw = atan2(rotationMatrix[2][0], rotationMatrix[2][2])
+        let roll = atan2(rotationMatrix[1][0], rotationMatrix[0][0])
+
+        // Update head movement gesture values based on rotation
+        updateHeadMovementGestures(pitch: pitch, yaw: yaw, roll: roll)
+    }
+
+    private func updateHeadMovementGestures(pitch: Float, yaw: Float, roll: Float) {
+        // Convert angles to absolute values for gesture detection
+        let pitchAbs = abs(pitch)
+        let yawAbs = abs(yaw)
+        let rollAbs = abs(roll)
+
+        // Update gesture values for preview mode
+        if isPreviewMode {
+            DispatchQueue.main.async {
+                // Head nod gestures (pitch)
+                self.previewGestureValues[.headNodUp] = pitch > 0 ? pitchAbs : 0
+                self.previewGestureValues[.headNodDown] = pitch < 0 ? pitchAbs : 0
+
+                // Head shake gestures (yaw)
+                self.previewGestureValues[.headShakeLeft] = yaw > 0 ? yawAbs : 0
+                self.previewGestureValues[.headShakeRight] = yaw < 0 ? yawAbs : 0
+
+                // Head tilt gestures (roll)
+                self.previewGestureValues[.headTiltLeft] = roll > 0 ? rollAbs : 0
+                self.previewGestureValues[.headTiltRight] = roll < 0 ? rollAbs : 0
+            }
+        }
+
+        // Update auto-detection values
+        if isAutoDetectionMode {
+            autoDetectionCurrentValues[.headNodUp] = pitch > 0 ? pitchAbs : 0
+            autoDetectionCurrentValues[.headNodDown] = pitch < 0 ? pitchAbs : 0
+            autoDetectionCurrentValues[.headShakeLeft] = yaw > 0 ? yawAbs : 0
+            autoDetectionCurrentValues[.headShakeRight] = yaw < 0 ? yawAbs : 0
+            autoDetectionCurrentValues[.headTiltLeft] = roll > 0 ? rollAbs : 0
+            autoDetectionCurrentValues[.headTiltRight] = roll < 0 ? rollAbs : 0
+        }
+
+        // Handle normal gesture detection for head movements
+        let headGestures: [FacialGesture] = [.headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight]
+
+        for gesture in headGestures {
+            guard let state = gestureStates[gesture] else { continue }
+
+            let gestureValue = getHeadGestureValue(for: gesture, pitch: pitch, yaw: yaw, roll: roll)
+            let isGestureActive = gestureValue >= state.threshold
+
+            var updatedState = state
+            let currentTime = Date()
+
+            if isGestureActive && !state.isActive {
+                // Gesture just started
+                updatedState.isActive = true
+                updatedState.startTime = currentTime
+            } else if !isGestureActive && state.isActive {
+                // Gesture just ended - determine if it was tap or hold
+                updatedState.isActive = false
+
+                if let startTime = state.startTime {
+                    let gestureDuration = currentTime.timeIntervalSince(startTime)
+                    let isHoldGesture = gestureDuration >= state.holdDuration
+
+                    // Trigger appropriate action based on duration
+                    DispatchQueue.main.async {
+                        self.onGestureDetected?(gesture, isHoldGesture)
+                    }
+                }
+
+                updatedState.startTime = nil
+            }
+
+            gestureStates[gesture] = updatedState
+        }
+    }
+
+    private func getHeadGestureValue(for gesture: FacialGesture, pitch: Float, yaw: Float, roll: Float) -> Float {
+        switch gesture {
+        case .headNodUp:
+            return pitch > 0 ? abs(pitch) : 0
+        case .headNodDown:
+            return pitch < 0 ? abs(pitch) : 0
+        case .headShakeLeft:
+            return yaw > 0 ? abs(yaw) : 0
+        case .headShakeRight:
+            return yaw < 0 ? abs(yaw) : 0
+        case .headTiltLeft:
+            return roll > 0 ? abs(roll) : 0
+        case .headTiltRight:
+            return roll < 0 ? abs(roll) : 0
+        default:
+            return 0
+        }
+    }
+
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
@@ -444,7 +588,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             if isPreviewMode {
                 print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
             }
+
+            // Process both blend shapes and head transform
             processBlendShapes(faceAnchor.blendShapes)
+            processHeadTransform(faceAnchor.transform)
         }
     }
     
