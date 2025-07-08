@@ -58,4 +58,4 @@ A game controller has all the same actions as external switches.
 
 ## Facial gestures
 
-WIP. Needs more testing and work. Wondering if the UI flow is wrong Plesae try
+WIP. Needs more testing and work. Wondering if the UI flow is wrong Plesae try it out and let us know if you have any issues.
