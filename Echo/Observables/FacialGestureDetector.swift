@@ -19,11 +19,20 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // Preview mode properties
     @Published var isPreviewMode: Bool = false
     @Published var previewGestureValues: [FacialGesture: Float] = [:]
-    
-    private var session = ARSession()
+
+    // Auto-detection mode properties
+    @Published var isAutoDetectionMode: Bool = false
+    @Published var autoDetectionBaseline: [FacialGesture: Float] = [:]
+    @Published var autoDetectionCurrentValues: [FacialGesture: Float] = [:]
+    @Published var autoDetectionResults: [FacialGesture: Float] = [:]
+    @Published var detectedGestureNames: [String] = []
+    @Published var rankedGestures: [(gesture: FacialGesture, percentage: Float)] = []
+
+    var session = ARSession()
     private var gestureStates: [FacialGesture: GestureState] = [:]
     private var onGestureDetected: ((FacialGesture, Bool) -> Void)?
     private var previewGestures: Set<FacialGesture> = []
+    private var onAutoDetectionComplete: ((FacialGesture?) -> Void)?
     
     private struct GestureState {
         var isActive: Bool = false
@@ -160,6 +169,95 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         session.pause()
         isActive = false
     }
+
+    // MARK: - Auto Detection Methods
+
+    func startAutoDetectionMode(onComplete: @escaping (FacialGesture?) -> Void) {
+        guard isSupported else {
+            errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
+            return
+        }
+
+        self.onAutoDetectionComplete = onComplete
+        isAutoDetectionMode = true
+        autoDetectionBaseline.removeAll()
+        autoDetectionCurrentValues.removeAll()
+        autoDetectionResults.removeAll()
+        detectedGestureNames.removeAll()
+
+        // Check camera permission before starting
+        checkCameraPermission()
+
+        if cameraPermissionStatus == .authorized {
+            startARSession()
+        } else if cameraPermissionStatus == .denied {
+            errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
+        } else {
+            requestCameraPermission { [weak self] granted in
+                if granted {
+                    self?.startARSession()
+                }
+            }
+        }
+    }
+
+    func captureBaseline() {
+        // Capture current gesture values as baseline
+        autoDetectionBaseline = autoDetectionCurrentValues
+        print("Captured baseline with \(autoDetectionBaseline.count) gestures")
+    }
+
+    func analyzeGestureChanges() -> FacialGesture? {
+        guard !autoDetectionBaseline.isEmpty else {
+            print("No baseline captured for analysis")
+            return nil
+        }
+
+        var gestureChanges: [(gesture: FacialGesture, percentage: Float)] = []
+
+        // Calculate percentage changes for all gestures
+        for gesture in FacialGesture.allCases {
+            let baseline = autoDetectionBaseline[gesture] ?? 0.0
+            let current = autoDetectionCurrentValues[gesture] ?? 0.0
+
+            // Calculate absolute change (avoiding division by zero)
+            let change = abs(current - baseline)
+            let percentageChange = baseline > 0.01 ? (change / baseline) : change
+
+            autoDetectionResults[gesture] = percentageChange
+
+            // Only include gestures with meaningful change (minimum threshold of 0.1)
+            if percentageChange > 0.1 {
+                gestureChanges.append((gesture: gesture, percentage: percentageChange))
+            }
+        }
+
+        // Sort by percentage change (highest first)
+        gestureChanges.sort { $0.percentage > $1.percentage }
+
+        // Take top 5 results for display
+        rankedGestures = Array(gestureChanges.prefix(5))
+
+        let topGesture = gestureChanges.first?.gesture
+        let maxChange = gestureChanges.first?.percentage ?? 0.0
+
+        print("Analysis complete. Max change: \(maxChange) for gesture: \(topGesture?.displayName ?? "none")")
+        print("Top 5 gestures: \(rankedGestures.map { "\($0.gesture.displayName): \(Int($0.percentage * 100))%" })")
+
+        return topGesture
+    }
+
+    func stopAutoDetectionMode() {
+        isAutoDetectionMode = false
+        autoDetectionBaseline.removeAll()
+        autoDetectionCurrentValues.removeAll()
+        autoDetectionResults.removeAll()
+        detectedGestureNames.removeAll()
+        rankedGestures.removeAll()
+        onAutoDetectionComplete = nil
+        session.pause()
+        isActive = false
+    }
     
     // MARK: - Private Methods
 
@@ -198,6 +296,26 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                 DispatchQueue.main.async {
                     self.previewGestureValues[gesture] = gestureValue
                 }
+            }
+            return
+        }
+
+        // Handle auto-detection mode
+        if isAutoDetectionMode {
+            var currentDetectedGestures: [String] = []
+
+            for gesture in FacialGesture.allCases {
+                let gestureValue = getGestureValue(for: gesture, from: blendShapes)
+                autoDetectionCurrentValues[gesture] = gestureValue
+
+                // Show real-time feedback for gestures above threshold
+                if gestureValue > gesture.defaultThreshold {
+                    currentDetectedGestures.append(gesture.displayName)
+                }
+            }
+
+            DispatchQueue.main.async {
+                self.detectedGestureNames = currentDetectedGestures
             }
             return
         }

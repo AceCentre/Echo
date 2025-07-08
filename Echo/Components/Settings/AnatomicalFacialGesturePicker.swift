@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ARKit
 
 struct AnatomicalFacialGesturePicker: View {
     @Binding var selectedGesture: FacialGesture
@@ -14,6 +15,50 @@ struct AnatomicalFacialGesturePicker: View {
     var body: some View {
         NavigationStack {
             Form {
+                // Auto Select Section
+                Section(content: {
+                    if ARFaceTrackingConfiguration.isSupported {
+                        NavigationLink(destination: {
+                            AutoSelectFacialGestureView(selectedGesture: $selectedGesture)
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Auto Select Facial Gesture")
+                                        .font(.headline)
+                                    Text("Let the camera detect your gesture automatically")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "camera.fill")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                    } else {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Auto Select Facial Gesture")
+                                    .font(.headline)
+                                    .foregroundColor(.secondary)
+                                Text("Requires device with TrueDepth camera")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "camera.slash")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }, header: {
+                    Text("Automatic Detection", comment: "Header for auto-detection section")
+                }, footer: {
+                    if ARFaceTrackingConfiguration.isSupported {
+                        Text("Position your face in the camera, follow the countdown, then make your gesture. The app will automatically detect and select it.", comment: "Footer explaining auto-detection")
+                    } else {
+                        Text("Auto-detection requires a device with Face ID capability (iPhone X or later, iPad Pro with TrueDepth camera). Use manual selection below.", comment: "Footer explaining auto-detection unavailable")
+                    }
+                })
+
                 Section(content: {
                     ForEach(FacialGestureCategory.allCases) { category in
                         NavigationLink(destination: {

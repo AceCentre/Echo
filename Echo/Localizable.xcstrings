@@ -29,6 +29,9 @@
     "%lld" : {
 
     },
+    "%lld%%" : {
+
+    },
     "0.5s" : {
 
     },
@@ -124,6 +127,18 @@
     },
     "Audio Settings" : {
       "comment" : "The navigation title for the Audio options page"
+    },
+    "Auto Select Facial Gesture" : {
+
+    },
+    "Auto Select Gesture" : {
+
+    },
+    "Auto-detection requires a device with Face ID capability (iPhone X or later, iPad Pro with TrueDepth camera). Use manual selection below." : {
+      "comment" : "Footer explaining auto-detection unavailable"
+    },
+    "Automatic Detection" : {
+      "comment" : "Header for auto-detection section"
     },
     "Back" : {
       "comment" : "Label for action that happens on a keypress\nThe button text for the navigation back button"
@@ -278,6 +293,9 @@
     "DETECTED" : {
 
     },
+    "Detected Gestures:" : {
+
+    },
     "Directional Audio" : {
       "comment" : "Label for directional audio toggle"
     },
@@ -331,6 +349,9 @@
     },
     "English" : {
       "comment" : "The label for the English language when setting prediction language"
+    },
+    "Error" : {
+
     },
     "Every Character Speaks Volumes" : {
       "comment" : "Explain what Echo is"
@@ -521,6 +542,9 @@
     "Let Echo know what switch you want to use by pressing it. If you change your mind you can reset the chosen switch." : {
       "comment" : "A description of how detecting switches works and how to reset it"
     },
+    "Let the camera detect your gesture automatically" : {
+
+    },
     "Lets setup **Echo**. You can change your settings at any time." : {
       "comment" : "Explain of Echo onboarding process"
     },
@@ -629,8 +653,14 @@
     "Nose movements and sneers" : {
       "comment" : "Description for nose gesture category"
     },
+    "Not supported" : {
+
+    },
     "Note, if there are children to this node they will be lost if you make it a spelling branch" : {
       "comment" : "Footer for spelling in node editing"
+    },
+    "OK" : {
+
     },
     "On Screen Arrows?" : {
       "comment" : "Getting started onboarding"
@@ -664,6 +694,9 @@
     },
     "Portuguese (Experimental)" : {
       "comment" : "The label for the portuguese language when setting prediction language, make sure to include the experimental tag"
+    },
+    "Position your face in the camera, follow the countdown, then make your gesture. The app will automatically detect and select it." : {
+      "comment" : "Footer explaining auto-detection"
     },
     "Predict which words and letters come next and you enter each letter." : {
       "comment" : "Explaination of prediction during onboarding\nSelect the vocabulary of phrases, words and letters to be used"
@@ -730,6 +763,9 @@
     },
     "Required" : {
       "comment" : "Prompt for required text input"
+    },
+    "Requires device with TrueDepth camera" : {
+
     },
     "Restarts to the top of the current list, scanning will resume if you have that enabled" : {
       "comment" : "Label for action that happens on a keypress"
@@ -841,6 +877,9 @@
     },
     "Select the currently selected item" : {
       "comment" : "Label for action that happens on a keypress"
+    },
+    "Select the gesture you performed:" : {
+
     },
     "Select the vocabulary of phrases, words and letters to be used" : {
       "comment" : "Footer of vocabulary options"
@@ -1060,6 +1099,9 @@
     },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"
+    },
+    "Try Again" : {
+
     },
     "Unknown Button" : {
       "comment" : "Name of a button when none is given"
