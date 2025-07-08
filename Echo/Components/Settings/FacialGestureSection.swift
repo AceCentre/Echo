@@ -166,7 +166,7 @@ struct GesturePreviewSection: View {
     let holdDuration: Double
     let tapAction: SwitchAction
     let holdAction: SwitchAction
-    let detector: FacialGestureDetector
+    @ObservedObject var detector: FacialGestureDetector
 
     @State private var isActive = false
     @State private var lastDetectionState = false
@@ -178,7 +178,11 @@ struct GesturePreviewSection: View {
     }
 
     var gestureValue: Float {
-        detector.previewGestureValues[gesture] ?? 0.0
+        let value = detector.previewGestureValues[gesture] ?? 0.0
+        if value > 0.1 { // Only log significant values to avoid spam
+            print("UI gestureValue for \(gesture.displayName): \(value)")
+        }
+        return value
     }
 
     var isGestureDetected: Bool {
@@ -363,9 +367,15 @@ struct GesturePreviewSection: View {
     private func startPreview() {
         print("Starting preview for gesture: \(gesture.displayName)")
         print("Detector supported: \(detector.isSupported)")
+        print("Camera permission status: \(detector.cameraPermissionStatus)")
+        print("Detector isActive before: \(detector.isActive)")
+        print("Detector isPreviewMode before: \(detector.isPreviewMode)")
         detector.startPreviewMode(for: [gesture])
         isActive = true
         print("Preview started, isActive: \(isActive)")
+        print("Detector isActive after: \(detector.isActive)")
+        print("Detector isPreviewMode after: \(detector.isPreviewMode)")
+        print("Detector error message: \(detector.errorMessage ?? "none")")
     }
 
     private func stopPreview() {
@@ -475,39 +485,46 @@ struct FacialGestureSection: View {
                     }
                 }
             } else {
-                ForEach(facialGestureSwitches.filter { gestureSwitch in
+                let visibleGestureSwitches = facialGestureSwitches.filter { gestureSwitch in
                     // Only show switches that are fully initialized and committed to database
                     return gestureSwitch.gesture != nil &&
                            !gestureSwitch.name.isEmpty &&
                            !gestureSwitch.isDeleted
-                }, id: \.persistentModelID) { gestureSwitch in
-                    Button(action: {
-                        currentGestureSwitch = gestureSwitch
-                        showAddGestureSheet.toggle()
-                    }, label: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
-                                    .foregroundColor(.primary)
-
-                                if let gesture = gestureSwitch.gesture {
-                                    let description = gesture.description
-                                    Text(description.isEmpty ? gesture.rawValue : description)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            // Status indicator
-                            Circle()
-                                .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
-                                .frame(width: 8, height: 8)
-
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.gray)
-                        }
-                    })
                 }
-                
+
+                if !visibleGestureSwitches.isEmpty {
+                    ForEach(visibleGestureSwitches, id: \.persistentModelID) { gestureSwitch in
+                        Button(action: {
+                            currentGestureSwitch = gestureSwitch
+                            showAddGestureSheet.toggle()
+                        }, label: {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(gestureSwitch.displayName.isEmpty ? gestureSwitch.name : gestureSwitch.displayName)
+                                        .foregroundColor(.primary)
+
+                                    if let gesture = gestureSwitch.gesture {
+                                        let description = gesture.description
+                                        Text(description.isEmpty ? gesture.rawValue : description)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+
+                                Spacer()
+
+                                // Status indicator
+                                Circle()
+                                    .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
+                                    .frame(width: 8, height: 8)
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.gray)
+                            }
+                        })
+                    }
+                }
+
                 Button(action: {
                     currentGestureSwitch = nil
                     showAddGestureSheet.toggle()
@@ -519,10 +536,9 @@ struct FacialGestureSection: View {
                                 comment: "Button label to add a new facial gesture switch"
                             ),
                             systemImage: "plus.circle.fill"
-                        )
-                    }
+                        )                    }
                 }
-                .buttonStyle(PlainButtonStyle())
+                
             }
         }, header: {
             Text("Facial Gestures", comment: "Header for facial gesture settings area")
@@ -625,7 +641,7 @@ struct AddFacialGesture: View {
     @Environment(\.modelContext) var modelContext
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
-    @State private var selectedGesture: FacialGesture = .eyeBlinkLeft
+    @State private var selectedGesture: FacialGesture = .eyeBlinkRight
     @State private var gestureName: String = ""
     @State private var tapAction: SwitchAction = .nextNode
     @State private var holdAction: SwitchAction = .none

@@ -78,12 +78,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func startARSession() {
+        print("startARSession called")
         let configuration = ARFaceTrackingConfiguration()
+        print("Running AR session with configuration")
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
 
         DispatchQueue.main.async {
+            print("Setting isActive to true on main queue")
             self.isActive = true
             self.errorMessage = nil
+            print("isActive is now: \(self.isActive)")
         }
     }
     
@@ -105,7 +109,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - Preview Mode Methods
 
     func startPreviewMode(for gestures: [FacialGesture]) {
+        print("FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName })")
+
         guard isSupported else {
+            print("Face tracking not supported")
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
@@ -120,18 +127,25 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             previewGestureValues[gesture] = 0.0
         }
 
+        print("Preview mode setup complete. isPreviewMode: \(isPreviewMode)")
+
         // Check camera permission before starting
         checkCameraPermission()
+        print("Camera permission status: \(cameraPermissionStatus)")
 
         if cameraPermissionStatus == .authorized {
             // Permission already granted, start immediately
+            print("Camera permission authorized, starting AR session")
             startARSession()
         } else if cameraPermissionStatus == .denied {
+            print("Camera permission denied")
             errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
         } else {
             // Permission not determined, request it
+            print("Camera permission not determined, requesting...")
             errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
             requestCameraPermission { [weak self] granted in
+                print("Camera permission request result: \(granted)")
                 if granted {
                     self?.startARSession()
                 }
@@ -177,8 +191,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // Handle preview mode
         if isPreviewMode {
+            print("Processing preview mode for \(previewGestures.count) gestures")
             for gesture in previewGestures {
                 let gestureValue = getGestureValue(for: gesture, from: blendShapes)
+                print("Preview gesture \(gesture.displayName): value = \(gestureValue)")
                 DispatchQueue.main.async {
                     self.previewGestureValues[gesture] = gestureValue
                 }
@@ -247,10 +263,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        guard isActive else { return }
-        
+        guard isActive else {
+            print("Session update received but detector not active")
+            return
+        }
+
         for anchor in anchors {
             if let faceAnchor = anchor as? ARFaceAnchor {
+                if isPreviewMode {
+                    print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
+                }
                 processBlendShapes(faceAnchor.blendShapes)
             }
         }
