@@ -5,26 +5,53 @@ import AVFAudio
 struct VoicePicker: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+
     @StateObject var voiceList = AvailableVoices()
-    
+
     @Binding var voiceId: String
     @Binding var voiceName: String
-    
+
     @State private var searchText: String = ""
     @State private var showNoveltyVoices: Bool = false
+    @State private var isLoading: Bool = true
+
+    init(voiceId: Binding<String>, voiceName: Binding<String>) {
+        print("🔊 DEBUG: VoicePicker.init() called with voiceId: \(voiceId.wrappedValue), voiceName: \(voiceName.wrappedValue)")
+        self._voiceId = voiceId
+        self._voiceName = voiceName
+        print("🔊 DEBUG: VoicePicker.init() completed")
+    }
     
     var body: some View {
-        Form {
-            // Toggle for Novelty Voices
-            Section {
-                Toggle("Show Novelty Voices", isOn: $showNoveltyVoices)
-            }
-            .searchable(text: $searchText,  placement: .navigationBarDrawer(displayMode: .always), prompt: "Search by language or name")
+        print("🔊 DEBUG: VoicePicker body being rendered, isLoading: \(isLoading)")
+        return NavigationView {
+            VStack {
+                if isLoading {
+                    HStack {
+                        ProgressView()
+                        Text("Loading voices...")
+                    }
+                    .padding()
+                    Spacer()
+                } else {
+                    // Search field at the top
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        TextField("Search by voice name or language", text: $searchText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                    .padding(.horizontal)
+                    .padding(.top)
 
+                    Form {
+                        // Toggle for Novelty Voices
+                        Section {
+                            Toggle("Show Novelty Voices", isOn: $showNoveltyVoices)
+                        }
 
-            // List of voices filtered by search text and novelty toggle
-            ForEach(filteredVoiceLanguages(), id: \.self) { lang in
+                        // List of voices filtered by search text and novelty toggle
+                        ForEach(filteredVoiceLanguages(), id: \.self) { lang in
                 Section(header: Text(getLanguageAndRegion(lang))) {
                     let voices = filteredVoices(for: lang)
                     ForEach(Array(voices.enumerated()), id: \.element.identifier) { _, voice in
@@ -46,12 +73,37 @@ struct VoicePicker: View {
                 }
             }
         }
+        }
         .navigationTitle("Select a Voice")
+        .onAppear {
+            print("🔊 DEBUG: VoicePicker onAppear called")
+            loadVoicesAsync()
+        }
+    }
+
+    private func loadVoicesAsync() {
+        print("🔊 DEBUG: VoicePicker.loadVoicesAsync() called")
+        DispatchQueue.global(qos: .userInitiated).async {
+            print("🔊 DEBUG: Loading voices on background thread")
+            // This will trigger ensureInitialized() on background thread
+            let _ = voiceList.sortedKeys()
+
+            DispatchQueue.main.async {
+                print("🔊 DEBUG: Voice loading completed, updating UI")
+                isLoading = false
+            }
+        }
     }
 
     // Filtered list of voice languages based on search and novelty filter
     private func filteredVoiceLanguages() -> [String] {
+        guard !isLoading else {
+            print("🔊 DEBUG: VoicePicker.filteredVoiceLanguages() called but still loading")
+            return []
+        }
+        print("🔊 DEBUG: VoicePicker.filteredVoiceLanguages() called")
         let allLanguages = voiceList.sortedKeys()
+        print("🔊 DEBUG: Found \(allLanguages.count) voice languages")
         let matchingLanguages = allLanguages.filter { lang in
             let voices = filteredVoices(for: lang)
             return !voices.isEmpty

@@ -43,12 +43,14 @@ struct VoiceSelectionArea: View {
                 voiceId: $speakingVoiceId,
                 voiceName: $speakingVoiceName,
                 playSample: {
+                    print("🔊 DEBUG: Speaking voice play sample called")
                     voiceController.playSpeaking(
                         String(
                             localized: "Thank you for using Echo, this is your speaking voice",
                             comment: "This is text is read aloud by the Text-To-Speech system as a preview"
                         )
                     )
+                    print("🔊 DEBUG: Speaking voice play sample completed")
                 }
             )
             VoiceOptionsArea(
@@ -65,12 +67,14 @@ struct VoiceSelectionArea: View {
                 voiceId: $cueVoiceId,
                 voiceName: $cueVoiceName,
                 playSample: {
+                    print("🔊 DEBUG: Cue voice play sample called")
                     voiceController.playCue(
                         String(
                             localized: "Thank you for using Echo, this is your cue voice",
                             comment: "This is text is read aloud by the Text-To-Speech system as a preview"
                         )
                     )
+                    print("🔊 DEBUG: Cue voice play sample completed")
                 }
             )
         }

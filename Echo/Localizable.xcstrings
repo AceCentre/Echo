@@ -266,6 +266,12 @@
     "Current Sentence: " : {
       "comment" : "This label prefixes the current full sentance in the scrollable area. Make sure to leave the colon and space"
     },
+    "Current Voice ID: %@" : {
+
+    },
+    "Current Voice Name: %@" : {
+
+    },
     "Current Word: " : {
       "comment" : "This label prefixes the current word in the scrollable area. Make sure to leave the colon and space"
     },
@@ -559,6 +565,9 @@
     },
     "Lip movements, smiles, and expressions" : {
       "comment" : "Description for mouth gesture category"
+    },
+    "Loading voices..." : {
+
     },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
@@ -1037,6 +1046,9 @@
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
     },
+    "Test Button" : {
+
+    },
     "Test Gesture" : {
 
     },
@@ -1141,6 +1153,12 @@
     },
     "Voice Options" : {
       "comment" : "The navigation title for the voice options page"
+    },
+    "Voice Picker Debug" : {
+
+    },
+    "Voice Picker Test" : {
+
     },
     "Voice Selection" : {
       "comment" : "Label for the navigation link to the voice options page"

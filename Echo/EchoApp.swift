@@ -122,39 +122,39 @@ struct EchoApp: App {
                 }
                 
                 /*
-                 Create and store a cueVoice
+                 Create and store a cueVoice with safe defaults
                  */
                 if currentSettings.cueVoice == nil {
                     let cueVoice = Voice(
                         rate: 35,
                         volume: 100,
-                        voiceId: "unknown",
-                        voiceName: "unkown"
+                        voiceId: "com.apple.ttsbundle.Samantha-compact",
+                        voiceName: "Samantha"
                     )
-                    cueVoice.setToDefaultCueVoice()
-                    
+                    // Don't call setToDefaultCueVoice() at startup to avoid Assistant Framework calls
+
                     container.mainContext.insert(cueVoice)
                     try container.mainContext.save()
-                    
+
                     currentSettings.cueVoice = cueVoice
                     try container.mainContext.save()
                 }
                 
                 /*
-                 Create and store a speakingVoice
+                 Create and store a speakingVoice with safe defaults
                  */
                 if currentSettings.speakingVoice == nil {
                     let speakingVoice = Voice(
                         rate: 35,
                         volume: 100,
-                        voiceId: "unknown",
-                        voiceName: "unkown"
+                        voiceId: "com.apple.ttsbundle.Samantha-compact",
+                        voiceName: "Samantha"
                     )
-                    speakingVoice.setToDefaultSpeakingVoice()
-                    
+                    // Don't call setToDefaultSpeakingVoice() at startup to avoid Assistant Framework calls
+
                     container.mainContext.insert(speakingVoice)
                     try container.mainContext.save()
-                    
+
                     currentSettings.speakingVoice = speakingVoice
                     try container.mainContext.save()
                 }

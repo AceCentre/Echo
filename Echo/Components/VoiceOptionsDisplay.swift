@@ -11,18 +11,22 @@ import SwiftUI
 struct VoiceOptionsArea: View {
     var title: String
     var helpText: String
-    
+
     @Binding var rate: Double
     @Binding var volume: Double
     @Binding var voiceId: String
     @Binding var voiceName: String
-    
+
     var playSample: () -> Void
+
+    @State private var showVoicePicker = false
     
     var body: some View {
         Section(content: {
             Button(action: {
+                print("🔊 DEBUG: Play Sample button tapped")
                 playSample()
+                print("🔊 DEBUG: Play Sample function called")
             }, label: {
                 Label(
                     String(
@@ -32,11 +36,10 @@ struct VoiceOptionsArea: View {
                     systemImage: "play.circle"
                 )
             })
-            NavigationLink(destination: {
-                VoicePicker(
-                    voiceId: $voiceId,
-                    voiceName: $voiceName
-                )
+            Button(action: {
+                print("🔊 DEBUG: Voice button tapped")
+                showVoicePicker = true
+                print("🔊 DEBUG: showVoicePicker set to true")
             }, label: {
                 HStack {
                     Text(
@@ -47,8 +50,25 @@ struct VoiceOptionsArea: View {
                     Text(voiceName)
                         .foregroundStyle(.gray)
                 }
-               
+
             })
+            .sheet(isPresented: $showVoicePicker) {
+                VStack {
+                    HStack {
+                        Button("Cancel") {
+                            print("🔊 DEBUG: Cancel button tapped")
+                            showVoicePicker = false
+                        }
+                        .padding()
+                        Spacer()
+                    }
+
+                    VoicePicker(voiceId: $voiceId, voiceName: $voiceName)
+                }
+                .onAppear {
+                    print("🔊 DEBUG: Voice picker sheet being presented")
+                }
+            }
             
             VStack {
                 HStack {
@@ -97,5 +117,36 @@ struct VoiceOptionsArea: View {
         }, footer: {
             Text(helpText)
         })
+    }
+}
+
+struct TestVoicePickerView: View {
+    @Binding var voiceId: String
+    @Binding var voiceName: String
+
+    var body: some View {
+        VStack {
+            Text("Voice Picker Test")
+                .font(.title)
+                .padding()
+
+            Text("Current Voice ID: \(voiceId)")
+                .padding()
+
+            Text("Current Voice Name: \(voiceName)")
+                .padding()
+
+            Button("Test Button") {
+                print("🔊 DEBUG: Test button tapped")
+            }
+            .padding()
+
+            Spacer()
+        }
+        .navigationTitle("Voice Picker Debug")
+        .onAppear {
+            print("🔊 DEBUG: TestVoicePickerView appeared successfully")
+            print("🔊 DEBUG: voiceId: '\(voiceId)', voiceName: '\(voiceName)'")
+        }
     }
 }
