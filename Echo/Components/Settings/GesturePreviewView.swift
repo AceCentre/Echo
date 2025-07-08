@@ -13,9 +13,10 @@ struct GesturePreviewView: View {
     let threshold: Float
     @State private var detector = FacialGestureDetector()
     @State private var isActive = false
-    
+    @State private var currentGestureValue: Float = 0.0
+
     var gestureValue: Float {
-        detector.previewGestureValues[gesture] ?? 0.0
+        return currentGestureValue
     }
     
     var isGestureDetected: Bool {
@@ -151,6 +152,12 @@ struct GesturePreviewView: View {
         }
         .onDisappear {
             stopPreview()
+        }
+        .onChange(of: detector.previewGestureValues) { _, newValues in
+            let newValue = newValues[gesture] ?? 0.0
+            if newValue != currentGestureValue {
+                currentGestureValue = newValue
+            }
         }
     }
     

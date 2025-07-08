@@ -177,12 +177,11 @@ struct GesturePreviewSection: View {
         case tap, hold
     }
 
+    // Use @State to force UI updates when gesture values change
+    @State private var currentGestureValue: Float = 0.0
+
     var gestureValue: Float {
-        let value = detector.previewGestureValues[gesture] ?? 0.0
-        if value > 0.1 { // Only log significant values to avoid spam
-            print("UI gestureValue for \(gesture.displayName): \(value)")
-        }
-        return value
+        return currentGestureValue
     }
 
     var isGestureDetected: Bool {
@@ -247,23 +246,30 @@ struct GesturePreviewSection: View {
 
                     // Gesture strength progress bar
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Gesture Strength")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
+                        HStack {
+                            Text("Gesture Strength")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text("\(String(format: "%.1f", gestureValue * 100))% / \(String(format: "%.0f", threshold * 100))%")
+                                .font(.caption2)
+                                .foregroundColor(gestureValue > threshold ? .green : .secondary)
+                                .fontWeight(gestureValue > threshold ? .bold : .regular)
+                        }
 
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
-                                    .frame(height: 4)
+                                    .frame(height: 8)
 
                                 Rectangle()
                                     .fill(isGestureDetected ? (isHoldGesture ? Color.orange : Color.green) : Color.blue)
-                                    .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 4)
+                                    .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 8)
                                     .animation(.easeInOut(duration: 0.1), value: gestureValue)
                             }
                         }
-                        .frame(height: 4)
+                        .frame(height: 8)
                     }
 
                     // Hold duration progress (always show if hold action is configured)
@@ -332,6 +338,15 @@ struct GesturePreviewSection: View {
         }
         .onChange(of: gestureValue) { _, newValue in
             print("Gesture value changed: \(newValue), threshold: \(threshold)")
+        }
+        .onChange(of: detector.previewGestureValues) { _, newValues in
+            let newValue = newValues[gesture] ?? 0.0
+            if newValue != currentGestureValue {
+                currentGestureValue = newValue
+                if newValue > 0.1 { // Only log significant values to avoid spam
+                    print("UI gestureValue for \(gesture.displayName): \(newValue)")
+                }
+            }
         }
         .onChange(of: isGestureDetected) { _, newValue in
             print("Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")

@@ -33,6 +33,9 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private var onGestureDetected: ((FacialGesture, Bool) -> Void)?
     private var previewGestures: Set<FacialGesture> = []
     private var onAutoDetectionComplete: ((FacialGesture?) -> Void)?
+    private var lastUpdateTime: Date = Date()
+    private var lastFaceAnchorTime: Date = Date()
+    private var sessionHealthTimer: Timer?
     
     private struct GestureState {
         var isActive: Bool = false
@@ -97,10 +100,47 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             self.isActive = true
             self.errorMessage = nil
             print("isActive is now: \(self.isActive)")
+
+            // Start session health monitoring
+            self.startSessionHealthMonitoring()
+        }
+    }
+
+    private func startSessionHealthMonitoring() {
+        // Stop any existing timer
+        sessionHealthTimer?.invalidate()
+
+        // Start a timer to check if we're still receiving face anchors
+        sessionHealthTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
+            self?.checkSessionHealth()
+        }
+    }
+
+    private func checkSessionHealth() {
+        let timeSinceLastFaceAnchor = Date().timeIntervalSince(lastFaceAnchorTime)
+
+        // If we haven't received a face anchor in 3 seconds and we should be active, restart the session
+        if timeSinceLastFaceAnchor > 3.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
+            print("⚠️ ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...")
+            DispatchQueue.main.async {
+                self.restartARSession()
+            }
+        }
+    }
+
+    private func restartARSession() {
+        print("🔄 Restarting ARKit session...")
+        session.pause()
+
+        // Small delay before restarting
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.startARSession()
         }
     }
     
     func stopDetection() {
+        sessionHealthTimer?.invalidate()
+        sessionHealthTimer = nil
         session.pause()
         isActive = false
         gestureStates.removeAll()
@@ -163,6 +203,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     func stopPreviewMode() {
+        sessionHealthTimer?.invalidate()
+        sessionHealthTimer = nil
         isPreviewMode = false
         previewGestures.removeAll()
         previewGestureValues.removeAll()
@@ -386,17 +428,28 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             return
         }
 
-        for anchor in anchors {
-            if let faceAnchor = anchor as? ARFaceAnchor {
-                if isPreviewMode {
-                    print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
-                }
-                processBlendShapes(faceAnchor.blendShapes)
+        // Throttle updates to prevent overwhelming the system (max 30 FPS)
+        let currentTime = Date()
+        let timeSinceLastUpdate = currentTime.timeIntervalSince(lastUpdateTime)
+        guard timeSinceLastUpdate >= 0.033 else { // ~30 FPS limit
+            return
+        }
+        lastUpdateTime = currentTime
+
+        // Only process the most recent face anchor to avoid overwhelming the system
+        if let faceAnchor = anchors.last(where: { $0 is ARFaceAnchor }) as? ARFaceAnchor {
+            // Update the last face anchor time for health monitoring
+            lastFaceAnchorTime = currentTime
+
+            if isPreviewMode {
+                print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
             }
+            processBlendShapes(faceAnchor.blendShapes)
         }
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
+        print("ARKit session failed with error: \(error.localizedDescription)")
         DispatchQueue.main.async {
             self.errorMessage = error.localizedDescription
             self.isActive = false
@@ -404,12 +457,20 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
     
     func sessionWasInterrupted(_ session: ARSession) {
+        print("ARKit session was interrupted")
         DispatchQueue.main.async {
             self.isActive = false
         }
     }
-    
+
     func sessionInterruptionEnded(_ session: ARSession) {
-        // Session interruption ended - could restart if needed
+        print("ARKit session interruption ended - restarting session")
+        // Restart the session when interruption ends
+        DispatchQueue.main.async {
+            if self.isPreviewMode || self.isAutoDetectionMode || self.onGestureDetected != nil {
+                print("Restarting ARKit session after interruption")
+                self.startARSession()
+            }
+        }
     }
 }

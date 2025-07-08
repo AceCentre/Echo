@@ -31,7 +31,6 @@ struct VoicePicker: View {
                         ProgressView()
                         Text("Loading voices...")
                     }
-                    .padding()
                     Spacer()
                 } else {
                     // Search field at the top
@@ -42,7 +41,6 @@ struct VoicePicker: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
                     .padding(.horizontal)
-                    .padding(.top)
 
                     Form {
                         // Toggle for Novelty Voices
