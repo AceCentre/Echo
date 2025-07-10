@@ -196,7 +196,7 @@ enum FacialGestureCategory: String, CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .eyes: return String(
-            localized: "Blinking and eye movements",
+            localized: "Blinking, eye closure, and gaze direction",
             comment: "Description for eye gesture category"
         )
         case .eyebrows: return String(
@@ -229,7 +229,11 @@ enum FacialGestureCategory: String, CaseIterable, Identifiable {
     var gestures: [FacialGesture] {
         switch self {
         case .eyes:
-            return [.eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither]
+            return [
+                .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither,
+                .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither,
+                .lookUp, .lookDown, .lookLeft, .lookRight
+            ]
         case .eyebrows:
             return [.browDownLeft, .browDownRight, .browInnerUp, .browOuterUpLeft, .browOuterUpRight]
         case .cheeks:

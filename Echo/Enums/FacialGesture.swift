@@ -12,6 +12,9 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     case eyeBlinkLeft = "eyeBlinkLeft"
     case eyeBlinkRight = "eyeBlinkRight"
     case eyeBlinkEither = "eyeBlinkEither"
+    case eyeOpenLeft = "eyeOpenLeft"
+    case eyeOpenRight = "eyeOpenRight"
+    case eyeOpenEither = "eyeOpenEither"
     case browDownLeft = "browDownLeft"
     case browDownRight = "browDownRight"
     case browInnerUp = "browInnerUp"
@@ -50,7 +53,11 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
     case noseSneerLeft = "noseSneerLeft"
     case noseSneerRight = "noseSneerRight"
     case tongueOut = "tongueOut"
-    
+    case lookUp = "lookUp"
+    case lookDown = "lookDown"
+    case lookLeft = "lookLeft"
+    case lookRight = "lookRight"
+
     var id: Self { self }
     
     var displayName: String {
@@ -66,6 +73,18 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkEither: return String(
             localized: "Either Eye Blink",
             comment: "Display name for either eye blink gesture"
+        )
+        case .eyeOpenLeft: return String(
+            localized: "Left Eye Open",
+            comment: "Display name for left eye open gesture"
+        )
+        case .eyeOpenRight: return String(
+            localized: "Right Eye Open",
+            comment: "Display name for right eye open gesture"
+        )
+        case .eyeOpenEither: return String(
+            localized: "Either Eye Open",
+            comment: "Display name for either eye open gesture"
         )
         case .browDownLeft: return String(
             localized: "Left Brow Down",
@@ -219,6 +238,22 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             localized: "Tongue Out",
             comment: "Display name for tongue out gesture"
         )
+        case .lookUp: return String(
+            localized: "Look Up",
+            comment: "Display name for look up gesture"
+        )
+        case .lookDown: return String(
+            localized: "Look Down",
+            comment: "Display name for look down gesture"
+        )
+        case .lookLeft: return String(
+            localized: "Look Left",
+            comment: "Display name for look left gesture"
+        )
+        case .lookRight: return String(
+            localized: "Look Right",
+            comment: "Display name for look right gesture"
+        )
         }
     }
     
@@ -235,6 +270,18 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkEither: return String(
             localized: "Blink either eye",
             comment: "Description for either eye blink gesture"
+        )
+        case .eyeOpenLeft: return String(
+            localized: "Keep your left eye open",
+            comment: "Description for left eye open gesture"
+        )
+        case .eyeOpenRight: return String(
+            localized: "Keep your right eye open",
+            comment: "Description for right eye open gesture"
+        )
+        case .eyeOpenEither: return String(
+            localized: "Keep either eye open",
+            comment: "Description for either eye open gesture"
         )
         case .browDownLeft: return String(
             localized: "Lower your left eyebrow",
@@ -388,6 +435,22 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             localized: "Stick out your tongue",
             comment: "Description for tongue out gesture"
         )
+        case .lookUp: return String(
+            localized: "Look up with your eyes",
+            comment: "Description for look up gesture"
+        )
+        case .lookDown: return String(
+            localized: "Look down with your eyes",
+            comment: "Description for look down gesture"
+        )
+        case .lookLeft: return String(
+            localized: "Look left with your eyes",
+            comment: "Description for look left gesture"
+        )
+        case .lookRight: return String(
+            localized: "Look right with your eyes",
+            comment: "Description for look right gesture"
+        )
         }
     }
     
@@ -397,6 +460,9 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .eyeBlinkLeft: return .eyeBlinkLeft
         case .eyeBlinkRight: return .eyeBlinkRight
         case .eyeBlinkEither: return .eyeBlinkLeft // Special case - will be handled in detection logic
+        case .eyeOpenLeft: return .eyeBlinkLeft // Use same blend shape as blink but inverted
+        case .eyeOpenRight: return .eyeBlinkRight // Use same blend shape as blink but inverted
+        case .eyeOpenEither: return .eyeBlinkLeft // Special case - will be handled in detection logic
         case .browDownLeft: return .browDownLeft
         case .browDownRight: return .browDownRight
         case .browInnerUp: return .browInnerUp
@@ -435,18 +501,44 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .noseSneerLeft: return .noseSneerLeft
         case .noseSneerRight: return .noseSneerRight
         case .tongueOut: return .tongueOut
+        case .lookUp: return .eyeLookUpLeft // Use left eye look up as primary, will handle specially
+        case .lookDown: return .eyeLookDownLeft // Use left eye look down as primary, will handle specially
+        case .lookLeft: return .eyeLookOutLeft // Use left eye look out as primary, will handle specially
+        case .lookRight: return .eyeLookInLeft // Use left eye look in as primary, will handle specially
         }
     }
     
+    /// Whether this gesture has inverted behavior (ARKit value decreases when gesture is performed)
+    var isInverted: Bool {
+        switch self {
+        case .mouthClose:
+            // mouthClose: ARKit reports higher values when mouth is open,
+            // but we want higher values when mouth is closed
+            return true
+        case .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither:
+            // eyeOpen: ARKit reports higher values when eyes are closed (blinking),
+            // but we want higher values when eyes are OPEN (opposite of blink)
+            return true
+        // Add other inverted gestures here if discovered during testing
+        // Examples might include other "close" or "press" type gestures
+        default:
+            return false
+        }
+    }
+
     /// Default threshold for gesture detection
     var defaultThreshold: Float {
         switch self {
         case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither:
             return 0.8 // Higher threshold for blinks
+        case .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither:
+            return 0.7 // Medium threshold for detecting open eyes
         case .jawOpen:
             return 0.3 // Lower threshold for mouth opening
         case .mouthSmileLeft, .mouthSmileRight:
             return 0.5 // Medium threshold for smiles
+        case .lookUp, .lookDown, .lookLeft, .lookRight:
+            return 0.4 // Medium-low threshold for gaze direction
         default:
             return 0.6 // Default threshold for most gestures
         }
@@ -458,12 +550,43 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
             .eyeBlinkLeft,
             .eyeBlinkRight,
             .eyeBlinkEither,
+            .eyeOpenLeft,
+            .eyeOpenRight,
+            .eyeOpenEither,
             .jawOpen,
+            .mouthClose,
             .mouthSmileLeft,
             .mouthSmileRight,
             .browInnerUp,
             .cheekPuff,
-            .mouthPucker
+            .mouthPucker,
+            .lookUp,
+            .lookDown,
+            .lookLeft,
+            .lookRight
         ]
+    }
+
+    /// Converts a linear slider value (0.0-1.0) to a non-linear threshold value (0.1-1.0)
+    /// Uses an exponential curve to provide more granular control in the lower sensitivity range
+    static func sliderValueToThreshold(_ sliderValue: Float) -> Float {
+        // Clamp slider value to valid range
+        let clampedValue = max(0.0, min(1.0, sliderValue))
+
+        // Use exponential curve: threshold = 0.1 + 0.9 * (sliderValue^2.5)
+        // This gives more granular control in the lower range
+        let exponentialValue = pow(clampedValue, 2.5)
+        return 0.1 + 0.9 * exponentialValue
+    }
+
+    /// Converts a threshold value (0.1-1.0) back to a linear slider value (0.0-1.0)
+    /// Inverse of sliderValueToThreshold for proper slider positioning
+    static func thresholdToSliderValue(_ threshold: Float) -> Float {
+        // Clamp threshold to valid range
+        let clampedThreshold = max(0.1, min(1.0, threshold))
+
+        // Inverse of the exponential curve: sliderValue = ((threshold - 0.1) / 0.9)^(1/2.5)
+        let normalizedThreshold = (clampedThreshold - 0.1) / 0.9
+        return pow(normalizedThreshold, 1.0 / 2.5)
     }
 }

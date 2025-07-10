@@ -68,7 +68,7 @@ struct FacialGestureSwitchSection: View {
                     actionState: holdAction
                 )
                 
-                // Threshold slider
+                // Threshold slider with non-linear scaling
                 VStack(alignment: .leading, spacing: 4) {
                     Text(String(
                         localized: "Threshold",
@@ -78,21 +78,28 @@ struct FacialGestureSwitchSection: View {
                     .foregroundColor(.secondary)
 
                     HStack {
-                        Text("0.1")
+                        Text("Low")
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
-                        Slider(value: $threshold, in: 0.1...1.0, step: 0.1)
-                            .tint(.blue)
+                        Slider(
+                            value: Binding(
+                                get: { FacialGesture.thresholdToSliderValue(threshold) },
+                                set: { threshold = FacialGesture.sliderValueToThreshold($0) }
+                            ),
+                            in: 0.0...1.0,
+                            step: 0.01
+                        )
+                        .tint(.blue)
 
-                        Text("1.0")
+                        Text("High")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
 
                     Text(String(
-                        localized: "Threshold: \(String(format: "%.1f", threshold))",
-                        comment: "Shows current threshold value"
+                        localized: "Threshold: \(Int(threshold * 100))%",
+                        comment: "Shows current threshold value as percentage"
                     ))
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -868,7 +875,7 @@ struct AddFacialGesture: View {
                             actionState: holdAction
                         )
 
-                        // Threshold slider
+                        // Threshold slider with non-linear scaling
                         VStack(alignment: .leading, spacing: 4) {
                             Text(String(
                                 localized: "Threshold",
@@ -878,21 +885,28 @@ struct AddFacialGesture: View {
                             .foregroundColor(.secondary)
 
                             HStack {
-                                Text("0.1")
+                                Text("Low")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
 
-                                Slider(value: $threshold, in: 0.1...1.0, step: 0.05)
-                                    .tint(.blue)
+                                Slider(
+                                    value: Binding(
+                                        get: { FacialGesture.thresholdToSliderValue(threshold) },
+                                        set: { threshold = FacialGesture.sliderValueToThreshold($0) }
+                                    ),
+                                    in: 0.0...1.0,
+                                    step: 0.01
+                                )
+                                .tint(.blue)
 
-                                Text("1.0")
+                                Text("High")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                             }
 
                             Text(String(
                                 localized: "Threshold: \(Int(threshold * 100))%",
-                                comment: "Shows current threshold value"
+                                comment: "Shows current threshold value as percentage"
                             ))
                             .font(.caption2)
                             .foregroundColor(.secondary)

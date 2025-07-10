@@ -42,13 +42,7 @@
     "%lld%%" : {
 
     },
-    "0.1" : {
-
-    },
     "0.5s" : {
-
-    },
-    "1.0" : {
 
     },
     "3.0s" : {
@@ -180,7 +174,7 @@
     "Blink your right eye" : {
       "comment" : "Description for right eye blink gesture"
     },
-    "Blinking and eye movements" : {
+    "Blinking, eye closure, and gaze direction" : {
       "comment" : "Description for eye gesture category"
     },
     "Bold Highlight Text" : {
@@ -360,6 +354,9 @@
     "Either Eye Blink" : {
       "comment" : "Display name for either eye blink gesture"
     },
+    "Either Eye Open" : {
+      "comment" : "Display name for either eye open gesture"
+    },
     "Enable" : {
       "comment" : "Label to enable swipe"
     },
@@ -462,6 +459,9 @@
     "Hide" : {
       "comment" : "Label to hide arrows\nPicker option for control command"
     },
+    "High" : {
+
+    },
     "History" : {
       "comment" : "Header for settings about history"
     },
@@ -513,6 +513,15 @@
     "Jaw Right" : {
       "comment" : "Display name for jaw right gesture"
     },
+    "Keep either eye open" : {
+      "comment" : "Description for either eye open gesture"
+    },
+    "Keep your left eye open" : {
+      "comment" : "Description for left eye open gesture"
+    },
+    "Keep your right eye open" : {
+      "comment" : "Description for right eye open gesture"
+    },
     "Language" : {
       "comment" : "The label that is shown next to the language picker"
     },
@@ -533,6 +542,9 @@
     },
     "Left Eye Blink" : {
       "comment" : "Display name for left eye blink gesture"
+    },
+    "Left Eye Open" : {
+      "comment" : "Display name for left eye open gesture"
     },
     "Left Frown" : {
       "comment" : "Display name for left frown gesture"
@@ -584,6 +596,33 @@
     },
     "Long Hold" : {
       "comment" : "Display name for long hold gesture duration"
+    },
+    "Look Down" : {
+      "comment" : "Display name for look down gesture"
+    },
+    "Look down with your eyes" : {
+      "comment" : "Description for look down gesture"
+    },
+    "Look Left" : {
+      "comment" : "Display name for look left gesture"
+    },
+    "Look left with your eyes" : {
+      "comment" : "Description for look left gesture"
+    },
+    "Look Right" : {
+      "comment" : "Display name for look right gesture"
+    },
+    "Look right with your eyes" : {
+      "comment" : "Description for look right gesture"
+    },
+    "Look Up" : {
+      "comment" : "Display name for look up gesture"
+    },
+    "Look up with your eyes" : {
+      "comment" : "Description for look up gesture"
+    },
+    "Low" : {
+
     },
     "Lower Lip Roll" : {
       "comment" : "Display name for lower lip roll gesture"
@@ -806,6 +845,9 @@
     },
     "Right Eye Blink" : {
       "comment" : "Display name for right eye blink gesture"
+    },
+    "Right Eye Open" : {
+      "comment" : "Display name for right eye open gesture"
     },
     "Right Frown" : {
       "comment" : "Display name for right frown gesture"
@@ -1107,11 +1149,8 @@
     "Threshold" : {
       "comment" : "Label for gesture threshold slider"
     },
-    "Threshold: %@" : {
-      "comment" : "Shows current threshold value"
-    },
     "Threshold: %lld%%" : {
-      "comment" : "Shows current threshold value"
+      "comment" : "Shows current threshold value as percentage"
     },
     "Tongue" : {
       "comment" : "Category name for tongue gestures"

@@ -163,8 +163,18 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let standardDeviation = sqrt(variance)
 
             // If standard deviation is very low and mean is also low, values might be stuck
-            if standardDeviation < 0.02 && mean < 0.15 {
+            // But exclude gaze direction gestures which naturally have low values when not actively looking
+            let isGazeGesture = [FacialGesture.lookUp, .lookDown, .lookLeft, .lookRight].contains(gesture)
+
+            if standardDeviation < 0.02 && mean < 0.15 && !isGazeGesture {
                 print("⚠️ Gesture \(gesture.displayName) appears unresponsive - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
+                DispatchQueue.main.async {
+                    self.restartARSession()
+                }
+                return
+            } else if isGazeGesture && standardDeviation < 0.001 && mean < 0.001 {
+                // For gaze gestures, only restart if values are completely stuck at 0
+                print("⚠️ Gaze gesture \(gesture.displayName) appears completely stuck - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
                 DispatchQueue.main.async {
                     self.restartARSession()
                 }
@@ -410,6 +420,29 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Handle preview mode
         if isPreviewMode {
             print("Processing preview mode for \(previewGestures.count) gestures")
+
+            // Debug: Log all non-zero blend shapes for gaze direction debugging
+            let gazeGestures: Set<FacialGesture> = [.lookUp, .lookDown, .lookLeft, .lookRight]
+            let hasGazeGesture = previewGestures.contains { gesture in
+                gazeGestures.contains(gesture)
+            }
+            if hasGazeGesture {
+                var gazeBlendShapes: [String: Float] = [:]
+                gazeBlendShapes["eyeLookUpLeft"] = blendShapes[.eyeLookUpLeft]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookUpRight"] = blendShapes[.eyeLookUpRight]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookDownLeft"] = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookDownRight"] = blendShapes[.eyeLookDownRight]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookInLeft"] = blendShapes[.eyeLookInLeft]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookInRight"] = blendShapes[.eyeLookInRight]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookOutLeft"] = blendShapes[.eyeLookOutLeft]?.floatValue ?? 0
+                gazeBlendShapes["eyeLookOutRight"] = blendShapes[.eyeLookOutRight]?.floatValue ?? 0
+
+                let nonZeroGaze = gazeBlendShapes.filter { $0.value > 0.01 }
+                if !nonZeroGaze.isEmpty {
+                    print("Non-zero gaze blend shapes: \(nonZeroGaze)")
+                }
+            }
+
             for gesture in previewGestures {
                 let gestureValue = getGestureValue(for: gesture, from: blendShapes)
                 print("Preview gesture \(gesture.displayName): value = \(gestureValue)")
@@ -504,12 +537,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func getGestureValue(for gesture: FacialGesture, from blendShapes: [ARFaceAnchor.BlendShapeLocation: NSNumber]) -> Float {
+        let rawValue: Float
+
         switch gesture {
         case .eyeBlinkEither:
             // Special case: either eye blink - use the maximum of both eye blink values
             let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
             let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
-            return max(leftBlink, rightBlink)
+            rawValue = max(leftBlink, rightBlink)
         case .eyeBlinkLeft, .eyeBlinkRight:
             // Debug eye blink values to understand left/right mapping
             let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
@@ -521,12 +556,105 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                 print("Eye values - ARKit Left: \(String(format: "%.3f", leftBlink)), ARKit Right: \(String(format: "%.3f", rightBlink)), Target(\(gesture.displayName)): \(String(format: "%.3f", targetValue))")
             }
 
-            return targetValue
+            rawValue = targetValue
+        case .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither:
+            // Eye open gestures: same as blink but inverted (detects when eyes are open)
+            if gesture == .eyeOpenEither {
+                let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
+                let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
+                rawValue = max(leftBlink, rightBlink)
+            } else {
+                rawValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
+            }
+        case .lookUp:
+            // Look up: use average of both eyes looking up
+            let leftLookUp = blendShapes[.eyeLookUpLeft]?.floatValue ?? 0
+            let rightLookUp = blendShapes[.eyeLookUpRight]?.floatValue ?? 0
+            // Use average for more stable detection
+            let upAvg = (leftLookUp + rightLookUp) / 2.0
+            // Subtract down values to get net upward gaze
+            let leftLookDown = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
+            let rightLookDown = blendShapes[.eyeLookDownRight]?.floatValue ?? 0
+            let downAvg = (leftLookDown + rightLookDown) / 2.0
+            // Net upward gaze (clamp to avoid negative values)
+            rawValue = max(0, upAvg - (downAvg * 0.5))
+
+            if rawValue > 0.01 { // Only log when there's activity
+                print("Look Up values - Up: \(leftLookUp)/\(rightLookUp), Down: \(leftLookDown)/\(rightLookDown), Net: \(rawValue)")
+            }
+        case .lookDown:
+            // Look down: use average of both eyes looking down
+            let leftLookDown = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
+            let rightLookDown = blendShapes[.eyeLookDownRight]?.floatValue ?? 0
+            // Use average for more stable detection
+            let downAvg = (leftLookDown + rightLookDown) / 2.0
+            // Subtract up values to get net downward gaze
+            let leftLookUp = blendShapes[.eyeLookUpLeft]?.floatValue ?? 0
+            let rightLookUp = blendShapes[.eyeLookUpRight]?.floatValue ?? 0
+            let upAvg = (leftLookUp + rightLookUp) / 2.0
+            // Net downward gaze (clamp to avoid negative values)
+            rawValue = max(0, downAvg - (upAvg * 0.5))
+
+            if rawValue > 0.01 {
+                print("Look Down values - Down: \(leftLookDown)/\(rightLookDown), Up: \(leftLookUp)/\(rightLookUp), Net: \(rawValue)")
+            }
+        case .lookLeft:
+            // Look left: left eye looks in (toward nose), right eye looks out (away from nose)
+            let leftLookIn = blendShapes[.eyeLookInLeft]?.floatValue ?? 0
+            let rightLookOut = blendShapes[.eyeLookOutRight]?.floatValue ?? 0
+            // Use average of both eyes for more stable detection
+            rawValue = (leftLookIn + rightLookOut) / 2.0
+            if rawValue > 0.01 {
+                print("Look Left values - LeftIn: \(leftLookIn), RightOut: \(rightLookOut), Average: \(rawValue)")
+            }
+        case .lookRight:
+            // Look right: left eye looks out (away from nose), right eye looks in (toward nose)
+            let leftLookOut = blendShapes[.eyeLookOutLeft]?.floatValue ?? 0
+            let rightLookIn = blendShapes[.eyeLookInRight]?.floatValue ?? 0
+            // Use average of both eyes for more stable detection
+            rawValue = (leftLookOut + rightLookIn) / 2.0
+            if rawValue > 0.01 {
+                print("Look Right values - LeftOut: \(leftLookOut), RightIn: \(rightLookIn), Average: \(rawValue)")
+            }
         default:
-            return blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
+            rawValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
+        }
+
+        // Apply inversion if needed for gestures that have inverted behavior
+        if gesture.isInverted {
+            return processInvertedGesture(rawValue, for: gesture)
+        } else {
+            return rawValue
         }
     }
-    
+
+    private func processInvertedGesture(_ rawValue: Float, for gesture: FacialGesture) -> Float {
+        switch gesture {
+        case .mouthClose:
+            // For mouthClose: ARKit reports higher values when mouth is more open
+            // We want higher values when mouth is more closed
+            //
+            // Strategy: Only register mouth close when actively closing from neutral
+            // - Neutral/open mouth (rawValue 0.2+): output = 0.0 (no detection)
+            // - Closing mouth (rawValue < 0.2): output scales from 0.0 to 1.0
+
+            let neutralThreshold: Float = 0.2
+
+            // If mouth is at or above neutral position, no mouth close detected
+            if rawValue >= neutralThreshold {
+                return 0.0
+            }
+
+            // Scale the closing amount: rawValue 0.2 → 0.0, rawValue 0.0 → 1.0
+            let closingRatio = (neutralThreshold - rawValue) / neutralThreshold
+            return min(1.0, max(0.0, closingRatio))
+
+        default:
+            // Default simple inversion for other inverted gestures
+            return 1.0 - rawValue
+        }
+    }
+
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
