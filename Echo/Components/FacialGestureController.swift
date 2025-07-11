@@ -76,18 +76,24 @@ struct FacialGestureController: View {
             return
         }
 
-        // Don't start if auto-select is active
+        // Don't interfere with other modes
         if FacialGestureDetector.isAutoSelectActive {
             return
         }
 
-        // Don't start if preview mode is active
         if gestureDetector.isPreviewMode {
             return
         }
 
-        // Stop any existing detection
-        gestureDetector.stopDetection()
+        // Only proceed if we're not already in navigation mode
+        if gestureDetector.currentMode == .navigation {
+            return
+        }
+
+        // Only stop detection if we're not in a critical mode
+        if gestureDetector.currentMode != .preview && gestureDetector.currentMode != .autoSelect {
+            gestureDetector.stopDetection()
+        }
 
         // Configure gestures for enabled switches
         var configuredGestures = 0

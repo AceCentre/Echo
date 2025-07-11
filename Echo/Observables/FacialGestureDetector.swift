@@ -23,6 +23,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     @Published var errorMessage: String?
     @Published var cameraPermissionStatus: AVAuthorizationStatus = .notDetermined
 
+    // Session mode tracking
+    enum SessionMode {
+        case inactive
+        case navigation    // Main app gesture detection
+        case preview      // Settings test gesture mode
+        case autoSelect   // Auto-select gesture discovery
+    }
+
+    @Published var currentMode: SessionMode = .inactive
+
     // Preview mode properties
     @Published var isPreviewMode: Bool = false
     @Published var previewGestureValues: [FacialGesture: Float] = [:]
@@ -90,15 +100,53 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
     
     // MARK: - Public Methods
-    
+
+    /// Stops all detection modes and cleans up session
+    private func stopAllModes() {
+        print("🎯 FacialGestureDetector.stopAllModes called - current mode: \(currentMode)")
+
+        // Stop timers
+        sessionHealthTimer?.invalidate()
+        sessionHealthTimer = nil
+        previewCorruptionCheckTimer?.invalidate()
+        previewCorruptionCheckTimer = nil
+
+        // Clear all state
+        isPreviewMode = false
+        isAutoDetectionMode = false
+        previewGestures.removeAll()
+        previewGestureValues.removeAll()
+        autoDetectionGestures.removeAll()
+        autoDetectionResults.removeAll()
+        onGestureDetected = nil
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
+
+        // Pause session
+        session.pause()
+        isActive = false
+        currentMode = .inactive
+
+        print("🎯 All modes stopped, session paused")
+    }
+
     func startDetection(onGestureDetected: @escaping (FacialGesture, Bool) -> Void) {
+        print("🎯 FacialGestureDetector.startDetection called - switching to navigation mode")
+
         guard isSupported else {
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
 
-        // Store the callback for later use
+        // Stop any existing session first
+        stopAllModes()
+
+        // Store the callback and set mode
         self.onGestureDetected = onGestureDetected
+        currentMode = .navigation
 
         // Check camera permission before starting
         checkCameraPermission()
@@ -248,17 +296,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
     
     func stopDetection() {
-        sessionHealthTimer?.invalidate()
-        sessionHealthTimer = nil
-        session.pause()
-        isActive = false
-        gestureStates.removeAll()
-        onGestureDetected = nil
-
-        // Reset head tracking
-        baselineHeadTransform = nil
-        currentHeadTransform = nil
-        headTrackingInitialized = false
+        print("🎯 FacialGestureDetector.stopDetection called")
+        stopAllModes()
     }
     
     func configureGesture(_ gesture: FacialGesture, threshold: Float, holdDuration: Double = 1.0) {
@@ -278,8 +317,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - Preview Mode Methods
 
     func startPreviewMode(for gestures: [FacialGesture]) {
-        print("🎯 FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName })")
-        print("🎯 Current isActive: \(isActive), isPreviewMode: \(isPreviewMode)")
+        print("🎯 FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName }) - switching to preview mode")
 
         guard isSupported else {
             print("🎯 Face tracking not supported")
@@ -287,8 +325,12 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             return
         }
 
+        // Stop any existing session first
+        stopAllModes()
+
         // Setup preview mode
         isPreviewMode = true
+        currentMode = .preview
         previewGestures = Set(gestures)
         previewGestureValues = [:]
 
@@ -302,25 +344,22 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Notify that preview mode is now active
         NotificationCenter.default.post(name: .previewModeActiveChanged, object: true)
 
-        print("Preview mode setup complete. isPreviewMode: \(isPreviewMode)")
-
         // Check camera permission before starting
         checkCameraPermission()
-        print("Camera permission status: \(cameraPermissionStatus)")
 
         if cameraPermissionStatus == .authorized {
             // Permission already granted, start immediately
-            print("Camera permission authorized, starting AR session")
+            print("🎯 Camera permission authorized, starting AR session for preview mode")
             startARSession()
         } else if cameraPermissionStatus == .denied {
-            print("Camera permission denied")
+            print("🎯 Camera permission denied")
             errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
         } else {
             // Permission not determined, request it
-            print("Camera permission not determined, requesting...")
+            print("🎯 Camera permission not determined, requesting...")
             errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
             requestCameraPermission { [weak self] granted in
-                print("Camera permission request result: \(granted)")
+                print("🎯 Camera permission request result: \(granted)")
                 if granted {
                     self?.startARSession()
                 }
@@ -330,24 +369,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
     func stopPreviewMode() {
         print("🎯 FacialGestureDetector.stopPreviewMode called")
-        sessionHealthTimer?.invalidate()
-        sessionHealthTimer = nil
-        previewCorruptionCheckTimer?.invalidate()
-        previewCorruptionCheckTimer = nil
-        isPreviewMode = false
-        previewGestures.removeAll()
-        previewGestureValues.removeAll()
-        session.pause()
-        isActive = false
+        stopAllModes()
 
         // Notify that preview mode is no longer active
         NotificationCenter.default.post(name: .previewModeActiveChanged, object: false)
+    }
 
-        // Reset head tracking
-        baselineHeadTransform = nil
-        currentHeadTransform = nil
-        headTrackingInitialized = false
-        print("🎯 Preview mode stopped, session paused")
+    /// Stops all detection and ensures clean state for navigation transitions
+    func stopForNavigation() {
+        print("🎯 FacialGestureDetector.stopForNavigation called - preparing for navigation transition")
+        stopAllModes()
     }
 
     // MARK: - Auto Detection Methods
