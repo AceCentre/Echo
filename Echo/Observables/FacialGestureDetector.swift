@@ -746,7 +746,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             )
 
             // Convert to Euler angles to check for extreme rotations
-            let eulerAngles = rotationMatrixToEulerAngles(rotationMatrix)
+            let eulerAngles = extractEulerAngles(from: rotationMatrix)
             let maxAngle = max(abs(eulerAngles.x), abs(eulerAngles.y), abs(eulerAngles.z))
 
             // If any angle exceeds 45 degrees (0.785 radians), reset baseline
@@ -923,5 +923,30 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                 self.startARSession()
             }
         }
+    }
+
+    // MARK: - Helper Functions
+
+    private func extractEulerAngles(from rotationMatrix: simd_float3x3) -> simd_float3 {
+        // Extract Euler angles from rotation matrix (ZYX order)
+        let sy = sqrt(rotationMatrix[0][0] * rotationMatrix[0][0] + rotationMatrix[1][0] * rotationMatrix[1][0])
+
+        let singular = sy < 1e-6
+
+        let x: Float
+        let y: Float
+        let z: Float
+
+        if !singular {
+            x = atan2(rotationMatrix[2][1], rotationMatrix[2][2])
+            y = atan2(-rotationMatrix[2][0], sy)
+            z = atan2(rotationMatrix[1][0], rotationMatrix[0][0])
+        } else {
+            x = atan2(-rotationMatrix[1][2], rotationMatrix[1][1])
+            y = atan2(-rotationMatrix[2][0], sy)
+            z = 0
+        }
+
+        return simd_float3(x, y, z)
     }
 }
