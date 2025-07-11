@@ -601,11 +601,11 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .lookUp, .lookDown, .lookLeft, .lookRight:
             return 0.4 // Medium-low threshold for gaze direction
         case .headNodUp, .headNodDown:
-            return 0.25 // Threshold for head nod (radians) - increased to reduce sensitivity
+            return 0.15 // Threshold for head nod (radians) - reduced for better sensitivity (~8.6 degrees)
         case .headShakeLeft, .headShakeRight:
-            return 0.10 // Threshold for head shake (radians) - decreased to improve detection
+            return 0.08 // Threshold for head shake (radians) - reduced for better sensitivity (~4.6 degrees)
         case .headTiltLeft, .headTiltRight:
-            return 0.08 // Threshold for head tilt (radians) - decreased to improve sensitivity
+            return 0.05 // Threshold for head tilt (radians) - reduced for better sensitivity (~2.9 degrees)
         default:
             return 0.6 // Default threshold for most gestures
         }
