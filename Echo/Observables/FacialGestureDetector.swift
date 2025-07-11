@@ -116,9 +116,13 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         isAutoDetectionMode = false
         previewGestures.removeAll()
         previewGestureValues.removeAll()
-        autoDetectionGestures.removeAll()
+        autoDetectionBaseline.removeAll()
+        autoDetectionCurrentValues.removeAll()
         autoDetectionResults.removeAll()
+        detectedGestureNames.removeAll()
+        rankedGestures.removeAll()
         onGestureDetected = nil
+        onAutoDetectionComplete = nil
 
         // Reset head tracking
         baselineHeadTransform = nil
