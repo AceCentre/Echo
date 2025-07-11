@@ -43,14 +43,22 @@ class MainCommunicationPageState: ObservableObject {
         self.disabledSpelling = disabledSpelling
     }
     
-    struct Level: Hashable, Equatable {
+    struct Level: Hashable, Equatable, Identifiable {
         static func == (lhs: MainCommunicationPageState.Level, rhs: MainCommunicationPageState.Level) -> Bool {
-            return lhs.hoveredNode == rhs.hoveredNode && lhs.last == rhs.last
+            return lhs.hoveredNode == rhs.hoveredNode &&
+                   lhs.last == rhs.last &&
+                   lhs.nodes == rhs.nodes
         }
 
         func hash(into hasher: inout Hasher) {
             hasher.combine(hoveredNode)
             hasher.combine(last)
+            hasher.combine(nodes)
+        }
+
+        // Create a stable ID based on the hovered node's persistent identifier
+        var id: String {
+            return hoveredNode.persistentModelID.hashValue.description + "_" + (last ? "last" : "notlast")
         }
 
         var hoveredNode: Node

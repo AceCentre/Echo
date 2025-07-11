@@ -16,6 +16,7 @@ struct HorizontalScrollLock<Content: View>: SwiftUI.View {
 
     @ViewBuilder var content: Content
     @State private var lastSelectedNode: Node?
+    @State private var scrollWorkItem: DispatchWorkItem?
 
     var body: some View {
         ScrollViewReader { scrollControl in
@@ -27,12 +28,20 @@ struct HorizontalScrollLock<Content: View>: SwiftUI.View {
                             guard selectedNode != lastSelectedNode else { return }
                             lastSelectedNode = selectedNode
 
-                            // Use a longer animation duration for editing mode to reduce flashing
-                            withAnimation(.easeInOut(duration: 0.3)) {
+                            // Cancel any pending scroll operation
+                            scrollWorkItem?.cancel()
+
+                            // Create new scroll work item
+                            let workItem = DispatchWorkItem {
                                 scrollControl.scrollTo("FINAL_ID", anchor: .trailing)
                             }
-                        }.onAppear {
+
+                            scrollWorkItem = workItem
+                            DispatchQueue.main.async(execute: workItem)
+                        }
+                        .onAppear {
                             lastSelectedNode = selectedNode
+                            // Immediate scroll on appear
                             scrollControl.scrollTo("FINAL_ID", anchor: .trailing)
                         }
                     ZStack {
@@ -42,10 +51,7 @@ struct HorizontalScrollLock<Content: View>: SwiftUI.View {
 
             }
             .scrollDisabled(locked)
-            .introspect(.scrollView, on: .iOS(.v17)) { scrollView in
-                // Use a longer animation duration for editing mode to reduce flashing
-                scrollView.setValue(0.3, forKeyPath: "contentOffsetAnimationDuration")
-            }
+            // Remove introspect animation to prevent conflicts with instant scrolling
         }
     }
 }
@@ -59,6 +65,7 @@ struct ScrollLock<Content: View>: SwiftUI.View {
     @ViewBuilder var content: Content
 
     @State private var lastSelectedNode: Node?
+    @State private var scrollWorkItem: DispatchWorkItem?
 
     var body: some View {
         ScrollViewReader { scrollControl in
@@ -66,20 +73,33 @@ struct ScrollLock<Content: View>: SwiftUI.View {
                 .onChange(of: selectedNode) {
                     // Prevent rapid scroll animations by checking if the node actually changed
                     guard selectedNode != lastSelectedNode else { return }
+
                     lastSelectedNode = selectedNode
 
-                    // Use a longer animation duration for editing mode to reduce flashing
-                    withAnimation(.easeInOut(duration: 0.3)) {
+                    // Only scroll if we have a valid selectedNode
+                    guard let selectedNode = selectedNode else { return }
+
+                    // Cancel any pending scroll operation
+                    scrollWorkItem?.cancel()
+
+                    // Create new scroll work item
+                    let workItem = DispatchWorkItem {
+                        // Double-check that this is still the current selected node
+                        guard selectedNode == self.selectedNode else { return }
                         scrollControl.scrollTo(selectedNode, anchor: .center)
                     }
-                }.onAppear {
+
+                    scrollWorkItem = workItem
+                    DispatchQueue.main.async(execute: workItem)
+                }
+                .onAppear {
                     lastSelectedNode = selectedNode
-                    scrollControl.scrollTo(selectedNode, anchor: .center)
-                }.scrollDisabled(locked)
-        }
-        .introspect(.scrollView, on: .iOS(.v17)) { scrollView in
-            // Use a longer animation duration for editing mode to reduce flashing
-            scrollView.setValue(0.3, forKeyPath: "contentOffsetAnimationDuration")
+                    // Scroll to the selected node on appear, but only if we have one
+                    if let selectedNode = selectedNode {
+                        scrollControl.scrollTo(selectedNode, anchor: .center)
+                    }
+                }
+                .scrollDisabled(locked)
         }
     }
 }

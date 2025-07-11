@@ -30,7 +30,7 @@ struct EditPage: View {
                     HStack {
                         GeometryReader { geometry in
                             HorizontalScrollLock(selectedNode: mainCommunicationPageState.hoveredNode, locked: false) {
-                                ForEach(mainCommunicationPageState.getLevels(), id: \.self) { currentLevel in
+                                ForEach(mainCommunicationPageState.getLevels()) { currentLevel in
                                     HStack {
                                         ScrollLock(selectedNode: currentLevel.hoveredNode, locked: false) {
                                             ScrollView {

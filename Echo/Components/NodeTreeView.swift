@@ -17,7 +17,7 @@ struct NodeTreeView: View {
         HStack {
             GeometryReader { geoReader in
                 HorizontalScrollLock(selectedNode: mainCommunicationPageState.hoveredNode) {
-                    ForEach(mainCommunicationPageState.getLevels(), id: \.self) { currentLevel in
+                    ForEach(mainCommunicationPageState.getLevels()) { currentLevel in
                         
                         HStack {
                             HStack {
@@ -30,7 +30,7 @@ struct NodeTreeView: View {
                                 ScrollView {
                                     
                                     VStack(alignment: .leading) {
-                                        ForEach(currentLevel.nodes, id: \.self) { node in
+                                        ForEach(currentLevel.nodes) { node in
                                             
                                             HStack {
                                                 if node == currentLevel.hoveredNode {
