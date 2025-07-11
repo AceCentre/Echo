@@ -379,9 +379,6 @@ struct GesturePreviewSection: View {
         .onDisappear {
             stopPreview()
         }
-        .onChange(of: gestureValue) { _, newValue in
-            print("Gesture value changed: \(newValue), threshold: \(threshold)")
-        }
         .onChange(of: detector.previewGestureValues) { _, newValues in
             let newValue = newValues[gesture] ?? 0.0
 
@@ -393,11 +390,7 @@ struct GesturePreviewSection: View {
             }
 
             if newValue != currentGestureValue {
-                print("Gesture value changed: \(newValue), threshold: \(threshold)")
                 currentGestureValue = newValue
-                if newValue > 0.1 { // Only log significant values to avoid spam
-                    print("UI gestureValue for \(gesture.displayName): \(newValue)")
-                }
             }
         }
         .onChange(of: isGestureDetected) { _, newValue in
@@ -630,16 +623,9 @@ struct FacialGestureSection: View {
             fixEmptyGestureNames()
         }
         .onChange(of: showAddGestureSheet) { _, newValue in
-            print("showAddGestureSheet changed to: \(newValue)")
             if !newValue {
                 // Sheet was dismissed, trigger a refresh
-                print("DEBUG: Sheet dismissed, triggering refresh")
                 refreshTrigger.toggle()
-
-                // Force a small delay to ensure the model context has been updated
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    print("DEBUG: After sheet dismiss delay - facialGestureSwitches.count: \(facialGestureSwitches.count)")
-                }
             }
         }
     }
@@ -683,21 +669,13 @@ struct FacialGestureSection: View {
     }
 
     private func getVisibleGestureSwitches() -> [FacialGestureSwitch] {
-        // Debug: Print all facial gesture switches from query
-        print("DEBUG: Total facialGestureSwitches from @Query: \(facialGestureSwitches.count)")
-        for (index, gestureSwitch) in facialGestureSwitches.enumerated() {
-            print("DEBUG: Switch \(index): name='\(gestureSwitch.name)', gestureRaw='\(gestureSwitch.gestureRaw)', gesture=\(gestureSwitch.gesture?.displayName ?? "nil")")
-        }
-
         let visibleGestureSwitches = facialGestureSwitches.filter { gestureSwitch in
             // Only show switches that are fully initialized and committed to database
             let hasGesture = gestureSwitch.gesture != nil
             let hasName = !gestureSwitch.name.isEmpty
-            print("DEBUG: Filtering switch '\(gestureSwitch.name)': hasGesture=\(hasGesture), hasName=\(hasName)")
             return hasGesture && hasName
         }
 
-        print("DEBUG: Visible switches after filtering: \(visibleGestureSwitches.count)")
         return visibleGestureSwitches
     }
 
@@ -1094,18 +1072,6 @@ struct AddFacialGesture: View {
         do {
             try modelContext.save()
             print("Successfully saved gesture: \(selectedGesture.displayName)")
-
-            // Debug: Check what's in the query immediately after save
-            print("DEBUG: Immediately after save - facialGestureSwitches.count: \(facialGestureSwitches.count)")
-            for gestureSwitch in facialGestureSwitches {
-                print("DEBUG: Post-save switch: \(gestureSwitch.name) - \(gestureSwitch.gestureRaw)")
-            }
-
-            // Force a small delay to ensure UI updates properly
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                // This helps ensure the UI refreshes after the save
-                print("DEBUG: After delay - facialGestureSwitches.count: \(facialGestureSwitches.count)")
-            }
         } catch {
             print("Failed to save facial gesture switch: \(error)")
             print("Error details: \(error.localizedDescription)")

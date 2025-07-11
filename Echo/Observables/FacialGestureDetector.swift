@@ -76,6 +76,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private var baselineHeadTransform: simd_float4x4?
     private var currentHeadTransform: simd_float4x4?
     private var headTrackingInitialized: Bool = false
+    private var lastBaselineResetTime: Date = Date()
+    private var baselineResetCooldown: TimeInterval = 2.0 // Minimum time between baseline resets
     
     private struct GestureState {
         var isActive: Bool = false
@@ -128,6 +130,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         baselineHeadTransform = nil
         currentHeadTransform = nil
         headTrackingInitialized = false
+        lastBaselineResetTime = Date()
 
         // Pause session
         session.pause()
@@ -716,10 +719,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func processHeadTransform(_ transform: simd_float4x4) {
         currentHeadTransform = transform
 
-        // Initialize baseline if this is the first frame or reset periodically
+        // Initialize baseline if this is the first frame
         if !headTrackingInitialized {
             baselineHeadTransform = transform
             headTrackingInitialized = true
+            lastBaselineResetTime = Date()
             print("🎯 Head tracking baseline initialized")
             return
         }
@@ -728,6 +732,31 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // Calculate relative transform (current relative to baseline)
         let relativeTransform = simd_mul(transform, simd_inverse(baseline))
+
+        // Check if baseline needs to be reset due to extreme values
+        let currentTime = Date()
+        let timeSinceLastReset = currentTime.timeIntervalSince(lastBaselineResetTime)
+
+        if timeSinceLastReset > baselineResetCooldown {
+            // Extract rotation to check for extreme values
+            let rotationMatrix = simd_float3x3(
+                simd_float3(relativeTransform.columns.0.x, relativeTransform.columns.0.y, relativeTransform.columns.0.z),
+                simd_float3(relativeTransform.columns.1.x, relativeTransform.columns.1.y, relativeTransform.columns.1.z),
+                simd_float3(relativeTransform.columns.2.x, relativeTransform.columns.2.y, relativeTransform.columns.2.z)
+            )
+
+            // Convert to Euler angles to check for extreme rotations
+            let eulerAngles = rotationMatrixToEulerAngles(rotationMatrix)
+            let maxAngle = max(abs(eulerAngles.x), abs(eulerAngles.y), abs(eulerAngles.z))
+
+            // If any angle exceeds 45 degrees (0.785 radians), reset baseline
+            if maxAngle > 0.785 {
+                print("🎯 Resetting head tracking baseline due to extreme rotation: \(maxAngle) radians")
+                baselineHeadTransform = transform
+                lastBaselineResetTime = currentTime
+                return
+            }
+        }
 
         // Extract rotation using a more robust method
         // ARKit face coordinate system: X=right, Y=up, Z=forward (toward user)
