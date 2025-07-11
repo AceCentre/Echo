@@ -490,7 +490,7 @@ struct FacialGestureSection: View {
     @Binding var showAddGestureSheet: Bool
     @Binding var currentGestureSwitch: FacialGestureSwitch?
     @State private var isSupported = ARFaceTrackingConfiguration.isSupported
-    @State private var gestureDetector = FacialGestureDetector()
+    @StateObject private var gestureDetector = FacialGestureDetector.shared
     @State private var refreshTrigger = false
     
     var body: some View {

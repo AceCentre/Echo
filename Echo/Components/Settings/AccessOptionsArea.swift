@@ -79,7 +79,7 @@ struct AccessOptionsArea: View {
             // Reset all state when sheet is dismissed
             currentFacialGestureSwitch = nil
         }) {
-            AddFacialGesture(currentGestureSwitch: $currentFacialGestureSwitch, gestureDetector: FacialGestureDetector())
+            AddFacialGesture(currentGestureSwitch: $currentFacialGestureSwitch, gestureDetector: FacialGestureDetector.shared)
         }
     }
 }

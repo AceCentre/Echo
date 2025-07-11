@@ -12,7 +12,7 @@ struct AutoSelectFacialGestureView: View {
     @Binding var selectedGesture: FacialGesture
     @Environment(\.dismiss) private var dismiss
 
-    @State private var gestureDetector = FacialGestureDetector()
+    @StateObject private var gestureDetector = FacialGestureDetector.shared
     @State private var countdownValue = 3
     @State private var isCountingDown = false
     @State private var isCapturing = false

@@ -93,7 +93,7 @@ struct FacialGestureAutoDetectCameraView: View {
 
 #Preview {
     FacialGestureAutoDetectCameraView(
-        gestureDetector: FacialGestureDetector(),
+        gestureDetector: FacialGestureDetector.shared,
         overlayText: "After 3 make your gesture... 1, 2, 3!",
         detectedGestures: ["Left Eye Blink", "Smile"]
     )

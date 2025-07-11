@@ -27,7 +27,7 @@ struct FacialGestureController: View {
 
     @Query var facialGestureSwitches: [FacialGestureSwitch]
 
-    @State private var gestureDetector = FacialGestureDetector()
+    @StateObject private var gestureDetector = FacialGestureDetector.shared
     @State private var isInitialized = false
     
     var body: some View {

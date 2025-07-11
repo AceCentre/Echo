@@ -16,6 +16,8 @@ extension Notification.Name {
 }
 
 class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
+    static let shared = FacialGestureDetector()
+
     @Published var isActive: Bool = false
     @Published var isSupported: Bool = false
     @Published var errorMessage: String?
@@ -276,10 +278,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - Preview Mode Methods
 
     func startPreviewMode(for gestures: [FacialGesture]) {
-        print("FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName })")
+        print("🎯 FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName })")
+        print("🎯 Current isActive: \(isActive), isPreviewMode: \(isPreviewMode)")
 
         guard isSupported else {
-            print("Face tracking not supported")
+            print("🎯 Face tracking not supported")
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
@@ -293,6 +296,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         for gesture in gestures {
             previewGestureValues[gesture] = 0.0
         }
+
+        print("🎯 Preview mode setup complete, starting AR session...")
 
         // Notify that preview mode is now active
         NotificationCenter.default.post(name: .previewModeActiveChanged, object: true)
@@ -324,6 +329,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     func stopPreviewMode() {
+        print("🎯 FacialGestureDetector.stopPreviewMode called")
         sessionHealthTimer?.invalidate()
         sessionHealthTimer = nil
         previewCorruptionCheckTimer?.invalidate()
@@ -341,6 +347,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         baselineHeadTransform = nil
         currentHeadTransform = nil
         headTrackingInitialized = false
+        print("🎯 Preview mode stopped, session paused")
     }
 
     // MARK: - Auto Detection Methods
@@ -478,7 +485,6 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                     if gestureValue >= 0.0 {
                         self.previewGestureValues[gesture] = gestureValue
                         self.lastPreviewUpdateTime = Date()
-                        print("Updated previewGestureValues[\(gesture.displayName)] = \(gestureValue)")
                     } else {
                         print("⚠️ Skipping invalid gesture value: \(gestureValue) for \(gesture.displayName)")
                     }

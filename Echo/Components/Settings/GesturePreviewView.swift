@@ -11,7 +11,7 @@ import ARKit
 struct GesturePreviewView: View {
     let gesture: FacialGesture
     let threshold: Float
-    @State private var detector = FacialGestureDetector()
+    @StateObject private var detector = FacialGestureDetector.shared
     @State private var isActive = false
     @State private var currentGestureValue: Float = 0.0
 
