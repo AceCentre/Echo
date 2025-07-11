@@ -240,18 +240,23 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let variance = history.map { pow($0 - mean, 2) }.reduce(0, +) / Float(history.count)
             let standardDeviation = sqrt(variance)
 
+            // Temporarily disable aggressive corruption detection as it's causing more problems than it solves
+            // The constant session restarts are making gestures "sticky" and unresponsive
+            // TODO: Implement more intelligent corruption detection that doesn't interfere with normal operation
+
             // If standard deviation is very low and mean is also low, values might be stuck
             // But exclude gaze direction gestures which naturally have low values when not actively looking
             let isGazeGesture = [FacialGesture.lookUp, .lookDown, .lookLeft, .lookRight].contains(gesture)
 
-            if standardDeviation < 0.02 && mean < 0.15 && !isGazeGesture {
-                print("⚠️ Gesture \(gesture.displayName) appears unresponsive - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
+            // Only restart for extreme cases where values are completely frozen
+            if standardDeviation < 0.001 && mean < 0.001 && !isGazeGesture {
+                print("⚠️ Gesture \(gesture.displayName) appears completely frozen - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
                 DispatchQueue.main.async {
                     self.restartARSession()
                 }
                 return
-            } else if isGazeGesture && standardDeviation < 0.001 && mean < 0.001 {
-                // For gaze gestures, only restart if values are completely stuck at 0
+            } else if isGazeGesture && standardDeviation < 0.0001 && mean < 0.0001 {
+                // For gaze gestures, only restart if values are completely stuck at 0 for a long time
                 print("⚠️ Gaze gesture \(gesture.displayName) appears completely stuck - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
                 DispatchQueue.main.async {
                     self.restartARSession()
@@ -649,6 +654,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let downAvg = (leftLookDown + rightLookDown) / 2.0
             // Net upward gaze (clamp to avoid negative values)
             rawValue = max(0, upAvg - (downAvg * 0.5))
+
+            // Debug logging for eye look gestures
+            if isPreviewMode && upAvg > 0.01 {
+                print("👁️ Look Up debug - leftUp: \(leftLookUp), rightUp: \(rightLookUp), upAvg: \(upAvg), downAvg: \(downAvg), final: \(rawValue)")
+            }
         case .lookDown:
             // Look down: use average of both eyes looking down
             let leftLookDown = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
@@ -749,8 +759,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let eulerAngles = extractEulerAngles(from: rotationMatrix)
             let maxAngle = max(abs(eulerAngles.x), abs(eulerAngles.y), abs(eulerAngles.z))
 
-            // If any angle exceeds 45 degrees (0.785 radians), reset baseline
-            if maxAngle > 0.785 {
+            // If any angle exceeds 90 degrees (1.57 radians), reset baseline
+            if maxAngle > 1.57 {
                 print("🎯 Resetting head tracking baseline due to extreme rotation: \(maxAngle) radians")
                 baselineHeadTransform = transform
                 lastBaselineResetTime = currentTime
