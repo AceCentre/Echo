@@ -11,7 +11,7 @@ import ARKit
 struct AutoSelectFacialGestureView: View {
     @Binding var selectedGesture: FacialGesture
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var gestureDetector = FacialGestureDetector()
     @State private var countdownValue = 3
     @State private var isCountingDown = false
@@ -20,6 +20,7 @@ struct AutoSelectFacialGestureView: View {
     @State private var detectedGesture: FacialGesture?
     @State private var showError = false
     @State private var errorMessage = ""
+    @State private var resultsTimer: Timer?
     
     private enum DetectionPhase {
         case ready
@@ -79,6 +80,10 @@ struct AutoSelectFacialGestureView: View {
                 Text(errorMessage)
             }
             .onAppear {
+                // Signal that auto-select is active
+                FacialGestureDetector.isAutoSelectActive = true
+                print("🎯 Auto-select view appeared - set isAutoSelectActive = true")
+
                 // Start camera preview immediately when view appears
                 if gestureDetector.isSupported {
                     gestureDetector.startAutoDetectionMode { detectedGesture in
@@ -91,7 +96,23 @@ struct AutoSelectFacialGestureView: View {
                 }
             }
             .onDisappear {
+                // Clean up timers
+                resultsTimer?.invalidate()
+                resultsTimer = nil
+
+                // Stop auto-detection
                 gestureDetector.stopAutoDetectionMode()
+
+                // Signal that auto-select is no longer active
+                FacialGestureDetector.isAutoSelectActive = false
+                print("🎯 Auto-select view disappeared - set isAutoSelectActive = false")
+            }
+            .onReceive(gestureDetector.$isActive) { isActive in
+                // Reset to ready phase if session becomes inactive during detection
+                if !isActive && currentPhase != .ready && currentPhase != .complete {
+                    currentPhase = .ready
+                    countdownValue = 3
+                }
             }
         }
     }
@@ -125,7 +146,10 @@ struct AutoSelectFacialGestureView: View {
     }
 
     private var readyPhaseControls: some View {
-        VStack(spacing: 12) {
+        let isButtonEnabled = gestureDetector.isSupported && gestureDetector.isActive
+        print("🎯 AutoSelect: Button enabled = \(isButtonEnabled) (supported: \(gestureDetector.isSupported), active: \(gestureDetector.isActive))")
+
+        return VStack(spacing: 12) {
             Button(action: startDetection) {
                 Label("Start", systemImage: "play.circle.fill")
                     .font(.headline)
@@ -135,12 +159,20 @@ struct AutoSelectFacialGestureView: View {
                     .background(Color.blue)
                     .cornerRadius(8)
             }
-            .disabled(!gestureDetector.isSupported)
+            .disabled(!isButtonEnabled)
 
             if !gestureDetector.isSupported {
                 Text("Not supported")
                     .font(.caption2)
                     .foregroundColor(.red)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.7))
+                    .cornerRadius(4)
+            } else if !gestureDetector.isActive {
+                Text("Camera starting...")
+                    .font(.caption2)
+                    .foregroundColor(.orange)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(Color.black.opacity(0.7))
@@ -237,11 +269,24 @@ struct AutoSelectFacialGestureView: View {
     // MARK: - Methods
 
     private func startDetection() {
+        print("🎯 AutoSelect: startDetection() called")
+        print("🎯 AutoSelect: gestureDetector.isSupported = \(gestureDetector.isSupported)")
+        print("🎯 AutoSelect: gestureDetector.isActive = \(gestureDetector.isActive)")
+        print("🎯 AutoSelect: currentPhase = \(currentPhase)")
+
         guard gestureDetector.isSupported else {
+            print("🎯 AutoSelect: Face tracking not supported")
             showError(message: "Face tracking is not supported on this device")
             return
         }
 
+        guard gestureDetector.isActive else {
+            print("🎯 AutoSelect: Camera not ready")
+            showError(message: "Camera is not ready. Please wait for the camera to start.")
+            return
+        }
+
+        print("🎯 AutoSelect: Starting countdown")
         currentPhase = .countdown
         countdownValue = 3
 
@@ -288,6 +333,8 @@ struct AutoSelectFacialGestureView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if !self.gestureDetector.rankedGestures.isEmpty {
                 self.currentPhase = .results
+                // Start a timer to automatically reset if no selection is made
+                self.startResultsTimer()
             } else {
                 self.detectedGesture = nil
                 self.currentPhase = .complete
@@ -296,6 +343,10 @@ struct AutoSelectFacialGestureView: View {
     }
     
     private func selectGesture(_ gesture: FacialGesture) {
+        // Cancel the results timer since user made a selection
+        resultsTimer?.invalidate()
+        resultsTimer = nil
+
         detectedGesture = gesture
         selectedGesture = gesture
         currentPhase = .complete
@@ -317,7 +368,24 @@ struct AutoSelectFacialGestureView: View {
         selectGesture(gesture)
     }
     
+    private func startResultsTimer() {
+        // Cancel any existing timer
+        resultsTimer?.invalidate()
+
+        // Start a 10-second timer to automatically reset if no selection is made
+        resultsTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { _ in
+            DispatchQueue.main.async {
+                print("🎯 Results timer expired - resetting detection")
+                self.resetDetection()
+            }
+        }
+    }
+
     private func resetDetection() {
+        // Cancel the results timer
+        resultsTimer?.invalidate()
+        resultsTimer = nil
+
         currentPhase = .ready
         detectedGesture = nil
         countdownValue = 3

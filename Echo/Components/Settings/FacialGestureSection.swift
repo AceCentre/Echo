@@ -266,25 +266,53 @@ struct GesturePreviewSection: View {
 
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.3))
-                                    .frame(height: 8)
-                                    .cornerRadius(4)
+                                // Background track
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.gray.opacity(0.2))
+                                    .frame(height: 16)
 
-                                // Threshold line
-                                Rectangle()
-                                    .fill(Color.orange)
-                                    .frame(width: 2, height: 12)
-                                    .offset(x: CGFloat(threshold) * geometry.size.width - 1)
-
-                                Rectangle()
-                                    .fill(isGestureDetected ? (isHoldGesture ? Color.orange : Color.green) : Color.blue)
-                                    .frame(width: CGFloat(gestureValue) * geometry.size.width, height: 8)
-                                    .cornerRadius(4)
+                                // Current value bar with gradient
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            .blue,
+                                            isGestureDetected ? (isHoldGesture ? .orange : .green) : .orange
+                                        ]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ))
+                                    .frame(
+                                        width: CGFloat(gestureValue) * geometry.size.width,
+                                        height: 16
+                                    )
                                     .animation(.easeInOut(duration: 0.1), value: gestureValue)
+
+                                // Threshold indicator line (more prominent)
+                                Rectangle()
+                                    .fill(Color.red)
+                                    .frame(width: 3, height: 20)
+                                    .offset(x: CGFloat(threshold) * geometry.size.width - 1.5)
+                                    .shadow(color: .red.opacity(0.3), radius: 2, x: 0, y: 0)
+
+                                // Threshold label
+                                Text("Target")
+                                    .font(.caption2)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.red)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 3)
+                                            .fill(Color.white)
+                                            .shadow(color: .black.opacity(0.1), radius: 1, x: 0, y: 1)
+                                    )
+                                    .padding(.horizontal, 3)
+                                    .padding(.vertical, 1)
+                                    .offset(
+                                        x: max(15, min(geometry.size.width - 30, CGFloat(threshold) * geometry.size.width - 15)),
+                                        y: -15
+                                    )
                             }
                         }
-                        .frame(height: 12)
+                        .frame(height: 20)
                     }
 
                     // Hold duration progress (always show if hold action is configured)
@@ -357,8 +385,9 @@ struct GesturePreviewSection: View {
         .onChange(of: detector.previewGestureValues) { _, newValues in
             let newValue = newValues[gesture] ?? 0.0
 
-            // Protect against sudden drops to exactly 0.0 which indicate corruption
-            if newValue == 0.0 && currentGestureValue > 0.15 {
+            // Only protect against corruption if we get exactly 0.0 after a very high value (>0.8)
+            // This allows natural drops to low baseline values (~0.2-0.3) which are normal for eye gestures
+            if newValue == 0.0 && currentGestureValue > 0.8 {
                 print("⚠️ Detected suspicious drop to 0.0 for \(gesture.displayName) (was \(currentGestureValue)) - ignoring")
                 return
             }

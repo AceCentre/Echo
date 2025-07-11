@@ -37,6 +37,28 @@ struct FacialGestureController: View {
             .onAppear {
                 print("🎯 FacialGestureController.onAppear called")
                 setupGestureDetection()
+
+                // Listen for auto-select state changes
+                NotificationCenter.default.addObserver(
+                    forName: .autoSelectActiveChanged,
+                    object: nil,
+                    queue: .main
+                ) { notification in
+                    if let isActive = notification.userInfo?["isActive"] as? Bool {
+                        self.handleAutoSelectStateChange(isActive)
+                    }
+                }
+
+                // Listen for preview mode state changes
+                NotificationCenter.default.addObserver(
+                    forName: .previewModeActiveChanged,
+                    object: nil,
+                    queue: .main
+                ) { notification in
+                    if let isActive = notification.object as? Bool {
+                        self.handlePreviewModeStateChange(isActive)
+                    }
+                }
             }
             .onChange(of: scenePhase) { _, newPhase in
                 print("🎯 FacialGestureController.scenePhase changed to: \(newPhase)")
@@ -49,6 +71,7 @@ struct FacialGestureController: View {
                     setupGestureDetection()
                 }
             }
+
     }
     
     private func setupGestureDetection() {
@@ -58,6 +81,18 @@ struct FacialGestureController: View {
 
         guard gestureDetector.isSupported else {
             print("🎯 Gesture detection not supported - exiting")
+            return
+        }
+
+        // Don't start if auto-select is active
+        if FacialGestureDetector.isAutoSelectActive {
+            print("🎯 Auto-select is active, skipping main gesture detection setup")
+            return
+        }
+
+        // Don't start if preview mode is active
+        if gestureDetector.isPreviewMode {
+            print("🎯 Preview mode is active, skipping main gesture detection setup")
             return
         }
 
@@ -97,6 +132,36 @@ struct FacialGestureController: View {
 
         isInitialized = true
         print("🎯 FacialGestureController initialization complete")
+    }
+
+    private func handleAutoSelectStateChange(_ isActive: Bool) {
+        print("🎯 Auto-select state changed to: \(isActive)")
+        if isActive {
+            // Pause main gesture detection when auto-select is active
+            print("🎯 Pausing main gesture detection for auto-select")
+            gestureDetector.stopDetection()
+        } else {
+            // Resume main gesture detection when auto-select is done
+            print("🎯 Resuming main gesture detection after auto-select")
+            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+                setupGestureDetection()
+            }
+        }
+    }
+
+    private func handlePreviewModeStateChange(_ isActive: Bool) {
+        print("🎯 Preview mode state changed to: \(isActive)")
+        if isActive {
+            // Pause main gesture detection when preview mode is active
+            print("🎯 Pausing main gesture detection for preview mode")
+            gestureDetector.stopDetection()
+        } else {
+            // Resume main gesture detection when preview mode is done
+            print("🎯 Resuming main gesture detection after preview mode")
+            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+                setupGestureDetection()
+            }
+        }
     }
 
     private func handleScenePhaseChange(_ newPhase: ScenePhase) {

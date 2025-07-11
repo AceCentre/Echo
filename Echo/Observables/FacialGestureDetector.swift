@@ -10,6 +10,11 @@ import ARKit
 import SwiftUI
 import AVFoundation
 
+extension Notification.Name {
+    static let autoSelectActiveChanged = Notification.Name("autoSelectActiveChanged")
+    static let previewModeActiveChanged = Notification.Name("previewModeActiveChanged")
+}
+
 class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     @Published var isActive: Bool = false
     @Published var isSupported: Bool = false
@@ -27,6 +32,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     @Published var autoDetectionResults: [FacialGesture: Float] = [:]
     @Published var detectedGestureNames: [String] = []
     @Published var rankedGestures: [(gesture: FacialGesture, percentage: Float)] = []
+
+    // Coordination between main app and auto-select
+    static var isAutoSelectActive: Bool = false {
+        didSet {
+            if isAutoSelectActive != oldValue {
+                print("🎯 FacialGestureDetector.isAutoSelectActive changed to: \(isAutoSelectActive)")
+                NotificationCenter.default.post(name: .autoSelectActiveChanged, object: nil, userInfo: ["isActive": isAutoSelectActive])
+            }
+        }
+    }
 
     var session = ARSession()
     private var gestureStates: [FacialGesture: GestureState] = [:]
@@ -262,6 +277,9 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             previewGestureValues[gesture] = 0.0
         }
 
+        // Notify that preview mode is now active
+        NotificationCenter.default.post(name: .previewModeActiveChanged, object: true)
+
         print("Preview mode setup complete. isPreviewMode: \(isPreviewMode)")
 
         // Check camera permission before starting
@@ -298,6 +316,9 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         previewGestureValues.removeAll()
         session.pause()
         isActive = false
+
+        // Notify that preview mode is no longer active
+        NotificationCenter.default.post(name: .previewModeActiveChanged, object: false)
     }
 
     // MARK: - Auto Detection Methods
@@ -467,10 +488,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Handle auto-detection mode
         if isAutoDetectionMode {
             var currentDetectedGestures: [String] = []
+            var currentValues: [FacialGesture: Float] = [:]
 
             for gesture in FacialGesture.allCases {
                 let gestureValue = getGestureValue(for: gesture, from: blendShapes)
-                autoDetectionCurrentValues[gesture] = gestureValue
+                currentValues[gesture] = gestureValue
 
                 // Show real-time feedback for gestures above threshold
                 if gestureValue > gesture.defaultThreshold {
@@ -479,12 +501,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             }
 
             DispatchQueue.main.async {
+                self.autoDetectionCurrentValues = currentValues
                 self.detectedGestureNames = currentDetectedGestures
             }
             return
         }
 
         // Handle normal gesture detection
+        var stateUpdates: [FacialGesture: GestureState] = [:]
+        var gestureCallbacks: [(FacialGesture, Bool)] = []
+
         for (gesture, state) in gestureStates {
             let gestureValue = getGestureValue(for: gesture, from: blendShapes)
             let isGestureActive = gestureValue >= state.threshold
@@ -493,7 +519,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             trackGestureValue(gesture, value: gestureValue)
 
             var updatedState = state
-            
+
             if isGestureActive && !state.isActive {
                 // Gesture just started - record start time but don't trigger action yet
                 updatedState.isActive = true
@@ -507,17 +533,26 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                     let gestureDuration = currentTime.timeIntervalSince(startTime)
                     let isHoldGesture = gestureDuration >= state.holdDuration
 
-                    // Trigger appropriate action based on duration
-                    DispatchQueue.main.async {
-                        self.onGestureDetected?(gesture, isHoldGesture)
-                    }
+                    // Store callback for main thread execution
+                    gestureCallbacks.append((gesture, isHoldGesture))
                 }
 
                 updatedState.startTime = nil
-                
             }
-            
-            gestureStates[gesture] = updatedState
+
+            stateUpdates[gesture] = updatedState
+        }
+
+        // Update all state on main thread
+        DispatchQueue.main.async {
+            for (gesture, updatedState) in stateUpdates {
+                self.gestureStates[gesture] = updatedState
+            }
+
+            // Execute gesture callbacks
+            for (gesture, isHoldGesture) in gestureCallbacks {
+                self.onGestureDetected?(gesture, isHoldGesture)
+            }
         }
     }
 

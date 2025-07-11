@@ -201,6 +201,9 @@
     "Camera active" : {
       "comment" : "Status text when camera is active"
     },
+    "Camera starting..." : {
+
+    },
     "Cancel" : {
       "comment" : "Button to close modal\nCancel button\nCancel button label\nLabel for closing an alert\nlabel for closing a sheet"
     },
@@ -1094,6 +1097,9 @@
     },
     "Tap and Gesture control" : {
       "comment" : "Toggle for swiping gestures"
+    },
+    "Target" : {
+
     },
     "Test Button" : {
 
