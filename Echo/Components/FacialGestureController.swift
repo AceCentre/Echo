@@ -35,7 +35,6 @@ struct FacialGestureController: View {
         Color.clear
             .frame(width: 0, height: 0)
             .onAppear {
-                print("🎯 FacialGestureController.onAppear called")
                 setupGestureDetection()
 
                 // Listen for auto-select state changes
@@ -61,11 +60,9 @@ struct FacialGestureController: View {
                 }
             }
             .onChange(of: scenePhase) { _, newPhase in
-                print("🎯 FacialGestureController.scenePhase changed to: \(newPhase)")
                 handleScenePhaseChange(newPhase)
             }
             .onChange(of: facialGestureSwitches) { _, _ in
-                print("🎯 Facial gesture switches changed - count: \(facialGestureSwitches.count)")
                 // Reconfigure when switches change
                 if gestureDetector.isSupported {
                     setupGestureDetection()
@@ -75,74 +72,52 @@ struct FacialGestureController: View {
     }
     
     private func setupGestureDetection() {
-        print("🎯 FacialGestureController.setupGestureDetection() called")
-        print("🎯 Gesture detector supported: \(gestureDetector.isSupported)")
-        print("🎯 Total facial gesture switches: \(facialGestureSwitches.count)")
-
         guard gestureDetector.isSupported else {
-            print("🎯 Gesture detection not supported - exiting")
             return
         }
 
         // Don't start if auto-select is active
         if FacialGestureDetector.isAutoSelectActive {
-            print("🎯 Auto-select is active, skipping main gesture detection setup")
             return
         }
 
         // Don't start if preview mode is active
         if gestureDetector.isPreviewMode {
-            print("🎯 Preview mode is active, skipping main gesture detection setup")
             return
         }
 
         // Stop any existing detection
-        print("🎯 Stopping any existing detection")
         gestureDetector.stopDetection()
 
         // Configure gestures for enabled switches
         var configuredGestures = 0
         for gestureSwitch in facialGestureSwitches where gestureSwitch.isEnabled {
-            print("🎯 Processing switch: \(gestureSwitch.name), enabled: \(gestureSwitch.isEnabled)")
             if let gesture = gestureSwitch.gesture {
-                print("🎯 Configuring gesture: \(gesture.displayName), threshold: \(gestureSwitch.threshold)")
                 gestureDetector.configureGesture(
                     gesture,
                     threshold: gestureSwitch.threshold,
                     holdDuration: gestureSwitch.holdDuration
                 )
                 configuredGestures += 1
-            } else {
-                print("🎯 Switch has no gesture: \(gestureSwitch.name)")
             }
         }
 
-        print("🎯 Configured gestures: \(configuredGestures)")
         if configuredGestures > 0 {
             // Start detection with callback
-            print("🎯 Starting gesture detection with \(configuredGestures) gestures")
             gestureDetector.startDetection { [weak mainCommunicationPageState] gesture, isHoldAction in
-                print("🎯 Gesture detected: \(gesture.displayName), isHold: \(isHoldAction)")
                 handleGestureDetected(gesture: gesture, isHoldAction: isHoldAction, mainCommunicationPageState: mainCommunicationPageState)
             }
-            print("🎯 Gesture detection started - isActive: \(gestureDetector.isActive)")
-        } else {
-            print("🎯 No gestures configured - not starting detection")
         }
 
         isInitialized = true
-        print("🎯 FacialGestureController initialization complete")
     }
 
     private func handleAutoSelectStateChange(_ isActive: Bool) {
-        print("🎯 Auto-select state changed to: \(isActive)")
         if isActive {
             // Pause main gesture detection when auto-select is active
-            print("🎯 Pausing main gesture detection for auto-select")
             gestureDetector.stopDetection()
         } else {
             // Resume main gesture detection when auto-select is done
-            print("🎯 Resuming main gesture detection after auto-select")
             if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
                 setupGestureDetection()
             }
@@ -150,14 +125,11 @@ struct FacialGestureController: View {
     }
 
     private func handlePreviewModeStateChange(_ isActive: Bool) {
-        print("🎯 Preview mode state changed to: \(isActive)")
         if isActive {
             // Pause main gesture detection when preview mode is active
-            print("🎯 Pausing main gesture detection for preview mode")
             gestureDetector.stopDetection()
         } else {
             // Resume main gesture detection when preview mode is done
-            print("🎯 Resuming main gesture detection after preview mode")
             if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
                 setupGestureDetection()
             }
@@ -167,16 +139,14 @@ struct FacialGestureController: View {
     private func handleScenePhaseChange(_ newPhase: ScenePhase) {
         switch newPhase {
         case .active:
-            print("🎯 App became active - restarting gesture detection if needed")
             // Only restart if we have configured gestures and detector is supported
             if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
                 setupGestureDetection()
             }
         case .inactive:
-            print("🎯 App became inactive - keeping gesture detection running")
             // Don't stop detection for inactive (e.g., when opening Control Center)
+            break
         case .background:
-            print("🎯 App went to background - stopping gesture detection")
             gestureDetector.stopDetection()
         @unknown default:
             break

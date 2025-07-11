@@ -138,8 +138,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Stop any existing timer
         sessionHealthTimer?.invalidate()
 
-        // Start a timer to check if we're still receiving face anchors
-        sessionHealthTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
+        // Start a timer to check if we're still receiving face anchors (check every 5 seconds)
+        sessionHealthTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             self?.checkSessionHealth()
         }
 
@@ -152,8 +152,9 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func checkSessionHealth() {
         let timeSinceLastFaceAnchor = Date().timeIntervalSince(lastFaceAnchorTime)
 
-        // If we haven't received a face anchor in 3 seconds and we should be active, restart the session
-        if timeSinceLastFaceAnchor > 3.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
+        // Only restart if we haven't received face anchors for a longer period (10 seconds)
+        // and only if we're actively supposed to be detecting
+        if timeSinceLastFaceAnchor > 10.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
             print("⚠️ ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...")
             DispatchQueue.main.async {
                 self.restartARSession()
@@ -466,33 +467,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // Handle preview mode
         if isPreviewMode {
-            print("Processing preview mode for \(previewGestures.count) gestures")
-
-            // Debug: Log all non-zero blend shapes for gaze direction debugging
-            let gazeGestures: Set<FacialGesture> = [.lookUp, .lookDown, .lookLeft, .lookRight]
-            let hasGazeGesture = previewGestures.contains { gesture in
-                gazeGestures.contains(gesture)
-            }
-            if hasGazeGesture {
-                var gazeBlendShapes: [String: Float] = [:]
-                gazeBlendShapes["eyeLookUpLeft"] = blendShapes[.eyeLookUpLeft]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookUpRight"] = blendShapes[.eyeLookUpRight]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookDownLeft"] = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookDownRight"] = blendShapes[.eyeLookDownRight]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookInLeft"] = blendShapes[.eyeLookInLeft]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookInRight"] = blendShapes[.eyeLookInRight]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookOutLeft"] = blendShapes[.eyeLookOutLeft]?.floatValue ?? 0
-                gazeBlendShapes["eyeLookOutRight"] = blendShapes[.eyeLookOutRight]?.floatValue ?? 0
-
-                let nonZeroGaze = gazeBlendShapes.filter { $0.value > 0.01 }
-                if !nonZeroGaze.isEmpty {
-                    print("Non-zero gaze blend shapes: \(nonZeroGaze)")
-                }
-            }
-
             for gesture in previewGestures {
                 let gestureValue = getGestureValue(for: gesture, from: blendShapes)
-                print("Preview gesture \(gesture.displayName): value = \(gestureValue)")
 
                 // Track gesture values for responsiveness monitoring
                 trackGestureValue(gesture, value: gestureValue)
@@ -607,17 +583,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
             rawValue = max(leftBlink, rightBlink)
         case .eyeBlinkLeft, .eyeBlinkRight:
-            // Debug eye blink values to understand left/right mapping
-            let leftBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
-            let rightBlink = blendShapes[.eyeBlinkRight]?.floatValue ?? 0
-            let targetValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
-
-            // Only log when there's significant activity
-            if leftBlink > 0.1 || rightBlink > 0.1 {
-                print("Eye values - ARKit Left: \(String(format: "%.3f", leftBlink)), ARKit Right: \(String(format: "%.3f", rightBlink)), Target(\(gesture.displayName)): \(String(format: "%.3f", targetValue))")
-            }
-
-            rawValue = targetValue
+            rawValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
         case .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither:
             // Eye open gestures: same as blink but inverted (detects when eyes are open)
             if gesture == .eyeOpenEither {
@@ -639,10 +605,6 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let downAvg = (leftLookDown + rightLookDown) / 2.0
             // Net upward gaze (clamp to avoid negative values)
             rawValue = max(0, upAvg - (downAvg * 0.5))
-
-            if rawValue > 0.01 { // Only log when there's activity
-                print("Look Up values - Up: \(leftLookUp)/\(rightLookUp), Down: \(leftLookDown)/\(rightLookDown), Net: \(rawValue)")
-            }
         case .lookDown:
             // Look down: use average of both eyes looking down
             let leftLookDown = blendShapes[.eyeLookDownLeft]?.floatValue ?? 0
@@ -655,28 +617,18 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let upAvg = (leftLookUp + rightLookUp) / 2.0
             // Net downward gaze (clamp to avoid negative values)
             rawValue = max(0, downAvg - (upAvg * 0.5))
-
-            if rawValue > 0.01 {
-                print("Look Down values - Down: \(leftLookDown)/\(rightLookDown), Up: \(leftLookUp)/\(rightLookUp), Net: \(rawValue)")
-            }
         case .lookLeft:
             // Look left: left eye looks in (toward nose), right eye looks out (away from nose)
             let leftLookIn = blendShapes[.eyeLookInLeft]?.floatValue ?? 0
             let rightLookOut = blendShapes[.eyeLookOutRight]?.floatValue ?? 0
             // Use average of both eyes for more stable detection
             rawValue = (leftLookIn + rightLookOut) / 2.0
-            if rawValue > 0.01 {
-                print("Look Left values - LeftIn: \(leftLookIn), RightOut: \(rightLookOut), Average: \(rawValue)")
-            }
         case .lookRight:
             // Look right: left eye looks out (away from nose), right eye looks in (toward nose)
             let leftLookOut = blendShapes[.eyeLookOutLeft]?.floatValue ?? 0
             let rightLookIn = blendShapes[.eyeLookInRight]?.floatValue ?? 0
             // Use average of both eyes for more stable detection
             rawValue = (leftLookOut + rightLookIn) / 2.0
-            if rawValue > 0.01 {
-                print("Look Right values - LeftOut: \(leftLookOut), RightIn: \(rightLookIn), Average: \(rawValue)")
-            }
         case .headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight:
             // Head movement gestures are handled separately in processHeadTransform
             // Return 0 here as these values are updated directly in preview/auto-detection modes
@@ -752,15 +704,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         let yaw = atan2(rotationMatrix[2][0], rotationMatrix[2][2])
         let roll = atan2(-rotationMatrix[0][1], rotationMatrix[1][1])
 
-        // Debug logging for head movements
-        let pitchDegrees = pitch * 180.0 / Float.pi
-        let yawDegrees = yaw * 180.0 / Float.pi
-        let rollDegrees = roll * 180.0 / Float.pi
 
-        // Only log when there's significant movement
-        if abs(pitchDegrees) > 2 || abs(yawDegrees) > 2 || abs(rollDegrees) > 2 {
-            print("🎯 Head angles - Pitch: \(String(format: "%.1f", pitchDegrees))°, Yaw: \(String(format: "%.1f", yawDegrees))°, Roll: \(String(format: "%.1f", rollDegrees))°")
-        }
 
         // Update head movement gesture values based on rotation
         updateHeadMovementGestures(pitch: pitch, yaw: yaw, roll: roll)
@@ -784,17 +728,6 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                 self.previewGestureValues[.headShakeRight] = headShakeRightValue
                 self.previewGestureValues[.headTiltLeft] = headTiltLeftValue
                 self.previewGestureValues[.headTiltRight] = headTiltRightValue
-
-                // Debug logging for preview values
-                if headNodUpValue > 0.05 || headNodDownValue > 0.05 {
-                    print("🎯 Nod values - Up: \(String(format: "%.3f", headNodUpValue)), Down: \(String(format: "%.3f", headNodDownValue))")
-                }
-                if headShakeLeftValue > 0.05 || headShakeRightValue > 0.05 {
-                    print("🎯 Shake values - Left: \(String(format: "%.3f", headShakeLeftValue)), Right: \(String(format: "%.3f", headShakeRightValue))")
-                }
-                if headTiltLeftValue > 0.05 || headTiltRightValue > 0.05 {
-                    print("🎯 Tilt values - Left: \(String(format: "%.3f", headTiltLeftValue)), Right: \(String(format: "%.3f", headTiltRightValue))")
-                }
             }
         }
 
@@ -885,19 +818,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             // Update the last face anchor time for health monitoring
             lastFaceAnchorTime = currentTime
 
-            if isPreviewMode {
-                print("Processing face anchor in preview mode, blendShapes count: \(faceAnchor.blendShapes.count)")
-            }
-
-            // Extract blend shapes immediately to avoid retaining the ARFrame
+            // Process immediately on the main thread to avoid ARFrame retention
+            // Extract data immediately and release the frame
             let blendShapes = faceAnchor.blendShapes
             let headTransform = faceAnchor.transform
 
-            // Process blend shapes and head transform asynchronously to release the frame immediately
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                self?.processBlendShapes(blendShapes)
-                self?.processHeadTransform(headTransform)
-            }
+            // Process synchronously to avoid frame retention issues
+            processBlendShapes(blendShapes)
+            processHeadTransform(headTransform)
         }
     }
     
