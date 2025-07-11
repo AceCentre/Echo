@@ -63,8 +63,10 @@ struct FacialGestureController: View {
                 handleScenePhaseChange(newPhase)
             }
             .onChange(of: facialGestureSwitches) { _, _ in
-                // Reconfigure when switches change
-                if gestureDetector.isSupported {
+                // Only reconfigure when switches change if we're in navigation mode or inactive
+                // Don't interfere with preview or auto-select modes
+                if gestureDetector.isSupported &&
+                   (gestureDetector.currentMode == .navigation || gestureDetector.currentMode == .inactive) {
                     setupGestureDetection()
                 }
             }
@@ -121,10 +123,16 @@ struct FacialGestureController: View {
     private func handleAutoSelectStateChange(_ isActive: Bool) {
         if isActive {
             // Pause main gesture detection when auto-select is active
-            gestureDetector.stopDetection()
+            // Only stop if we're currently in navigation mode
+            if gestureDetector.currentMode == .navigation {
+                gestureDetector.stopDetection()
+            }
         } else {
             // Resume main gesture detection when auto-select is done
-            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+            // Only resume if we're not in another active mode
+            if gestureDetector.isSupported &&
+               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               gestureDetector.currentMode == .inactive {
                 setupGestureDetection()
             }
         }
@@ -133,10 +141,16 @@ struct FacialGestureController: View {
     private func handlePreviewModeStateChange(_ isActive: Bool) {
         if isActive {
             // Pause main gesture detection when preview mode is active
-            gestureDetector.stopDetection()
+            // Only stop if we're currently in navigation mode
+            if gestureDetector.currentMode == .navigation {
+                gestureDetector.stopDetection()
+            }
         } else {
             // Resume main gesture detection when preview mode is done
-            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+            // Only resume if we're not in another active mode
+            if gestureDetector.isSupported &&
+               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               gestureDetector.currentMode == .inactive {
                 setupGestureDetection()
             }
         }
@@ -146,14 +160,20 @@ struct FacialGestureController: View {
         switch newPhase {
         case .active:
             // Only restart if we have configured gestures and detector is supported
-            if gestureDetector.isSupported && !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty {
+            // Don't interfere with preview or auto-select modes
+            if gestureDetector.isSupported &&
+               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               (gestureDetector.currentMode == .navigation || gestureDetector.currentMode == .inactive) {
                 setupGestureDetection()
             }
         case .inactive:
             // Don't stop detection for inactive (e.g., when opening Control Center)
             break
         case .background:
-            gestureDetector.stopDetection()
+            // Only stop if we're in navigation mode - don't interfere with other modes
+            if gestureDetector.currentMode == .navigation {
+                gestureDetector.stopDetection()
+            }
         @unknown default:
             break
         }
