@@ -456,6 +456,30 @@
     "Go to the previous item" : {
       "comment" : "Label for action that happens on a keypress"
     },
+    "Head Movement" : {
+      "comment" : "Category name for head movement gestures"
+    },
+    "Head Nod Down" : {
+      "comment" : "Display name for head nod down gesture"
+    },
+    "Head Nod Up" : {
+      "comment" : "Display name for head nod up gesture"
+    },
+    "Head nods, shakes, and tilts" : {
+      "comment" : "Description for head movement gesture category"
+    },
+    "Head Shake Left" : {
+      "comment" : "Display name for head shake left gesture"
+    },
+    "Head Shake Right" : {
+      "comment" : "Display name for head shake right gesture"
+    },
+    "Head Tilt Left" : {
+      "comment" : "Display name for head tilt left gesture"
+    },
+    "Head Tilt Right" : {
+      "comment" : "Display name for head tilt right gesture"
+    },
     "Hebrew (Experimental)" : {
       "comment" : "The label for the Hebrew language when setting prediction language, make sure to include the experimental tag"
     },
@@ -704,6 +728,12 @@
     },
     "No game controller connect to device. Please connect a controller to access these settings" : {
       "comment" : "Notification of no game controllers connected"
+    },
+    "Nod your head down" : {
+      "comment" : "Description for head nod down gesture"
+    },
+    "Nod your head up" : {
+      "comment" : "Description for head nod up gesture"
     },
     "None" : {
       "comment" : "Label for action that happens on a keypress"
@@ -957,6 +987,12 @@
     "Settings" : {
       "comment" : "The navigation title for the settings page"
     },
+    "Shake your head to the left" : {
+      "comment" : "Description for head shake left gesture"
+    },
+    "Shake your head to the right" : {
+      "comment" : "Description for head shake right gesture"
+    },
     "Short Hold" : {
       "comment" : "Display name for short hold gesture duration"
     },
@@ -1157,6 +1193,12 @@
     },
     "Threshold: %lld%%" : {
       "comment" : "Shows current threshold value as percentage"
+    },
+    "Tilt your head to the left" : {
+      "comment" : "Description for head tilt left gesture"
+    },
+    "Tilt your head to the right" : {
+      "comment" : "Description for head tilt right gesture"
     },
     "Tongue" : {
       "comment" : "Category name for tongue gestures"

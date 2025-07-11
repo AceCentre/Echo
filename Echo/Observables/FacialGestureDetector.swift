@@ -59,6 +59,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // Preview corruption detection
     private var lastPreviewUpdateTime: Date = Date()
     private var previewCorruptionCheckTimer: Timer?
+
+    // Head tracking properties
+    private var baselineHeadTransform: simd_float4x4?
+    private var currentHeadTransform: simd_float4x4?
+    private var headTrackingInitialized: Bool = false
     
     private struct GestureState {
         var isActive: Bool = false
@@ -246,6 +251,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         isActive = false
         gestureStates.removeAll()
         onGestureDetected = nil
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
     
     func configureGesture(_ gesture: FacialGesture, threshold: Float, holdDuration: Double = 1.0) {
@@ -254,6 +264,12 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     
     func removeGesture(_ gesture: FacialGesture) {
         gestureStates.removeValue(forKey: gesture)
+    }
+
+    func resetHeadBaseline() {
+        print("🎯 Resetting head tracking baseline")
+        baselineHeadTransform = currentHeadTransform
+        headTrackingInitialized = true
     }
 
     // MARK: - Preview Mode Methods
@@ -319,6 +335,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // Notify that preview mode is no longer active
         NotificationCenter.default.post(name: .previewModeActiveChanged, object: false)
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
 
     // MARK: - Auto Detection Methods
@@ -408,6 +429,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         onAutoDetectionComplete = nil
         session.pause()
         isActive = false
+
+        // Reset head tracking
+        baselineHeadTransform = nil
+        currentHeadTransform = nil
+        headTrackingInitialized = false
     }
     
     // MARK: - Private Methods
@@ -651,6 +677,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             if rawValue > 0.01 {
                 print("Look Right values - LeftOut: \(leftLookOut), RightIn: \(rightLookIn), Average: \(rawValue)")
             }
+        case .headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight:
+            // Head movement gestures are handled separately in processHeadTransform
+            // Return 0 here as these values are updated directly in preview/auto-detection modes
+            return 0
         default:
             rawValue = blendShapes[gesture.blendShapeLocation]?.floatValue ?? 0
         }
@@ -690,6 +720,150 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         }
     }
 
+    private func processHeadTransform(_ transform: simd_float4x4) {
+        currentHeadTransform = transform
+
+        // Initialize baseline if this is the first frame or reset periodically
+        if !headTrackingInitialized {
+            baselineHeadTransform = transform
+            headTrackingInitialized = true
+            print("🎯 Head tracking baseline initialized")
+            return
+        }
+
+        guard let baseline = baselineHeadTransform else { return }
+
+        // Calculate relative transform (current relative to baseline)
+        let relativeTransform = simd_mul(transform, simd_inverse(baseline))
+
+        // Extract rotation using a more robust method
+        // ARKit face coordinate system: X=right, Y=up, Z=forward (toward user)
+        let rotationMatrix = simd_float3x3(
+            simd_float3(relativeTransform.columns.0.x, relativeTransform.columns.0.y, relativeTransform.columns.0.z),
+            simd_float3(relativeTransform.columns.1.x, relativeTransform.columns.1.y, relativeTransform.columns.1.z),
+            simd_float3(relativeTransform.columns.2.x, relativeTransform.columns.2.y, relativeTransform.columns.2.z)
+        )
+
+        // Extract Euler angles with proper ARKit coordinate system
+        // Pitch: rotation around X-axis (nod up/down)
+        // Yaw: rotation around Y-axis (shake left/right)
+        // Roll: rotation around Z-axis (tilt left/right)
+        let pitch = atan2(-rotationMatrix[2][1], sqrt(rotationMatrix[2][0] * rotationMatrix[2][0] + rotationMatrix[2][2] * rotationMatrix[2][2]))
+        let yaw = atan2(rotationMatrix[2][0], rotationMatrix[2][2])
+        let roll = atan2(-rotationMatrix[0][1], rotationMatrix[1][1])
+
+        // Debug logging for head movements
+        let pitchDegrees = pitch * 180.0 / Float.pi
+        let yawDegrees = yaw * 180.0 / Float.pi
+        let rollDegrees = roll * 180.0 / Float.pi
+
+        // Only log when there's significant movement
+        if abs(pitchDegrees) > 2 || abs(yawDegrees) > 2 || abs(rollDegrees) > 2 {
+            print("🎯 Head angles - Pitch: \(String(format: "%.1f", pitchDegrees))°, Yaw: \(String(format: "%.1f", yawDegrees))°, Roll: \(String(format: "%.1f", rollDegrees))°")
+        }
+
+        // Update head movement gesture values based on rotation
+        updateHeadMovementGestures(pitch: pitch, yaw: yaw, roll: roll)
+    }
+
+    private func updateHeadMovementGestures(pitch: Float, yaw: Float, roll: Float) {
+        // Calculate gesture values with proper directional logic
+        let headNodUpValue = max(0, pitch)      // Positive pitch = nod up
+        let headNodDownValue = max(0, -pitch)   // Negative pitch = nod down
+        let headShakeLeftValue = max(0, -yaw)   // Negative yaw = shake left
+        let headShakeRightValue = max(0, yaw)   // Positive yaw = shake right
+        let headTiltLeftValue = max(0, -roll)   // Negative roll = tilt left
+        let headTiltRightValue = max(0, roll)   // Positive roll = tilt right
+
+        // Update gesture values for preview mode
+        if isPreviewMode {
+            DispatchQueue.main.async {
+                self.previewGestureValues[.headNodUp] = headNodUpValue
+                self.previewGestureValues[.headNodDown] = headNodDownValue
+                self.previewGestureValues[.headShakeLeft] = headShakeLeftValue
+                self.previewGestureValues[.headShakeRight] = headShakeRightValue
+                self.previewGestureValues[.headTiltLeft] = headTiltLeftValue
+                self.previewGestureValues[.headTiltRight] = headTiltRightValue
+
+                // Debug logging for preview values
+                if headNodUpValue > 0.05 || headNodDownValue > 0.05 {
+                    print("🎯 Nod values - Up: \(String(format: "%.3f", headNodUpValue)), Down: \(String(format: "%.3f", headNodDownValue))")
+                }
+                if headShakeLeftValue > 0.05 || headShakeRightValue > 0.05 {
+                    print("🎯 Shake values - Left: \(String(format: "%.3f", headShakeLeftValue)), Right: \(String(format: "%.3f", headShakeRightValue))")
+                }
+                if headTiltLeftValue > 0.05 || headTiltRightValue > 0.05 {
+                    print("🎯 Tilt values - Left: \(String(format: "%.3f", headTiltLeftValue)), Right: \(String(format: "%.3f", headTiltRightValue))")
+                }
+            }
+        }
+
+        // Update auto-detection values
+        if isAutoDetectionMode {
+            autoDetectionCurrentValues[.headNodUp] = headNodUpValue
+            autoDetectionCurrentValues[.headNodDown] = headNodDownValue
+            autoDetectionCurrentValues[.headShakeLeft] = headShakeLeftValue
+            autoDetectionCurrentValues[.headShakeRight] = headShakeRightValue
+            autoDetectionCurrentValues[.headTiltLeft] = headTiltLeftValue
+            autoDetectionCurrentValues[.headTiltRight] = headTiltRightValue
+        }
+
+        // Handle normal gesture detection for head movements
+        let headGestures: [FacialGesture] = [.headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight]
+
+        for gesture in headGestures {
+            guard let state = gestureStates[gesture] else { continue }
+
+            let gestureValue = getHeadGestureValue(for: gesture, pitch: pitch, yaw: yaw, roll: roll)
+            let isGestureActive = gestureValue >= state.threshold
+
+            var updatedState = state
+            let currentTime = Date()
+
+            if isGestureActive && !state.isActive {
+                // Gesture just started
+                updatedState.isActive = true
+                updatedState.startTime = currentTime
+            } else if !isGestureActive && state.isActive {
+                // Gesture just ended - determine if it was tap or hold
+                updatedState.isActive = false
+
+                if let startTime = state.startTime {
+                    let gestureDuration = currentTime.timeIntervalSince(startTime)
+                    let isHoldGesture = gestureDuration >= state.holdDuration
+
+                    // Trigger appropriate action based on duration
+                    DispatchQueue.main.async {
+                        self.onGestureDetected?(gesture, isHoldGesture)
+                    }
+                }
+
+                updatedState.startTime = nil
+            }
+
+            gestureStates[gesture] = updatedState
+        }
+    }
+
+    private func getHeadGestureValue(for gesture: FacialGesture, pitch: Float, yaw: Float, roll: Float) -> Float {
+        switch gesture {
+        case .headNodUp:
+            return max(0, pitch)      // Positive pitch = nod up
+        case .headNodDown:
+            return max(0, -pitch)     // Negative pitch = nod down
+        case .headShakeLeft:
+            return max(0, -yaw)       // Negative yaw = shake left
+        case .headShakeRight:
+            return max(0, yaw)        // Positive yaw = shake right
+        case .headTiltLeft:
+            return max(0, -roll)      // Negative roll = tilt left
+        case .headTiltRight:
+            return max(0, roll)       // Positive roll = tilt right
+        default:
+            return 0
+        }
+    }
+
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
@@ -717,10 +891,12 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
             // Extract blend shapes immediately to avoid retaining the ARFrame
             let blendShapes = faceAnchor.blendShapes
+            let headTransform = faceAnchor.transform
 
-            // Process blend shapes asynchronously to release the frame immediately
+            // Process blend shapes and head transform asynchronously to release the frame immediately
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.processBlendShapes(blendShapes)
+                self?.processHeadTransform(headTransform)
             }
         }
     }
