@@ -58,4 +58,4 @@ A game controller has all the same actions as external switches.
 
 ## Facial gestures
 
-Needs testing. Note head movement is in a feature branch. 
+Needs testing. Note some gestures need to have more settings applied like range of head movenemmnt etc
