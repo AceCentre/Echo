@@ -28,6 +28,7 @@ struct EditPage: View {
                 }
                 VStack {
                     HStack {
+                        GeometryReader { geometry in
                             HorizontalScrollLock(selectedNode: mainCommunicationPageState.hoveredNode, locked: false) {
                                 ForEach(mainCommunicationPageState.getLevels(), id: \.self) { currentLevel in
                                     HStack {
@@ -46,19 +47,17 @@ struct EditPage: View {
                                                                         .padding()
                                                                         .opacity(currentLevel.last ? 1 : 0.5)
                                                                 })
-                                                                
-                                                                
                                                             }
                                                         }.id(node)
                                                     }
                                                 }
-                                                .padding(.vertical, UIScreen.main.bounds.size.height / 2)
+                                                .padding(.vertical, max(geometry.size.height / 2, 100))
                                             }
                                         }
                                     }
                                 }
                             }
-                        
+                        }
                     }
                 }
             }

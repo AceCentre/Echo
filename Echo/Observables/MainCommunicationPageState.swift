@@ -45,14 +45,14 @@ class MainCommunicationPageState: ObservableObject {
     
     struct Level: Hashable, Equatable {
         static func == (lhs: MainCommunicationPageState.Level, rhs: MainCommunicationPageState.Level) -> Bool {
-            return lhs.levelId == rhs.levelId
+            return lhs.hoveredNode == rhs.hoveredNode && lhs.last == rhs.last
         }
-        
+
         func hash(into hasher: inout Hasher) {
-            hasher.combine(levelId)
+            hasher.combine(hoveredNode)
+            hasher.combine(last)
         }
-        
-        var levelId: UUID = UUID()
+
         var hoveredNode: Node
         var nodes: [Node]
         var last: Bool

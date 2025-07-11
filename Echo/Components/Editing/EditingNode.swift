@@ -14,9 +14,9 @@ struct EditingNode: View {
     @EnvironmentObject var errorHandling: ErrorHandling
 
     @State var text = ""
-    
+
     var node: Node
-    
+
     @FocusState private var isFocused: Bool
     
     var body: some View {
@@ -31,11 +31,11 @@ struct EditingNode: View {
                 
                 do {
                     try modelContext.save()
+                    // Don't automatically hover new nodes in edit mode to prevent UI instability
+                    // mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
                 } catch {
                     errorHandling.handle(error: error)
                 }
-                
-                mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
                 Image(systemName: "plus.circle")
                     .foregroundStyle(.green)
@@ -72,11 +72,11 @@ struct EditingNode: View {
                         
                         do {
                             try modelContext.save()
+                            // Don't automatically hover new nodes in edit mode to prevent UI instability
+                            // mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
                         } catch {
                             errorHandling.handle(error: error)
                         }
-                        
-                        mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
                         
                     }, label: {
                         Image(systemName: "plus.circle")
@@ -101,10 +101,11 @@ struct EditingNode: View {
                 
                 do {
                     try modelContext.save()
+                    // Don't automatically hover new nodes in edit mode to prevent UI instability
+                    // mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
                 } catch {
                     errorHandling.handle(error: error)
                 }
-                mainCommunicationPageState.hoverNode(newNode, shouldScan: false)
             }, label: {
                 Image(systemName: "plus.circle")
                     .foregroundStyle(.green)
@@ -113,7 +114,11 @@ struct EditingNode: View {
         .onAppear {
             text = node.displayText
         }
+        .onDisappear {
+            // View cleanup if needed
+        }
         .onChange(of: text) {
+            // Update node properties directly without debouncing
             if node.displayText == node.cueText && node.displayText == node.speakText {
                 node.displayText = text
                 node.cueText = text
