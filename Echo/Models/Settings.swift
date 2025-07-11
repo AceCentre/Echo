@@ -48,6 +48,7 @@ class Settings {
     var showOnScreenArrows: Bool = true
     var allowSwipeGestures: Bool = true
     var enableSwitchControl: Bool = true
+    var enableFacialGestures: Bool = true
     var selectedTheme: String = Theme.themes.first?.name ?? "System Default"
     var arrowSize: CGFloat = 100.0
     var arrowBorderOpacity: Double = 1.0
@@ -118,6 +119,7 @@ class Settings {
         self.showOnScreenArrows = true
         self.allowSwipeGestures = true
         self.enableSwitchControl = true
+        self.enableFacialGestures = true
         self.selectedTheme = Theme.themes.first?.name ?? "System Default"
         self.arrowSize = 100.0
         self.arrowBorderOpacity = 1.0

@@ -17,7 +17,6 @@ struct FacialGestureSwitchSection: View {
     @State var holdAction: SwitchAction
     @State var threshold: Float
     @State var holdDuration: Double
-    @State var isEnabled: Bool
 
     var gestureSwitch: FacialGestureSwitch
 
@@ -27,21 +26,10 @@ struct FacialGestureSwitchSection: View {
         self._holdAction = State(initialValue: gestureSwitch.holdAction)
         self._threshold = State(initialValue: gestureSwitch.threshold)
         self._holdDuration = State(initialValue: gestureSwitch.holdDuration)
-        self._isEnabled = State(initialValue: gestureSwitch.isEnabled)
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Enable/Disable toggle
-            Toggle(
-                String(
-                    localized: "Enable Gesture",
-                    comment: "Toggle to enable/disable facial gesture"
-                ),
-                isOn: $isEnabled
-            )
-            
-            if isEnabled {
                 // Tap action picker
                 ActionPicker(
                     label: String(
@@ -139,13 +127,12 @@ struct FacialGestureSwitchSection: View {
                     }
                 }
 
-                // Explanatory text about tap/hold behavior
-                if holdAction != .none {
-                    Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .padding(.top, 4)
-                }
+            // Explanatory text about tap/hold behavior
+            if holdAction != .none {
+                Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 4)
             }
         }
         .onChange(of: tapAction) { _, _ in
@@ -160,9 +147,7 @@ struct FacialGestureSwitchSection: View {
         .onChange(of: holdDuration) { _, _ in
             gestureSwitch.holdDuration = holdDuration
         }
-        .onChange(of: isEnabled) { _, _ in
-            gestureSwitch.isEnabled = isEnabled
-        }
+
     }
 }
 
@@ -490,7 +475,17 @@ struct FacialGestureSection: View {
         // Hidden view to trigger refresh when refreshTrigger changes
         let _ = refreshTrigger // This forces the view to re-evaluate when refreshTrigger changes
 
+        @Bindable var settingsBindable = settings
         Section(content: {
+            // Global Facial Gesture Toggle
+            Toggle(
+                String(
+                    localized: "Facial Gestures",
+                    comment: "Toggle to enable/disable all facial gestures"
+                ),
+                isOn: $settingsBindable.enableFacialGestures
+            )
+
             if !isSupported {
                 VStack(alignment: .leading, spacing: 8) {
                     Label(
@@ -563,11 +558,6 @@ struct FacialGestureSection: View {
                                 }
 
                                 Spacer()
-
-                                // Status indicator
-                                Circle()
-                                    .fill(gestureSwitch.isEnabled ? Color.green : Color.gray)
-                                    .frame(width: 8, height: 8)
 
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.gray)
@@ -722,7 +712,6 @@ struct AddFacialGesture: View {
     @State private var holdAction: SwitchAction = .none
     @State private var threshold: Float = 0.8
     @State private var holdDuration: Double = 1.0
-    @State private var isEnabled: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -1013,7 +1002,6 @@ struct AddFacialGesture: View {
                     holdAction = existingGesture.holdAction
                     threshold = existingGesture.threshold
                     holdDuration = existingGesture.holdDuration
-                    isEnabled = existingGesture.isEnabled
                 }
             }
         }
@@ -1065,7 +1053,6 @@ struct AddFacialGesture: View {
                 currentGestureSwitch.tapAction = tapAction
                 currentGestureSwitch.holdAction = holdAction
                 currentGestureSwitch.holdDuration = holdDuration
-                currentGestureSwitch.isEnabled = isEnabled
             }
         }
 

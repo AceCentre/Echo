@@ -70,11 +70,26 @@ struct FacialGestureController: View {
                     setupGestureDetection()
                 }
             }
+            .onChange(of: settings.enableFacialGestures) { _, _ in
+                // Reconfigure when global facial gesture setting changes
+                if gestureDetector.isSupported &&
+                   (gestureDetector.currentMode == .navigation || gestureDetector.currentMode == .inactive) {
+                    setupGestureDetection()
+                }
+            }
 
     }
     
     private func setupGestureDetection() {
         guard gestureDetector.isSupported else {
+            return
+        }
+
+        // If facial gestures are globally disabled, stop detection
+        if !settings.enableFacialGestures {
+            if gestureDetector.currentMode == .navigation {
+                gestureDetector.stopDetection()
+            }
             return
         }
 
@@ -97,9 +112,9 @@ struct FacialGestureController: View {
             gestureDetector.stopDetection()
         }
 
-        // Configure gestures for enabled switches
+        // Configure gestures for all switches when global setting is enabled
         var configuredGestures = 0
-        for gestureSwitch in facialGestureSwitches where gestureSwitch.isEnabled {
+        for gestureSwitch in facialGestureSwitches {
             if let gesture = gestureSwitch.gesture {
                 gestureDetector.configureGesture(
                     gesture,
@@ -131,7 +146,8 @@ struct FacialGestureController: View {
             // Resume main gesture detection when auto-select is done
             // Only resume if we're not in another active mode
             if gestureDetector.isSupported &&
-               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               settings.enableFacialGestures &&
+               !facialGestureSwitches.filter({ $0.gesture != nil }).isEmpty &&
                gestureDetector.currentMode == .inactive {
                 setupGestureDetection()
             }
@@ -149,7 +165,8 @@ struct FacialGestureController: View {
             // Resume main gesture detection when preview mode is done
             // Only resume if we're not in another active mode
             if gestureDetector.isSupported &&
-               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               settings.enableFacialGestures &&
+               !facialGestureSwitches.filter({ $0.gesture != nil }).isEmpty &&
                gestureDetector.currentMode == .inactive {
                 setupGestureDetection()
             }
@@ -162,7 +179,8 @@ struct FacialGestureController: View {
             // Only restart if we have configured gestures and detector is supported
             // Don't interfere with preview or auto-select modes
             if gestureDetector.isSupported &&
-               !facialGestureSwitches.filter({ $0.isEnabled && $0.gesture != nil }).isEmpty &&
+               settings.enableFacialGestures &&
+               !facialGestureSwitches.filter({ $0.gesture != nil }).isEmpty &&
                (gestureDetector.currentMode == .navigation || gestureDetector.currentMode == .inactive) {
                 setupGestureDetection()
             }
@@ -182,8 +200,9 @@ struct FacialGestureController: View {
     private func handleGestureDetected(gesture: FacialGesture, isHoldAction: Bool, mainCommunicationPageState: MainCommunicationPageState?) {
         guard let mainState = mainCommunicationPageState else { return }
 
-        // Find the corresponding switch for this gesture
-        guard let gestureSwitch = facialGestureSwitches.first(where: { $0.gesture == gesture && $0.isEnabled }) else {
+        // Find the corresponding switch for this gesture (check global setting)
+        guard settings.enableFacialGestures,
+              let gestureSwitch = facialGestureSwitches.first(where: { $0.gesture == gesture }) else {
             return
         }
 

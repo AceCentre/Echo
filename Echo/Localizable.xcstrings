@@ -363,9 +363,6 @@
     "Enable" : {
       "comment" : "Label to enable swipe"
     },
-    "Enable Gesture" : {
-      "comment" : "Toggle to enable/disable facial gesture"
-    },
     "End of list" : {
       "comment" : "Picker option for control command"
     },
@@ -409,7 +406,7 @@
       "comment" : "Explanation for camera permission denied"
     },
     "Facial Gestures" : {
-      "comment" : "Header for facial gesture settings area"
+      "comment" : "Header for facial gesture settings area\nToggle to enable/disable all facial gestures"
     },
     "First phrase in new vocab" : {
       "comment" : "Default new node text"
