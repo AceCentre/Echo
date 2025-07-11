@@ -605,7 +605,7 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         case .headShakeLeft, .headShakeRight:
             return 0.08 // Threshold for head shake (radians) - reduced for better sensitivity (~4.6 degrees)
         case .headTiltLeft, .headTiltRight:
-            return 0.05 // Threshold for head tilt (radians) - reduced for better sensitivity (~2.9 degrees)
+            return 0.12 // Threshold for head tilt (radians) - balanced sensitivity (~6.9 degrees)
         default:
             return 0.6 // Default threshold for most gestures
         }
