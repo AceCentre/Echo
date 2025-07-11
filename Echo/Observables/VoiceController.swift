@@ -39,9 +39,10 @@ class VoiceController: ObservableObject {
     }
     
     func play(_ text: String?, voiceOptions: Voice, pan: Float, isFast: Bool = false, cb: (() -> Void)? = {}) {
-        print("🔊 DEBUG: VoiceController.play() called with text: '\(text ?? "nil")' and voiceId: \(voiceOptions.voiceId)")
-        print("🔊 DEBUG: VoiceController.play() call stack:")
-        Thread.callStackSymbols.forEach { print("  \($0)") }
+        // Reduced logging - only log significant events, not every play call
+        if let text = text, text.count > 10 {
+            print("🔊 VoiceController.play() - long text: '\(String(text.prefix(20)))...'")
+        }
 
         let unwrappedAv = self.customAV ?? AudioEngine()
         self.customAV = unwrappedAv

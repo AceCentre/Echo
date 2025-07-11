@@ -41,9 +41,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
-        print("🔊 DEBUG: AudioEngine.speak() called with text: '\(text)' and voiceId: \(voiceOptions.voiceId)")
-        print("🔊 DEBUG: AudioEngine.speak() call stack:")
-        Thread.callStackSymbols.forEach { print("  \($0)") }
+        // Reduced logging - only log errors or significant events
 
         callback = cb
 
@@ -54,7 +52,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         }
 
         // Don't set the voice here - let the synthesizer use default and set it later
-        print("🔊 DEBUG: AudioEngine.speak() - deferring voice setting to avoid Assistant Framework calls")
         
         outputSemaphore.wait()
         
@@ -63,7 +60,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             
         if scenePhase == .active {
             // Set the voice just before synthesis to minimize Assistant Framework calls
-            print("🔊 DEBUG: Setting voice just before synthesis: \(voiceOptions.voiceId)")
             utterance.voice = getCachedVoice(identifier: voiceOptions.voiceId)
 
             synthesizer.write(utterance, toBufferCallback: { buffer in
@@ -136,21 +132,19 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     private func getCachedVoice(identifier: String) -> AVSpeechSynthesisVoice? {
         // Check cache first
         if let cachedVoice = voiceCache[identifier] {
-            print("🔊 DEBUG: Using cached voice for identifier: \(identifier)")
             return cachedVoice
         }
 
         // Try to find the voice in the available voices list to avoid Assistant Framework calls
-        print("🔊 DEBUG: Looking for voice in speechVoices() list: \(identifier)")
         let availableVoices = AVSpeechSynthesisVoice.speechVoices()
         let voice = availableVoices.first { $0.identifier == identifier }
 
         if let voice = voice {
-            print("🔊 DEBUG: Found voice in speechVoices() list, caching it")
             voiceCache[identifier] = voice
             return voice
         } else {
-            print("🔊 DEBUG: Voice not found in speechVoices(), creating by identifier - may trigger Assistant Framework")
+            // Only log when we have to create a voice (which may trigger Assistant Framework)
+            print("🔊 Voice not found in speechVoices(), creating by identifier: \(identifier)")
             let createdVoice = AVSpeechSynthesisVoice(identifier: identifier)
 
             if let createdVoice = createdVoice {
