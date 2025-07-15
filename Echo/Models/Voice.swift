@@ -34,6 +34,7 @@ class Voice {
         print("DEBUG: setToDefaultCueVoice() called")
         // Get all available voices and find a suitable one
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
+        print("DEBUG: Found \(allVoices.count) total voices available")
 
         // Try to find voices for the current locale first
         let currentLocale = Locale.current.identifier
@@ -48,15 +49,11 @@ class Voice {
 
         // Get the first voice as default
         guard let firstVoice = availableVoices.first else {
-            // If no voices available at all, use Alex as fallback
-            if let alexVoice = AVSpeechSynthesisVoice(identifier: AVSpeechSynthesisVoiceIdentifierAlex) {
-                self.voiceId = alexVoice.identifier
-                self.voiceName = alexVoice.name
-            } else {
-                // Last resort fallback
-                self.voiceId = "com.apple.ttsbundle.Samantha-compact"
-                self.voiceName = "Samantha"
-            }
+            print("DEBUG: No voices available, using system default")
+            // Use system default voice - compatible with all iOS versions
+            let systemVoice = AVSpeechSynthesisVoice()
+            self.voiceId = systemVoice.identifier
+            self.voiceName = systemVoice.name
             return
         }
 
@@ -68,12 +65,14 @@ class Voice {
         let selectedVoice = targetVoice ?? firstVoice
         self.voiceId = selectedVoice.identifier
         self.voiceName = selectedVoice.name
+        print("DEBUG: Selected cue voice: \(self.voiceName) (\(self.voiceId))")
     }
     
     func setToDefaultSpeakingVoice() {
         print("DEBUG: setToDefaultSpeakingVoice() called")
         // Get all available voices and find a suitable one
         let allVoices = AVSpeechSynthesisVoice.speechVoices()
+        print("DEBUG: Found \(allVoices.count) total voices available")
 
         // Try to find voices for the current locale first
         let currentLocale = Locale.current.identifier
@@ -86,20 +85,17 @@ class Voice {
         // If still no voices, use all available voices
         let availableVoices = languageVoices.isEmpty ? allVoices : languageVoices
 
-        // Use the first available voice, or Alex as fallback
+        // Use the first available voice
         if let firstVoice = availableVoices.first {
             self.voiceId = firstVoice.identifier
             self.voiceName = firstVoice.name
+            print("DEBUG: Selected speaking voice: \(self.voiceName) (\(self.voiceId))")
         } else {
-            // If no voices available at all, use Alex as fallback
-            if let alexVoice = AVSpeechSynthesisVoice(identifier: AVSpeechSynthesisVoiceIdentifierAlex) {
-                self.voiceId = alexVoice.identifier
-                self.voiceName = alexVoice.name
-            } else {
-                // Last resort fallback
-                self.voiceId = "com.apple.ttsbundle.Samantha-compact"
-                self.voiceName = "Samantha"
-            }
+            print("DEBUG: No voices available, using system default")
+            // Use system default voice - compatible with all iOS versions
+            let systemVoice = AVSpeechSynthesisVoice()
+            self.voiceId = systemVoice.identifier
+            self.voiceName = systemVoice.name
         }
     }
 }

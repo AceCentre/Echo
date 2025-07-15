@@ -125,13 +125,9 @@ struct EchoApp: App {
                  Create and store a cueVoice with safe defaults
                  */
                 if currentSettings.cueVoice == nil {
-                    let cueVoice = Voice(
-                        rate: 35,
-                        volume: 100,
-                        voiceId: "com.apple.ttsbundle.Samantha-compact",
-                        voiceName: "Samantha"
-                    )
-                    // Don't call setToDefaultCueVoice() at startup to avoid Assistant Framework calls
+                    let cueVoice = Voice()
+                    // Set to a safe default voice that works on all iOS versions
+                    cueVoice.setToDefaultCueVoice()
 
                     container.mainContext.insert(cueVoice)
                     try container.mainContext.save()
@@ -144,13 +140,9 @@ struct EchoApp: App {
                  Create and store a speakingVoice with safe defaults
                  */
                 if currentSettings.speakingVoice == nil {
-                    let speakingVoice = Voice(
-                        rate: 35,
-                        volume: 100,
-                        voiceId: "com.apple.ttsbundle.Samantha-compact",
-                        voiceName: "Samantha"
-                    )
-                    // Don't call setToDefaultSpeakingVoice() at startup to avoid Assistant Framework calls
+                    let speakingVoice = Voice()
+                    // Set to a safe default voice that works on all iOS versions
+                    speakingVoice.setToDefaultSpeakingVoice()
 
                     container.mainContext.insert(speakingVoice)
                     try container.mainContext.save()

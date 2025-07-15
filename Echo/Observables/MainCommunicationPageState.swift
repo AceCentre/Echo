@@ -134,20 +134,42 @@ class MainCommunicationPageState: ObservableObject {
     func onAppear() {
         // Remove back nodes
         settings?.currentVocab?.rootNode?.removeBackNodes()
-        
+
         // Add back nodes
         if settings?.showBackInList == true {
             settings?.currentVocab?.rootNode?.addBackNodes(
                 BackButtonPosition(rawValue: settings?.backButtonPosition ?? 0) ?? .bottom
             )
         }
-        
+
         scanLoops = 0
         disableScanningAsHidden = false
-        do {
-            try clickNode(settings?.currentVocab?.rootNode, isStartup: true)
-        } catch {
-            self.errorHandling?.handle(error: error)
+
+        // Set up the UI and hover the first node
+        if let rootNode = settings?.currentVocab?.rootNode,
+           let firstNode = rootNode.getChildren("onAppear")?.first {
+            // Hover the first node and speak its cue text after a delay
+            hoveredNode = firstNode
+
+            // Delay the initial cue to allow app components to fully initialize
+            // But still provide audio feedback so users know the app is working
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if let voiceEngine = self.voiceEngine {
+                    print("🔊 MainCommunicationPageState: Speaking initial cue after delay")
+                    voiceEngine.playCue(firstNode.cueText, isFast: false) {
+                        // Only start scanning if explicitly enabled
+                        if self.settings?.scanOnAppLaunch == true {
+                            do {
+                                try self.setNextMoveTimer()
+                            } catch {
+                                self.errorHandling?.handle(error: error)
+                            }
+                        }
+                    }
+                } else {
+                    print("🔊 MainCommunicationPageState: No voice engine available")
+                }
+            }
         }
     }
     
