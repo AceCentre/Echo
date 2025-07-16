@@ -14,6 +14,15 @@ Echo is based around the concept of auditory scanning. Auditory scanning is a co
 
 Echo provides you with two different voices, one for your auditory cues and the another to represent your voice.
 
+## Key Features
+
+- **Auditory Scanning**: Navigate using sound cues instead of visual elements
+- **Multiple Access Methods**: Touch, swipe, external switches, game controllers, and facial gestures
+- **Facial Gesture Recognition**: Control the app using facial movements for hands-free operation
+- **Dual Voice System**: Separate voices for navigation cues and communication output
+- **Customizable Interface**: Adapt the app to individual needs and preferences
+- **Offline Operation**: Works without internet connection for reliable communication
+
 For a detailed video how to use Echo checkout the video below.
 
 {% embed url="https://youtu.be/i5KYUj7epeo" %}
