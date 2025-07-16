@@ -126,7 +126,7 @@ If you have questions about this privacy policy or Echo's privacy practices:
 
 **Ace Centre**
 - Website: https://acecentre.org.uk
-- Email: info@acecentre.org.uk
+- Email: enquiries@acecentre.org.uk
 - Address: Ace Centre, Hollinwood Business Centre, Albert Street, Oldham, OL8 3QL, UK
 
 ## Regulatory Compliance
