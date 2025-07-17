@@ -24,9 +24,9 @@ struct VoiceOptionsArea: View {
     var body: some View {
         Section(content: {
             Button(action: {
-                print("🔊 DEBUG: Play Sample button tapped")
+                // print("🔊 DEBUG: Play Sample button tapped")
                 playSample()
-                print("🔊 DEBUG: Play Sample function called")
+                // print("🔊 DEBUG: Play Sample function called")
             }, label: {
                 Label(
                     String(
@@ -37,9 +37,9 @@ struct VoiceOptionsArea: View {
                 )
             })
             Button(action: {
-                print("🔊 DEBUG: Voice button tapped")
+                // print("🔊 DEBUG: Voice button tapped")
                 showVoicePicker = true
-                print("🔊 DEBUG: showVoicePicker set to true")
+                //print("🔊 DEBUG: showVoicePicker set to true")
             }, label: {
                 HStack {
                     Text(
@@ -56,7 +56,7 @@ struct VoiceOptionsArea: View {
                 VStack {
                     HStack {
                         Button("Cancel") {
-                            print("🔊 DEBUG: Cancel button tapped")
+                            // print("🔊 DEBUG: Cancel button tapped")
                             showVoicePicker = false
                         }
                         .padding()

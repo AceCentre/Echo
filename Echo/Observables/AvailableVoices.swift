@@ -72,9 +72,9 @@ class AvailableVoices: ObservableObject {
     }
     
     func fetchVoices() {
-        print("🔊 DEBUG: AvailableVoices.fetchVoices() called - about to call speechVoices()")
+        // print("🔊 DEBUG: AvailableVoices.fetchVoices() called - about to call speechVoices()")
         let aVFvoices = AVSpeechSynthesisVoice.speechVoices()
-        print("🔊 DEBUG: AvailableVoices.fetchVoices() - speechVoices() completed, found \(aVFvoices.count) voices")
+        // print("🔊 DEBUG: AvailableVoices.fetchVoices() - speechVoices() completed, found \(aVFvoices.count) voices")
 
         var tempVoicesByLang: [String: [AVSpeechSynthesisVoice]] = [:]
 
@@ -102,7 +102,7 @@ class AvailableVoices: ObservableObject {
         DispatchQueue.main.async {
             self.voicesByLang = tempVoicesByLang
             self.voices = aVFvoices
-            print("🔊 DEBUG: AvailableVoices.fetchVoices() - updated UI on main thread, voicesByLang has \(tempVoicesByLang.count) languages")
+            // print("🔊 DEBUG: AvailableVoices.fetchVoices() - updated UI on main thread, voicesByLang has \(tempVoicesByLang.count) languages")
         }
     }
     

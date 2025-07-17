@@ -21,6 +21,9 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // iOS Bug Fix: Track if callback has been called to prevent multiple calls
     private var callbackCalled: Bool = false
 
+    // iOS Bug Fix: Track current utterance to ignore old completions
+    private var currentUtteranceText: String?
+
     // Cache voices to avoid repeated Assistant Framework calls
     private var voiceCache: [String: AVSpeechSynthesisVoice] = [:]
 
@@ -31,11 +34,18 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     
     func stop() {
         let timestamp = Date().timeIntervalSince1970
-        print("🔊 AUDIO ENGINE STOP CALLED: [\(timestamp)]")
+        //print("🔊 AUDIO ENGINE STOP CALLED: [\(timestamp)]")
 
         self.callback = nil
         self.callbackCalled = true // Prevent any pending callbacks
+        self.currentUtteranceText = nil // Clear current utterance tracking
+
+        // iOS Bug Fix: stopSpeaking() doesn't work reliably - recreate synthesizer
         self.synthesizer.stopSpeaking(at: .immediate)
+        self.synthesizer.delegate = nil
+        self.synthesizer = AVSpeechSynthesizer()
+        self.synthesizer.delegate = self
+        // print("🔊 AUDIO ENGINE: Recreated synthesizer to force stop")
 
         // Stop player if it exists
         if let unwrappedPlayer = self.player {
@@ -51,7 +61,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     private func safeCallback() {
         guard !callbackCalled else {
             let timestamp = Date().timeIntervalSince1970
-            print("🔊 AUDIO ENGINE: Prevented duplicate callback at [\(timestamp)]")
+            // print("🔊 AUDIO ENGINE: Prevented duplicate callback at [\(timestamp)]")
             return
         }
         callbackCalled = true
@@ -60,13 +70,14 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
         let timestamp = Date().timeIntervalSince1970
-        print("🔊 AUDIO ENGINE SPEAK START: [\(timestamp)] '\(text)' voice: \(voiceOptions.voiceName)")
+        // print("🔊 AUDIO ENGINE SPEAK START: [\(timestamp)] '\(text)' voice: \(voiceOptions.voiceName)")
 
         callback = cb
         callbackCalled = false // Reset callback flag for new speech
+        currentUtteranceText = text // Track current utterance
 
         guard scenePhase == .active else {
-            print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
+            // print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
             safeCallback()
             return
         }
@@ -94,10 +105,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         // iOS 26 Beta Fix: NEVER use synthesizer.write() - it causes crashes on iOS 26
         // For panning, we'll use a different approach that doesn't involve write()
         if pan != 0.0 {
-            print("🔊 AUDIO ENGINE: Using pan approach for '\(text)'")
+            //print("🔊 AUDIO ENGINE: Using pan approach for '\(text)'")
             useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
         } else {
-            print("🔊 AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'")
+            // print("🔊 AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'")
             synthesizer.speak(utterance)
         }
     }
@@ -122,8 +133,8 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             print("🔊 RIGHT channel requested - use hardware audio splitter cable")
         }
 
-        print("🔊 INFO: Audio channel splitting requires physical audio splitter cable")
-        print("🔊 INFO: iOS 26 Beta limitation prevents software-based channel routing")
+        //print("🔊 INFO: Audio channel splitting requires physical audio splitter cable")
+        //print("🔊 INFO: iOS 26 Beta limitation prevents software-based channel routing")
     }
     
 
@@ -132,13 +143,27 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         let timestamp = Date().timeIntervalSince1970
-        print("🔊 AUDIO ENGINE FINISH: [\(timestamp)] '\(utterance.speechString)'")
+        //print("🔊 AUDIO ENGINE FINISH: [\(timestamp)] '\(utterance.speechString)'")
+
+        // iOS Bug Fix: Only process completion if this matches our current utterance
+        guard utterance.speechString == currentUtteranceText else {
+            // print("🔊 AUDIO ENGINE: Ignoring completion for old utterance: '\(utterance.speechString)'")
+            return
+        }
+
         safeCallback()
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
         let timestamp = Date().timeIntervalSince1970
         print("🔊 AUDIO ENGINE CANCEL: [\(timestamp)] '\(utterance.speechString)'")
+
+        // iOS Bug Fix: Only process cancellation if this matches our current utterance
+        guard utterance.speechString == currentUtteranceText else {
+            // print("🔊 AUDIO ENGINE: Ignoring cancellation for old utterance: '\(utterance.speechString)'")
+            return
+        }
+
         safeCallback()
     }
 

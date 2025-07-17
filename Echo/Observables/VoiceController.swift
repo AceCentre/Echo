@@ -84,15 +84,11 @@ class VoiceController: ObservableObject {
                 cueVoice = createSafeDefaultVoice()
             }
 
-            print("🔊 CUE VOICE: \(cueVoice.voiceName) - '\(text ?? "")'")
             play(text, voiceOptions: cueVoice, pan: direction.pan, isFast: isFast, cb: cb)
         }
     }
     
     func playSpeaking(_ text: String, cb: (() -> Void)? = {}) {
-        let timestamp = Date().timeIntervalSince1970
-        print("🔊 VOICE CONTROLLER playSpeaking() CALLED: [\(timestamp)] '\(text)'")
-
         if let unwrappedSettings = settings {
 
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.speakDirection : .center
@@ -106,7 +102,6 @@ class VoiceController: ObservableObject {
                 speakingVoice = createSafeDefaultVoice()
             }
 
-            print("🔊 SPEAKING VOICE: \(speakingVoice.voiceName) - '\(text)'")
             play(text, voiceOptions: speakingVoice, pan: direction.pan, cb: cb)
         }
     }
