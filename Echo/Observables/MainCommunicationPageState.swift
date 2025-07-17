@@ -192,13 +192,15 @@ class MainCommunicationPageState: ObservableObject {
                 errorHandling?.handle(error: EchoError.noChildren)
             }
         } else if node?.type == .phrase {
+            print("🔊 PHRASE SELECTED: '\(node?.speakText ?? "Error")' - playing with speaking voice")
             voiceEngine?.playSpeaking(node?.speakText ?? "Error", cb: {
+                print("🔊 PHRASE COMPLETED: '\(node?.speakText ?? "Error")' - returning to root")
                 do {
                     try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: false)
                 } catch {
                     self.errorHandling?.handle(error: error)
                 }
-                
+
             })
             
         } else if node?.type == .branch {
@@ -622,7 +624,13 @@ class MainCommunicationPageState: ObservableObject {
                 if scanLoops == 0 && settings?.fastFirstLoop == true {
                     isFast = true
                 }
+                if hoveredNode.type == .phrase {
+                    print("🔊 PHRASE HOVERED: '\(hoveredNode.cueText)' - playing with cue voice")
+                }
                 unwrappedVoice.playCue(hoveredNode.cueText, isFast:isFast, cb: {
+                    if self.hoveredNode.type == .phrase {
+                        print("🔊 PHRASE CUE COMPLETED: '\(self.hoveredNode.cueText)'")
+                    }
                     if self.settings?.scanning == true && shouldScan {
                         do {
                             try self.setNextMoveTimer()

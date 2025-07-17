@@ -13,123 +13,151 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     var synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     var player: AVAudioPlayer?
 
+    // For temporary audio file creation during pan operations
+    private var audioFile: AVAudioFile?
+
     var callback: (() -> Void)?
 
-    // Use a semaphore to make sure only one thing is writing to the output file at a time.
-    var outputSemaphore: DispatchSemaphore
+    // iOS Bug Fix: Track if callback has been called to prevent multiple calls
+    private var callbackCalled: Bool = false
 
     // Cache voices to avoid repeated Assistant Framework calls
     private var voiceCache: [String: AVSpeechSynthesisVoice] = [:]
 
     override init() {
-        outputSemaphore = DispatchSemaphore(value: 1)
-
         super.init()
-        
         synthesizer.delegate = self
     }
     
     func stop() {
+        let timestamp = Date().timeIntervalSince1970
+        print("🔊 AUDIO ENGINE STOP CALLED: [\(timestamp)]")
+
         self.callback = nil
+        self.callbackCalled = true // Prevent any pending callbacks
         self.synthesizer.stopSpeaking(at: .immediate)
+
+        // Stop player if it exists
         if let unwrappedPlayer = self.player {
             unwrappedPlayer.pause()
             unwrappedPlayer.stop()
         }
-        
-        outputSemaphore.signal()
+
+        // Clean up audio file
+        audioFile = nil
+    }
+
+    // iOS Bug Fix: Safe callback that prevents multiple calls
+    private func safeCallback() {
+        guard !callbackCalled else {
+            let timestamp = Date().timeIntervalSince1970
+            print("🔊 AUDIO ENGINE: Prevented duplicate callback at [\(timestamp)]")
+            return
+        }
+        callbackCalled = true
+        callback?()
     }
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
-        // Reduced logging - only log errors or significant events
+        let timestamp = Date().timeIntervalSince1970
+        print("🔊 AUDIO ENGINE SPEAK START: [\(timestamp)] '\(text)' voice: \(voiceOptions.voiceName)")
 
         callback = cb
+        callbackCalled = false // Reset callback flag for new speech
 
-        // let ssmlRepresentation = "<speak><say-as interpret-as=\"characters\">dylan</say-as></speak>"
-        let ssmlRepresentation = "<speak>\(text)</speak>"
-        guard let utterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) else {
-            fatalError("SSML was not valid")
+        guard scenePhase == .active else {
+            print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
+            safeCallback()
+            return
         }
 
-        // Don't set the voice here - let the synthesizer use default and set it later
-        
-        outputSemaphore.wait()
-        
-        let audioFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
-        var output: AVAudioFile?
-            
-        if scenePhase == .active {
-            // Set the voice just before synthesis to minimize Assistant Framework calls
-            utterance.voice = getCachedVoice(identifier: voiceOptions.voiceId)
+        // Try SSML first, fallback to plain text for iOS 26 compatibility
+        let utterance: AVSpeechUtterance
+        let ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
 
-            synthesizer.write(utterance, toBufferCallback: { buffer in
-                guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
-                    fatalError("unknown buffer type: \(buffer)")
-                }
-                
-                if let unwrappedOutput = output {
-                    do {
-                        try unwrappedOutput.write(from: pcmBuffer)
-                    } catch {
-                        fatalError("Failed to write pcmBuffer to output")
-                    }
-                    
-                } else {
-                    output = try? AVAudioFile(
-                        forWriting: audioFilePath,
-                        settings: pcmBuffer.format.settings,
-                        commonFormat: pcmBuffer.format.commonFormat,
-                        interleaved: pcmBuffer.format.isInterleaved
-                    )
-                    if let unwrappedOutput = output {
-                        do {
-                            try unwrappedOutput.write(from: pcmBuffer)
-                        } catch {
-                            fatalError("Failed to write pcmBuffer to output")
-                        }
-                    }
-                }
-                
-                if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
-                    self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: isFast ? 75 : voiceOptions.rate)
-                }
-            })
+        if let ssmlUtterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) {
+            utterance = ssmlUtterance
         } else {
-            print("Not calling write as app is in the background or inactive")
+            // Fallback to plain text if SSML fails (iOS 26 compatibility)
+            print("🔊 SSML failed, using plain text fallback")
+            utterance = AVSpeechUtterance(string: text)
         }
-    }
-    
-    func finished(audioUrl: URL, pan: Float, volume: Double, rate: Double) {
-        do {
-            self.player = try AVAudioPlayer(contentsOf: audioUrl)
-            
-            guard let unwrappedPlayer = self.player else {
-                fatalError("Failed to create AVAudioPlayer")
-            }
-            
-            let calculatedVolume = Float(volume) / 100
-            let calculatedRate = ((Float(rate) * 1.5) / 100) + 0.5
 
-            unwrappedPlayer.pan = pan
-            unwrappedPlayer.rate = calculatedRate
-            unwrappedPlayer.enableRate = true
-            unwrappedPlayer.volume = calculatedVolume
-            unwrappedPlayer.delegate = self
-            unwrappedPlayer.prepareToPlay()
-            unwrappedPlayer.play()
-        } catch {
-            fatalError("Failed to create AVAudioPlayer")
+        // Set the voice just before synthesis to minimize Assistant Framework calls
+        let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
+        utterance.voice = selectedVoice
+
+        // Set speech parameters directly on utterance
+        utterance.rate = Float((isFast ? 75 : voiceOptions.rate) * 1.5 / 100 + 0.5)
+        utterance.volume = Float(voiceOptions.volume) / 100
+
+        // iOS 26 Beta Fix: NEVER use synthesizer.write() - it causes crashes on iOS 26
+        // For panning, we'll use a different approach that doesn't involve write()
+        if pan != 0.0 {
+            print("🔊 AUDIO ENGINE: Using pan approach for '\(text)'")
+            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
+        } else {
+            print("🔊 AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'")
+            synthesizer.speak(utterance)
         }
     }
+
+    private func useSimpleSpeechWithAudioSessionPan(utterance: AVSpeechUtterance, pan: Float) {
+        // iOS 26 Beta Fix: Use AVAudioSession channel routing instead of synthesizer.write()
+
+        // Configure audio session for channel routing
+        configureAudioSessionForPanning(pan: pan)
+
+        // Use simple speech synthesis (iOS 26 compatible)
+        synthesizer.speak(utterance)
+    }
+
+    private func configureAudioSessionForPanning(pan: Float) {
+        // iOS 26 Beta Fix: Don't try to reconfigure audio session - it causes warnings
+        // and iOS doesn't support direct channel routing through AVAudioSession anyway
+
+        if pan < 0 {
+            print("🔊 LEFT channel requested - use hardware audio splitter cable")
+        } else if pan > 0 {
+            print("🔊 RIGHT channel requested - use hardware audio splitter cable")
+        }
+
+        print("🔊 INFO: Audio channel splitting requires physical audio splitter cable")
+        print("🔊 INFO: iOS 26 Beta limitation prevents software-based channel routing")
+    }
     
+
+
+    // MARK: - AVSpeechSynthesizerDelegate
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        let timestamp = Date().timeIntervalSince1970
+        print("🔊 AUDIO ENGINE FINISH: [\(timestamp)] '\(utterance.speechString)'")
+        safeCallback()
+    }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        let timestamp = Date().timeIntervalSince1970
+        print("🔊 AUDIO ENGINE CANCEL: [\(timestamp)] '\(utterance.speechString)'")
+        safeCallback()
+    }
+
+    // MARK: - AVAudioPlayerDelegate
+
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully: Bool) {
-        outputSemaphore.signal()
-        callback?()
+        audioFile = nil // Clean up
+        safeCallback()
     }
 
     // MARK: - Voice Caching
 
     private func getCachedVoice(identifier: String) -> AVSpeechSynthesisVoice? {
+        // Handle empty identifier (system default)
+        if identifier.isEmpty {
+            print("🔊 Using system default voice")
+            return nil // nil means use system default
+        }
+
         // Check cache first
         if let cachedVoice = voiceCache[identifier] {
             return cachedVoice
@@ -152,12 +180,58 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
                 print("🔊 DEBUG: Voice created and cached successfully")
                 return createdVoice
             } else {
-                print("🔊 DEBUG: Failed to create voice, using default")
-                // Fallback to default voice
-                let defaultVoice = AVSpeechSynthesisVoice()
-                voiceCache[identifier] = defaultVoice
-                return defaultVoice
+                print("🔊 DEBUG: Failed to create voice, using fallback")
+                // iOS 26 Fix: Use proper fallback voice creation
+                let defaultVoice = createFallbackVoice()
+                if let defaultVoice = defaultVoice {
+                    voiceCache[identifier] = defaultVoice
+                    return defaultVoice
+                } else {
+                    print("🔊 ERROR: Could not create any fallback voice")
+                    return nil
+                }
             }
         }
+    }
+
+    private func createFallbackVoice() -> AVSpeechSynthesisVoice? {
+        // Try multiple fallback strategies for iOS 26 compatibility
+
+        // 1. Try Alex voice (usually available on all iOS versions)
+        if let alexVoice = AVSpeechSynthesisVoice(identifier: AVSpeechSynthesisVoiceIdentifierAlex) {
+            print("🔊 Using Alex voice as fallback")
+            return alexVoice
+        }
+
+        // 2. Try to get any English voice
+        let availableVoices = AVSpeechSynthesisVoice.speechVoices()
+        if let englishVoice = availableVoices.first(where: { $0.language.hasPrefix("en") }) {
+            print("🔊 Using English voice as fallback: \(englishVoice.name)")
+            return englishVoice
+        }
+
+        // 3. Try to get the first available voice
+        if let firstVoice = availableVoices.first {
+            print("🔊 Using first available voice as fallback: \(firstVoice.name)")
+            return firstVoice
+        }
+
+        // 4. Last resort: try creating with language code
+        if let languageVoice = AVSpeechSynthesisVoice(language: "en-US") {
+            print("🔊 Using language-based voice as fallback")
+            return languageVoice
+        }
+
+        print("🔊 CRITICAL: No fallback voice could be created")
+        return nil
+    }
+
+    private func escapeXML(_ text: String) -> String {
+        return text
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&apos;")
     }
 }

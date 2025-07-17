@@ -122,41 +122,57 @@ struct EchoApp: App {
                 }
                 
                 /*
-                 Create and store a cueVoice with safe defaults
+                 Create and store voices using actual available system voices
                  */
-                if currentSettings.cueVoice == nil {
-                    let cueVoice = Voice(
-                        rate: 35,
-                        volume: 100,
-                        voiceId: "com.apple.ttsbundle.Samantha-compact",
-                        voiceName: "Samantha"
-                    )
-                    // Don't call setToDefaultCueVoice() at startup to avoid Assistant Framework calls
+                if currentSettings.cueVoice == nil || currentSettings.speakingVoice == nil {
+                    let availableVoices = AVSpeechSynthesisVoice.speechVoices()
 
-                    container.mainContext.insert(cueVoice)
-                    try container.mainContext.save()
+                    // Get voices for current locale first, then fallback to English, then any voice
+                    let currentLocale = Locale.current.identifier
+                    let localeVoices = availableVoices.filter { $0.language == currentLocale }
+                    let languageCode = String(currentLocale.prefix(2))
+                    let languageVoices = localeVoices.isEmpty ? availableVoices.filter { $0.language.hasPrefix(languageCode) } : localeVoices
+                    let usableVoices = languageVoices.isEmpty ? availableVoices : languageVoices
 
-                    currentSettings.cueVoice = cueVoice
-                    try container.mainContext.save()
-                }
-                
-                /*
-                 Create and store a speakingVoice with safe defaults
-                 */
-                if currentSettings.speakingVoice == nil {
-                    let speakingVoice = Voice(
-                        rate: 35,
-                        volume: 100,
-                        voiceId: "com.apple.ttsbundle.Samantha-compact",
-                        voiceName: "Samantha"
-                    )
-                    // Don't call setToDefaultSpeakingVoice() at startup to avoid Assistant Framework calls
+                    // Create cue voice (use first available voice)
+                    if currentSettings.cueVoice == nil {
+                        let cueVoice: Voice
+                        if let firstVoice = usableVoices.first {
+                            cueVoice = Voice(rate: 35, volume: 100, voiceId: firstVoice.identifier, voiceName: firstVoice.name)
+                            print("🔊 Created cue voice: \(firstVoice.name) (\(firstVoice.identifier))")
+                        } else {
+                            // Ultimate fallback - let the system choose
+                            cueVoice = Voice(rate: 35, volume: 100, voiceId: "", voiceName: "System Default")
+                            print("🔊 Created cue voice: System Default")
+                        }
 
-                    container.mainContext.insert(speakingVoice)
-                    try container.mainContext.save()
+                        container.mainContext.insert(cueVoice)
+                        try container.mainContext.save()
+                        currentSettings.cueVoice = cueVoice
+                        try container.mainContext.save()
+                    }
 
-                    currentSettings.speakingVoice = speakingVoice
-                    try container.mainContext.save()
+                    // Create speaking voice (use second available voice if possible, otherwise first)
+                    if currentSettings.speakingVoice == nil {
+                        let speakingVoice: Voice
+                        if usableVoices.count > 1 {
+                            let secondVoice = usableVoices[1]
+                            speakingVoice = Voice(rate: 35, volume: 100, voiceId: secondVoice.identifier, voiceName: secondVoice.name)
+                            print("🔊 Created speaking voice: \(secondVoice.name) (\(secondVoice.identifier))")
+                        } else if let firstVoice = usableVoices.first {
+                            speakingVoice = Voice(rate: 35, volume: 100, voiceId: firstVoice.identifier, voiceName: firstVoice.name)
+                            print("🔊 Created speaking voice: \(firstVoice.name) (\(firstVoice.identifier))")
+                        } else {
+                            // Ultimate fallback - let the system choose
+                            speakingVoice = Voice(rate: 35, volume: 100, voiceId: "", voiceName: "System Default")
+                            print("🔊 Created speaking voice: System Default")
+                        }
+
+                        container.mainContext.insert(speakingVoice)
+                        try container.mainContext.save()
+                        currentSettings.speakingVoice = speakingVoice
+                        try container.mainContext.save()
+                    }
                 }
             } catch {
                 errorHandling.handle(error: error)

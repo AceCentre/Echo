@@ -1,0 +1,153 @@
+Database Location: "/var/mobile/Containers/Data/Application/9D8ECE26-9B8E-4F9E-8B91-1C5B9AE1677C/Library/Application Support/default.store"
+unable to create XPCSession for service "com.apple.uiintelligencesupport.agent": The operation couldn’t be completed. (XPC.XPCRichError error 1.); underlying error: Underlying connection was invalidated. Reason: failed at lookup with error 3 - No such process
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15a00f0c0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+viewDidLoad UIViewController
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+🔊 VoiceController.play() - long text: 'Quick Words...'
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+🎯 FacialGestureDetector.stopDetection called
+🎯 FacialGestureDetector.stopAllModes called - current mode: inactive
+🎯 All modes stopped, session paused
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b08c360> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b08f360> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b333120> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b331560> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b331aa0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b464000> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+          IPCAUClient.cpp:129   IPCAUClient: bundle display name is nil
+viewDidAppear UIViewController
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b330540> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b332280> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b467f00> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Become responder 0.5
+Become responder 1
+Become responder 0.5
+Become responder 2
+Become responder 1
+Become responder 2
+🔊 Simple speech synthesis completed
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15ae081e0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b4655c0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b42f240> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+🔊 Simple speech synthesis completed
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Simple speech synthesis completed
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15a00d6e0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+🔊 Simple speech synthesis completed
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Simple speech synthesis completed
+🔊 VoiceController.play() - long text: 'Quick Words...'
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b352fa0> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Simple speech synthesis completed
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple synthesizer.speak() approach
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+🔊 Simple speech synthesis completed
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+🔊 VoiceController.play() - long text: 'Quick Words...'
+🔊 Using voice: Daniel (com.apple.voice.compact.en-GB.Daniel)
+🔊 Using simple speech with pan post-processing: -1.0
+🎯 FacialGestureDetector.stopDetection called
+🎯 FacialGestureDetector.stopAllModes called - current mode: inactive
+🎯 All modes stopped, session paused
+Unable to update Font Descriptor's weight to Weight(value: 0.0):
+UICTFontDescriptor <0x15b41ce40> = {
+    NSFontNameAttribute = System;
+    NSFontSizeAttribute = 17;
+} - SwiftUICore/Logging.swift:84 - please file a bug report.
+         AVAudioBuffer.mm:268   mBuffers[0].mDataByteSize (0) should be non-zero
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[0]'
+*** First throw call stack:
+(0x19f4538d0 0x19c5b17a4 0x19f46bd40 0x19f4d20c0 0x1c63b79c4 0x102b7861c 0x102b922b0 0x102bb348c 0x102b88758 0x102b88694 0x19f3f55a0 0x19f3a7df0 0x19f3a6d28 0x1f09ad498 0x1a2124838 0x1a20c2fd0 0x1a43f01e0 0x1a43ecd7c 0x1a43ec868 0x104080200 0x1040821b0 0x19c605b18)
+libc++abi: terminating due to uncaught exception of type NSException
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[0]'
+*** First throw call stack:
+(0x19f4538d0 0x19c5b17a4 0x19f46bd40 0x19f4d20c0 0x1c63b79c4 0x102b7861c 0x102b922b0 0x102bb348c 0x102b88758 0x102b88694 0x19f3f55a0 0x19f3a7df0 0x19f3a6d28 0x1f09ad498 0x1a2124838 0x1a20c2fd0 0x1a43f01e0 0x1a43ecd7c 0x1a43ec868 0x104080200 0x1040821b0 0x19c605b18)
+terminating due to uncaught exception of type NSException

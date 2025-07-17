@@ -1,0 +1,58 @@
+Database Location: "/var/mobile/Containers/Data/Application/3BBE5AC3-AABC-4E0A-996B-B15B7FB3FE6E/Library/Application Support/default.store"
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+Illegal attempt to map a relationship containing temporary objects to its identifiers.
+🔊 CUE VOICE: Daniel (Enhanced) (English) - 'Quick Words'
+🔊 AUDIO ENGINE STOP CALLED: [1752765216.145242]
+🔊 AUDIO ENGINE SPEAK START: [1752765216.145259] 'Quick Words' voice: Daniel (Enhanced) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'Quick Words'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+#FactoryInstall Unable to query results, error: 5
+#FactoryInstall Unable to query results, error: 5
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+          IPCAUClient.cpp:129   IPCAUClient: bundle display name is nil
+🔊 AUDIO ENGINE FINISH: [1752765218.6053162] 'Quick Words'
+🔊 CUE VOICE: Daniel (Enhanced) (English) - 'Chat'
+🔊 AUDIO ENGINE STOP CALLED: [1752765219.866578]
+🔊 AUDIO ENGINE SPEAK START: [1752765219.8670568] 'Chat' voice: Daniel (Enhanced) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'Chat'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765220.35656] 'Chat'
+🔊 CUE VOICE: Daniel (Enhanced) (English) - 'Care'
+🔊 AUDIO ENGINE STOP CALLED: [1752765220.409006]
+🔊 AUDIO ENGINE SPEAK START: [1752765220.409044] 'Care' voice: Daniel (Enhanced) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'Care'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765221.010374] 'Care'
+🔊 PHRASE HOVERED: 'I need the toilet' - playing with cue voice
+🔊 CUE VOICE: Daniel (Enhanced) (English) - 'I need the toilet'
+🔊 AUDIO ENGINE STOP CALLED: [1752765221.0254378]
+🔊 AUDIO ENGINE SPEAK START: [1752765221.025471] 'I need the toilet' voice: Daniel (Enhanced) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'I need the toilet'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 PHRASE SELECTED: 'I need the toilet' - playing with speaking voice
+🔊 VOICE CONTROLLER playSpeaking() CALLED: [1752765221.6959062] 'I need the toilet'
+🔊 SPEAKING VOICE: Jamie (Premium) (English) - 'I need the toilet'
+🔊 AUDIO ENGINE STOP CALLED: [1752765221.698049]
+🔊 AUDIO ENGINE SPEAK START: [1752765221.69823] 'I need the toilet' voice: Jamie (Premium) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'I need the toilet'
+🔊 AUDIO ENGINE FINISH: [1752765221.733654] 'I need the toilet'
+🔊 PHRASE COMPLETED: 'I need the toilet' - returning to root
+🔊 CUE VOICE: Daniel (Enhanced) (English) - 'Quick Words'
+🔊 AUDIO ENGINE STOP CALLED: [1752765221.733803]
+🔊 AUDIO ENGINE SPEAK START: [1752765221.73383] 'Quick Words' voice: Daniel (Enhanced) (English)
+🔊 AUDIO ENGINE: Calling synthesizer.speak() for 'Quick Words'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765223.2653198] 'I need the toilet'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765224.405365] 'I need the toilet'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765225.755291] 'Quick Words'
+-[AFPreferences _languageCodeWithFallback:] No language code saved, but Assistant is enabled - returning: en-GB
+🔊 AUDIO ENGINE FINISH: [1752765226.901511] 'Quick Words'

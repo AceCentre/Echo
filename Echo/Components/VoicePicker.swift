@@ -16,15 +16,12 @@ struct VoicePicker: View {
     @State private var isLoading: Bool = true
 
     init(voiceId: Binding<String>, voiceName: Binding<String>) {
-        print("🔊 DEBUG: VoicePicker.init() called with voiceId: \(voiceId.wrappedValue), voiceName: \(voiceName.wrappedValue)")
         self._voiceId = voiceId
         self._voiceName = voiceName
-        print("🔊 DEBUG: VoicePicker.init() completed")
     }
     
     var body: some View {
-        let _ = print("🔊 DEBUG: VoicePicker body being rendered, isLoading: \(isLoading)")
-        return NavigationView {
+        NavigationView {
             VStack {
                 if isLoading {
                     HStack {
@@ -99,12 +96,9 @@ struct VoicePicker: View {
     // Filtered list of voice languages based on search and novelty filter
     func filteredVoiceLanguages() -> [String] {
         guard !isLoading else {
-            print("🔊 DEBUG: VoicePicker.filteredVoiceLanguages() called but still loading")
             return []
         }
-        print("🔊 DEBUG: VoicePicker.filteredVoiceLanguages() called")
         let allLanguages = voiceList.sortedKeys()
-        print("🔊 DEBUG: Found \(allLanguages.count) voice languages")
         let matchingLanguages = allLanguages.filter { lang in
             let voices = filteredVoices(for: lang)
             return !voices.isEmpty
@@ -127,6 +121,17 @@ struct VoicePicker: View {
             if #available(iOS 17.0, *) {
                 let traits = voice.voiceTraits
                 isNovelty = traits.contains(.isNoveltyVoice)
+            }
+
+            // Additional novelty voice detection for voices that might not have the trait set correctly
+            // Eloquence voices should be considered novelty voices
+            if voice.identifier.contains("eloquence") {
+                isNovelty = true
+            }
+
+            // Other novelty voice patterns
+            if voice.identifier.contains("novelty") || voice.name.localizedCaseInsensitiveContains("novelty") {
+                isNovelty = true
             }
 
             // Check if it's an enhanced voice

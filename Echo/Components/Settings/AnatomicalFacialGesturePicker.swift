@@ -55,7 +55,7 @@ struct AnatomicalFacialGesturePicker: View {
                     if ARFaceTrackingConfiguration.isSupported {
                         Text("Position your face in the camera, follow the countdown, then make your gesture. The app will automatically detect and select it.", comment: "Footer explaining auto-detection")
                     } else {
-                        Text("Auto-detection requires a device with Face ID capability (iPhone X or later, iPad Pro with TrueDepth camera). Use manual selection below.", comment: "Footer explaining auto-detection unavailable")
+                        Text("Auto-detection requires a device with face tracking capability (iPhone X or later, iPad Pro with TrueDepth camera, or devices with A12 Bionic chip or later). Use manual selection below.", comment: "Footer explaining auto-detection unavailable")
                     }
                 })
 

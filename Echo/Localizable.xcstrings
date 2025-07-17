@@ -144,7 +144,7 @@
     "Auto Select Gesture" : {
 
     },
-    "Auto-detection requires a device with Face ID capability (iPhone X or later, iPad Pro with TrueDepth camera). Use manual selection below." : {
+    "Auto-detection requires a device with face tracking capability (iPhone X or later, iPad Pro with TrueDepth camera, or devices with A12 Bionic chip or later). Use manual selection below." : {
       "comment" : "Footer explaining auto-detection unavailable"
     },
     "Automatic Detection" : {
@@ -1176,7 +1176,7 @@
     "These are the actions that will happen when you tap or hold your switch" : {
       "comment" : "The footer description of the area of the actions area when adding a new switch"
     },
-    "This device does not support face tracking. Facial gesture controls require a device with TrueDepth camera or A12 Bionic chip or later." : {
+    "This device does not support face tracking. Facial gesture controls require a device with face tracking capability (iPhone X or later, iPad Pro with TrueDepth camera, or devices with A12 Bionic chip or later)." : {
       "comment" : "Explanation for unsupported device"
     },
     "This is the number of levels of your phrases to show at once." : {

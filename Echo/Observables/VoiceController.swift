@@ -22,7 +22,7 @@ class VoiceController: ObservableObject {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
         } catch let error {
-            print("This error message from SpeechSynthesizer \(error.localizedDescription)")
+            print("🔊 ERROR: Audio session configuration failed: \(error.localizedDescription)")
         }
     }
     
@@ -39,10 +39,7 @@ class VoiceController: ObservableObject {
     }
     
     func play(_ text: String?, voiceOptions: Voice, pan: Float, isFast: Bool = false, cb: (() -> Void)? = {}) {
-        // Reduced logging - only log significant events, not every play call
-        if let text = text, text.count > 10 {
-            print("🔊 VoiceController.play() - long text: '\(String(text.prefix(20)))...'")
-        }
+        // Only log errors or significant issues
 
         let unwrappedAv = self.customAV ?? AudioEngine()
         self.customAV = unwrappedAv
@@ -59,13 +56,13 @@ class VoiceController: ObservableObject {
         if let unwrappedSettings = settings {
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
 
-            // Use existing cue voice or create a safe default without calling setToDefaultCueVoice
+            // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
             if let existingCueVoice = unwrappedSettings.cueVoice {
                 cueVoice = existingCueVoice
             } else {
-                // Create a safe default voice without triggering Assistant Framework
-                cueVoice = Voice(rate: 35, volume: 100, voiceId: "com.apple.ttsbundle.Samantha-compact", voiceName: "Samantha")
+                // Create a safe default voice using first available voice
+                cueVoice = createSafeDefaultVoice()
             }
 
             play(text, voiceOptions: cueVoice, pan: direction.pan, isFast: true, cb: cb)
@@ -78,34 +75,61 @@ class VoiceController: ObservableObject {
         if let unwrappedSettings = settings {
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
 
-            // Use existing cue voice or create a safe default without calling setToDefaultCueVoice
+            // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
             if let existingCueVoice = unwrappedSettings.cueVoice {
                 cueVoice = existingCueVoice
             } else {
-                // Create a safe default voice without triggering Assistant Framework
-                cueVoice = Voice(rate: 35, volume: 100, voiceId: "com.apple.ttsbundle.Samantha-compact", voiceName: "Samantha")
+                // Create a safe default voice using first available voice
+                cueVoice = createSafeDefaultVoice()
             }
 
+            print("🔊 CUE VOICE: \(cueVoice.voiceName) - '\(text ?? "")'")
             play(text, voiceOptions: cueVoice, pan: direction.pan, isFast: isFast, cb: cb)
         }
     }
     
     func playSpeaking(_ text: String, cb: (() -> Void)? = {}) {
+        let timestamp = Date().timeIntervalSince1970
+        print("🔊 VOICE CONTROLLER playSpeaking() CALLED: [\(timestamp)] '\(text)'")
+
         if let unwrappedSettings = settings {
 
             let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.speakDirection : .center
 
-            // Use existing speaking voice or create a safe default without calling setToDefaultSpeakingVoice
+            // Use existing speaking voice or create a safe default using available voices
             let speakingVoice: Voice
             if let existingSpeakingVoice = unwrappedSettings.speakingVoice {
                 speakingVoice = existingSpeakingVoice
             } else {
-                // Create a safe default voice without triggering Assistant Framework
-                speakingVoice = Voice(rate: 35, volume: 100, voiceId: "com.apple.ttsbundle.Samantha-compact", voiceName: "Samantha")
+                // Create a safe default voice using first available voice
+                speakingVoice = createSafeDefaultVoice()
             }
 
+            print("🔊 SPEAKING VOICE: \(speakingVoice.voiceName) - '\(text)'")
             play(text, voiceOptions: speakingVoice, pan: direction.pan, cb: cb)
+        }
+    }
+
+    private func createSafeDefaultVoice() -> Voice {
+        let availableVoices = AVSpeechSynthesisVoice.speechVoices()
+
+        // Try to get a voice for current locale first
+        let currentLocale = Locale.current.identifier
+        let localeVoices = availableVoices.filter { $0.language == currentLocale }
+
+        // If no voices for current locale, try language code only
+        let languageCode = String(currentLocale.prefix(2))
+        let languageVoices = localeVoices.isEmpty ? availableVoices.filter { $0.language.hasPrefix(languageCode) } : localeVoices
+
+        // Use the best available voice
+        let usableVoices = languageVoices.isEmpty ? availableVoices : languageVoices
+
+        if let firstVoice = usableVoices.first {
+            return Voice(rate: 35, volume: 100, voiceId: firstVoice.identifier, voiceName: firstVoice.name)
+        } else {
+            // Ultimate fallback - empty voiceId will let the system choose
+            return Voice(rate: 35, volume: 100, voiceId: "", voiceName: "System Default")
         }
     }
 }

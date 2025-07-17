@@ -499,7 +499,7 @@ struct FacialGestureSection: View {
                     
                     Text(
                         String(
-                            localized: "This device does not support face tracking. Facial gesture controls require a device with TrueDepth camera or A12 Bionic chip or later.",
+                            localized: "This device does not support face tracking. Facial gesture controls require a device with face tracking capability (iPhone X or later, iPad Pro with TrueDepth camera, or devices with A12 Bionic chip or later).",
                             comment: "Explanation for unsupported device"
                         )
                     )
