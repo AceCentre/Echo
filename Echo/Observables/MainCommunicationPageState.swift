@@ -625,11 +625,11 @@ class MainCommunicationPageState: ObservableObject {
                     isFast = true
                 }
                 if hoveredNode.type == .phrase {
-                    print("🔊 PHRASE HOVERED: '\(hoveredNode.cueText)' - playing with cue voice")
+                    EchoLogger.debug("PHRASE HOVERED: '\(hoveredNode.cueText)' - playing with cue voice", category: .voice)
                 }
                 unwrappedVoice.playCue(hoveredNode.cueText, isFast:isFast, cb: {
                     if self.hoveredNode.type == .phrase {
-                        print("🔊 PHRASE CUE COMPLETED: '\(self.hoveredNode.cueText)'")
+                        EchoLogger.debug("PHRASE CUE COMPLETED: '\(self.hoveredNode.cueText)'", category: .voice)
                     }
                     if self.settings?.scanning == true && shouldScan {
                         do {

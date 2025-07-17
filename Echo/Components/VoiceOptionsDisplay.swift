@@ -24,9 +24,9 @@ struct VoiceOptionsArea: View {
     var body: some View {
         Section(content: {
             Button(action: {
-                // print("🔊 DEBUG: Play Sample button tapped")
+                // EchoLogger.debug("Play Sample button tapped", category: .voice)
                 playSample()
-                // print("🔊 DEBUG: Play Sample function called")
+                // EchoLogger.debug("Play Sample function called", category: .voice)
             }, label: {
                 Label(
                     String(
@@ -37,9 +37,9 @@ struct VoiceOptionsArea: View {
                 )
             })
             Button(action: {
-                // print("🔊 DEBUG: Voice button tapped")
+                // EchoLogger.debug("Voice button tapped", category: .voice)
                 showVoicePicker = true
-                //print("🔊 DEBUG: showVoicePicker set to true")
+                //EchoLogger.debug("showVoicePicker set to true", category: .voice)
             }, label: {
                 HStack {
                     Text(
@@ -56,7 +56,7 @@ struct VoiceOptionsArea: View {
                 VStack {
                     HStack {
                         Button("Cancel") {
-                            // print("🔊 DEBUG: Cancel button tapped")
+                            // EchoLogger.debug("Cancel button tapped", category: .voice)
                             showVoicePicker = false
                         }
                         .padding()
@@ -66,7 +66,7 @@ struct VoiceOptionsArea: View {
                     VoicePicker(voiceId: $voiceId, voiceName: $voiceName)
                 }
                 .onAppear {
-                    print("🔊 DEBUG: Voice picker sheet being presented")
+                    EchoLogger.debug("Voice picker sheet being presented", category: .voice)
                 }
             }
             
@@ -137,7 +137,7 @@ struct TestVoicePickerView: View {
                 .padding()
 
             Button("Test Button") {
-                print("🔊 DEBUG: Test button tapped")
+                EchoLogger.debug("Test button tapped", category: .voice)
             }
             .padding()
 
@@ -145,8 +145,8 @@ struct TestVoicePickerView: View {
         }
         .navigationTitle("Voice Picker Debug")
         .onAppear {
-            print("🔊 DEBUG: TestVoicePickerView appeared successfully")
-            print("🔊 DEBUG: voiceId: '\(voiceId)', voiceName: '\(voiceName)'")
+            EchoLogger.debug("TestVoicePickerView appeared successfully", category: .voice)
+            EchoLogger.debug("voiceId: '\(voiceId)', voiceName: '\(voiceName)'", category: .voice)
         }
     }
 }

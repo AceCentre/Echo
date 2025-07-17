@@ -33,8 +33,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func stop() {
-        let timestamp = Date().timeIntervalSince1970
-        //print("🔊 AUDIO ENGINE STOP CALLED: [\(timestamp)]")
+        //EchoLogger.debug("AUDIO ENGINE STOP CALLED: [\(Date().timeIntervalSince1970)]", category: .voice)
 
         self.callback = nil
         self.callbackCalled = true // Prevent any pending callbacks
@@ -45,7 +44,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         self.synthesizer.delegate = nil
         self.synthesizer = AVSpeechSynthesizer()
         self.synthesizer.delegate = self
-        // print("🔊 AUDIO ENGINE: Recreated synthesizer to force stop")
+        // EchoLogger.debug("AUDIO ENGINE: Recreated synthesizer to force stop", category: .voice)
 
         // Stop player if it exists
         if let unwrappedPlayer = self.player {
@@ -60,8 +59,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // iOS Bug Fix: Safe callback that prevents multiple calls
     private func safeCallback() {
         guard !callbackCalled else {
-            let timestamp = Date().timeIntervalSince1970
-            // print("🔊 AUDIO ENGINE: Prevented duplicate callback at [\(timestamp)]")
+            // EchoLogger.debug("AUDIO ENGINE: Prevented duplicate callback at [\(Date().timeIntervalSince1970)]", category: .voice)
             return
         }
         callbackCalled = true
@@ -69,15 +67,14 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
-        let timestamp = Date().timeIntervalSince1970
-        // print("🔊 AUDIO ENGINE SPEAK START: [\(timestamp)] '\(text)' voice: \(voiceOptions.voiceName)")
+        // EchoLogger.debug("AUDIO ENGINE SPEAK START: [\(Date().timeIntervalSince1970)] '\(text)' voice: \(voiceOptions.voiceName)", category: .voice)
 
         callback = cb
         callbackCalled = false // Reset callback flag for new speech
         currentUtteranceText = text // Track current utterance
 
         guard scenePhase == .active else {
-            // print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
+            // EchoLogger.debug("AUDIO ENGINE: Not speaking as app is in the background or inactive", category: .voice)
             safeCallback()
             return
         }
@@ -90,7 +87,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             utterance = ssmlUtterance
         } else {
             // Fallback to plain text if SSML fails (iOS 26 compatibility)
-            print("🔊 SSML failed, using plain text fallback")
+            EchoLogger.debug("SSML failed, using plain text fallback", category: .voice)
             utterance = AVSpeechUtterance(string: text)
         }
 
@@ -105,10 +102,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         // iOS 26 Beta Fix: NEVER use synthesizer.write() - it causes crashes on iOS 26
         // For panning, we'll use a different approach that doesn't involve write()
         if pan != 0.0 {
-            //print("🔊 AUDIO ENGINE: Using pan approach for '\(text)'")
+            //EchoLogger.debug("AUDIO ENGINE: Using pan approach for '\(text)'", category: .voice)
             useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
         } else {
-            // print("🔊 AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'")
+            // EchoLogger.debug("AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'", category: .voice)
             synthesizer.speak(utterance)
         }
     }
@@ -117,7 +114,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         // iOS Version Detection: Check if we can safely use synthesizer.write()
         if #available(iOS 19.0, *) {
             // iOS 19+ (including iOS 26 Beta): synthesizer.write() crashes, use hardware splitter
-            print("🔊 iOS 19+ detected: Channel splitting requires hardware audio splitter cable")
+            EchoLogger.debug("iOS 19+ detected: Channel splitting requires hardware audio splitter cable", category: .voice)
             configureAudioSessionForPanning(pan: pan)
             synthesizer.speak(utterance)
             return
@@ -149,7 +146,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
                             interleaved: pcmBuffer.format.isInterleaved
                         )
                     } catch {
-                        print("🔊 ERROR: Failed to create audio file: \(error)")
+                        EchoLogger.error("Failed to create audio file: \(error)", category: .voice)
                         DispatchQueue.main.async {
                             self.safeCallback()
                         }
@@ -160,7 +157,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
                 do {
                     try self.audioFile?.write(from: pcmBuffer)
                 } catch {
-                    print("🔊 ERROR: Failed to write to audio file: \(error)")
+                    EchoLogger.error("Failed to write to audio file: \(error)", category: .voice)
                 }
             }
         }
@@ -170,7 +167,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         do {
             self.player = try AVAudioPlayer(contentsOf: url)
             guard let player = self.player else {
-                print("🔊 ERROR: Failed to create AVAudioPlayer")
+                EchoLogger.error("Failed to create AVAudioPlayer", category: .voice)
                 safeCallback()
                 return
             }
@@ -181,9 +178,9 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             player.prepareToPlay()
             player.play()
 
-            print("🔊 Playing audio with channel routing: pan=\(pan)")
+            EchoLogger.debug("Playing audio with channel routing: pan=\(pan)", category: .voice)
         } catch {
-            print("🔊 ERROR: Failed to play audio file: \(error)")
+            EchoLogger.error("Failed to play audio file: \(error)", category: .voice)
             safeCallback()
         }
     }
@@ -193,13 +190,13 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         // and iOS doesn't support direct channel routing through AVAudioSession anyway
 
         if pan < 0 {
-            print("🔊 LEFT channel requested - use hardware audio splitter cable")
+            EchoLogger.debug("LEFT channel requested - use hardware audio splitter cable", category: .voice)
         } else if pan > 0 {
-            print("🔊 RIGHT channel requested - use hardware audio splitter cable")
+            EchoLogger.debug("RIGHT channel requested - use hardware audio splitter cable", category: .voice)
         }
 
-        //print("🔊 INFO: Audio channel splitting requires physical audio splitter cable")
-        //print("🔊 INFO: iOS 26 Beta limitation prevents software-based channel routing")
+        //EchoLogger.info("Audio channel splitting requires physical audio splitter cable", category: .voice)
+        //EchoLogger.info("iOS 26 Beta limitation prevents software-based channel routing", category: .voice)
     }
     
 
@@ -207,12 +204,11 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // MARK: - AVSpeechSynthesizerDelegate
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        let timestamp = Date().timeIntervalSince1970
-        //print("🔊 AUDIO ENGINE FINISH: [\(timestamp)] '\(utterance.speechString)'")
+        //EchoLogger.debug("AUDIO ENGINE FINISH: [\(Date().timeIntervalSince1970)] '\(utterance.speechString)'", category: .voice)
 
         // iOS Bug Fix: Only process completion if this matches our current utterance
         guard utterance.speechString == currentUtteranceText else {
-            // print("🔊 AUDIO ENGINE: Ignoring completion for old utterance: '\(utterance.speechString)'")
+            // EchoLogger.debug("AUDIO ENGINE: Ignoring completion for old utterance: '\(utterance.speechString)'", category: .voice)
             return
         }
 
@@ -221,11 +217,11 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
         let timestamp = Date().timeIntervalSince1970
-        print("🔊 AUDIO ENGINE CANCEL: [\(timestamp)] '\(utterance.speechString)'")
+        EchoLogger.debug("AUDIO ENGINE CANCEL: [\(timestamp)] '\(utterance.speechString)'", category: .voice)
 
         // iOS Bug Fix: Only process cancellation if this matches our current utterance
         guard utterance.speechString == currentUtteranceText else {
-            // print("🔊 AUDIO ENGINE: Ignoring cancellation for old utterance: '\(utterance.speechString)'")
+            // EchoLogger.debug("AUDIO ENGINE: Ignoring cancellation for old utterance: '\(utterance.speechString)'", category: .voice)
             return
         }
 
@@ -244,7 +240,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     private func getCachedVoice(identifier: String) -> AVSpeechSynthesisVoice? {
         // Handle empty identifier (system default)
         if identifier.isEmpty {
-            print("🔊 Using system default voice")
+            EchoLogger.debug("Using system default voice", category: .voice)
             return nil // nil means use system default
         }
 
@@ -262,22 +258,22 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             return voice
         } else {
             // Only log when we have to create a voice (which may trigger Assistant Framework)
-            print("🔊 Voice not found in speechVoices(), creating by identifier: \(identifier)")
+            EchoLogger.debug("Voice not found in speechVoices(), creating by identifier: \(identifier)", category: .voice)
             let createdVoice = AVSpeechSynthesisVoice(identifier: identifier)
 
             if let createdVoice = createdVoice {
                 voiceCache[identifier] = createdVoice
-                print("🔊 DEBUG: Voice created and cached successfully")
+                EchoLogger.debug("Voice created and cached successfully", category: .voice)
                 return createdVoice
             } else {
-                print("🔊 DEBUG: Failed to create voice, using fallback")
+                EchoLogger.debug("Failed to create voice, using fallback", category: .voice)
                 // iOS 26 Fix: Use proper fallback voice creation
                 let defaultVoice = createFallbackVoice()
                 if let defaultVoice = defaultVoice {
                     voiceCache[identifier] = defaultVoice
                     return defaultVoice
                 } else {
-                    print("🔊 ERROR: Could not create any fallback voice")
+                    EchoLogger.error("Could not create any fallback voice", category: .voice)
                     return nil
                 }
             }
@@ -289,30 +285,30 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
         // 1. Try Alex voice (usually available on all iOS versions)
         if let alexVoice = AVSpeechSynthesisVoice(identifier: AVSpeechSynthesisVoiceIdentifierAlex) {
-            print("🔊 Using Alex voice as fallback")
+            EchoLogger.debug("Using Alex voice as fallback", category: .voice)
             return alexVoice
         }
 
         // 2. Try to get any English voice
         let availableVoices = AVSpeechSynthesisVoice.speechVoices()
         if let englishVoice = availableVoices.first(where: { $0.language.hasPrefix("en") }) {
-            print("🔊 Using English voice as fallback: \(englishVoice.name)")
+            EchoLogger.debug("Using English voice as fallback: \(englishVoice.name)", category: .voice)
             return englishVoice
         }
 
         // 3. Try to get the first available voice
         if let firstVoice = availableVoices.first {
-            print("🔊 Using first available voice as fallback: \(firstVoice.name)")
+            EchoLogger.debug("Using first available voice as fallback: \(firstVoice.name)", category: .voice)
             return firstVoice
         }
 
         // 4. Last resort: try creating with language code
         if let languageVoice = AVSpeechSynthesisVoice(language: "en-US") {
-            print("🔊 Using language-based voice as fallback")
+            EchoLogger.debug("Using language-based voice as fallback", category: .voice)
             return languageVoice
         }
 
-        print("🔊 CRITICAL: No fallback voice could be created")
+        EchoLogger.critical("No fallback voice could be created", category: .voice)
         return nil
     }
 

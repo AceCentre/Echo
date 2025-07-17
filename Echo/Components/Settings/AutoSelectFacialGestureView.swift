@@ -82,7 +82,7 @@ struct AutoSelectFacialGestureView: View {
             .onAppear {
                 // Signal that auto-select is active
                 FacialGestureDetector.isAutoSelectActive = true
-                print("🎯 Auto-select view appeared - set isAutoSelectActive = true")
+                EchoLogger.facialGesture("Auto-select view appeared - set isAutoSelectActive = true")
 
                 // Start camera preview immediately when view appears
                 if gestureDetector.isSupported {
@@ -105,7 +105,7 @@ struct AutoSelectFacialGestureView: View {
 
                 // Signal that auto-select is no longer active
                 FacialGestureDetector.isAutoSelectActive = false
-                print("🎯 Auto-select view disappeared - set isAutoSelectActive = false")
+                EchoLogger.facialGesture("Auto-select view disappeared - set isAutoSelectActive = false")
             }
             .onReceive(gestureDetector.$isActive) { isActive in
                 // Reset to ready phase if session becomes inactive during detection
@@ -147,7 +147,7 @@ struct AutoSelectFacialGestureView: View {
 
     private var readyPhaseControls: some View {
         let isButtonEnabled = gestureDetector.isSupported && gestureDetector.isActive
-        print("🎯 AutoSelect: Button enabled = \(isButtonEnabled) (supported: \(gestureDetector.isSupported), active: \(gestureDetector.isActive))")
+        EchoLogger.facialGesture("AutoSelect: Button enabled = \(isButtonEnabled) (supported: \(gestureDetector.isSupported), active: \(gestureDetector.isActive))")
 
         return VStack(spacing: 12) {
             Button(action: startDetection) {
@@ -269,24 +269,24 @@ struct AutoSelectFacialGestureView: View {
     // MARK: - Methods
 
     private func startDetection() {
-        print("🎯 AutoSelect: startDetection() called")
-        print("🎯 AutoSelect: gestureDetector.isSupported = \(gestureDetector.isSupported)")
-        print("🎯 AutoSelect: gestureDetector.isActive = \(gestureDetector.isActive)")
-        print("🎯 AutoSelect: currentPhase = \(currentPhase)")
+        EchoLogger.facialGesture("AutoSelect: startDetection() called")
+        EchoLogger.facialGesture("AutoSelect: gestureDetector.isSupported = \(gestureDetector.isSupported)")
+        EchoLogger.facialGesture("AutoSelect: gestureDetector.isActive = \(gestureDetector.isActive)")
+        EchoLogger.facialGesture("AutoSelect: currentPhase = \(currentPhase)")
 
         guard gestureDetector.isSupported else {
-            print("🎯 AutoSelect: Face tracking not supported")
+            EchoLogger.facialGesture("AutoSelect: Face tracking not supported")
             showError(message: "Face tracking is not supported on this device")
             return
         }
 
         guard gestureDetector.isActive else {
-            print("🎯 AutoSelect: Camera not ready")
+            EchoLogger.facialGesture("AutoSelect: Camera not ready")
             showError(message: "Camera is not ready. Please wait for the camera to start.")
             return
         }
 
-        print("🎯 AutoSelect: Starting countdown")
+        EchoLogger.facialGesture("AutoSelect: Starting countdown")
         currentPhase = .countdown
         countdownValue = 3
 
@@ -375,7 +375,7 @@ struct AutoSelectFacialGestureView: View {
         // Start a 10-second timer to automatically reset if no selection is made
         resultsTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { _ in
             DispatchQueue.main.async {
-                print("🎯 Results timer expired - resetting detection")
+                EchoLogger.facialGesture("Results timer expired - resetting detection")
                 self.resetDetection()
             }
         }

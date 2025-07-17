@@ -49,7 +49,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     static var isAutoSelectActive: Bool = false {
         didSet {
             if isAutoSelectActive != oldValue {
-                print("🎯 FacialGestureDetector.isAutoSelectActive changed to: \(isAutoSelectActive)")
+                EchoLogger.facialGesture("FacialGestureDetector.isAutoSelectActive changed to: \(isAutoSelectActive)")
                 NotificationCenter.default.post(name: .autoSelectActiveChanged, object: nil, userInfo: ["isActive": isAutoSelectActive])
             }
         }
@@ -105,7 +105,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
     /// Stops all detection modes and cleans up session
     private func stopAllModes() {
-        print("🎯 FacialGestureDetector.stopAllModes called - current mode: \(currentMode)")
+        EchoLogger.facialGesture("FacialGestureDetector.stopAllModes called - current mode: \(currentMode)")
 
         // Stop timers
         sessionHealthTimer?.invalidate()
@@ -137,11 +137,11 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         isActive = false
         currentMode = .inactive
 
-        print("🎯 All modes stopped, session paused")
+        EchoLogger.facialGesture("All modes stopped, session paused")
     }
 
     func startDetection(onGestureDetected: @escaping (FacialGesture, Bool) -> Void) {
-        print("🎯 FacialGestureDetector.startDetection called - switching to navigation mode")
+        EchoLogger.facialGesture("FacialGestureDetector.startDetection called - switching to navigation mode")
 
         guard isSupported else {
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
@@ -308,7 +308,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
     
     func stopDetection() {
-        print("🎯 FacialGestureDetector.stopDetection called")
+        EchoLogger.facialGesture("FacialGestureDetector.stopDetection called")
         stopAllModes()
     }
     
@@ -321,7 +321,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     func resetHeadBaseline() {
-        print("🎯 Resetting head tracking baseline")
+        EchoLogger.facialGesture("Resetting head tracking baseline")
         baselineHeadTransform = currentHeadTransform
         headTrackingInitialized = true
     }
@@ -329,10 +329,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     // MARK: - Preview Mode Methods
 
     func startPreviewMode(for gestures: [FacialGesture]) {
-        print("🎯 FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName }) - switching to preview mode")
+        EchoLogger.facialGesture("FacialGestureDetector.startPreviewMode called for gestures: \(gestures.map { $0.displayName }) - switching to preview mode")
 
         guard isSupported else {
-            print("🎯 Face tracking not supported")
+            EchoLogger.facialGesture("Face tracking not supported")
             errorMessage = String(localized: "Face tracking is not supported on this device", comment: "Error message for unsupported device")
             return
         }
@@ -351,7 +351,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             previewGestureValues[gesture] = 0.0
         }
 
-        print("🎯 Preview mode setup complete, starting AR session...")
+        EchoLogger.facialGesture("Preview mode setup complete, starting AR session...")
 
         // Notify that preview mode is now active
         NotificationCenter.default.post(name: .previewModeActiveChanged, object: true)
@@ -361,17 +361,17 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         if cameraPermissionStatus == .authorized {
             // Permission already granted, start immediately
-            print("🎯 Camera permission authorized, starting AR session for preview mode")
+            EchoLogger.facialGesture("Camera permission authorized, starting AR session for preview mode")
             startARSession()
         } else if cameraPermissionStatus == .denied {
-            print("🎯 Camera permission denied")
+            EchoLogger.facialGesture("Camera permission denied")
             errorMessage = String(localized: "Camera access denied. Please enable camera access in Settings to use facial gestures.", comment: "Error message for denied camera permission")
         } else {
             // Permission not determined, request it
-            print("🎯 Camera permission not determined, requesting...")
+            EchoLogger.facialGesture("Camera permission not determined, requesting...")
             errorMessage = String(localized: "Camera access required for facial gesture detection.", comment: "Error message for camera permission needed")
             requestCameraPermission { [weak self] granted in
-                print("🎯 Camera permission request result: \(granted)")
+                EchoLogger.facialGesture("Camera permission request result: \(granted)")
                 if granted {
                     self?.startARSession()
                 }
@@ -380,7 +380,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     func stopPreviewMode() {
-        print("🎯 FacialGestureDetector.stopPreviewMode called")
+        EchoLogger.facialGesture("FacialGestureDetector.stopPreviewMode called")
         stopAllModes()
 
         // Notify that preview mode is no longer active
@@ -389,7 +389,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
     /// Stops all detection and ensures clean state for navigation transitions
     func stopForNavigation() {
-        print("🎯 FacialGestureDetector.stopForNavigation called - preparing for navigation transition")
+        EchoLogger.facialGesture("FacialGestureDetector.stopForNavigation called - preparing for navigation transition")
         stopAllModes()
     }
 
@@ -657,7 +657,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
             // Debug logging for eye look gestures
             if isPreviewMode && upAvg > 0.01 {
-                print("👁️ Look Up debug - leftUp: \(leftLookUp), rightUp: \(rightLookUp), upAvg: \(upAvg), downAvg: \(downAvg), final: \(rawValue)")
+                EchoLogger.eyeTracking("Look Up debug - leftUp: \(leftLookUp), rightUp: \(rightLookUp), upAvg: \(upAvg), downAvg: \(downAvg), final: \(rawValue)")
             }
         case .lookDown:
             // Look down: use average of both eyes looking down
@@ -734,7 +734,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             baselineHeadTransform = transform
             headTrackingInitialized = true
             lastBaselineResetTime = Date()
-            print("🎯 Head tracking baseline initialized")
+            EchoLogger.facialGesture("Head tracking baseline initialized")
             return
         }
 
@@ -761,7 +761,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
             // If any angle exceeds 90 degrees (1.57 radians), reset baseline
             if maxAngle > 1.57 {
-                print("🎯 Resetting head tracking baseline due to extreme rotation: \(maxAngle) radians")
+                EchoLogger.facialGesture("Resetting head tracking baseline due to extreme rotation: \(maxAngle) radians")
                 baselineHeadTransform = transform
                 lastBaselineResetTime = currentTime
                 return

@@ -74,20 +74,20 @@ struct VoicePicker: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
-            // print("🔊 DEBUG: VoicePicker onAppear called")
+            // EchoLogger.debug("VoicePicker onAppear called", category: .voice)
             loadVoicesAsync()
         }
     }
 
     private func loadVoicesAsync() {
-        //  print("🔊 DEBUG: VoicePicker.loadVoicesAsync() called")
+        //  EchoLogger.debug("VoicePicker.loadVoicesAsync() called", category: .voice)
         DispatchQueue.global(qos: .userInitiated).async {
-            //print("🔊 DEBUG: Loading voices on background thread")
+            //EchoLogger.debug("Loading voices on background thread", category: .voice)
             // This will trigger ensureInitialized() on background thread
             let _ = voiceList.sortedKeys()
 
             DispatchQueue.main.async {
-                print("🔊 DEBUG: Voice loading completed, updating UI")
+                EchoLogger.debug("Voice loading completed, updating UI", category: .voice)
                 isLoading = false
             }
         }

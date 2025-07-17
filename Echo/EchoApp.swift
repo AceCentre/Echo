@@ -139,11 +139,11 @@ struct EchoApp: App {
                         let cueVoice: Voice
                         if let firstVoice = usableVoices.first {
                             cueVoice = Voice(rate: 35, volume: 100, voiceId: firstVoice.identifier, voiceName: firstVoice.name)
-                            print("🔊 Created cue voice: \(firstVoice.name) (\(firstVoice.identifier))")
+                            EchoLogger.debug("Created cue voice: \(firstVoice.name) (\(firstVoice.identifier))", category: .voice)
                         } else {
                             // Ultimate fallback - let the system choose
                             cueVoice = Voice(rate: 35, volume: 100, voiceId: "", voiceName: "System Default")
-                            print("🔊 Created cue voice: System Default")
+                            EchoLogger.debug("Created cue voice: System Default", category: .voice)
                         }
 
                         container.mainContext.insert(cueVoice)
@@ -158,14 +158,14 @@ struct EchoApp: App {
                         if usableVoices.count > 1 {
                             let secondVoice = usableVoices[1]
                             speakingVoice = Voice(rate: 35, volume: 100, voiceId: secondVoice.identifier, voiceName: secondVoice.name)
-                            print("🔊 Created speaking voice: \(secondVoice.name) (\(secondVoice.identifier))")
+                            EchoLogger.debug("Created speaking voice: \(secondVoice.name) (\(secondVoice.identifier))", category: .voice)
                         } else if let firstVoice = usableVoices.first {
                             speakingVoice = Voice(rate: 35, volume: 100, voiceId: firstVoice.identifier, voiceName: firstVoice.name)
-                            print("🔊 Created speaking voice: \(firstVoice.name) (\(firstVoice.identifier))")
+                            EchoLogger.debug("Created speaking voice: \(firstVoice.name) (\(firstVoice.identifier))", category: .voice)
                         } else {
                             // Ultimate fallback - let the system choose
                             speakingVoice = Voice(rate: 35, volume: 100, voiceId: "", voiceName: "System Default")
-                            print("🔊 Created speaking voice: System Default")
+                            EchoLogger.debug("Created speaking voice: System Default", category: .voice)
                         }
 
                         container.mainContext.insert(speakingVoice)

@@ -22,7 +22,7 @@ class VoiceController: ObservableObject {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
         } catch let error {
-            print("🔊 ERROR: Audio session configuration failed: \(error.localizedDescription)")
+            EchoLogger.error("Audio session configuration failed: \(error.localizedDescription)", category: .voice)
         }
     }
     

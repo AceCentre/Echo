@@ -16,19 +16,19 @@ class AvailableVoices: ObservableObject {
     private var hasInitialized = false
 
     init() {
-        print("🔊 DEBUG: AvailableVoices.init() called")
+        EchoLogger.debug("AvailableVoices.init() called", category: .voice)
         // Don't automatically fetch voices on init to avoid Assistant Framework calls
         // Voices will be fetched when actually needed
-        print("🔊 DEBUG: AvailableVoices.init() completed")
+        EchoLogger.debug("AvailableVoices.init() completed", category: .voice)
     }
     
     func ensureInitialized() {
         guard !hasInitialized else { return }
-        print("🔊 DEBUG: AvailableVoices.ensureInitialized() - first time initialization")
+        EchoLogger.debug("AvailableVoices.ensureInitialized() - first time initialization", category: .voice)
         hasInitialized = true
 
         // Load basic voices on background thread, then request personal voice authorization
-        print("🔊 DEBUG: Loading basic voices on background thread")
+        EchoLogger.debug("Loading basic voices on background thread", category: .voice)
         DispatchQueue.global(qos: .userInitiated).async {
             self.fetchVoices()
 
@@ -40,41 +40,41 @@ class AvailableVoices: ObservableObject {
     }
 
     private func requestPersonalVoiceAuthorization() {
-        print("🔊 DEBUG: AvailableVoices.requestPersonalVoiceAuthorization() called")
+        EchoLogger.debug("AvailableVoices.requestPersonalVoiceAuthorization() called", category: .voice)
         if #available(iOS 17.0, *) {
-            print("🔊 DEBUG: About to call AVSpeechSynthesizer.requestPersonalVoiceAuthorization")
+            EchoLogger.debug("About to call AVSpeechSynthesizer.requestPersonalVoiceAuthorization", category: .voice)
             AVSpeechSynthesizer.requestPersonalVoiceAuthorization { status in
                 DispatchQueue.main.async {
-                    print("🔊 DEBUG: Personal voice authorization completed with status: \(status)")
+                    EchoLogger.debug("Personal voice authorization completed with status: \(status)", category: .voice)
                     switch status {
                     case .authorized:
                         self.personalVoiceAuthorized = true
-                        print("🔊 DEBUG: Personal voice authorized, refetching voices")
+                        EchoLogger.debug("Personal voice authorized, refetching voices", category: .voice)
                         // Call fetchVoices on background thread to avoid blocking main thread
                         DispatchQueue.global(qos: .userInitiated).async {
                             self.fetchVoices()
                         }
                     case .denied, .notDetermined, .unsupported:
                         self.personalVoiceAuthorized = false
-                        print("🔊 DEBUG: Personal voice not authorized")
+                        EchoLogger.debug("Personal voice not authorized", category: .voice)
                         // Don't refetch - we already have basic voices loaded
                     @unknown default:
                         self.personalVoiceAuthorized = false
-                        print("🔊 DEBUG: Personal voice unknown status")
+                        EchoLogger.debug("Personal voice unknown status", category: .voice)
                         // Don't refetch - we already have basic voices loaded
                     }
                 }
             }
         } else {
-            print("🔊 DEBUG: iOS < 17.0, no personal voice support")
+            EchoLogger.debug("iOS < 17.0, no personal voice support", category: .voice)
             // Don't call fetchVoices() again - we already loaded basic voices
         }
     }
     
     func fetchVoices() {
-        // print("🔊 DEBUG: AvailableVoices.fetchVoices() called - about to call speechVoices()")
+        // EchoLogger.debug("AvailableVoices.fetchVoices() called - about to call speechVoices()", category: .voice)
         let aVFvoices = AVSpeechSynthesisVoice.speechVoices()
-        // print("🔊 DEBUG: AvailableVoices.fetchVoices() - speechVoices() completed, found \(aVFvoices.count) voices")
+        // EchoLogger.debug("AvailableVoices.fetchVoices() - speechVoices() completed, found \(aVFvoices.count) voices", category: .voice)
 
         var tempVoicesByLang: [String: [AVSpeechSynthesisVoice]] = [:]
 
@@ -102,7 +102,7 @@ class AvailableVoices: ObservableObject {
         DispatchQueue.main.async {
             self.voicesByLang = tempVoicesByLang
             self.voices = aVFvoices
-            // print("🔊 DEBUG: AvailableVoices.fetchVoices() - updated UI on main thread, voicesByLang has \(tempVoicesByLang.count) languages")
+            // EchoLogger.debug("AvailableVoices.fetchVoices() - updated UI on main thread, voicesByLang has \(tempVoicesByLang.count) languages", category: .voice)
         }
     }
     
