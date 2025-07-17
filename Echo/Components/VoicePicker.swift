@@ -80,7 +80,7 @@ struct VoicePicker: View {
     }
 
     private func loadVoicesAsync() {
-        // print("🔊 DEBUG: VoicePicker.loadVoicesAsync() called")
+        //  print("🔊 DEBUG: VoicePicker.loadVoicesAsync() called")
         DispatchQueue.global(qos: .userInitiated).async {
             //print("🔊 DEBUG: Loading voices on background thread")
             // This will trigger ensureInitialized() on background thread

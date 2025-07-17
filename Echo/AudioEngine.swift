@@ -114,13 +114,78 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
 
     private func useSimpleSpeechWithAudioSessionPan(utterance: AVSpeechUtterance, pan: Float) {
-        // iOS 26 Beta Fix: Use AVAudioSession channel routing instead of synthesizer.write()
+        // iOS Version Detection: Check if we can safely use synthesizer.write()
+        if #available(iOS 19.0, *) {
+            // iOS 19+ (including iOS 26 Beta): synthesizer.write() crashes, use hardware splitter
+            print("🔊 iOS 19+ detected: Channel splitting requires hardware audio splitter cable")
+            configureAudioSessionForPanning(pan: pan)
+            synthesizer.speak(utterance)
+            return
+        }
 
-        // Configure audio session for channel routing
-        configureAudioSessionForPanning(pan: pan)
+        // iOS 18.5 and earlier: Use real channel splitting with AVAudioPlayer
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
 
-        // Use simple speech synthesis (iOS 26 compatible)
-        synthesizer.speak(utterance)
+        // Write speech to temporary file for channel manipulation
+        synthesizer.write(utterance) { [weak self] buffer in
+            guard let self = self else { return }
+
+            if let pcmBuffer = buffer as? AVAudioPCMBuffer {
+                if pcmBuffer.frameLength == 0 {
+                    // End of synthesis - now play the file with proper channel routing
+                    DispatchQueue.main.async {
+                        self.playFileWithChannelRouting(url: tempURL, pan: pan)
+                    }
+                    return
+                }
+
+                // Write buffer to file
+                if self.audioFile == nil {
+                    do {
+                        self.audioFile = try AVAudioFile(
+                            forWriting: tempURL,
+                            settings: pcmBuffer.format.settings,
+                            commonFormat: pcmBuffer.format.commonFormat,
+                            interleaved: pcmBuffer.format.isInterleaved
+                        )
+                    } catch {
+                        print("🔊 ERROR: Failed to create audio file: \(error)")
+                        DispatchQueue.main.async {
+                            self.safeCallback()
+                        }
+                        return
+                    }
+                }
+
+                do {
+                    try self.audioFile?.write(from: pcmBuffer)
+                } catch {
+                    print("🔊 ERROR: Failed to write to audio file: \(error)")
+                }
+            }
+        }
+    }
+
+    private func playFileWithChannelRouting(url: URL, pan: Float) {
+        do {
+            self.player = try AVAudioPlayer(contentsOf: url)
+            guard let player = self.player else {
+                print("🔊 ERROR: Failed to create AVAudioPlayer")
+                safeCallback()
+                return
+            }
+
+            // Apply true channel routing for AirPods/headphones
+            player.pan = pan  // -1.0 = full left, 1.0 = full right
+            player.delegate = self
+            player.prepareToPlay()
+            player.play()
+
+            print("🔊 Playing audio with channel routing: pan=\(pan)")
+        } catch {
+            print("🔊 ERROR: Failed to play audio file: \(error)")
+            safeCallback()
+        }
     }
 
     private func configureAudioSessionForPanning(pan: Float) {
