@@ -81,7 +81,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
         // Try SSML first, fallback to plain text for iOS 26 compatibility
         let utterance: AVSpeechUtterance
-        let ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
+        let ssmlRepresentation = "<speak>\(escapeXMLPreservingSSML(text))</speak>"
 
         if let ssmlUtterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) {
             utterance = ssmlUtterance
@@ -319,5 +319,76 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             .replacingOccurrences(of: ">", with: "&gt;")
             .replacingOccurrences(of: "\"", with: "&quot;")
             .replacingOccurrences(of: "'", with: "&apos;")
+    }
+
+    private func escapeXMLPreservingSSML(_ text: String) -> String {
+        // If the text doesn't contain SSML tags, use regular XML escaping
+        if !text.contains("<") || !text.contains(">") {
+            return escapeXML(text)
+        }
+
+        // Parse and preserve SSML tags while escaping content
+        var result = ""
+        var currentIndex = text.startIndex
+
+        while currentIndex < text.endIndex {
+            // Look for the next SSML tag
+            if let tagStart = text.range(of: "<", range: currentIndex..<text.endIndex)?.lowerBound {
+                // Escape content before the tag
+                let beforeTag = String(text[currentIndex..<tagStart])
+                result += escapeXML(beforeTag)
+
+                // Find the end of the tag
+                if let tagEnd = text.range(of: ">", range: tagStart..<text.endIndex)?.upperBound {
+                    let tag = String(text[tagStart..<tagEnd])
+
+                    // Check if this is a valid SSML tag we want to preserve
+                    if isValidSSMLTag(tag) {
+                        result += tag
+                        currentIndex = tagEnd
+                    } else {
+                        // Not a valid SSML tag, escape it
+                        result += escapeXML(tag)
+                        currentIndex = tagEnd
+                    }
+                } else {
+                    // No closing >, escape the remaining text
+                    let remaining = String(text[tagStart..<text.endIndex])
+                    result += escapeXML(remaining)
+                    break
+                }
+            } else {
+                // No more tags, escape the remaining text
+                let remaining = String(text[currentIndex..<text.endIndex])
+                result += escapeXML(remaining)
+                break
+            }
+        }
+
+        return result
+    }
+
+    private func isValidSSMLTag(_ tag: String) -> Bool {
+        // List of SSML tags we want to preserve
+        let validSSMLTags = [
+            "say-as",
+            "break",
+            "emphasis",
+            "prosody",
+            "phoneme",
+            "sub",
+            "voice",
+            "audio",
+            "mark"
+        ]
+
+        // Check if the tag starts with any valid SSML tag
+        for validTag in validSSMLTags {
+            if tag.hasPrefix("<\(validTag)") || tag.hasPrefix("</\(validTag)") {
+                return true
+            }
+        }
+
+        return false
     }
 }
