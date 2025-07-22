@@ -22,33 +22,47 @@ Echo uses Apple's ARKit framework for facial gesture detection:
 
 ## Gesture Categories
 
-### Eye Gestures
+Echo organizes facial gestures into three technical categories, each with specialized threshold controls for optimal user experience:
+
+### Intensity-Based Gestures
+These gestures use facial muscle intensity and are measured on a 0-100% scale:
+
+#### Eye Gestures
 Perfect for users who retain good eye muscle control:
 - **Blink Detection**: Left, right, or either eye
 - **Sustained Eye States**: Keeping eyes open or closed
 - **Wink Patterns**: Single or double winks
 
-### Mouth and Jaw Gestures
+#### Mouth and Jaw Gestures
 Ideal for users with facial muscle control:
 - **Jaw Movements**: Open, forward, left, right
 - **Mouth Expressions**: Smile, frown, pucker, funnel
 - **Lip Movements**: Various lip positions and movements
 
-### Head Movement Gestures
-For users who can move their head:
-- **Nodding**: Up and down movements
-- **Shaking**: Left and right movements
-- **Tilting**: Side-to-side head tilts
-
-### Eyebrow Gestures
+#### Eyebrow and Facial Gestures
 Subtle but effective control options:
 - **Brow Raises**: Inner, outer, left, right
 - **Brow Furrows**: Downward movements
-
-### Advanced Gestures
-- **Gaze Direction**: Looking up, down, left, right
 - **Cheek Movements**: Puffing, squinting
 - **Nose Movements**: Sneering, flaring
+
+### Angular-Based Gestures
+These gestures measure head movement angles in degrees:
+
+#### Head Movement Gestures
+For users who can move their head:
+- **Nodding**: Up and down movements (measured in degrees of pitch)
+- **Shaking**: Left and right movements (measured in degrees of yaw)
+- **Tilting**: Side-to-side head tilts (measured in degrees of roll)
+
+### Composite Gestures
+These gestures use complex calculations combining multiple facial features:
+
+#### Gaze Direction
+Advanced eye tracking for precise control:
+- **Looking Up/Down**: Vertical gaze movement
+- **Looking Left/Right**: Horizontal gaze movement
+- **Combined Gaze**: Multi-directional eye positioning
 
 ## Configuration
 
@@ -58,14 +72,42 @@ Subtle but effective control options:
 3. **Add Gestures**: Tap "Facial Gesture Switches"
 4. **Choose Method**: Manual selection or auto-detection
 5. **Configure Actions**: Assign tap and hold actions
-6. **Test Setup**: Use preview mode to verify detection
+6. **Adjust Thresholds**: Use context-aware controls with helpful descriptions
+7. **Test Setup**: Use preview mode to verify detection with real-time feedback
 
-### Sensitivity Adjustment
-Each gesture includes customizable sensitivity settings:
-- **Threshold Control**: Adjust how pronounced the gesture needs to be
-- **Visual Feedback**: Real-time threshold indicators
-- **Fine-tuning**: Precise control for individual needs
-- **Adaptive Settings**: Different thresholds for different gestures
+### User Experience Improvements
+Echo's threshold controls are designed for clarity and ease of use:
+- **Context-Aware Labels**: Instead of generic "Threshold," see "Intensity Required," "Movement Amount," or "Sensitivity"
+- **Meaningful Units**: View thresholds in percentages for intensity, degrees for head movements, or levels for gaze
+- **Helpful Descriptions**: Each gesture includes guidance like "How much you need to close your eyes"
+- **Visual Feedback**: Real-time indicators show current gesture values against your threshold settings
+
+### Threshold Configuration
+Echo provides intelligent, context-aware threshold controls that adapt to each gesture type:
+
+#### Intensity-Based Gesture Controls
+For facial muscle movements (blinks, smiles, jaw movements):
+- **"Intensity Required"**: Controls how much muscle activation is needed
+- **Percentage Display**: Shows threshold as "85% intensity" for clear understanding
+- **Range**: Typically 50-95% for reliable detection without false triggers
+
+#### Angular-Based Gesture Controls
+For head movements (nod, shake, tilt):
+- **"Movement Amount"**: Controls how far you need to move your head
+- **Degree Display**: Shows threshold as "8° movement" for precise control
+- **Range**: Typically 3-17° for comfortable, deliberate movements
+
+#### Composite Gesture Controls
+For gaze direction and complex movements:
+- **"Sensitivity"**: Controls detection responsiveness
+- **Level Display**: Shows threshold as "Level 4/10" for intuitive adjustment
+- **Range**: 10 levels from very sensitive to very precise
+
+#### Universal Features
+- **Visual Feedback**: Real-time threshold indicators during testing
+- **Contextual Descriptions**: Helpful explanations like "How much you need to close your eyes"
+- **Fine-tuning**: Precise control tailored to individual capabilities
+- **Hold Duration**: Separate timing controls for tap vs. hold actions
 
 ### Action Mapping
 Gestures can trigger various actions:
@@ -105,10 +147,22 @@ Echo's intelligent auto-detection system simplifies gesture setup:
 - **Rest Periods**: Take breaks to prevent fatigue
 
 ### Troubleshooting
+
+#### Detection Issues
 - **Inconsistent Detection**: Check lighting and positioning
-- **False Triggers**: Increase gesture thresholds
 - **No Detection**: Verify camera permissions and device compatibility
 - **Performance Issues**: Close other camera-using apps
+
+#### Threshold Adjustment
+- **False Triggers**:
+  - For intensity gestures: Increase "Intensity Required" percentage
+  - For head movements: Increase "Movement Amount" degrees
+  - For gaze gestures: Decrease "Sensitivity" level
+- **Missed Gestures**:
+  - For intensity gestures: Decrease "Intensity Required" percentage
+  - For head movements: Decrease "Movement Amount" degrees
+  - For gaze gestures: Increase "Sensitivity" level
+- **Understanding Thresholds**: Use the contextual descriptions (e.g., "How much you need to close your eyes") to guide adjustments
 
 ## Accessibility Benefits
 
