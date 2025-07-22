@@ -42,6 +42,12 @@
     "%lld%%" : {
 
     },
+    "%lld%% intensity" : {
+      "comment" : "Threshold display for intensity gestures"
+    },
+    "%lld° movement" : {
+      "comment" : "Threshold display for angular gestures"
+    },
     "0.5s" : {
 
     },
@@ -510,6 +516,45 @@
     "HOLD READY" : {
 
     },
+    "How far you need to nod your head" : {
+      "comment" : "Threshold description for head nod gestures"
+    },
+    "How far you need to shake your head" : {
+      "comment" : "Threshold description for head shake gestures"
+    },
+    "How far you need to tilt your head" : {
+      "comment" : "Threshold description for head tilt gestures"
+    },
+    "How much of the gesture is required" : {
+      "comment" : "Generic threshold description"
+    },
+    "How much you need to close your eyes" : {
+      "comment" : "Threshold description for eye blink gestures"
+    },
+    "How much you need to move your gaze" : {
+      "comment" : "Threshold description for gaze direction gestures"
+    },
+    "How much you need to open your mouth" : {
+      "comment" : "Threshold description for jaw open gesture"
+    },
+    "How much you need to pucker your lips" : {
+      "comment" : "Threshold description for mouth pucker gesture"
+    },
+    "How much you need to puff your cheeks" : {
+      "comment" : "Threshold description for cheek puff gesture"
+    },
+    "How much you need to raise your eyebrows" : {
+      "comment" : "Threshold description for eyebrow raise gesture"
+    },
+    "How much you need to smile" : {
+      "comment" : "Threshold description for smile gestures"
+    },
+    "How tightly you need to close your mouth" : {
+      "comment" : "Threshold description for mouth close gesture"
+    },
+    "How wide your eyes need to be open" : {
+      "comment" : "Threshold description for eye open gestures"
+    },
     "Import a vocabulary" : {
       "comment" : "Text on inport vocab button"
     },
@@ -518,6 +563,9 @@
     },
     "Inner Brow Up" : {
       "comment" : "Display name for inner brow up gesture"
+    },
+    "Intensity Required" : {
+      "comment" : "Threshold label for intensity-based gestures"
     },
     "Jaw" : {
       "comment" : "Category name for jaw gestures"
@@ -605,6 +653,9 @@
     },
     "Letter prediction" : {
       "comment" : "Label for toggle to turn letter based prediction off and on"
+    },
+    "Level %lld/10" : {
+      "comment" : "Threshold display for composite gestures"
     },
     "Lift the left side of your upper lip" : {
       "comment" : "Description for left upper lip up gesture"
@@ -707,6 +758,9 @@
     },
     "Move your mouth to the right" : {
       "comment" : "Description for mouth right gesture"
+    },
+    "Movement Amount" : {
+      "comment" : "Threshold label for angular head movements"
     },
     "My new vocabulary" : {
       "comment" : "Placeholder for new vocab name"
@@ -981,6 +1035,9 @@
     "Selected Key" : {
       "comment" : "Label for showing the value of the key that has been selected for an external switch"
     },
+    "Sensitivity" : {
+      "comment" : "Threshold label for composite gestures like gaze"
+    },
     "Settings" : {
       "comment" : "The navigation title for the settings page"
     },
@@ -1186,10 +1243,10 @@
       "comment" : "Message for delete gesture alert"
     },
     "Threshold" : {
-      "comment" : "Label for gesture threshold slider"
+      "comment" : "Fallback label for gesture threshold slider"
     },
     "Threshold: %lld%%" : {
-      "comment" : "Shows current threshold value as percentage"
+      "comment" : "Fallback threshold display"
     },
     "Tilt your head to the left" : {
       "comment" : "Description for head tilt left gesture"

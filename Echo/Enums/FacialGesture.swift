@@ -510,7 +510,84 @@ enum FacialGesture: String, CaseIterable, Identifiable, Codable {
         )
         }
     }
-    
+
+    /// Gesture category for threshold UI customization
+    enum GestureCategory {
+        case intensity    // ARKit blend shapes (0.0-1.0 scale)
+        case angular      // Head movements (radians)
+        case composite    // Complex calculations (gaze direction)
+    }
+
+    /// Category of this gesture for threshold UI customization
+    var category: GestureCategory {
+        switch self {
+        case .headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight:
+            return .angular
+        case .lookUp, .lookDown, .lookLeft, .lookRight:
+            return .composite
+        default:
+            return .intensity
+        }
+    }
+
+    /// Context-aware threshold label based on gesture category
+    var thresholdLabel: String {
+        switch category {
+        case .intensity:
+            return String(localized: "Intensity Required", comment: "Threshold label for intensity-based gestures")
+        case .angular:
+            return String(localized: "Movement Amount", comment: "Threshold label for angular head movements")
+        case .composite:
+            return String(localized: "Sensitivity", comment: "Threshold label for composite gestures like gaze")
+        }
+    }
+
+    /// Helpful description of what the threshold means for this gesture
+    var thresholdDescription: String {
+        switch self {
+        case .eyeBlinkLeft, .eyeBlinkRight, .eyeBlinkEither:
+            return String(localized: "How much you need to close your eyes", comment: "Threshold description for eye blink gestures")
+        case .eyeOpenLeft, .eyeOpenRight, .eyeOpenEither:
+            return String(localized: "How wide your eyes need to be open", comment: "Threshold description for eye open gestures")
+        case .jawOpen:
+            return String(localized: "How much you need to open your mouth", comment: "Threshold description for jaw open gesture")
+        case .mouthClose:
+            return String(localized: "How tightly you need to close your mouth", comment: "Threshold description for mouth close gesture")
+        case .mouthSmileLeft, .mouthSmileRight:
+            return String(localized: "How much you need to smile", comment: "Threshold description for smile gestures")
+        case .headNodUp, .headNodDown:
+            return String(localized: "How far you need to nod your head", comment: "Threshold description for head nod gestures")
+        case .headShakeLeft, .headShakeRight:
+            return String(localized: "How far you need to shake your head", comment: "Threshold description for head shake gestures")
+        case .headTiltLeft, .headTiltRight:
+            return String(localized: "How far you need to tilt your head", comment: "Threshold description for head tilt gestures")
+        case .lookUp, .lookDown, .lookLeft, .lookRight:
+            return String(localized: "How much you need to move your gaze", comment: "Threshold description for gaze direction gestures")
+        case .browInnerUp:
+            return String(localized: "How much you need to raise your eyebrows", comment: "Threshold description for eyebrow raise gesture")
+        case .cheekPuff:
+            return String(localized: "How much you need to puff your cheeks", comment: "Threshold description for cheek puff gesture")
+        case .mouthPucker:
+            return String(localized: "How much you need to pucker your lips", comment: "Threshold description for mouth pucker gesture")
+        default:
+            return String(localized: "How much of the gesture is required", comment: "Generic threshold description")
+        }
+    }
+
+    /// Display threshold value with appropriate units
+    func thresholdDisplayValue(_ threshold: Float) -> String {
+        switch category {
+        case .intensity:
+            return String(localized: "\(Int(threshold * 100))% intensity", comment: "Threshold display for intensity gestures")
+        case .angular:
+            let degrees = Int(threshold * 180 / Float.pi)
+            return String(localized: "\(degrees)° movement", comment: "Threshold display for angular gestures")
+        case .composite:
+            let level = Int(threshold * 10)
+            return String(localized: "Level \(level)/10", comment: "Threshold display for composite gestures")
+        }
+    }
+
     /// Maps FacialGesture to ARKit's BlendShapeLocation
     var blendShapeLocation: ARFaceAnchor.BlendShapeLocation {
         switch self {

@@ -56,11 +56,11 @@ struct FacialGestureSwitchSection: View {
                     actionState: holdAction
                 )
                 
-                // Threshold slider with non-linear scaling
+                // Threshold slider with context-aware labeling
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(String(
+                    Text(gestureSwitch.gesture?.thresholdLabel ?? String(
                         localized: "Threshold",
-                        comment: "Label for gesture threshold slider"
+                        comment: "Fallback label for gesture threshold slider"
                     ))
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -85,12 +85,21 @@ struct FacialGestureSwitchSection: View {
                             .foregroundColor(.secondary)
                     }
 
-                    Text(String(
+                    // Context-aware threshold display
+                    Text(gestureSwitch.gesture?.thresholdDisplayValue(threshold) ?? String(
                         localized: "Threshold: \(Int(threshold * 100))%",
-                        comment: "Shows current threshold value as percentage"
+                        comment: "Fallback threshold display"
                     ))
                     .font(.caption2)
                     .foregroundColor(.secondary)
+
+                    // Helpful description
+                    if let gesture = gestureSwitch.gesture {
+                        Text(gesture.thresholdDescription)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .opacity(0.8)
+                    }
                 }
 
 
@@ -871,14 +880,11 @@ struct AddFacialGesture: View {
                             actionState: holdAction
                         )
 
-                        // Threshold slider with non-linear scaling
+                        // Threshold slider with context-aware labeling
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(String(
-                                localized: "Threshold",
-                                comment: "Label for gesture threshold slider"
-                            ))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                            Text(selectedGesture.thresholdLabel)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
 
                             HStack {
                                 Text("Low")
@@ -900,12 +906,16 @@ struct AddFacialGesture: View {
                                     .foregroundColor(.secondary)
                             }
 
-                            Text(String(
-                                localized: "Threshold: \(Int(threshold * 100))%",
-                                comment: "Shows current threshold value as percentage"
-                            ))
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
+                            // Context-aware threshold display
+                            Text(selectedGesture.thresholdDisplayValue(threshold))
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+
+                            // Helpful description
+                            Text(selectedGesture.thresholdDescription)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .opacity(0.8)
                         }
 
                         // Hold duration slider (only if hold action is not .none)
