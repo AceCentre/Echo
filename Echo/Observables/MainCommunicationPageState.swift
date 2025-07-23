@@ -29,7 +29,8 @@ class MainCommunicationPageState: ObservableObject {
     var workItem: DispatchWorkItem?
     
     var isFastScan: Bool = false
-    
+    var fastScanStartIndex: Int = -1  // Track where fast scan started for single pass
+
     var dontQueueNextItem: Bool = false
     
     var settings: Settings?
@@ -129,6 +130,8 @@ class MainCommunicationPageState: ObservableObject {
         if let unwrappedWorkItem = workItem {
             unwrappedWorkItem.cancel()
         }
+        // Clean up fast scan state
+        stopFastScan()
     }
     
     func onAppear() {
@@ -612,7 +615,28 @@ class MainCommunicationPageState: ObservableObject {
                             try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: true)
                             throw EchoError.noSiblings(nodeDetails: self.hoveredNode.details, location: "isFastScan")
                         }
-                        
+
+                        // Check if we've completed one full pass (single pass mode)
+                        let currentIndex = siblings.firstIndex(where: { $0 == self.hoveredNode }) ?? 0
+                        let nextIndex = (currentIndex + 1) % siblings.count
+
+                        // Safety check: if fastScanStartIndex is invalid, stop scanning
+                        if self.fastScanStartIndex < 0 || self.fastScanStartIndex >= siblings.count {
+                            EchoLogger.warning("Quick scan start index invalid (\(self.fastScanStartIndex)), stopping scan", category: .general)
+                            self.stopFastScan()
+                            return
+                        }
+
+                        // If next index would be the starting position, we've completed one full pass
+                        if nextIndex == self.fastScanStartIndex {
+                            EchoLogger.debug("Quick scan completed one full pass, stopping", category: .general)
+                            self.stopFastScan()
+
+                            // Play completion sound/cue
+                            //unwrappedVoice.playCue("Scan complete", isFast: false, cb: nil)
+                            return
+                        }
+
                         try self.nextNode(siblings)
                     } catch {
                         self.errorHandling?.handle(error: error)
@@ -740,13 +764,19 @@ class MainCommunicationPageState: ObservableObject {
             }
             throw EchoError.noSiblings(nodeDetails: hoveredNode.details, location: "startFastScan")
         }
-        
+
+        // Record the starting position for single pass
+        fastScanStartIndex = siblings.firstIndex(where: { $0 == hoveredNode }) ?? 0
         isFastScan = true
-        
+
+        EchoLogger.debug("Quick scan started at index \(fastScanStartIndex) of \(siblings.count) items", category: .general)
+
         try nextNode(siblings)
     }
     
     func stopFastScan() {
         isFastScan = false
+        fastScanStartIndex = -1  // Reset start index
+        EchoLogger.debug("Quick scan stopped", category: .general)
     }
 }
