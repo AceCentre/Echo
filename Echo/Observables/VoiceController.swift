@@ -18,11 +18,34 @@ class VoiceController: ObservableObject {
 
     init() {
         phase = .active
-        // This makes it work in silent mode by setting the audio to playback
+        // Configure audio session to work with ARKit and speech synthesis
+        configureAudioSession()
+    }
+
+    private func configureAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            let audioSession = AVAudioSession.sharedInstance()
+
+            // Use playAndRecord category to be compatible with ARKit (which may use microphone)
+            // This prevents audio session conflicts between ARKit and speech synthesis
+            try audioSession.setCategory(.playAndRecord,
+                                       mode: .default,
+                                       options: [.defaultToSpeaker, .allowBluetooth])
+
+            // Activate the session
+            try audioSession.setActive(true)
+
+            EchoLogger.debug("Audio session configured successfully for ARKit compatibility", category: .voice)
         } catch let error {
             EchoLogger.error("Audio session configuration failed: \(error.localizedDescription)", category: .voice)
+
+            // Fallback to simpler configuration
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                EchoLogger.debug("Fallback audio session configuration applied", category: .voice)
+            } catch let fallbackError {
+                EchoLogger.error("Fallback audio session configuration also failed: \(fallbackError.localizedDescription)", category: .voice)
+            }
         }
     }
     
@@ -51,6 +74,25 @@ class VoiceController: ObservableObject {
     func stop() {
         customAV?.stop()
     }
+
+    /// Reset audio session when conflicts are detected (e.g., with ARKit)
+    func resetAudioSession() {
+        EchoLogger.debug("Resetting audio session due to conflicts", category: .voice)
+
+        do {
+            // Deactivate current session
+            try AVAudioSession.sharedInstance().setActive(false)
+
+            // Small delay to allow system cleanup
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.configureAudioSession()
+            }
+        } catch {
+            EchoLogger.error("Failed to reset audio session: \(error.localizedDescription)", category: .voice)
+            // Try to reconfigure anyway
+            configureAudioSession()
+        }
+    }
     
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
@@ -65,7 +107,9 @@ class VoiceController: ObservableObject {
                 cueVoice = createSafeDefaultVoice()
             }
 
-            play(text, voiceOptions: cueVoice, pan: direction.pan, isFast: true, cb: cb)
+            // Use direct synthesis for fast cue to avoid buffer issues with rapid audio generation
+            // This bypasses the file-based synthesis that's causing AVAudioBuffer errors
+            playDirect(text, voiceOptions: cueVoice, pan: direction.pan, cb: cb)
         }
     }
     

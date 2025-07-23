@@ -27,6 +27,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // Cache voices to avoid repeated Assistant Framework calls
     private var voiceCache: [String: AVSpeechSynthesisVoice] = [:]
 
+    // Track audio buffer failures for recovery
+    private var consecutiveBufferFailures: Int = 0
+    private let maxBufferFailures: Int = 3
+
     override init() {
         super.init()
         synthesizer.delegate = self
@@ -108,8 +112,22 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         var bufferCount = 0
         var hasValidAudio = false
 
+        // Add timeout to prevent hanging on buffer generation
+        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+            if !hasFinished {
+                hasFinished = true
+                DispatchQueue.main.async {
+                    EchoLogger.warning("Audio buffer generation timed out, falling back to direct synthesis", category: .voice)
+                    self.fallbackToDirectSynthesis(text: text, pan: pan, voiceOptions: voiceOptions, isFast: isFast)
+                }
+            }
+        }
+
         synthesizer.write(utterance, toBufferCallback: { buffer in
-            guard !hasFinished else { return }
+            guard !hasFinished else {
+                timeoutTimer.invalidate()
+                return
+            }
             bufferCount += 1
 
             guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
@@ -117,9 +135,12 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
                 return
             }
 
-            // Check for empty buffer (iOS 26 beta bug)
-            if pcmBuffer.frameLength > 1 {
+            // Check for empty buffer (iOS 26 beta bug) and invalid data
+            if pcmBuffer.frameLength > 1 && pcmBuffer.audioBufferList.pointee.mBuffers.mDataByteSize > 0 {
                 hasValidAudio = true
+            } else if pcmBuffer.audioBufferList.pointee.mBuffers.mDataByteSize == 0 {
+                // Log the specific buffer issue we're seeing in the logs
+                EchoLogger.warning("Detected zero-size audio buffer (mDataByteSize = 0), this may cause audio issues", category: .voice)
             }
 
             if let unwrappedOutput = output {
@@ -147,11 +168,23 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
             if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
                 hasFinished = true
+                timeoutTimer.invalidate()
                 DispatchQueue.main.async {
                     if hasValidAudio {
+                        // Reset failure counter on success
+                        self.consecutiveBufferFailures = 0
                         self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: isFast ? 75 : voiceOptions.rate)
                     } else {
-                        // Fallback to direct synthesis if file-based synthesis produces empty buffers
+                        // Track buffer failures and potentially reset audio system
+                        self.consecutiveBufferFailures += 1
+                        EchoLogger.warning("File-based synthesis produced no valid audio (failure #\(self.consecutiveBufferFailures)), falling back to direct synthesis", category: .voice)
+
+                        // If we have too many consecutive failures, suggest audio session reset
+                        if self.consecutiveBufferFailures >= self.maxBufferFailures {
+                            EchoLogger.error("Multiple consecutive audio buffer failures detected. Audio session may need reset.", category: .voice)
+                            self.consecutiveBufferFailures = 0 // Reset counter
+                        }
+
                         self.fallbackToDirectSynthesis(text: text, pan: pan, voiceOptions: voiceOptions, isFast: isFast)
                     }
                 }

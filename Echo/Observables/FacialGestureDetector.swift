@@ -176,7 +176,15 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
     private func startARSession() {
         print("startARSession called")
+
+        // Configure ARKit to be more resource-friendly
         let configuration = ARFaceTrackingConfiguration()
+
+        // Reduce resource usage to prevent conflicts with audio system
+        if #available(iOS 13.0, *) {
+            configuration.maximumNumberOfTrackedFaces = 1 // Only track one face
+        }
+
         print("Running AR session with configuration")
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
 
@@ -209,9 +217,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func checkSessionHealth() {
         let timeSinceLastFaceAnchor = Date().timeIntervalSince(lastFaceAnchorTime)
 
-        // Only restart if we haven't received face anchors for a longer period (10 seconds)
+        // Increase restart threshold to 30 seconds to reduce frequent restarts that cause audio conflicts
+        // Only restart if we haven't received face anchors for a longer period
         // and only if we're actively supposed to be detecting
-        if timeSinceLastFaceAnchor > 10.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
+        if timeSinceLastFaceAnchor > 30.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
             print("⚠️ ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...")
             DispatchQueue.main.async {
                 self.restartARSession()
@@ -562,7 +571,13 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         var stateUpdates: [FacialGesture: GestureState] = [:]
         var gestureCallbacks: [(FacialGesture, Bool)] = []
 
-        for (gesture, state) in gestureStates {
+        // Thread-safe access: get a snapshot of current gesture states
+        var currentGestureStates: [FacialGesture: GestureState] = [:]
+        DispatchQueue.main.sync {
+            currentGestureStates = gestureStates
+        }
+
+        for (gesture, state) in currentGestureStates {
             let gestureValue = getGestureValue(for: gesture, from: blendShapes)
             let isGestureActive = gestureValue >= state.threshold
 
@@ -608,17 +623,20 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func trackGestureValue(_ gesture: FacialGesture, value: Float) {
-        // Initialize history array if needed
-        if gestureValueHistory[gesture] == nil {
-            gestureValueHistory[gesture] = []
-        }
+        // Thread-safe access to gestureValueHistory
+        DispatchQueue.main.async {
+            // Initialize history array if needed
+            if self.gestureValueHistory[gesture] == nil {
+                self.gestureValueHistory[gesture] = []
+            }
 
-        // Add new value
-        gestureValueHistory[gesture]?.append(value)
+            // Add new value
+            self.gestureValueHistory[gesture]?.append(value)
 
-        // Keep only the last 30 values (about 1 second at 30 FPS)
-        if let count = gestureValueHistory[gesture]?.count, count > 30 {
-            gestureValueHistory[gesture]?.removeFirst()
+            // Keep only the last 30 values (about 1 second at 30 FPS)
+            if let count = self.gestureValueHistory[gesture]?.count, count > 30 {
+                self.gestureValueHistory[gesture]?.removeFirst()
+            }
         }
     }
 
@@ -824,14 +842,24 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Handle normal gesture detection for head movements
         let headGestures: [FacialGesture] = [.headNodUp, .headNodDown, .headShakeLeft, .headShakeRight, .headTiltLeft, .headTiltRight]
 
+        // Collect state updates and callbacks to execute on main thread (thread safety)
+        var stateUpdates: [FacialGesture: GestureState] = [:]
+        var gestureCallbacks: [(FacialGesture, Bool)] = []
+        let currentTime = Date()
+
         for gesture in headGestures {
-            guard let state = gestureStates[gesture] else { continue }
+            // Thread-safe access: read current state on main thread
+            var currentState: GestureState?
+            DispatchQueue.main.sync {
+                currentState = gestureStates[gesture]
+            }
+
+            guard let state = currentState else { continue }
 
             let gestureValue = getHeadGestureValue(for: gesture, pitch: pitch, yaw: yaw, roll: roll)
             let isGestureActive = gestureValue >= state.threshold
 
             var updatedState = state
-            let currentTime = Date()
 
             if isGestureActive && !state.isActive {
                 // Gesture just started
@@ -845,16 +873,26 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                     let gestureDuration = currentTime.timeIntervalSince(startTime)
                     let isHoldGesture = gestureDuration >= state.holdDuration
 
-                    // Trigger appropriate action based on duration
-                    DispatchQueue.main.async {
-                        self.onGestureDetected?(gesture, isHoldGesture)
-                    }
+                    // Store callback for main thread execution
+                    gestureCallbacks.append((gesture, isHoldGesture))
                 }
 
                 updatedState.startTime = nil
             }
 
-            gestureStates[gesture] = updatedState
+            stateUpdates[gesture] = updatedState
+        }
+
+        // Update all state and execute callbacks on main thread (thread safety)
+        DispatchQueue.main.async {
+            for (gesture, updatedState) in stateUpdates {
+                self.gestureStates[gesture] = updatedState
+            }
+
+            // Execute gesture callbacks
+            for (gesture, isHoldGesture) in gestureCallbacks {
+                self.onGestureDetected?(gesture, isHoldGesture)
+            }
         }
     }
 
@@ -885,10 +923,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             return
         }
 
-        // Throttle updates to prevent overwhelming the system (max 30 FPS)
+        // Throttle updates to prevent overwhelming the system (max 20 FPS for better performance)
         let currentTime = Date()
         let timeSinceLastUpdate = currentTime.timeIntervalSince(lastUpdateTime)
-        guard timeSinceLastUpdate >= 0.033 else { // ~30 FPS limit
+        guard timeSinceLastUpdate >= 0.05 else { // ~20 FPS limit (reduced from 30 FPS)
             return
         }
         lastUpdateTime = currentTime
@@ -898,14 +936,16 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             // Update the last face anchor time for health monitoring
             lastFaceAnchorTime = currentTime
 
-            // Process immediately on the main thread to avoid ARFrame retention
-            // Extract data immediately and release the frame
+            // Extract data immediately and copy to avoid frame retention
             let blendShapes = faceAnchor.blendShapes
             let headTransform = faceAnchor.transform
 
-            // Process synchronously to avoid frame retention issues
-            processBlendShapes(blendShapes)
-            processHeadTransform(headTransform)
+            // Process asynchronously on a background queue to avoid blocking the ARKit thread
+            // This prevents frame retention by allowing ARKit to release frames immediately
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                self?.processBlendShapes(blendShapes)
+                self?.processHeadTransform(headTransform)
+            }
         }
     }
     
