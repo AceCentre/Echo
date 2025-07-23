@@ -97,7 +97,7 @@ class EchoLogger {
     /// Current minimum log level - only logs at this level or higher will be shown
     static var minimumLogLevel: LogLevel = {
         #if DEBUG
-        return .debug  // Show all logs in debug builds
+        return .warning  // Only show warnings and errors in debug builds (reduced verbosity)
         #else
         return .info   // Show info and above in release builds
         #endif
@@ -109,7 +109,7 @@ class EchoLogger {
     /// Whether to include file/function/line info in logs
     static var includeSourceInfo: Bool = {
         #if DEBUG
-        return true
+        return false  // Disable detailed source info for cleaner logs
         #else
         return false
         #endif
@@ -160,10 +160,10 @@ class EchoLogger {
         // Use os_log for better performance and integration with Console.app
         os_log("%{public}@", log: category.osLog, type: level.osLogType, logMessage)
 
-        // Also print to console for Xcode debugging (only in debug builds)
-        #if DEBUG
-        print("\(level.emoji) \(level.name): \(logMessage)")
-        #endif
+        // Disable duplicate print() output to reduce log verbosity
+        // #if DEBUG
+        // print("\(level.emoji) \(level.name): \(logMessage)")
+        // #endif
     }
 
     // MARK: - Configuration Methods

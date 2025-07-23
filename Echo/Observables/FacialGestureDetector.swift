@@ -175,7 +175,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func startARSession() {
-        print("startARSession called")
+        EchoLogger.debug("startARSession called", category: .facialGesture)
 
         // Configure ARKit to be more resource-friendly
         let configuration = ARFaceTrackingConfiguration()
@@ -185,14 +185,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             configuration.maximumNumberOfTrackedFaces = 1 // Only track one face
         }
 
-        print("Running AR session with configuration")
+        EchoLogger.debug("Running AR session with configuration", category: .facialGesture)
         session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
 
         DispatchQueue.main.async {
-            print("Setting isActive to true on main queue")
+            EchoLogger.debug("Setting isActive to true on main queue", category: .facialGesture)
             self.isActive = true
             self.errorMessage = nil
-            print("isActive is now: \(self.isActive)")
+            EchoLogger.debug("isActive is now: \(self.isActive)", category: .facialGesture)
 
             // Start session health monitoring
             self.startSessionHealthMonitoring()
@@ -221,7 +221,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Only restart if we haven't received face anchors for a longer period
         // and only if we're actively supposed to be detecting
         if timeSinceLastFaceAnchor > 30.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
-            print("⚠️ ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...")
+            EchoLogger.warning("ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...", category: .facialGesture)
             DispatchQueue.main.async {
                 self.restartARSession()
             }
@@ -259,14 +259,14 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
             // Only restart for extreme cases where values are completely frozen
             if standardDeviation < 0.001 && mean < 0.001 && !isGazeGesture {
-                print("⚠️ Gesture \(gesture.displayName) appears completely frozen - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
+                EchoLogger.warning("Gesture \(gesture.displayName) appears completely frozen - std dev: \(standardDeviation), mean: \(mean). Restarting session...", category: .facialGesture)
                 DispatchQueue.main.async {
                     self.restartARSession()
                 }
                 return
             } else if isGazeGesture && standardDeviation < 0.0001 && mean < 0.0001 {
                 // For gaze gestures, only restart if values are completely stuck at 0 for a long time
-                print("⚠️ Gaze gesture \(gesture.displayName) appears completely stuck - std dev: \(standardDeviation), mean: \(mean). Restarting session...")
+                EchoLogger.warning("Gaze gesture \(gesture.displayName) appears completely stuck - std dev: \(standardDeviation), mean: \(mean). Restarting session...", category: .facialGesture)
                 DispatchQueue.main.async {
                     self.restartARSession()
                 }
@@ -289,7 +289,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
 
         // If we haven't updated preview values in 5 seconds while in preview mode, something is wrong
         if timeSinceLastUpdate > 5.0 && isPreviewMode && isActive {
-            print("⚠️ Preview values haven't updated in \(timeSinceLastUpdate)s - restarting preview mode")
+            EchoLogger.warning("Preview values haven't updated in \(timeSinceLastUpdate)s - restarting preview mode", category: .facialGesture)
 
             // Restart preview mode
             let currentGestures = Array(previewGestures)
@@ -303,7 +303,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func restartARSession() {
-        print("🔄 Restarting ARKit session...")
+        EchoLogger.warning("Restarting ARKit session...", category: .facialGesture)
         session.pause()
 
         // Clear gesture value history to start fresh
@@ -473,8 +473,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         let topGesture = gestureChanges.first?.gesture
         let maxChange = gestureChanges.first?.percentage ?? 0.0
 
-        print("Analysis complete. Max change: \(maxChange) for gesture: \(topGesture?.displayName ?? "none")")
-        print("Top 5 gestures: \(rankedGestures.map { "\($0.gesture.displayName): \(Int($0.percentage * 100))%" })")
+        EchoLogger.debug("Analysis complete. Max change: \(maxChange) for gesture: \(topGesture?.displayName ?? "none")", category: .facialGesture)
+        EchoLogger.debug("Top 5 gestures: \(rankedGestures.map { "\($0.gesture.displayName): \(Int($0.percentage * 100))%" })", category: .facialGesture)
 
         return topGesture
     }
@@ -538,7 +538,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                         self.previewGestureValues[gesture] = gestureValue
                         self.lastPreviewUpdateTime = Date()
                     } else {
-                        print("⚠️ Skipping invalid gesture value: \(gestureValue) for \(gesture.displayName)")
+                        EchoLogger.warning("Skipping invalid gesture value: \(gestureValue) for \(gesture.displayName)", category: .facialGesture)
                     }
                 }
             }

@@ -7,6 +7,7 @@
 
 - [Releasing a new version](#releasing-a-new-version)
 - [Prediction](#prediction)
+- [Developer Tools](#developer-tools)
 
 ## Releasing a new version
 
@@ -15,6 +16,32 @@ To release a new version, make sure your commit message includes `[PATCH]`, `[MI
 ## Prediction
 
 [Click here to view the prediction measurement results](./PREDICTION.md)
+
+## Developer Tools
+
+### Logging Control
+
+Echo uses a custom `EchoLogger` system for debugging and diagnostics. By default, only warnings and errors are shown to maintain performance. Developers can control logging verbosity:
+
+**Quick disable all logging** (for performance testing):
+```swift
+EchoLogger.loggingEnabled = false
+```
+
+**Change log level at runtime**:
+```swift
+EchoLogger.setLogLevel(.debug)    // Show everything (verbose)
+EchoLogger.setLogLevel(.info)     // Show info and above
+EchoLogger.setLogLevel(.warning)  // Show warnings and errors only (default)
+EchoLogger.setLogLevel(.error)    // Show only errors
+```
+
+**Toggle detailed source info**:
+```swift
+EchoLogger.setSourceInfoEnabled(true)  // Show [File.swift:123 function()]
+```
+
+Log categories include: `.voice`, `.facialGesture`, `.eyeTracking`, `.gameController`, `.database`, `.ui`, and `.general`.
 
 ## Issues
 

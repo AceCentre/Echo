@@ -274,9 +274,9 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
     private func configureAudioSessionForPanning(pan: Float) {
         if pan < 0 {
-            print("🔊 LEFT channel requested - use hardware audio splitter cable")
+            EchoLogger.debug("LEFT channel requested - use hardware audio splitter cable", category: .voice)
         } else if pan > 0 {
-            print("🔊 RIGHT channel requested - use hardware audio splitter cable")
+            EchoLogger.debug("RIGHT channel requested - use hardware audio splitter cable", category: .voice)
         }
 
     }
