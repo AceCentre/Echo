@@ -13,22 +13,11 @@ import UIKit
 import AudioToolbox
 
 struct FacialGestureSwitchSection: View {
-    @State var tapAction: SwitchAction
-    @State var holdAction: SwitchAction
-    @State var threshold: Float
-    @State var holdDuration: Double
-
     var gestureSwitch: FacialGestureSwitch
-
-    init(gestureSwitch: FacialGestureSwitch) {
-        self.gestureSwitch = gestureSwitch
-        self._tapAction = State(initialValue: gestureSwitch.tapAction)
-        self._holdAction = State(initialValue: gestureSwitch.holdAction)
-        self._threshold = State(initialValue: gestureSwitch.threshold)
-        self._holdDuration = State(initialValue: gestureSwitch.holdDuration)
-    }
     
     var body: some View {
+        @Bindable var bindableGestureSwitch = gestureSwitch
+
         VStack(alignment: .leading, spacing: 12) {
                 // Tap action picker
                 ActionPicker(
@@ -38,9 +27,9 @@ struct FacialGestureSwitchSection: View {
                     ),
                     actions: SwitchAction.tapCases,
                     actionChange: { newAction in
-                        tapAction = newAction
+                        bindableGestureSwitch.tapAction = newAction
                     },
-                    actionState: tapAction
+                    actionState: bindableGestureSwitch.tapAction
                 )
 
                 // Hold action picker
@@ -51,9 +40,9 @@ struct FacialGestureSwitchSection: View {
                     ),
                     actions: SwitchAction.holdCases,
                     actionChange: { newAction in
-                        holdAction = newAction
+                        bindableGestureSwitch.holdAction = newAction
                     },
-                    actionState: holdAction
+                    actionState: bindableGestureSwitch.holdAction
                 )
                 
                 // Threshold slider with context-aware labeling
@@ -72,8 +61,8 @@ struct FacialGestureSwitchSection: View {
 
                         Slider(
                             value: Binding(
-                                get: { FacialGesture.thresholdToSliderValue(threshold) },
-                                set: { threshold = FacialGesture.sliderValueToThreshold($0) }
+                                get: { FacialGesture.thresholdToSliderValue(bindableGestureSwitch.threshold) },
+                                set: { bindableGestureSwitch.threshold = FacialGesture.sliderValueToThreshold($0) }
                             ),
                             in: 0.0...1.0,
                             step: 0.01
@@ -86,8 +75,8 @@ struct FacialGestureSwitchSection: View {
                     }
 
                     // Context-aware threshold display
-                    Text(gestureSwitch.gesture?.thresholdDisplayValue(threshold) ?? String(
-                        localized: "Threshold: \(Int(threshold * 100))%",
+                    Text(gestureSwitch.gesture?.thresholdDisplayValue(bindableGestureSwitch.threshold) ?? String(
+                        localized: "Threshold: \(Int(bindableGestureSwitch.threshold * 100))%",
                         comment: "Fallback threshold display"
                     ))
                     .font(.caption2)
@@ -105,7 +94,7 @@ struct FacialGestureSwitchSection: View {
 
                 
                 // Hold duration slider (only if hold action is not .none)
-                if holdAction != .none {
+                if bindableGestureSwitch.holdAction != .none {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(String(
                             localized: "Hold Duration",
@@ -119,7 +108,7 @@ struct FacialGestureSwitchSection: View {
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
 
-                            Slider(value: $holdDuration, in: 0.5...3.0, step: 0.1)
+                            Slider(value: $bindableGestureSwitch.holdDuration, in: 0.5...3.0, step: 0.1)
                                 .tint(.blue)
 
                             Text("3.0s")
@@ -128,7 +117,7 @@ struct FacialGestureSwitchSection: View {
                         }
 
                         Text(String(
-                            localized: "Duration: \(String(format: "%.1f", holdDuration))s",
+                            localized: "Duration: \(String(format: "%.1f", bindableGestureSwitch.holdDuration))s",
                             comment: "Shows current hold duration value"
                         ))
                         .font(.caption2)
@@ -137,24 +126,12 @@ struct FacialGestureSwitchSection: View {
                 }
 
             // Explanatory text about tap/hold behavior
-            if holdAction != .none {
+            if bindableGestureSwitch.holdAction != .none {
                 Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .padding(.top, 4)
             }
-        }
-        .onChange(of: tapAction) { _, _ in
-            gestureSwitch.tapAction = tapAction
-        }
-        .onChange(of: holdAction) { _, _ in
-            gestureSwitch.holdAction = holdAction
-        }
-        .onChange(of: threshold) { _, _ in
-            gestureSwitch.threshold = threshold
-        }
-        .onChange(of: holdDuration) { _, _ in
-            gestureSwitch.holdDuration = holdDuration
         }
 
     }
@@ -1006,6 +983,12 @@ struct AddFacialGesture: View {
             } else {
                 // Initialize state variables with existing gesture values
                 if let existingGesture = currentGestureSwitch {
+                    print("📖 Loading existing gesture '\(existingGesture.displayName)':")
+                    print("   loaded tapAction: \(existingGesture.tapAction.title)")
+                    print("   loaded holdAction: \(existingGesture.holdAction.title)")
+                    print("   loaded threshold: \(existingGesture.threshold)")
+                    print("   loaded holdDuration: \(existingGesture.holdDuration)")
+
                     gestureName = existingGesture.name
                     selectedGesture = existingGesture.gesture ?? .eyeBlinkRight
                     tapAction = existingGesture.tapAction
@@ -1057,18 +1040,33 @@ struct AddFacialGesture: View {
         } else {
             // Update existing gesture switch
             if let currentGestureSwitch = currentGestureSwitch {
+                print("💾 Saving existing gesture '\(currentGestureSwitch.displayName)':")
+                print("   current tapAction in object: \(currentGestureSwitch.tapAction.title)")
+                print("   current holdAction in object: \(currentGestureSwitch.holdAction.title)")
+                print("   current threshold in object: \(currentGestureSwitch.threshold)")
+                print("   current holdDuration in object: \(currentGestureSwitch.holdDuration)")
+
+                // For existing gestures, only update name and gesture type
+                // The actions, threshold, and holdDuration are already updated via @Bindable in FacialGestureSwitchSection
                 currentGestureSwitch.name = gestureName
                 currentGestureSwitch.gesture = selectedGesture
-                currentGestureSwitch.threshold = threshold
-                currentGestureSwitch.tapAction = tapAction
-                currentGestureSwitch.holdAction = holdAction
-                currentGestureSwitch.holdDuration = holdDuration
+
+                print("💾 Final values before save:")
+                print("   final tapAction: \(currentGestureSwitch.tapAction.title)")
+                print("   final holdAction: \(currentGestureSwitch.holdAction.title)")
             }
         }
 
         do {
             try modelContext.save()
             print("Successfully saved gesture: \(selectedGesture.displayName)")
+
+            // Verify what was actually saved
+            if let currentGestureSwitch = currentGestureSwitch {
+                print("✅ Verification after save:")
+                print("   saved tapAction: \(currentGestureSwitch.tapAction.title)")
+                print("   saved holdAction: \(currentGestureSwitch.holdAction.title)")
+            }
         } catch {
             print("Failed to save facial gesture switch: \(error)")
             print("Error details: \(error.localizedDescription)")
