@@ -33,7 +33,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func stop() {
-        //EchoLogger.debug("AUDIO ENGINE STOP CALLED: [\(Date().timeIntervalSince1970)]", category: .voice)
 
         self.callback = nil
         self.callbackCalled = true // Prevent any pending callbacks
@@ -44,7 +43,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         self.synthesizer.delegate = nil
         self.synthesizer = AVSpeechSynthesizer()
         self.synthesizer.delegate = self
-        // EchoLogger.debug("AUDIO ENGINE: Recreated synthesizer to force stop", category: .voice)
+
 
         // Stop player if it exists
         if let unwrappedPlayer = self.player {
@@ -59,7 +58,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // iOS Bug Fix: Safe callback that prevents multiple calls
     private func safeCallback() {
         guard !callbackCalled else {
-            // EchoLogger.debug("AUDIO ENGINE: Prevented duplicate callback at [\(Date().timeIntervalSince1970)]", category: .voice)
             return
         }
         callbackCalled = true
@@ -67,21 +65,22 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
-        // EchoLogger.debug("AUDIO ENGINE SPEAK START: [\(Date().timeIntervalSince1970)] '\(text)' voice: \(voiceOptions.voiceName)", category: .voice)
+        //let timestamp = Date().timeIntervalSince1970
+        // print("🔊 AUDIO ENGINE SPEAK START: [\(timestamp)] '\(text)' voice: \(voiceOptions.voiceName)")
 
         callback = cb
         callbackCalled = false // Reset callback flag for new speech
         currentUtteranceText = text // Track current utterance
 
         guard scenePhase == .active else {
-            // EchoLogger.debug("AUDIO ENGINE: Not speaking as app is in the background or inactive", category: .voice)
+            // print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
             safeCallback()
             return
         }
 
         // Try SSML first, fallback to plain text for iOS 26 compatibility
         let utterance: AVSpeechUtterance
-        let ssmlRepresentation = "<speak>\(escapeXMLPreservingSSML(text))</speak>"
+        let ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
 
         if let ssmlUtterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) {
             utterance = ssmlUtterance
@@ -95,108 +94,158 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
         utterance.voice = selectedVoice
 
-        // Set speech parameters directly on utterance
-        utterance.rate = Float((isFast ? 75 : voiceOptions.rate) * 1.5 / 100 + 0.5)
-        utterance.volume = Float(voiceOptions.volume) / 100
+        // Since iOS 26 beta has fixed the file writing issue, use file-based approach for proper rate/volume control
 
-        // iOS 26 Beta Fix: NEVER use synthesizer.write() - it causes crashes on iOS 26
-        // For panning, we'll use a different approach that doesn't involve write()
-        if pan != 0.0 {
-            //EchoLogger.debug("AUDIO ENGINE: Using pan approach for '\(text)'", category: .voice)
-            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
-        } else {
-            // EchoLogger.debug("AUDIO ENGINE: Calling synthesizer.speak() for '\(text)'", category: .voice)
-            synthesizer.speak(utterance)
-        }
+        // Use normal rate for synthesis, we'll control rate with AVAudioPlayer
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.volume = 1.0
+
+        // Generate audio to file first, then play with rate/volume control
+        let audioFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
+        var output: AVAudioFile?
+        var hasFinished = false
+
+        var bufferCount = 0
+        var hasValidAudio = false
+
+        synthesizer.write(utterance, toBufferCallback: { buffer in
+            guard !hasFinished else { return }
+            bufferCount += 1
+
+            guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
+                EchoLogger.error("Unknown buffer type: \(buffer)", category: .voice)
+                return
+            }
+
+            // Check for empty buffer (iOS 26 beta bug)
+            if pcmBuffer.frameLength > 1 {
+                hasValidAudio = true
+            }
+
+            if let unwrappedOutput = output {
+                do {
+                    try unwrappedOutput.write(from: pcmBuffer)
+                } catch {
+                    EchoLogger.error("Failed to write pcmBuffer to output: \(error)", category: .voice)
+                }
+
+            } else {
+                output = try? AVAudioFile(
+                    forWriting: audioFilePath,
+                    settings: pcmBuffer.format.settings,
+                    commonFormat: pcmBuffer.format.commonFormat,
+                    interleaved: pcmBuffer.format.isInterleaved
+                )
+                if let unwrappedOutput = output {
+                    do {
+                        try unwrappedOutput.write(from: pcmBuffer)
+                    } catch {
+                        EchoLogger.error("Failed to write pcmBuffer to output: \(error)", category: .voice)
+                    }
+                }
+            }
+
+            if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
+                hasFinished = true
+                DispatchQueue.main.async {
+                    if hasValidAudio {
+                        self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: isFast ? 75 : voiceOptions.rate)
+                    } else {
+                        // Fallback to direct synthesis if file-based synthesis produces empty buffers
+                        self.fallbackToDirectSynthesis(text: text, pan: pan, voiceOptions: voiceOptions, isFast: isFast)
+                    }
+                }
+            }
+        })
     }
 
-    private func useSimpleSpeechWithAudioSessionPan(utterance: AVSpeechUtterance, pan: Float) {
-        // iOS Version Detection: Check if we can safely use synthesizer.write()
-        if #available(iOS 19.0, *) {
-            // iOS 19+ (including iOS 26 Beta): synthesizer.write() crashes, use hardware splitter
-            EchoLogger.debug("iOS 19+ detected: Channel splitting requires hardware audio splitter cable", category: .voice)
-            configureAudioSessionForPanning(pan: pan)
-            synthesizer.speak(utterance)
+    func speakDirect(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
+        callback = cb
+        callbackCalled = false
+        currentUtteranceText = text
+
+        guard scenePhase == .active else {
+            safeCallback()
             return
         }
 
-        // iOS 18.5 and earlier: Use real channel splitting with AVAudioPlayer
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
+        let utterance = AVSpeechUtterance(string: text)
 
-        // Write speech to temporary file for channel manipulation
-        synthesizer.write(utterance) { [weak self] buffer in
-            guard let self = self else { return }
+        // Set voice
+        let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
+        utterance.voice = selectedVoice
 
-            if let pcmBuffer = buffer as? AVAudioPCMBuffer {
-                if pcmBuffer.frameLength == 0 {
-                    // End of synthesis - now play the file with proper channel routing
-                    DispatchQueue.main.async {
-                        self.playFileWithChannelRouting(url: tempURL, pan: pan)
-                    }
-                    return
-                }
+        // Set rate and volume directly
+        let targetRate = Float(voiceOptions.rate)
+        let calculatedRate = Float((targetRate * 1.5) / 100 + 0.5)
+        let clampedRate = max(AVSpeechUtteranceMinimumSpeechRate, min(AVSpeechUtteranceMaximumSpeechRate, calculatedRate))
+        utterance.rate = clampedRate
+        utterance.volume = Float(voiceOptions.volume) / 100
 
-                // Write buffer to file
-                if self.audioFile == nil {
-                    do {
-                        self.audioFile = try AVAudioFile(
-                            forWriting: tempURL,
-                            settings: pcmBuffer.format.settings,
-                            commonFormat: pcmBuffer.format.commonFormat,
-                            interleaved: pcmBuffer.format.isInterleaved
-                        )
-                    } catch {
-                        EchoLogger.error("Failed to create audio file: \(error)", category: .voice)
-                        DispatchQueue.main.async {
-                            self.safeCallback()
-                        }
-                        return
-                    }
-                }
-
-                do {
-                    try self.audioFile?.write(from: pcmBuffer)
-                } catch {
-                    EchoLogger.error("Failed to write to audio file: \(error)", category: .voice)
-                }
-            }
+        // Use direct synthesis with pan handling
+        if pan != 0.0 {
+            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
+        } else {
+            synthesizer.speak(utterance)
         }
     }
 
-    private func playFileWithChannelRouting(url: URL, pan: Float) {
+    func fallbackToDirectSynthesis(text: String, pan: Float, voiceOptions: Voice, isFast: Bool) {
+        let utterance = AVSpeechUtterance(string: text)
+        let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
+        utterance.voice = selectedVoice
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.volume = 1.0
+
+        if pan != 0.0 {
+            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
+        } else {
+            synthesizer.speak(utterance)
+        }
+    }
+
+    func finished(audioUrl: URL, pan: Float, volume: Double, rate: Double) {
         do {
-            self.player = try AVAudioPlayer(contentsOf: url)
-            guard let player = self.player else {
+            self.player = try AVAudioPlayer(contentsOf: audioUrl)
+
+            guard let unwrappedPlayer = self.player else {
                 EchoLogger.error("Failed to create AVAudioPlayer", category: .voice)
                 safeCallback()
                 return
             }
 
-            // Apply true channel routing for AirPods/headphones
-            player.pan = pan  // -1.0 = full left, 1.0 = full right
-            player.delegate = self
-            player.prepareToPlay()
-            player.play()
+            let calculatedVolume = Float(volume) / 100
+            let calculatedRate = ((Float(rate) * 1.5) / 100) + 0.5
 
-            EchoLogger.debug("Playing audio with channel routing: pan=\(pan)", category: .voice)
+            unwrappedPlayer.pan = pan
+            unwrappedPlayer.rate = calculatedRate
+            unwrappedPlayer.enableRate = true
+            unwrappedPlayer.volume = calculatedVolume
+            unwrappedPlayer.delegate = self
+            unwrappedPlayer.prepareToPlay()
+
+            unwrappedPlayer.play()
         } catch {
-            EchoLogger.error("Failed to play audio file: \(error)", category: .voice)
             safeCallback()
         }
     }
 
-    private func configureAudioSessionForPanning(pan: Float) {
-        // iOS 26 Beta Fix: Don't try to reconfigure audio session - it causes warnings
-        // and iOS doesn't support direct channel routing through AVAudioSession anyway
+    private func useSimpleSpeechWithAudioSessionPan(utterance: AVSpeechUtterance, pan: Float) {
 
+        // Configure audio session for channel routing
+        configureAudioSessionForPanning(pan: pan)
+
+        // Use simple speech synthesis (iOS 26 compatible)
+        synthesizer.speak(utterance)
+    }
+
+    private func configureAudioSessionForPanning(pan: Float) {
         if pan < 0 {
-            EchoLogger.debug("LEFT channel requested - use hardware audio splitter cable", category: .voice)
+            print("🔊 LEFT channel requested - use hardware audio splitter cable")
         } else if pan > 0 {
-            EchoLogger.debug("RIGHT channel requested - use hardware audio splitter cable", category: .voice)
+            print("🔊 RIGHT channel requested - use hardware audio splitter cable")
         }
 
-        //EchoLogger.info("Audio channel splitting requires physical audio splitter cable", category: .voice)
-        //EchoLogger.info("iOS 26 Beta limitation prevents software-based channel routing", category: .voice)
     }
     
 
@@ -204,11 +253,8 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // MARK: - AVSpeechSynthesizerDelegate
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        //EchoLogger.debug("AUDIO ENGINE FINISH: [\(Date().timeIntervalSince1970)] '\(utterance.speechString)'", category: .voice)
-
         // iOS Bug Fix: Only process completion if this matches our current utterance
         guard utterance.speechString == currentUtteranceText else {
-            // EchoLogger.debug("AUDIO ENGINE: Ignoring completion for old utterance: '\(utterance.speechString)'", category: .voice)
             return
         }
 
@@ -216,12 +262,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        let timestamp = Date().timeIntervalSince1970
-        EchoLogger.debug("AUDIO ENGINE CANCEL: [\(timestamp)] '\(utterance.speechString)'", category: .voice)
+        EchoLogger.debug("Audio engine cancelled utterance: '\(utterance.speechString)'", category: .voice)
 
         // iOS Bug Fix: Only process cancellation if this matches our current utterance
         guard utterance.speechString == currentUtteranceText else {
-            // EchoLogger.debug("AUDIO ENGINE: Ignoring cancellation for old utterance: '\(utterance.speechString)'", category: .voice)
             return
         }
 
@@ -232,6 +276,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully: Bool) {
         audioFile = nil // Clean up
+        safeCallback()
+    }
+
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         safeCallback()
     }
 
@@ -263,7 +311,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
             if let createdVoice = createdVoice {
                 voiceCache[identifier] = createdVoice
-                EchoLogger.debug("Voice created and cached successfully", category: .voice)
                 return createdVoice
             } else {
                 EchoLogger.debug("Failed to create voice, using fallback", category: .voice)
@@ -308,7 +355,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             return languageVoice
         }
 
-        EchoLogger.critical("No fallback voice could be created", category: .voice)
+        EchoLogger.error("No fallback voice could be created", category: .voice)
         return nil
     }
 
@@ -319,76 +366,5 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
             .replacingOccurrences(of: ">", with: "&gt;")
             .replacingOccurrences(of: "\"", with: "&quot;")
             .replacingOccurrences(of: "'", with: "&apos;")
-    }
-
-    private func escapeXMLPreservingSSML(_ text: String) -> String {
-        // If the text doesn't contain SSML tags, use regular XML escaping
-        if !text.contains("<") || !text.contains(">") {
-            return escapeXML(text)
-        }
-
-        // Parse and preserve SSML tags while escaping content
-        var result = ""
-        var currentIndex = text.startIndex
-
-        while currentIndex < text.endIndex {
-            // Look for the next SSML tag
-            if let tagStart = text.range(of: "<", range: currentIndex..<text.endIndex)?.lowerBound {
-                // Escape content before the tag
-                let beforeTag = String(text[currentIndex..<tagStart])
-                result += escapeXML(beforeTag)
-
-                // Find the end of the tag
-                if let tagEnd = text.range(of: ">", range: tagStart..<text.endIndex)?.upperBound {
-                    let tag = String(text[tagStart..<tagEnd])
-
-                    // Check if this is a valid SSML tag we want to preserve
-                    if isValidSSMLTag(tag) {
-                        result += tag
-                        currentIndex = tagEnd
-                    } else {
-                        // Not a valid SSML tag, escape it
-                        result += escapeXML(tag)
-                        currentIndex = tagEnd
-                    }
-                } else {
-                    // No closing >, escape the remaining text
-                    let remaining = String(text[tagStart..<text.endIndex])
-                    result += escapeXML(remaining)
-                    break
-                }
-            } else {
-                // No more tags, escape the remaining text
-                let remaining = String(text[currentIndex..<text.endIndex])
-                result += escapeXML(remaining)
-                break
-            }
-        }
-
-        return result
-    }
-
-    private func isValidSSMLTag(_ tag: String) -> Bool {
-        // List of SSML tags we want to preserve
-        let validSSMLTags = [
-            "say-as",
-            "break",
-            "emphasis",
-            "prosody",
-            "phoneme",
-            "sub",
-            "voice",
-            "audio",
-            "mark"
-        ]
-
-        // Check if the tag starts with any valid SSML tag
-        for validTag in validSSMLTags {
-            if tag.hasPrefix("<\(validTag)") || tag.hasPrefix("</\(validTag)") {
-                return true
-            }
-        }
-
-        return false
     }
 }

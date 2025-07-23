@@ -192,9 +192,9 @@ class MainCommunicationPageState: ObservableObject {
                 errorHandling?.handle(error: EchoError.noChildren)
             }
         } else if node?.type == .phrase {
-            // print("🔊 PHRASE SELECTED: '\(node?.speakText ?? "Error")' - playing with speaking voice")
+            EchoLogger.debug("PHRASE SELECTED: '\(node?.speakText ?? "Error")' - playing with speaking voice", category: .voice)
             voiceEngine?.playSpeaking(node?.speakText ?? "Error", cb: {
-                //print("🔊 PHRASE COMPLETED: '\(node?.speakText ?? "Error")' - returning to root")
+                EchoLogger.debug("PHRASE COMPLETED: '\(node?.speakText ?? "Error")' - returning to root", category: .voice)
                 do {
                     try self.clickNode(self.settings?.currentVocab?.rootNode, isStartup: false)
                 } catch {

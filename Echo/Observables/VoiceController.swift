@@ -102,8 +102,17 @@ class VoiceController: ObservableObject {
                 speakingVoice = createSafeDefaultVoice()
             }
 
-            play(text, voiceOptions: speakingVoice, pan: direction.pan, cb: cb)
+            // Use direct synthesis for speaking voice for reliable audio output
+            playDirect(text, voiceOptions: speakingVoice, pan: direction.pan, cb: cb)
         }
+    }
+
+    func playDirect(_ text: String?, voiceOptions: Voice, pan: Float, cb: (() -> Void)? = {}) {
+        let unwrappedAv = self.customAV ?? AudioEngine()
+        self.customAV = unwrappedAv
+
+        unwrappedAv.stop()
+        unwrappedAv.speakDirect(text: text ?? "", voiceOptions: voiceOptions, pan: pan, scenePhase: phase, cb: cb)
     }
 
     private func createSafeDefaultVoice() -> Voice {
