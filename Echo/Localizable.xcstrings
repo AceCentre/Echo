@@ -501,8 +501,8 @@
     "Hold Duration" : {
       "comment" : "Label for hold duration slider"
     },
-    "Hold Gesture" : {
-      "comment" : "The label that is shown next to the hold gesture action"
+    "Hold Gesture Action" : {
+      "comment" : "The label for the hold gesture action picker"
     },
     "Hold gesture briefly" : {
       "comment" : "Description for short hold gesture duration"
@@ -1074,8 +1074,8 @@
     "Shrug your upper lip" : {
       "comment" : "Description for upper lip shrug gesture"
     },
-    "Single Gesture" : {
-      "comment" : "The label that is shown next to the single gesture action"
+    "Single Gesture Action" : {
+      "comment" : "The label for the single gesture action picker"
     },
     "Single Tap" : {
       "comment" : "The label that is shown next to the single tap action"
@@ -1262,6 +1262,12 @@
     },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"
+    },
+    "Triggered by a quick gesture" : {
+
+    },
+    "Triggered by holding the gesture" : {
+
     },
     "Try Again" : {
 

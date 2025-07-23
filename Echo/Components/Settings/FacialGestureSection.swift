@@ -12,18 +12,20 @@ import ARKit
 import UIKit
 import AudioToolbox
 
+
+
 struct FacialGestureSwitchSection: View {
     var gestureSwitch: FacialGestureSwitch
     
     var body: some View {
         @Bindable var bindableGestureSwitch = gestureSwitch
 
-        VStack(alignment: .leading, spacing: 12) {
-                // Tap action picker
+        Group {
+                // Single gesture action
                 ActionPicker(
                     label: String(
-                        localized: "Single Gesture",
-                        comment: "The label that is shown next to the single gesture action"
+                        localized: "Single Gesture Action",
+                        comment: "The label for the single gesture action picker"
                     ),
                     actions: SwitchAction.tapCases,
                     actionChange: { newAction in
@@ -32,11 +34,11 @@ struct FacialGestureSwitchSection: View {
                     actionState: bindableGestureSwitch.tapAction
                 )
 
-                // Hold action picker
+                // Hold gesture action
                 ActionPicker(
                     label: String(
-                        localized: "Hold Gesture",
-                        comment: "The label that is shown next to the hold gesture action"
+                        localized: "Hold Gesture Action",
+                        comment: "The label for the hold gesture action picker"
                     ),
                     actions: SwitchAction.holdCases,
                     actionChange: { newAction in
@@ -44,6 +46,8 @@ struct FacialGestureSwitchSection: View {
                     },
                     actionState: bindableGestureSwitch.holdAction
                 )
+
+            }
                 
                 // Threshold slider with context-aware labeling
                 VStack(alignment: .leading, spacing: 4) {
@@ -135,7 +139,6 @@ struct FacialGestureSwitchSection: View {
         }
 
     }
-}
 
 
 struct GesturePreviewSection: View {
@@ -831,31 +834,43 @@ struct AddFacialGesture: View {
 
                 // Actions section for new gesture
                 Section(content: {
-                        // Tap action picker
-                        ActionPicker(
-                            label: String(
-                                localized: "Single Gesture",
-                                comment: "The label that is shown next to the single gesture action"
-                            ),
-                            actions: SwitchAction.tapCases,
-                            actionChange: { newAction in
-                                tapAction = newAction
-                            },
-                            actionState: tapAction
-                        )
+                        Group {
+                            // Single gesture action
+                            ActionPicker(
+                                label: String(
+                                    localized: "Single Gesture Action",
+                                    comment: "The label for the single gesture action picker"
+                                ),
+                                actions: SwitchAction.tapCases,
+                                actionChange: { newAction in
+                                    tapAction = newAction
+                                },
+                                actionState: tapAction
+                            )
 
-                        // Hold action picker
-                        ActionPicker(
-                            label: String(
-                                localized: "Hold Gesture",
-                                comment: "The label that is shown next to the hold gesture action"
-                            ),
-                            actions: SwitchAction.holdCases,
-                            actionChange: { newAction in
-                                holdAction = newAction
-                            },
-                            actionState: holdAction
-                        )
+                            Text("Triggered by a quick gesture")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 16)
+
+                            // Hold gesture action
+                            ActionPicker(
+                                label: String(
+                                    localized: "Hold Gesture Action",
+                                    comment: "The label for the hold gesture action picker"
+                                ),
+                                actions: SwitchAction.holdCases,
+                                actionChange: { newAction in
+                                    holdAction = newAction
+                                },
+                                actionState: holdAction
+                            )
+
+                            Text("Triggered by holding the gesture")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 16)
+                        }
 
                         // Threshold slider with context-aware labeling
                         VStack(alignment: .leading, spacing: 4) {
