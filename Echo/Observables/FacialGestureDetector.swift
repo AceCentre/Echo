@@ -229,7 +229,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Only restart if we haven't received face anchors for a longer period
         // and only if we're actively supposed to be detecting
         if timeSinceLastFaceAnchor > 30.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
-            EchoLogger.warning("ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...", category: .facialGesture)
+            EchoLogger.debug("ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...", category: .facialGesture)
             DispatchQueue.main.async {
                 self.restartARSession()
             }
@@ -311,7 +311,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     }
 
     private func restartARSession() {
-        EchoLogger.warning("Restarting ARKit session...", category: .facialGesture)
+        EchoLogger.debug("Restarting ARKit session...", category: .facialGesture)
         session.pause()
 
         // Clear gesture value history to start fresh
