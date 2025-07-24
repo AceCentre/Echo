@@ -16,130 +16,137 @@ import AudioToolbox
 
 struct FacialGestureSwitchSection: View {
     var gestureSwitch: FacialGestureSwitch
-    
+
     var body: some View {
         @Bindable var bindableGestureSwitch = gestureSwitch
 
+        if let gesture = gestureSwitch.gesture {
+            FacialGestureActionSection(
+                gesture: gesture,
+                tapAction: $bindableGestureSwitch.tapAction,
+                holdAction: $bindableGestureSwitch.holdAction,
+                threshold: $bindableGestureSwitch.threshold,
+                holdDuration: $bindableGestureSwitch.holdDuration
+            )
+        }
+    }
+}
+
+struct FacialGestureActionSection: View {
+    let gesture: FacialGesture
+    @Binding var tapAction: SwitchAction
+    @Binding var holdAction: SwitchAction
+    @Binding var threshold: Float
+    @Binding var holdDuration: Double
+
+    var body: some View {
         Group {
-                // Single gesture action
-                ActionPicker(
-                    label: String(
-                        localized: "Single Gesture Action",
-                        comment: "The label for the single gesture action picker"
-                    ),
-                    actions: SwitchAction.tapCases,
-                    actionChange: { newAction in
-                        bindableGestureSwitch.tapAction = newAction
-                    },
-                    actionState: bindableGestureSwitch.tapAction
-                )
+            // Single gesture action
+            ActionPicker(
+                label: String(
+                    localized: "Single Gesture Action",
+                    comment: "The label for the single gesture action picker"
+                ),
+                actions: SwitchAction.tapCases,
+                actionChange: { newAction in
+                    tapAction = newAction
+                },
+                actionState: tapAction
+            )
 
-                // Hold gesture action
-                ActionPicker(
-                    label: String(
-                        localized: "Hold Gesture Action",
-                        comment: "The label for the hold gesture action picker"
-                    ),
-                    actions: SwitchAction.holdCases,
-                    actionChange: { newAction in
-                        bindableGestureSwitch.holdAction = newAction
-                    },
-                    actionState: bindableGestureSwitch.holdAction
-                )
 
+            // Hold gesture action
+            ActionPicker(
+                label: String(
+                    localized: "Hold Gesture Action",
+                    comment: "The label for the hold gesture action picker"
+                ),
+                actions: SwitchAction.holdCases,
+                actionChange: { newAction in
+                    holdAction = newAction
+                },
+                actionState: holdAction
+            )
+            // Threshold slider with context-aware labeling
+            VStack(alignment: .leading, spacing: 4) {
+                Text(gesture.thresholdLabel)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                HStack {
+                    Text("Low")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+
+                    Slider(
+                        value: Binding(
+                            get: { FacialGesture.thresholdToSliderValue(threshold) },
+                            set: { threshold = FacialGesture.sliderValueToThreshold($0) }
+                        ),
+                        in: 0.0...1.0,
+                        step: 0.01
+                    )
+                    .tint(.blue)
+
+                    Text("High")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+
+                // Context-aware threshold display
+                Text(gesture.thresholdDisplayValue(threshold))
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+
+                // Helpful description
+                Text(gesture.thresholdDescription)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .opacity(0.8)
             }
-                
-                // Threshold slider with context-aware labeling
+
+            // Hold duration slider (only if hold action is not .none)
+            if holdAction != .none {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(gestureSwitch.gesture?.thresholdLabel ?? String(
-                        localized: "Threshold",
-                        comment: "Fallback label for gesture threshold slider"
+                    Text(String(
+                        localized: "Hold Duration",
+                        comment: "Label for hold duration slider"
                     ))
                     .font(.caption)
                     .foregroundColor(.secondary)
 
                     HStack {
-                        Text("Low")
+                        Text("0.5s")
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
-                        Slider(
-                            value: Binding(
-                                get: { FacialGesture.thresholdToSliderValue(bindableGestureSwitch.threshold) },
-                                set: { bindableGestureSwitch.threshold = FacialGesture.sliderValueToThreshold($0) }
-                            ),
-                            in: 0.0...1.0,
-                            step: 0.01
-                        )
-                        .tint(.blue)
+                        Slider(value: $holdDuration, in: 0.5...3.0, step: 0.1)
+                            .tint(.blue)
 
-                        Text("High")
+                        Text("3.0s")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
 
-                    // Context-aware threshold display
-                    Text(gestureSwitch.gesture?.thresholdDisplayValue(bindableGestureSwitch.threshold) ?? String(
-                        localized: "Threshold: \(Int(bindableGestureSwitch.threshold * 100))%",
-                        comment: "Fallback threshold display"
+                    Text(String(
+                        localized: "Duration: \(String(format: "%.1f", holdDuration))s",
+                        comment: "Shows current hold duration value"
                     ))
                     .font(.caption2)
                     .foregroundColor(.secondary)
-
-                    // Helpful description
-                    if let gesture = gestureSwitch.gesture {
-                        Text(gesture.thresholdDescription)
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                            .opacity(0.8)
-                    }
                 }
-
-
-                
-                // Hold duration slider (only if hold action is not .none)
-                if bindableGestureSwitch.holdAction != .none {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(String(
-                            localized: "Hold Duration",
-                            comment: "Label for hold duration slider"
-                        ))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                        HStack {
-                            Text("0.5s")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-
-                            Slider(value: $bindableGestureSwitch.holdDuration, in: 0.5...3.0, step: 0.1)
-                                .tint(.blue)
-
-                            Text("3.0s")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Text(String(
-                            localized: "Duration: \(String(format: "%.1f", bindableGestureSwitch.holdDuration))s",
-                            comment: "Shows current hold duration value"
-                        ))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    }
-                }
-
-            // Explanatory text about tap/hold behavior
-            if bindableGestureSwitch.holdAction != .none {
-                Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .padding(.top, 4)
             }
+
+        // Explanatory text about tap/hold behavior
+        if holdAction != .none {
+            Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.top, 4)
         }
-
+        }
     }
-
+}
 
 struct GesturePreviewSection: View {
     let gesture: FacialGesture
@@ -834,121 +841,13 @@ struct AddFacialGesture: View {
 
                 // Actions section for new gesture
                 Section(content: {
-                        Group {
-                            // Single gesture action
-                            ActionPicker(
-                                label: String(
-                                    localized: "Single Gesture Action",
-                                    comment: "The label for the single gesture action picker"
-                                ),
-                                actions: SwitchAction.tapCases,
-                                actionChange: { newAction in
-                                    tapAction = newAction
-                                },
-                                actionState: tapAction
-                            )
-
-                            Text("Triggered by a quick gesture")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 16)
-
-                            // Hold gesture action
-                            ActionPicker(
-                                label: String(
-                                    localized: "Hold Gesture Action",
-                                    comment: "The label for the hold gesture action picker"
-                                ),
-                                actions: SwitchAction.holdCases,
-                                actionChange: { newAction in
-                                    holdAction = newAction
-                                },
-                                actionState: holdAction
-                            )
-
-                            Text("Triggered by holding the gesture")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 16)
-                        }
-
-                        // Threshold slider with context-aware labeling
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(selectedGesture.thresholdLabel)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-
-                            HStack {
-                                Text("Low")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-
-                                Slider(
-                                    value: Binding(
-                                        get: { FacialGesture.thresholdToSliderValue(threshold) },
-                                        set: { threshold = FacialGesture.sliderValueToThreshold($0) }
-                                    ),
-                                    in: 0.0...1.0,
-                                    step: 0.01
-                                )
-                                .tint(.blue)
-
-                                Text("High")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-
-                            // Context-aware threshold display
-                            Text(selectedGesture.thresholdDisplayValue(threshold))
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-
-                            // Helpful description
-                            Text(selectedGesture.thresholdDescription)
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                                .opacity(0.8)
-                        }
-
-                        // Hold duration slider (only if hold action is not .none)
-                        if holdAction != .none {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(String(
-                                    localized: "Hold Duration",
-                                    comment: "Label for hold duration slider"
-                                ))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-
-                                HStack {
-                                    Text("0.5s")
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-
-                                    Slider(value: $holdDuration, in: 0.5...3.0, step: 0.1)
-                                        .tint(.blue)
-
-                                    Text("3.0s")
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Text(String(
-                                    localized: "Duration: \(String(format: "%.1f", holdDuration))s",
-                                    comment: "Shows current hold duration value"
-                                ))
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            }
-                        }
-
-                    // Explanatory text about tap/hold behavior
-                    if holdAction != .none {
-                        Text("Actions trigger when gesture is released: Quick release = Tap action, Hold past duration = Hold action")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 4)
-                    }
+                    FacialGestureActionSection(
+                        gesture: selectedGesture,
+                        tapAction: $tapAction,
+                        holdAction: $holdAction,
+                        threshold: $threshold,
+                        holdDuration: $holdDuration
+                    )
                 }, header: {
                     Text("Actions", comment: "Header for actions section")
                 })

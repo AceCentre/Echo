@@ -1242,12 +1242,6 @@
     "This will permanently delete this facial gesture switch." : {
       "comment" : "Message for delete gesture alert"
     },
-    "Threshold" : {
-      "comment" : "Fallback label for gesture threshold slider"
-    },
-    "Threshold: %lld%%" : {
-      "comment" : "Fallback threshold display"
-    },
     "Tilt your head to the left" : {
       "comment" : "Description for head tilt left gesture"
     },
@@ -1262,12 +1256,6 @@
     },
     "Tongue Out" : {
       "comment" : "Display name for tongue out gesture"
-    },
-    "Triggered by a quick gesture" : {
-
-    },
-    "Triggered by holding the gesture" : {
-
     },
     "Try Again" : {
 
