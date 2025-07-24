@@ -30,7 +30,7 @@ class VoiceController: ObservableObject {
             // This prevents audio session conflicts between ARKit and speech synthesis
             try audioSession.setCategory(.playAndRecord,
                                        mode: .default,
-                                       options: [.defaultToSpeaker, .allowBluetooth])
+                                       options: [.defaultToSpeaker, .allowBluetoothHFP])
 
             // Activate the session
             try audioSession.setActive(true)

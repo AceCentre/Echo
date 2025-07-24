@@ -84,7 +84,18 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
 
         // Try SSML first, fallback to plain text for iOS 26 compatibility
         let utterance: AVSpeechUtterance
-        let ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
+
+        // Check if text already contains SSML markup
+        let containsSSML = text.contains("<") && text.contains(">")
+        let ssmlRepresentation: String
+
+        if containsSSML {
+            // Text already contains SSML, wrap in speak tags without escaping
+            ssmlRepresentation = "<speak>\(text)</speak>"
+        } else {
+            // Plain text, escape and wrap in speak tags
+            ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
+        }
 
         if let ssmlUtterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) {
             utterance = ssmlUtterance
