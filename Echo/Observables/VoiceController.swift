@@ -96,7 +96,8 @@ class VoiceController: ObservableObject {
     
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
-            let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
+            // Audio splitting disabled - always use center channel
+            let direction: AudioDirection = .center
 
             // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
@@ -117,7 +118,8 @@ class VoiceController: ObservableObject {
     
     func playCue(_ text: String?, isFast: Bool = false, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
-            let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.cueDirection : .center
+            // Audio splitting disabled - always use center channel
+            let direction: AudioDirection = .center
 
             // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
@@ -134,8 +136,8 @@ class VoiceController: ObservableObject {
     
     func playSpeaking(_ text: String, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
-
-            let direction: AudioDirection = unwrappedSettings.splitAudio ? unwrappedSettings.speakDirection : .center
+            // Audio splitting disabled - always use center channel
+            let direction: AudioDirection = .center
 
             // Use existing speaking voice or create a safe default using available voices
             let speakingVoice: Voice
