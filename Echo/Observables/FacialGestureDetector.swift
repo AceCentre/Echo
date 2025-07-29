@@ -456,6 +456,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         var gestureChanges: [(gesture: FacialGesture, percentage: Float)] = []
 
         // Calculate percentage changes for all gestures
+        var tempResults: [FacialGesture: Float] = [:]
         for gesture in FacialGesture.allCases {
             let baseline = autoDetectionBaseline[gesture] ?? 0.0
             let current = autoDetectionCurrentValues[gesture] ?? 0.0
@@ -464,7 +465,7 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             let change = abs(current - baseline)
             let percentageChange = baseline > 0.01 ? (change / baseline) : change
 
-            autoDetectionResults[gesture] = percentageChange
+            tempResults[gesture] = percentageChange
 
             // Only include gestures with meaningful change (minimum threshold of 0.1)
             if percentageChange > 0.1 {
@@ -475,8 +476,12 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         // Sort by percentage change (highest first)
         gestureChanges.sort { $0.percentage > $1.percentage }
 
-        // Take top 5 results for display
-        rankedGestures = Array(gestureChanges.prefix(5))
+        // Update @Published properties on main thread
+        let topResults = Array(gestureChanges.prefix(5))
+        DispatchQueue.main.async {
+            self.autoDetectionResults = tempResults
+            self.rankedGestures = topResults
+        }
 
         let topGesture = gestureChanges.first?.gesture
         let maxChange = gestureChanges.first?.percentage ?? 0.0
@@ -568,7 +573,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
                 }
             }
 
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                // Safety check: ensure we're still in auto-detection mode when this executes
+                guard let self = self, self.isAutoDetectionMode && self.isActive else { return }
+
                 self.autoDetectionCurrentValues = currentValues
                 self.detectedGestureNames = currentDetectedGestures
             }
@@ -837,14 +845,19 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             }
         }
 
-        // Update auto-detection values
-        if isAutoDetectionMode {
-            autoDetectionCurrentValues[.headNodUp] = headNodUpValue
-            autoDetectionCurrentValues[.headNodDown] = headNodDownValue
-            autoDetectionCurrentValues[.headShakeLeft] = headShakeLeftValue
-            autoDetectionCurrentValues[.headShakeRight] = headShakeRightValue
-            autoDetectionCurrentValues[.headTiltLeft] = headTiltLeftValue
-            autoDetectionCurrentValues[.headTiltRight] = headTiltRightValue
+        // Update auto-detection values (with safety check)
+        if isAutoDetectionMode && isActive {
+            DispatchQueue.main.async { [weak self] in
+                // Double-check we're still in auto-detection mode when this executes
+                guard let self = self, self.isAutoDetectionMode && self.isActive else { return }
+
+                self.autoDetectionCurrentValues[.headNodUp] = headNodUpValue
+                self.autoDetectionCurrentValues[.headNodDown] = headNodDownValue
+                self.autoDetectionCurrentValues[.headShakeLeft] = headShakeLeftValue
+                self.autoDetectionCurrentValues[.headShakeRight] = headShakeRightValue
+                self.autoDetectionCurrentValues[.headTiltLeft] = headTiltLeftValue
+                self.autoDetectionCurrentValues[.headTiltRight] = headTiltRightValue
+            }
         }
 
         // Handle normal gesture detection for head movements
