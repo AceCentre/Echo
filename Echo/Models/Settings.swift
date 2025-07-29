@@ -22,9 +22,10 @@ class Settings {
     // Audio settings
     var cueVoice: Voice?
     var speakingVoice: Voice?
-    var splitAudio: Bool
-    var cueDirection: AudioDirection
-    var speakDirection: AudioDirection
+    // Audio splitting disabled - all audio plays through center channel
+    private var splitAudio: Bool = false // Always disabled
+    private var cueDirection: AudioDirection = .center // Always center
+    private var speakDirection: AudioDirection = .center // Always center
 
     // Scanning settings
     var scanning: Bool
@@ -80,6 +81,11 @@ class Settings {
     var messageBarBackgroundOpacity: Double = 1.0
     var messageBarFontName: String = "System"
     var messageBarFontSize: Int = 16
+
+    // Public getters for audio direction (always center since splitting is disabled)
+    var effectiveCueDirection: AudioDirection { return .center }
+    var effectiveSpeakDirection: AudioDirection { return .center }
+    var isAudioSplittingEnabled: Bool { return false }
     
     init(showOnboarding: Bool = true) {
         self.showOnboarding = showOnboarding
@@ -93,9 +99,10 @@ class Settings {
         // Initialize Audio settings
         self.cueVoice = nil
         self.speakingVoice = nil
+        // Audio splitting is disabled - properties are set to fixed values
         self.splitAudio = false
-        self.cueDirection = .left
-        self.speakDirection = .right
+        self.cueDirection = .center
+        self.speakDirection = .center
 
         // Initialize Scanning settings
         self.scanning = true

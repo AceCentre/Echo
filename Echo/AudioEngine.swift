@@ -9,12 +9,8 @@ import Foundation
 import AVKit
 import SwiftUI
 
-class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate, ObservableObject {
+class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
     var synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
-    var player: AVAudioPlayer?
-
-    // For temporary audio file creation during pan operations
-    private var audioFile: AVAudioFile?
 
     var callback: (() -> Void)?
 
@@ -27,10 +23,6 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
     // Cache voices to avoid repeated Assistant Framework calls
     private var voiceCache: [String: AVSpeechSynthesisVoice] = [:]
 
-    // Track audio buffer failures for recovery
-    private var consecutiveBufferFailures: Int = 0
-    private let maxBufferFailures: Int = 3
-
     override init() {
         super.init()
         synthesizer.delegate = self
@@ -42,21 +34,11 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         self.callbackCalled = true // Prevent any pending callbacks
         self.currentUtteranceText = nil // Clear current utterance tracking
 
-        // iOS Bug Fix: stopSpeaking() doesn't work reliably - recreate synthesizer
+        // Stop speech synthesis immediately
         self.synthesizer.stopSpeaking(at: .immediate)
         self.synthesizer.delegate = nil
         self.synthesizer = AVSpeechSynthesizer()
         self.synthesizer.delegate = self
-
-
-        // Stop player if it exists
-        if let unwrappedPlayer = self.player {
-            unwrappedPlayer.pause()
-            unwrappedPlayer.stop()
-        }
-
-        // Clean up audio file
-        audioFile = nil
     }
 
     // iOS Bug Fix: Safe callback that prevents multiple calls
@@ -109,98 +91,21 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
         utterance.voice = selectedVoice
 
-        // Since iOS 26 beta has fixed the file writing issue, use file-based approach for proper rate/volume control
+        // Use direct speech synthesis for faster output - no more buffer-based approach
 
-        // Use normal rate for synthesis, we'll control rate with AVAudioPlayer
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        utterance.volume = 1.0
+        // Set rate and volume directly for immediate speech
+        let targetRate = isFast ? 75.0 : voiceOptions.rate
+        let calculatedRate = Float((targetRate * 1.5) / 100 + 0.5)
+        let clampedRate = max(AVSpeechUtteranceMinimumSpeechRate, min(AVSpeechUtteranceMaximumSpeechRate, calculatedRate))
+        utterance.rate = clampedRate
+        utterance.volume = Float(voiceOptions.volume) / 100
 
-        // Generate audio to file first, then play with rate/volume control
-        let audioFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).caf")
-        var output: AVAudioFile?
-        var hasFinished = false
-
-        var bufferCount = 0
-        var hasValidAudio = false
-
-        // Add timeout to prevent hanging on buffer generation
-        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-            if !hasFinished {
-                hasFinished = true
-                DispatchQueue.main.async {
-                    EchoLogger.warning("Audio buffer generation timed out, falling back to direct synthesis", category: .voice)
-                    self.fallbackToDirectSynthesis(text: text, pan: pan, voiceOptions: voiceOptions, isFast: isFast)
-                }
-            }
+        // Use direct synthesis with pan handling for immediate output
+        if pan != 0.0 {
+            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
+        } else {
+            synthesizer.speak(utterance)
         }
-
-        synthesizer.write(utterance, toBufferCallback: { buffer in
-            guard !hasFinished else {
-                timeoutTimer.invalidate()
-                return
-            }
-            bufferCount += 1
-
-            guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
-                EchoLogger.error("Unknown buffer type: \(buffer)", category: .voice)
-                return
-            }
-
-            // Check for empty buffer (iOS 26 beta bug) and invalid data
-            if pcmBuffer.frameLength > 1 && pcmBuffer.audioBufferList.pointee.mBuffers.mDataByteSize > 0 {
-                hasValidAudio = true
-            } else if pcmBuffer.audioBufferList.pointee.mBuffers.mDataByteSize == 0 {
-                // Log the specific buffer issue we're seeing in the logs
-                EchoLogger.warning("Detected zero-size audio buffer (mDataByteSize = 0), this may cause audio issues", category: .voice)
-            }
-
-            if let unwrappedOutput = output {
-                do {
-                    try unwrappedOutput.write(from: pcmBuffer)
-                } catch {
-                    EchoLogger.error("Failed to write pcmBuffer to output: \(error)", category: .voice)
-                }
-
-            } else {
-                output = try? AVAudioFile(
-                    forWriting: audioFilePath,
-                    settings: pcmBuffer.format.settings,
-                    commonFormat: pcmBuffer.format.commonFormat,
-                    interleaved: pcmBuffer.format.isInterleaved
-                )
-                if let unwrappedOutput = output {
-                    do {
-                        try unwrappedOutput.write(from: pcmBuffer)
-                    } catch {
-                        EchoLogger.error("Failed to write pcmBuffer to output: \(error)", category: .voice)
-                    }
-                }
-            }
-
-            if pcmBuffer.frameLength == 0 || pcmBuffer.frameLength == 1 {
-                hasFinished = true
-                timeoutTimer.invalidate()
-                DispatchQueue.main.async {
-                    if hasValidAudio {
-                        // Reset failure counter on success
-                        self.consecutiveBufferFailures = 0
-                        self.finished(audioUrl: audioFilePath, pan: pan, volume: voiceOptions.volume, rate: isFast ? 75 : voiceOptions.rate)
-                    } else {
-                        // Track buffer failures and potentially reset audio system
-                        self.consecutiveBufferFailures += 1
-                        EchoLogger.warning("File-based synthesis produced no valid audio (failure #\(self.consecutiveBufferFailures)), falling back to direct synthesis", category: .voice)
-
-                        // If we have too many consecutive failures, suggest audio session reset
-                        if self.consecutiveBufferFailures >= self.maxBufferFailures {
-                            EchoLogger.error("Multiple consecutive audio buffer failures detected. Audio session may need reset.", category: .voice)
-                            self.consecutiveBufferFailures = 0 // Reset counter
-                        }
-
-                        self.fallbackToDirectSynthesis(text: text, pan: pan, voiceOptions: voiceOptions, isFast: isFast)
-                    }
-                }
-            }
-        })
     }
 
     func speakDirect(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
@@ -234,45 +139,9 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         }
     }
 
-    func fallbackToDirectSynthesis(text: String, pan: Float, voiceOptions: Voice, isFast: Bool) {
-        let utterance = AVSpeechUtterance(string: text)
-        let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
-        utterance.voice = selectedVoice
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        utterance.volume = 1.0
+    // fallbackToDirectSynthesis method removed - no longer needed with direct speech synthesis
 
-        if pan != 0.0 {
-            useSimpleSpeechWithAudioSessionPan(utterance: utterance, pan: pan)
-        } else {
-            synthesizer.speak(utterance)
-        }
-    }
-
-    func finished(audioUrl: URL, pan: Float, volume: Double, rate: Double) {
-        do {
-            self.player = try AVAudioPlayer(contentsOf: audioUrl)
-
-            guard let unwrappedPlayer = self.player else {
-                EchoLogger.error("Failed to create AVAudioPlayer", category: .voice)
-                safeCallback()
-                return
-            }
-
-            let calculatedVolume = Float(volume) / 100
-            let calculatedRate = ((Float(rate) * 1.5) / 100) + 0.5
-
-            unwrappedPlayer.pan = pan
-            unwrappedPlayer.rate = calculatedRate
-            unwrappedPlayer.enableRate = true
-            unwrappedPlayer.volume = calculatedVolume
-            unwrappedPlayer.delegate = self
-            unwrappedPlayer.prepareToPlay()
-
-            unwrappedPlayer.play()
-        } catch {
-            safeCallback()
-        }
-    }
+    // finished method removed - no longer needed with direct speech synthesis
 
     private func useSimpleSpeechWithAudioSessionPan(utterance: AVSpeechUtterance, pan: Float) {
 
@@ -316,16 +185,7 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate,
         safeCallback()
     }
 
-    // MARK: - AVAudioPlayerDelegate
-
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully: Bool) {
-        audioFile = nil // Clean up
-        safeCallback()
-    }
-
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        safeCallback()
-    }
+    // AVAudioPlayerDelegate methods removed - no longer needed with direct speech synthesis
 
     // MARK: - Voice Caching
 
