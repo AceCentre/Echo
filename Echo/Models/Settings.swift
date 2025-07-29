@@ -24,8 +24,8 @@ class Settings {
     var speakingVoice: Voice?
     // Audio splitting disabled - all audio plays through center channel
     private var splitAudio: Bool = false // Always disabled
-    private var cueDirection: AudioDirection = .center // Always center
-    private var speakDirection: AudioDirection = .center // Always center
+    private var cueDirection: AudioDirection = AudioDirection.center // Always center
+    private var speakDirection: AudioDirection = AudioDirection.center // Always center
 
     // Scanning settings
     var scanning: Bool
@@ -83,8 +83,8 @@ class Settings {
     var messageBarFontSize: Int = 16
 
     // Public getters for audio direction (always center since splitting is disabled)
-    var effectiveCueDirection: AudioDirection { return .center }
-    var effectiveSpeakDirection: AudioDirection { return .center }
+    var effectiveCueDirection: AudioDirection { return AudioDirection.center }
+    var effectiveSpeakDirection: AudioDirection { return AudioDirection.center }
     var isAudioSplittingEnabled: Bool { return false }
     
     init(showOnboarding: Bool = true) {
@@ -101,8 +101,8 @@ class Settings {
         self.speakingVoice = nil
         // Audio splitting is disabled - properties are set to fixed values
         self.splitAudio = false
-        self.cueDirection = .center
-        self.speakDirection = .center
+        self.cueDirection = AudioDirection.center
+        self.speakDirection = AudioDirection.center
 
         // Initialize Scanning settings
         self.scanning = true

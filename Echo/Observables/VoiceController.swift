@@ -30,7 +30,7 @@ class VoiceController: ObservableObject {
             // This prevents audio session conflicts between ARKit and speech synthesis
             try audioSession.setCategory(.playAndRecord,
                                        mode: .default,
-                                       options: [.defaultToSpeaker, .allowBluetoothHFP])
+                                       options: [.defaultToSpeaker, .allowBluetooth])
 
             // Activate the session
             try audioSession.setActive(true)
@@ -97,7 +97,7 @@ class VoiceController: ObservableObject {
     func playFastCue(_ text: String, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
             // Audio splitting disabled - always use center channel
-            let direction: AudioDirection = .center
+            let direction: AudioDirection = AudioDirection.center
 
             // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
@@ -119,7 +119,7 @@ class VoiceController: ObservableObject {
     func playCue(_ text: String?, isFast: Bool = false, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
             // Audio splitting disabled - always use center channel
-            let direction: AudioDirection = .center
+            let direction: AudioDirection = AudioDirection.center
 
             // Use existing cue voice or create a safe default using available voices
             let cueVoice: Voice
@@ -137,7 +137,7 @@ class VoiceController: ObservableObject {
     func playSpeaking(_ text: String, cb: (() -> Void)? = {}) {
         if let unwrappedSettings = settings {
             // Audio splitting disabled - always use center channel
-            let direction: AudioDirection = .center
+            let direction: AudioDirection = AudioDirection.center
 
             // Use existing speaking voice or create a safe default using available voices
             let speakingVoice: Voice
