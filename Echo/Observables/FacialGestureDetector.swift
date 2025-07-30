@@ -225,15 +225,28 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func checkSessionHealth() {
         let timeSinceLastFaceAnchor = Date().timeIntervalSince(lastFaceAnchorTime)
 
-        // Increase restart threshold to 30 seconds to reduce frequent restarts that cause audio conflicts
-        // Only restart if we haven't received face anchors for a longer period
-        // and only if we're actively supposed to be detecting
-        if timeSinceLastFaceAnchor > 30.0 && isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil) {
-            EchoLogger.debug("ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s. Restarting...", category: .facialGesture)
-            DispatchQueue.main.async {
-                self.restartARSession()
+        // Use progressive restart thresholds: 30s for genuine issues, but avoid restarts during normal operation
+        // Check if we're in a state where face detection should be working
+        let shouldBeDetecting = isActive && (isPreviewMode || isAutoDetectionMode || onGestureDetected != nil)
+
+        // More intelligent restart logic: 30s threshold but only if we haven't had ANY gesture activity
+        if timeSinceLastFaceAnchor > 30.0 && shouldBeDetecting {
+            // Check if we've had any gesture activity recently (indicates face is being tracked)
+            let hasRecentGestureActivity = gestureValueHistory.values.contains { history in
+                guard let lastValue = history.last else { return false }
+                return lastValue > 0.1 // Any meaningful gesture activity
             }
-            return
+
+            // Only restart if there's truly no face tracking AND no gesture activity
+            if !hasRecentGestureActivity {
+                EchoLogger.debug("ARKit session appears stuck - no face anchors for \(timeSinceLastFaceAnchor)s and no gesture activity. Restarting...", category: .facialGesture)
+                DispatchQueue.main.async {
+                    self.restartARSession()
+                }
+                return
+            } else {
+                EchoLogger.debug("No face anchors for \(timeSinceLastFaceAnchor)s but gesture activity detected - not restarting", category: .facialGesture)
+            }
         }
 
         // Check for unresponsive gesture values (stuck at low levels)
@@ -244,41 +257,44 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         let currentTime = Date()
         let timeSinceLastCheck = currentTime.timeIntervalSince(lastGestureVarianceCheck)
 
-        // Only check every 10 seconds to allow enough data to accumulate
-        guard timeSinceLastCheck >= 10.0 else { return }
+        // Only check every 20 seconds to allow enough data to accumulate and reduce false positives
+        guard timeSinceLastCheck >= 20.0 else { return }
         lastGestureVarianceCheck = currentTime
 
         // Check if we have enough history and if gesture values are stuck
+        var stuckGestureCount = 0
+        var totalGesturesChecked = 0
+
         for (gesture, history) in gestureValueHistory {
-            guard history.count >= 20 else { continue } // Need at least 20 samples
+            guard history.count >= 40 else { continue } // Need at least 40 samples for reliable variance calculation
+            totalGesturesChecked += 1
 
             // Calculate variance to detect if values are stuck
             let mean = history.reduce(0, +) / Float(history.count)
             let variance = history.map { pow($0 - mean, 2) }.reduce(0, +) / Float(history.count)
             let standardDeviation = sqrt(variance)
 
-            // Temporarily disable aggressive corruption detection as it's causing more problems than it solves
-            // The constant session restarts are making gestures "sticky" and unresponsive
-            // TODO: Implement more intelligent corruption detection that doesn't interfere with normal operation
-
             // If standard deviation is very low and mean is also low, values might be stuck
             // But exclude gaze direction gestures which naturally have low values when not actively looking
             let isGazeGesture = [FacialGesture.lookUp, .lookDown, .lookLeft, .lookRight].contains(gesture)
 
-            // Only restart for extreme cases where values are completely frozen
-            if standardDeviation < 0.001 && mean < 0.001 && !isGazeGesture {
-                EchoLogger.warning("Gesture \(gesture.displayName) appears completely frozen - std dev: \(standardDeviation), mean: \(mean). Restarting session...", category: .facialGesture)
-                DispatchQueue.main.async {
-                    self.restartARSession()
-                }
-                return
-            } else if isGazeGesture && standardDeviation < 0.0001 && mean < 0.0001 {
-                // For gaze gestures, only restart if values are completely stuck at 0 for a long time
-                EchoLogger.warning("Gaze gesture \(gesture.displayName) appears completely stuck - std dev: \(standardDeviation), mean: \(mean). Restarting session...", category: .facialGesture)
-                DispatchQueue.main.async {
-                    self.restartARSession()
-                }
-                return
+            // Count gestures that appear stuck using very conservative thresholds
+            if standardDeviation < 0.0001 && mean < 0.0001 && !isGazeGesture {
+                stuckGestureCount += 1
+                EchoLogger.debug("Gesture \(gesture.displayName) appears stuck - std dev: \(standardDeviation), mean: \(mean)", category: .facialGesture)
+            } else if isGazeGesture && standardDeviation < 0.00001 && mean < 0.00001 {
+                stuckGestureCount += 1
+                EchoLogger.debug("Gaze gesture \(gesture.displayName) appears stuck - std dev: \(standardDeviation), mean: \(mean)", category: .facialGesture)
+            }
+        }
+
+        // Only restart if multiple gestures (>50% of checked gestures, minimum 3) are simultaneously stuck
+        // This indicates a real ARKit session issue rather than normal gesture behavior
+        let stuckThreshold = max(3, totalGesturesChecked / 2)
+        if stuckGestureCount >= stuckThreshold && totalGesturesChecked >= 5 {
+            EchoLogger.warning("Multiple gestures appear stuck (\(stuckGestureCount)/\(totalGesturesChecked)) - restarting session...", category: .facialGesture)
+            DispatchQueue.main.async {
+                self.restartARSession()
             }
         }
     }
@@ -295,15 +311,15 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
     private func checkPreviewCorruption() {
         let timeSinceLastUpdate = Date().timeIntervalSince(lastPreviewUpdateTime)
 
-        // If we haven't updated preview values in 5 seconds while in preview mode, something is wrong
-        if timeSinceLastUpdate > 5.0 && isPreviewMode && isActive {
+        // If we haven't updated preview values in 15 seconds while in preview mode, something is wrong
+        if timeSinceLastUpdate > 15.0 && isPreviewMode && isActive {
             EchoLogger.warning("Preview values haven't updated in \(timeSinceLastUpdate)s - restarting preview mode", category: .facialGesture)
 
             // Restart preview mode
             let currentGestures = Array(previewGestures)
             DispatchQueue.main.async {
                 self.stopPreviewMode()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.startPreviewMode(for: currentGestures)
                 }
             }
@@ -318,8 +334,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
         gestureValueHistory.removeAll()
         lastGestureVarianceCheck = Date()
 
-        // Small delay before restarting
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        // Minimal delay before restarting to reduce detection gaps
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.startARSession()
         }
     }
@@ -649,8 +665,8 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             // Add new value
             self.gestureValueHistory[gesture]?.append(value)
 
-            // Keep only the last 30 values (about 1 second at 30 FPS)
-            if let count = self.gestureValueHistory[gesture]?.count, count > 30 {
+            // Keep only the last 60 values (about 2 seconds at 30 FPS) for more stable detection
+            if let count = self.gestureValueHistory[gesture]?.count, count > 60 {
                 self.gestureValueHistory[gesture]?.removeFirst()
             }
         }
@@ -971,10 +987,10 @@ class FacialGestureDetector: NSObject, ObservableObject, ARSessionDelegate {
             return
         }
 
-        // Throttle updates to prevent overwhelming the system (max 20 FPS for better performance)
+        // Throttle updates to prevent overwhelming the system (max 30 FPS for responsive detection)
         let currentTime = Date()
         let timeSinceLastUpdate = currentTime.timeIntervalSince(lastUpdateTime)
-        guard timeSinceLastUpdate >= 0.05 else { // ~20 FPS limit (reduced from 30 FPS)
+        guard timeSinceLastUpdate >= 0.033 else { // ~30 FPS limit (restored from 20 FPS since audio conflicts resolved)
             return
         }
         lastUpdateTime = currentTime

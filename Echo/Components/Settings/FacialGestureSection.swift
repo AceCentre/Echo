@@ -363,10 +363,12 @@ struct GesturePreviewSection: View {
         .onChange(of: detector.previewGestureValues) { _, newValues in
             let newValue = newValues[gesture] ?? 0.0
 
-            // Only protect against corruption if we get exactly 0.0 after a very high value (>0.8)
-            // This allows natural drops to low baseline values (~0.2-0.3) which are normal for eye gestures
-            if newValue == 0.0 && currentGestureValue > 0.8 {
-                print("⚠️ Detected suspicious drop to 0.0 for \(gesture.displayName) (was \(currentGestureValue)) - ignoring")
+            // More intelligent corruption detection: only protect against sudden drops to exactly 0.0
+            // after very high values (>0.9) and only for non-gaze gestures
+            // This allows natural drops and reduces false positives
+            let isGazeGesture = [FacialGesture.lookUp, .lookDown, .lookLeft, .lookRight].contains(gesture)
+            if newValue == 0.0 && currentGestureValue > 0.9 && !isGazeGesture {
+                EchoLogger.warning("Detected suspicious drop to 0.0 for \(gesture.displayName) (was \(currentGestureValue)) - ignoring", category: .facialGesture)
                 return
             }
 
@@ -375,10 +377,10 @@ struct GesturePreviewSection: View {
             }
         }
         .onChange(of: isGestureDetected) { _, newValue in
-            print("Gesture detected changed: \(newValue), lastState: \(lastDetectionState)")
+            EchoLogger.debug("Gesture detected changed: \(newValue), lastState: \(lastDetectionState)", category: .facialGesture)
             if newValue && !lastDetectionState {
                 // Gesture started - record start time but don't play feedback yet
-                print("Gesture started - waiting for release to determine tap/hold")
+                EchoLogger.debug("Gesture started - waiting for release to determine tap/hold", category: .facialGesture)
                 gestureStartTime = Date()
             } else if !newValue && lastDetectionState {
                 // Gesture ended - determine if it was tap or hold and play appropriate feedback
@@ -387,11 +389,11 @@ struct GesturePreviewSection: View {
                     let wasHoldGesture = gestureDuration >= holdDuration
 
                     if wasHoldGesture {
-                        print("Playing HOLD feedback (duration: \(String(format: "%.1f", gestureDuration))s)")
+                        EchoLogger.debug("Playing HOLD feedback (duration: \(String(format: "%.1f", gestureDuration))s)", category: .facialGesture)
                         playDetectionFeedback(.hold)
                         lastFeedbackType = .hold
                     } else {
-                        print("Playing TAP feedback (duration: \(String(format: "%.1f", gestureDuration))s)")
+                        EchoLogger.debug("Playing TAP feedback (duration: \(String(format: "%.1f", gestureDuration))s)", category: .facialGesture)
                         playDetectionFeedback(.tap)
                         lastFeedbackType = .tap
                     }
