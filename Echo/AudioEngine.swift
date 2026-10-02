@@ -49,6 +49,11 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
         callbackCalled = true
         callback?()
     }
+
+    /// Strips emojis and trims whitespace from text before speech synthesis.
+    func stripEmojis(from text: String) -> String {
+        return text.removingEmojis
+    }
     
     func speak(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, isFast: Bool = false, cb: (() -> Void)?) {
         //let timestamp = Date().timeIntervalSince1970
@@ -56,10 +61,18 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
 
         callback = cb
         callbackCalled = false // Reset callback flag for new speech
-        currentUtteranceText = text // Track current utterance
 
         guard scenePhase == .active else {
             // print("🔊 AUDIO ENGINE: Not speaking as app is in the background or inactive")
+            safeCallback()
+            return
+        }
+
+        let filteredText = stripEmojis(from: text)
+
+        guard !filteredText.isEmpty else {
+            EchoLogger.debug("Utterance is empty after removing emojis, skipping speech synthesis", category: .voice)
+            currentUtteranceText = nil
             safeCallback()
             return
         }
@@ -68,15 +81,15 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
         let utterance: AVSpeechUtterance
 
         // Check if text already contains SSML markup
-        let containsSSML = text.contains("<") && text.contains(">")
+        let containsSSML = filteredText.contains("<") && filteredText.contains(">")
         let ssmlRepresentation: String
 
         if containsSSML {
             // Text already contains SSML, wrap in speak tags without escaping
-            ssmlRepresentation = "<speak>\(text)</speak>"
+            ssmlRepresentation = "<speak>\(filteredText)</speak>"
         } else {
             // Plain text, escape and wrap in speak tags
-            ssmlRepresentation = "<speak>\(escapeXML(text))</speak>"
+            ssmlRepresentation = "<speak>\(escapeXML(filteredText))</speak>"
         }
 
         if let ssmlUtterance = AVSpeechUtterance(ssmlRepresentation: ssmlRepresentation) {
@@ -84,8 +97,10 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
         } else {
             // Fallback to plain text if SSML fails (iOS 26 compatibility)
             EchoLogger.debug("SSML failed, using plain text fallback", category: .voice)
-            utterance = AVSpeechUtterance(string: text)
+            utterance = AVSpeechUtterance(string: filteredText)
         }
+
+        currentUtteranceText = utterance.speechString // Track current utterance
 
         // Set the voice just before synthesis to minimize Assistant Framework calls
         let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
@@ -111,14 +126,23 @@ class AudioEngine: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
     func speakDirect(text: String, voiceOptions: Voice, pan: Float, scenePhase: ScenePhase, cb: (() -> Void)?) {
         callback = cb
         callbackCalled = false
-        currentUtteranceText = text
 
         guard scenePhase == .active else {
             safeCallback()
             return
         }
 
-        let utterance = AVSpeechUtterance(string: text)
+        let filteredText = stripEmojis(from: text)
+
+        guard !filteredText.isEmpty else {
+            EchoLogger.debug("Utterance is empty after removing emojis, skipping speech synthesis", category: .voice)
+            currentUtteranceText = nil
+            safeCallback()
+            return
+        }
+
+        let utterance = AVSpeechUtterance(string: filteredText)
+        currentUtteranceText = utterance.speechString
 
         // Set voice
         let selectedVoice = getCachedVoice(identifier: voiceOptions.voiceId)
